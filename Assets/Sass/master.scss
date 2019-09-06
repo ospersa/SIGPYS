@@ -200,7 +200,6 @@ input[type=number] {
     right: -30px;
     height: 30px;
     border-radius: 50%;
-    border-radius: 50%;
     cursor: help;
 }
 /********* Estilos de boton ayuda  *********/
@@ -326,3 +325,52 @@ select[required] {
     border: none;
     top: 0;
 }
+
+/***** Ajuste clase para cortar texto largo *****/
+.truncate {
+    width: 185px;
+}
+
+td {
+    &:hover {
+        .truncate {
+            white-space: inherit;
+            overflow: auto;
+            max-height: 150px;
+            margin: 0;
+            
+            &::-webkit-scrollbar-track{
+                border-radius: 50px;
+                border: 1px solid #00897b;
+            }
+
+            &::-webkit-scrollbar{
+                width: 8px;
+            }
+            
+            &::-webkit-scrollbar-thumb{
+                background-color: #009688 ;
+                border-radius: 50px;
+            }
+        }
+    }
+}
+/***** Ajuste clase para cortar texto largo *****/
+
+/***** Ajuste en modal *****/
+.modal{
+    width: 60%;
+    min-height: 70% !important;
+    
+    &.datepicker-modal{
+        min-height: auto !important;
+    }
+}
+/***** Ajuste en modal *****/
+
+/***** Ajuste en tabs *****/
+.tab-container{
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+/***** Ajuste en tabs *****/

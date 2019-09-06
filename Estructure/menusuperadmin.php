@@ -21,7 +21,7 @@
         <div class="divider"></div>
     </li>
     <li>
-        <a href="home.php">Mis Productos/Servicios</a>
+        <a href="misproductosservicios.php">Mis Productos/Servicios</a>
     </li>
     <li>
         <div class="divider"></div>

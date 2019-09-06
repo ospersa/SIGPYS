@@ -21,12 +21,14 @@
     <li>
         <div class="divider"></div>
     </li>
+    -->
     <li>
-        <a href="home.php">Mis Productos/Servicios</a>
+        <a href="misproductosservicios.php">Mis Productos/Servicios</a>
     </li>
     <li>
         <div class="divider"></div>
     </li>
+    <!--
     <li>
         <a class="dropdown-trigger" href="#!" data-target="colciencias">Colciencias
             <i class="material-icons right">arrow_drop_down</i>

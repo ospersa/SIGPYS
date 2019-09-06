@@ -37,9 +37,8 @@ if(($userBD == $userPOSTMinusculas) and ($passPOST == $passwordBD)){
 
 //Si los datos no son correctos, o están vacíos, muestra un error
 //Además, hay un script que vacía los campos con la clase "acceso" (formulario)
-} else if ( $userBD != $userPOSTMinusculas || $userPOST == "" || $passPOST == "" || !password_verify($passPOST, $passwordBD) ) {
-	die ('<script>$(".login").val("");</script>
-    User name or password incorrect');
+} else if ( $userBD != $userPOSTMinusculas || $userPOST == "" || $passPOST == "" || $passPOST != $passwordBD ) {
+	die ('<script>$(".login").val("");</script> User name or password incorrect');
 } else {
 	die('Error');
 };
