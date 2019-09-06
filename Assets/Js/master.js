@@ -1,0 +1,513 @@
+$(window).on('load', function () {
+    $('.loader').delay(350).fadeOut('slow');
+});
+
+$('.modal').on('load', function () {
+    $('select').formSelect();
+});
+
+$('.modal').on('change', function () {
+    $('select').formSelect();
+    $('select').addClass('hide');
+});
+
+$(document).ready(function () {
+
+    $('.sidenav').sidenav();
+
+    $('select').formSelect();
+
+    $(".dropdown-trigger").dropdown();
+
+    $('.modal').modal({
+        onOpenEnd:function(){
+            $('select').formSelect();
+            M.textareaAutoResize($(".textarea"));
+            /*$('#actForm').submit(function(e){
+                e.preventDefault();
+            });*/
+        }
+    });
+
+    $('.collapsible').collapsible({
+        onOpenEnd:function(){
+            M.textareaAutoResize($(".materialize-textarea"));
+        }
+    });
+
+    $('.datepicker').datepicker({
+        container: 'body'
+    });
+
+    $('#txtFechIni').datepicker({
+        showClearBtn: true,
+        i18n: {
+            clear: 'Borrar'
+        },
+        onSelect: function(){
+            $('#check').prop('disabled', true),
+            $('#txtFechFin').focus()
+        }
+    });
+
+    $('#txtFechFin').datepicker({
+        showClearBtn: true,
+        i18n: {
+            clear: 'Borrar'
+        },
+        onSelect: function(){
+            $('#check').prop('disabled', true)
+        }
+    });
+
+    $('.datepicker-clear').click(function(){
+        if ($('#txtFechIni').val() === "" && $('#txtFechFin').val() === "") {
+            $('#check').prop('disabled', false);
+        }
+        
+    });
+
+    $('#check').change(function(){
+        if ($(this).is(':checked')) {
+            $('#txtFechIni').prop('disabled', true);
+            $('#txtFechFin').prop('disabled', true);
+        } else {
+            $('#txtFechIni').prop('disabled', false);
+            $('#txtFechFin').prop('disabled', false);
+        }
+    });
+
+    $("#txtpass1Per").change(function(){
+        var val1 = $("#txtpassPer").val();
+        var val2 = $("#txtpass1Per").val();
+
+        if(val1 != val2){
+            $("#passText").removeClass("hide");
+        }else{
+            $("#passText").addClass("hide");
+            $("#btn-pass").removeClass("disabled");
+        }
+    })
+
+    $('table tbody#cotizacion').paginathing({
+        perPage: 10,
+        insertAfter: 'table.responsive-table',
+        pageNumbers: false,
+    });
+
+    $("#btn-search").hover(
+        function () {
+            $("#txt-search").removeClass("hide");
+        },
+        function () {
+            $("#btn-search").click(function () {
+                $("#txt-search").addClass("hide");
+            });
+        }
+    );
+
+    $('#btnAsignar').click(function(){
+        $('#txtValCotizacion').removeAttr("required");
+    });
+
+    $('#frmPeriodos').submit(function(){
+        $('#cantDias').prop('disabled',false);
+    });
+
+    $('#sltPeriodo').change(function () {
+        var valor = $(this).val();
+        $('#div_dinamico').empty();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_busPersona.php",
+            data: $("#sltPeriodo").serialize(),
+            success: function (data) {
+                $('#div_dinamico').html(data);
+            }
+        })
+    });
+
+    $('#sltPeriodo2').change(function () {
+        var persona = "";
+        var periodo = $(this).val();
+        $('#div_dinamico').empty();
+        var personaFrm = $('#txtPersona').val();
+        if (personaFrm == null) {
+            $.ajax({
+                type: "POST",
+                url: "../Controllers/ctrl_busPersona.php",
+                data: $("#sltPeriodo2").serialize(),
+                success: function (data) {
+                    $('#div_sltdinamico').html(data);
+                    $("select").formSelect();
+                    $('#sltPersona').change(function () {
+                        persona = $(this).val();
+                        $('#div_dinamico').empty();
+                        $.ajax({
+                            type: "POST",
+                            url: "../Controllers/ctrl_busPersonaProy.php",
+                            data: {
+                                persona: persona,
+                                periodo: periodo
+                            },
+                            beforeSend: function(xhr){
+                                $('#div_dinamico').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+                            },
+                            success: function (data) {
+                                $('#div_dinamico').html(data);
+                            },
+                        })
+                    });
+                }
+            })
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "../Controllers/ctrl_busPersonaProy.php",
+                data: {
+                    persona: personaFrm,
+                    periodo: periodo
+                },
+                success: function (data) {
+                    $('#div_dinamico').html(data);
+                    M.textareaAutoResize($("textarea"));
+                }
+            })
+        }
+    });
+
+    $('#sltPeriodoPlan').change(function(){
+        $('#div_dinamico').empty();
+        var periodo = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_busPersona.php",
+            data: $('#sltPeriodoPlan').serialize(),
+            success: function(data){
+                $('#div_sltdinamico').html(data);
+                $('select').formSelect();
+                $('#sltPersonaPlan').change(function(){
+                    var persona = $(this).val();
+                    $('#div_dinamico').empty();
+                    $.ajax({
+                        type: "POST",
+                        url: "../Controllers/ctrl_infPlaneacionXls.php",
+                        data: {persona:persona, periodo:periodo},
+                        beforeSend: function(){
+                            $('#div_dinamico').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+                        },
+                        success: function(data){
+                            $('#div_dinamico').html(data);
+                            M.textareaAutoResize($("textarea"));
+                        }
+                    });
+                });
+            }
+        });
+    });
+    
+    $('#sltPeriodoPlan').change(function(){
+        $('#div_dinamico').empty();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_infPlaneacionXls.php",
+            data: $('#sltPeriodoPlan').serialize(),
+            success: function(data){
+                $('#div_dinamico').html(data);
+            }
+        });
+    });
+
+    /* MODULO COTIZACIONES */
+    $(function() {
+        var $form = $("#frmCotizador");
+        var $input = $form.find("#txtValCotizacion, #txtDiferencia");
+        $input.on("keyup change", function(event){
+            var selection = window.getSelection().toString();
+            if (selection !== ''){
+                return;
+            }
+            if ($.inArray(event.keyCode,[38,40,37,39]) !== -1) {
+                return;
+            }
+            var $this = $( this );
+            var input = $this.val();
+            var input = input.replace(/[\D\s\._\-]+/g, "");
+            input = input ? parseInt( input, 10 ) : 0;
+            $this.val( function() {
+                return ( input === 0 ) ? "" : "$ " + input.toLocaleString("es-CO");
+            } );
+        });
+    })
+
+    $('#btnAsignar').prop('disabled', true);
+
+    $('.asignacion').on("keyup change",function() {
+        var disable = false;
+        $('.asignacion').each(function() {
+            if (!$(this).val()) {
+                disable = true;
+            }
+        });
+        $('#btnAsignar').prop('disabled', disable);
+    });
+
+    if ($('#txtObsAprobacion').val() != "" && $('#txtEnlAprobacion').val() != "") {
+        $('#btnAprobar').prop("disabled", "true");
+        $('#txtObsAprobacion').prop("readonly", "true");
+        $('#txtEnlAprobacion').prop("readonly", "true");
+    }
+    
+    $('#txtDiferencia').val("$ " + ($('#txtValCot').text() - $('#txtTotalRecurso').val()).toLocaleString("es-CO"));
+    /* MODULO COTIZACIONES */
+
+    /** Busqueda proyecto en solicitud inicial*/
+    var consulta;
+    $('#txtBusquedaProy').keyup(function(){
+        consulta = $('#txtBusquedaProy').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_solicitudInicial.php",
+            data: "b="+consulta,
+            dataType: "html",
+            beforeSend: function(){
+                $('#sltProyecto').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function(){
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function(data){
+                $("#sltProyecto").empty();
+                $("#sltProyecto").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
+
+    $('#btnDescargar').click(function(){
+        $('select[required]').css({
+            display: 'inline',
+            position: 'absolute',
+            float: 'left',
+            padding: 0,
+            margin: 0,
+            border: '1px solid rgba(255,255,255,0)',
+            height: 0,
+            width: 0,
+            top: '3em',
+            left: '9em'
+        });
+        $(window).on('load', function () {
+            $('.loader').delay(350).fadeOut('slow');
+        });
+    })
+
+    /** Busqueda de solicitudes específicas */
+    $('#txt-search').keypress(function(e) {
+        var tecla = (e.keyCode ? e.keyCode : e.wich);
+        var url = $('#txt-search').data('url');
+        if (tecla == 13) {
+            busqueda(url);
+        }
+    })
+
+});
+
+
+function busqueda(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#txt-search").serialize(),
+        beforeSend: function(){
+            $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+            $('table tbody').paginathing({
+                perPage: 6,
+                insertAfter: 'table.responsive-table',
+                pageNumbers: false,
+            });
+        }
+    });
+    return false;
+}
+
+function pruebas(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#txt-search").serialize(),
+        beforeSend: function(){
+            $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+            $('table tbody').paginathing({
+                perPage: 6,
+                insertAfter: 'table.responsive-table',
+                pageNumbers: false,
+            });
+        }
+    });
+}
+
+/*------- Inicio JS para boton actualizar -------*/
+function actualiza(val, url) {
+    $('#val').val(val);
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#actForm").serialize(),
+        success: function(){
+            console.log(url);
+        }
+    });
+    return false;
+}
+/*------- Fin JS para boton actualizar -------*/
+/*------- Inicio JS para boton suprimir -------*/
+function suprimir(value, url) {
+    $('#val').val(value);
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#actForm").serialize()
+    });
+    return false;
+}
+/*------- Fin JS para boton suprimir -------*/
+
+/*------- Inicio envio de datos a modal -------*/
+function envioData(valor, dir) {
+    $('.modal-content').load(dir + "?id=" + valor, function () {
+        $('#cod').val(valor);
+        $("select").formSelect();
+    });
+}
+/*------- Fin envio de datos a modal -------*/
+
+/*------- Fin envio de datos a modal -------*/
+function cargaSelect(elem, dir, destino) {
+    $.ajax({
+        type: "POST",
+        url: dir,
+        data: $(elem).serialize(),
+        beforeSend: function(){
+            $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $(destino).html(data);
+            $("select").formSelect();
+            $(".datepicker").datepicker();
+        }
+    })
+}
+
+function validar(i){
+    var hrsPresup = $("input[name='tiempoDisponible["+i+"]']").val();
+    var hrsAsig = parseInt($("input[name='horasInvertir["+i+"]']").val());
+    var minAsig = parseInt($("input[name='minutosInvertir["+i+"]']").val());
+    var totalHrsDisponible = $('#txtHorasMes').val();
+    var totalDisponible = parseFloat(totalHrsDisponible * 60);
+    var totalHrsAsignado = 0;
+    var totalMinAsignado = 0;
+    $('.hrsInvertir').each(function (){
+        if (!isNaN($(this).val())) {
+            totalHrsAsignado += Number($(this).val());
+        } 
+    })
+    $('.minInvertir').each(function (){
+        if (!isNaN($(this).val())) {
+            totalMinAsignado += Number($(this).val());
+        } 
+    })
+    totalAsignado = (totalHrsAsignado * 60) + totalMinAsignado;
+
+    var tiempoDisponible = totalDisponible - totalAsignado;
+    
+    if (!isNaN(hrsAsig) && !isNaN(minAsig)) {
+        if (tiempoDisponible >= 0) {
+            M.toast({html: "<i class='small material-icons white-text'>done</i><p class='white-text'>  Horas disponibles para asignar: <strong>"+(tiempoDisponible / 60).toFixed(2)+"<strong></p>"});
+        } else {
+            M.toast({html: "<i class='small material-icons red-text'>error</i><p class='red-text'>  Se ha excedido en: <strong>"+Math.abs((tiempoDisponible / 60).toFixed(2))+" horas.<strong></p>"});
+        }
+        
+    }
+
+    if (isNaN(hrsAsig)) {
+        hrsAsig = 0;
+    }
+    if (isNaN(minAsig)) {
+        minAsig = 0;
+    }
+    hrsPresup = hrsPresup.replace(" hrs", "");
+    var minPresup = hrsPresup * 60;
+    var minTotales = (hrsAsig * 60) + minAsig;
+    if (minTotales > minPresup) {
+        $('#horasInvertir'+ i +'').addClass("alert-input");
+        $('#minutosInvertir'+ i +'').addClass("alert-input");
+    } else {
+        $('#horasInvertir'+ i +'').removeClass("alert-input");
+        $('#minutosInvertir'+ i +'').removeClass("alert-input");
+    }
+}
+
+function calcula(){
+    cot = $('#txtValCotizacion').val().replace(/[($)\s\._\-]+/g, '');
+    rec = $('#txtTotalRecurso').val();
+    dif = cot - rec;
+    $('#txtDiferencia').val("$ " + (cot - rec).toLocaleString("es-CO"));
+}
+
+function format(val){
+    num = $(val).val().replace(/\./g,'');
+    if (!isNaN(num)) {
+        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,'$1.');
+        num = num.split('').reverse().join('').replace(/^[\.]/,'');
+        $(val).val(num);
+    } else {
+        alert("Solo se permite numeración en '$' pesos colombianos");
+        $(val).val().replace(/[^\d\.]*/g,'');
+    }
+    
+}
+
+/**  */
+function mostrarInfo(url){
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#frmInfNomina").serialize(),
+        success: function (data) {
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+            $('table tbody').paginathing({
+                perPage: 6,
+                insertAfter: 'table.responsive-table',
+                pageNumbers: false,
+            });
+        }
+    });
+    return false;
+}
+
+/** Función para enviar los datos de formulario para el informe de P/S */
+
+function buscar(url){
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $('form').serialize(),
+        beforeSend: function(){
+            $('#div_dinamico').html("<div class='row'><div class='col l6 m6 s12 offset-l3 offset-m3'><div class='progress'><div class='indeterminate'></div></div><p class='center-align'>Cargando...</p></div></div>");
+        },
+        success: function (data){
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+        }
+    });
+}
