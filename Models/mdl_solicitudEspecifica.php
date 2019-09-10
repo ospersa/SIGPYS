@@ -327,6 +327,124 @@
             mysqli_close($connection);
         }
 
+        public static function cargaEspecificasUsuario ($buscar, $cod, $usuario) {
+            require('../Core/connection.php');
+            $string = "";
+            $sql = "SELECT idPersona FROM pys_login where usrLogin = '$usuario';";
+            $result = mysqli_query($connection, $sql);
+            while($data = mysqli_fetch_array($result)){
+                $idUsuario = $data[0];
+            };
+
+            $consulta = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_Cursosmodulos.idCM, pys_Cursosmodulos.nombreCursoCM, pys_Cursosmodulos.nombreModuloCM, pys_Cursosmodulos.codigoCursoCM, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_servicios.idSer, pys_servicios.nombreSer, pys_servicios.productoOservicio, pys_equipos.nombreEqu, pys_asignados.idPersona, pys_asignados.idRol, pys_asignados.idFase, pys_asignados.idResponRegistro, pys_solicitudes.idSolIni
+       
+            FROM pys_solicitudes
+       
+            inner join pys_tipossolicitud on pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
+            inner join pys_actsolicitudes on pys_solicitudes.idSol = pys_actsolicitudes.idSol
+            inner join pys_estadosol on pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
+            inner join pys_cursosmodulos on pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+            inner join pys_proyectos on pys_cursosmodulos.idProy = pys_proyectos.idProy
+            inner join pys_actualizacionproy on pys_actualizacionproy.idProy = pys_proyectos.idProy
+            inner join pys_frentes on pys_proyectos.idFrente = pys_frentes.idFrente
+            inner join pys_servicios on pys_actsolicitudes.idSer = pys_servicios.idSer
+            inner join pys_equipos on pys_servicios.idEqu = pys_equipos.idEqu
+            inner join pys_asignados on pys_asignados.idsol = pys_actsolicitudes.idSol
+            inner join pys_personas on pys_asignados.idResponRegistro = pys_personas.idPersona
+            inner join pys_convocatoria on pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
+	   	   
+	        where pys_solicitudes.est = '1' and pys_actsolicitudes.est = '1' and pys_actualizacionproy.est = '1' and pys_tipossolicitud.est = '1' and pys_estadosol.est = '1' and pys_personas.est = '1' and pys_frentes.est = '1' and pys_cursosmodulos.estProy = '1' and pys_cursosmodulos.estCurso = '1' and pys_convocatoria.est = '1' and pys_equipos.est = '1' and pys_asignados.est = '1' and   pys_asignados.idPersona = '".$idUsuario."' and pys_solicitudes.idTSol = 'TSOL02' and ((pys_estadosol.idEstSol != 'ESS001') and (pys_estadosol.idEstSol != 'ESS006') and (pys_estadosol.idEstSol != 'ESS007')) and ((pys_actualizacionproy.codProy like '%".$buscar."%') or (pys_actualizacionproy.nombreProy like '%$buscar%') or(pys_solicitudes.idSol like '%$buscar%') or (pys_estadosol.nombreEstSol like '%$buscar%')) 
+            ORDER BY pys_actsolicitudes.idSol DESC;";
+            $resultado = mysqli_query($connection, $consulta);
+            $registros = mysqli_num_rows($resultado);
+            if ($registros > 0) {
+                $string = ' <table class="responsive-table centered">
+                                <thead>
+                                    <tr>
+                                        <th>Código solicitud</th>
+                                        <th>Producto/Servicio</th>
+                                        <th>Cód. proyecto en Conecta-TE</th>
+                                        <th>Proyecto</th>
+                                        <th>Equipo -- Servicio</th>
+                                        <th>Descripción Producto/Servicio</th>
+                                        <th>Fecha prevista entrega</th>
+                                        <th>Fecha creación</th>
+                                        <th>Registrar tiempos</th>
+                                        <th>Marcar como terminado</th>
+                                        <th>Cerrar producto/servicio</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="misSolicitudes">';
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    $registra = $datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'];
+                    $string .= '    <tr>
+                                        <td>'.$datos['idSolIni'].'</td>
+                                        <td>P'.$datos['idSol'].'</td>
+                                        <td>'.$datos['codProy'].'</td>
+                                        <td>'.$datos['nombreProy'].'</td>
+                                        <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
+                                        <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
+                                        <td>'.$datos['fechPrev'].'</td>
+                                        <td>'.$datos['fechSol'].'</td>';
+                                        $idSol = $datos['idSol'];
+                    /** Validación sí se ha registrado tiempo para el producto/servicio */
+                    $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
+                    FROM pys_tiempos 
+                    INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
+                    WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+                    $resultado1 = mysqli_query($connection, $consulta1);
+                    $registros1 = mysqli_num_rows($resultado1);
+                    while ($datos2 = mysqli_fetch_array($resultado1)) {
+                        $idAsig = $datos2["idAsig"];
+                    }
+                    if( $registros1 > 0){
+                        $string .= '<td><a href="#modalTiempos" class="modal-trigger" onclick="envioData(\''.$datos['idSol'].'\',\'modalTiempos.php\');" title="Ya ha registrado tiempos"><i class="material-icons teal-text">timer</i></a></td>';
+                    } else {
+                        $string .= '<td><a href="#modalTiempos" class="modal-trigger" onclick="envioData(\''.$datos['idSol'].'\',\'modalTiempos.php\');" title="Aun no ha registrado tiempos"><i class="material-icons red-text">timer</i></a></td>';
+                    }
+
+                    /** Sí ha registrado tiempos y el estado de asignacion es diferente a 0 o 2 se habilita para marcar como terminada la labor*/
+                    if( $registros1 > 0){
+                        $consulta2 = "SELECT est FROM pys_asignados WHERE idPersona = '".$idUsuario."' AND idSol = '".$datos['idSol']."' AND idAsig = '".$idAsig."' AND est = 1;";
+                        $resultado2 = mysqli_query($connection, $consulta2);
+                        $registros2 = mysqli_num_rows($resultado2);
+                        if ($registros2 > 0) {
+                            $string .= '<td><a href="#modalTerminar" class="modal-trigger" onclick="envioData(\''.$idAsig.'\',\'modalTerminar.php\');" title="Marcar como terminado"><i class="material-icons red-text">done</i></a></td>';
+                        }
+                    } else {
+                        $string .= '<td></td>';
+                    }
+
+                    /** Sí ha registrado tiempos se activa la opción de cerrar producto/servicio*/
+                    if( $registros1 > 0){
+                        $consulta3 = "SELECT est FROM pys_asignados WHERE idPersona = '".$idUsuario."' AND idSol = '".$datos['idSol']."' AND idAsig = '".$idAsig."' AND est = 1;";
+                        $resultado3 = mysqli_query($connection, $consulta3);
+                        $registros3 = mysqli_num_rows($resultado3);
+                        if ($registros3 > 0) {
+                            $string .= '<td><a href="#modalTerminar" class="modal-trigger" onclick="envioData(\''.$idAsig.'\',\'modalTerminar.php\');" title="Marcar como terminado"><i class="material-icons red-text">done</i></a></td>
+                            </tr>';
+                        }
+                    } else {
+                        $string .= '<td></td></tr>';
+                    }
+                }
+                $string .= '    </tbody>
+                            </table>';
+            } else {
+                if ($cod == '1') {
+                    $string = "<h4 class='center-align'>No hay solicitudes específicas creadas.</h4>";
+                } else {
+                    $string = "<h4 class='center-align'>No hay resultados para la busqueda.</h4>";
+                }
+            }
+            if ($cod == '1') {
+                return $string;
+            } else if ($cod == '2') {
+                echo $string;
+            }
+            mysqli_close($connection);
+        }
+
     }
 
 ?>

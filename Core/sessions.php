@@ -8,7 +8,7 @@ $hora = $_SERVER["REQUEST_TIME"];
 $archivo = basename($_SERVER["PHP_SELF"]);
 
 //Duración de la sesión en segundos
-$duracion = 900;
+$duracion = 3600;
 
 //Si el tiempo de la petición* es mayor el tiempo permitido de la duración, 
 //destruye la sesión y crea una nueva

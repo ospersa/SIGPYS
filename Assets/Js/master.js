@@ -3,15 +3,20 @@ $(window).on('load', function () {
 });
 
 $('.modal').on('load', function () {
-    $('select').formSelect();
+    inicializarCampos();
 });
 
 $('.modal').on('change', function () {
     $('select').formSelect();
     $('select').addClass('hide');
+    inicializarCampos();
 });
 
 $(document).ready(function () {
+
+    $('.tabs').tabs();
+
+    $('.collapsible').collapsible();
 
     $('.sidenav').sidenav();
 
@@ -21,16 +26,12 @@ $(document).ready(function () {
 
     $('.modal').modal({
         onOpenEnd:function(){
-            $('select').formSelect();
-            M.textareaAutoResize($(".textarea"));
-            /*$('#actForm').submit(function(e){
-                e.preventDefault();
-            });*/
+            inicializarCampos();
         }
     });
 
     $('.collapsible').collapsible({
-        onOpenEnd:function(){
+        onOpenEnd: function(){
             M.textareaAutoResize($(".materialize-textarea"));
         }
     });
@@ -64,7 +65,6 @@ $(document).ready(function () {
         if ($('#txtFechIni').val() === "" && $('#txtFechFin').val() === "") {
             $('#check').prop('disabled', false);
         }
-        
     });
 
     $('#check').change(function(){
@@ -105,6 +105,10 @@ $(document).ready(function () {
             });
         }
     );
+
+    $('.ico-clean').click(function () {
+        $('#txt-search').val('');
+    });
 
     $('#btnAsignar').click(function(){
         $('#txtValCotizacion').removeAttr("required");
@@ -311,6 +315,12 @@ $(document).ready(function () {
         }
     })
 
+    $('table tbody#misSolicitudes').paginathing({
+        perPage: 6,
+        insertAfter: 'table.responsive-table',
+        pageNumbers: false,
+    });
+
 });
 
 
@@ -386,6 +396,11 @@ function envioData(valor, dir) {
     $('.modal-content').load(dir + "?id=" + valor, function () {
         $('#cod').val(valor);
         $("select").formSelect();
+        inicializarCampos();
+        var textareas = $(".textarea");
+        if (textareas.length != 0) {
+            M.textareaAutoResize($(".textarea"));
+        }
     });
 }
 /*------- Fin envio de datos a modal -------*/
@@ -510,4 +525,36 @@ function buscar(url){
             $('#div_dinamico').slideDown("slow");
         }
     });
+}
+
+/** Función para inicializar los campos de materialize */
+function inicializarCampos() {
+    
+    var collapsibles = $('.collapsible');
+    if (collapsibles.length != 0) {
+        $('.collapsible').collapsible();
+    }
+    
+    var tabs =  $('.tabs');
+    if (tabs.length != 0) {
+        $('.tabs').tabs();
+        //var active = $('.tabs .active').attr('href');
+        //$('.tabs-content ' + active).show();
+    }
+    
+    var selects = $('.collapsible');
+    if (selects.length != 0) {
+        $('select').formSelect();
+    }
+    
+    var textareas = $(".textarea");
+    if (textareas.length != 0) {
+        M.textareaAutoResize($(".textarea"));
+    }
+
+    var datepickers = $(".datepicker");
+    if (datepickers.length != 0) {
+        $('.datepicker').datepicker();
+    }
+
 }

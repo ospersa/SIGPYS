@@ -81,7 +81,7 @@ if ($idInicial != "") {
                                 <div class="input-field">
                                     <input id="txt-search" name="txt-search" type="search" data-url="../Controllers/ctrl_solicitudEspecifica.php">
                                     <label class="label-icon" for="txt-search"><i class="material-icons">search</i></label>
-                                    <i class="material-icons">close</i>
+                                    <i class="material-icons ico-clean">close</i>
                                 </div>
                             </div>
                         </nav>
