@@ -44,7 +44,7 @@ require('../Estructure/header.php');
                     <label for="txtNomDepartamento">Nombre del departamento</label>
                 </div>
             </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action">Guardar</button>
+            <button class="btn waves-effect waves-light" type="submit" name="btnGuardarDepto">Guardar</button>
         </form>
     </div>
 </div>

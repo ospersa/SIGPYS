@@ -1,13 +1,13 @@
 <?php
-/** Inclusión del Modelo */
+/* Inclusión del Modelo */
 include_once("../Models/mdl_solicitud.php");
 
+/* Inicialización variables*/
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
+/* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
-    $busqueda = $_POST['txt-search'];
-    if ($busqueda == null) {
-        Solicitud::busquedaTotalEstados();
-    } else {
-        Solicitud::busquedaEstados($busqueda);
-    }
+    $busqueda = ($search == null) ? Solicitud::busquedaTotalEstados() : Solicitud::busquedaEstados($busqueda);
 }
+
 ?>

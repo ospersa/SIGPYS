@@ -1,10 +1,13 @@
 <?php
-    $busqueda = $_POST["txt-search"];
+/* Inclusión del Modelo */
+include_once "../Models/mdl_perfil.php";
   
-    include_once "../Models/mdl_perfil.php";
-    if ($busqueda == null) {
-        $resultado = Perfiles::busquedaTotal();
-    } else {
-        $resultado = Perfiles::busqueda($busqueda);
-    }
-    
+/* Inicialización variables*/
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Perfiles::busquedaTotal() : Perfiles::busqueda($busqueda);
+}
+ 
+?>   

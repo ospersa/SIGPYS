@@ -1,5 +1,8 @@
 <?php
+/* Inclusión del Modelo */
 include_once('../Models/mdl_colciencias.php');
+
+/* Carga de información en el Modal */
 if (isset($_GET['cod2'])) {
     $cod2 = $_GET['cod2'];
     $idProy = $_GET['cod'];
@@ -7,4 +10,5 @@ if (isset($_GET['cod2'])) {
         $resultado = Colciencias::onLoadProyecto($idProy);
     }
 }
+
 ?>

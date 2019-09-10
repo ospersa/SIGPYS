@@ -9,15 +9,15 @@
 					require('../Controllers/ctrl_entidad.php');
 				?>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<input id="txtNomEnti" name="txtNomEnti" type="text" class="validate" autofocus required value="<?php echo $var1;?>">
+					<input id="txtNomEnti" name="txtNomEnti" type="text" class="validate" autofocus required value="<?php echo $nomEnti;?>">
 					<label for="txtNomEnti" class="active">Nombre de la Entidad</label>
 				</div>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<input id="txtNomCortoEnti" name="txtNomCortoEnti" type="text" class="validate" value="<?php echo $var2;?>">
+					<input id="txtNomCortoEnti" name="txtNomCortoEnti" type="text" class="validate" value="<?php echo $nomCortoEnti;?>">
 					<label for="txtNomCortoEnti" class="active">Nombre corto de la Entidad</label>
 				</div>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<textarea id="txtDescEnti" name="txtDescEnti" class="materialize-textarea" ><?php echo $var3;?></textarea>
+					<textarea id="txtDescEnti" name="txtDescEnti" class="materialize-textarea" ><?php echo $descEnti;?></textarea>
 					<label for="txtDescEnti" class="active">Descripción de la Entidad</label>
 				</div>
 			</div>

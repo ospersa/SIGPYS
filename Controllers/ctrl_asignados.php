@@ -1,4 +1,5 @@
 <?php
+/*Inclusión del Modelo */
 include_once('../Models/mdl_asignados.php');
 
 /*
@@ -10,16 +11,18 @@ include_once('../Models/mdl_asignados.php');
     pry: ID de proyecto para hacer eliminación.
 */
 
-$estado = (isset($_POST['est'])) ? $_POST['est'] : null ;
-$maxHora = (isset($_POST['txtHoras'])) ? $_POST['txtHoras'] : null;
-$maxMin = (isset($_POST['txtMinutos'])) ? $_POST['txtMinutos'] : null;
-$idAsig = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-$idSol = (isset($_POST['txtCodSol'])) ? $_POST['txtCodSol'] : null;
-$nombreCompleto = "";
-$nombreFase = "";
-$horas = "";
-$minutos = "";
+/* Inicialización variables  */
+$estado            = (isset($_POST['est'])) ? $_POST['est'] : null ;
+$maxHora           = (isset($_POST['txtHoras'])) ? $_POST['txtHoras'] : null;
+$maxMin            = (isset($_POST['txtMinutos'])) ? $_POST['txtMinutos'] : null;
+$idAsig            = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$idSol             = (isset($_POST['txtCodSol'])) ? $_POST['txtCodSol'] : null;
+$nombreCompleto    = "";
+$nombreFase        = "";
+$horas             = "";
+$minutos           = "";
 
+/* Procesamiento peticiones al controlador  */
 if (isset($_GET['cod1'])) {
     $idProy = $_GET['cod1'];
     unset($_GET['cod1']);

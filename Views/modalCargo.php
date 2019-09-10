@@ -9,11 +9,11 @@
 					require('../Controllers/ctrl_cargo.php');
 				?>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<input id="txtnomCargo" name="txtnomCargo" type="text" class="validate" autofocus required value="<?php echo $var1;?>">
+					<input id="txtnomCargo" name="txtnomCargo" type="text" class="validate" autofocus required value="<?php echo $nomCargo;?>">
 					<label for="txtnomCargo" class="active">Nombre del cargo</label>
 				</div>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<textarea id="txtdescCargo" name="txtdescCargo" class="materialize-textarea" ><?php echo $var2;?></textarea>
+					<textarea id="txtdescCargo" name="txtdescCargo" class="materialize-textarea" ><?php echo $descCargo;?></textarea>
 					<label for="txtdescCargo" class="active">Descripción del cargo</label>
 				</div>
 			</div>

@@ -1,9 +1,12 @@
 <?php
+/* Inclusión del Modelo */
 include_once('../Models/mdl_infTiempos.php');
 
+/* Inicialización variables*/
 $fechIni = (empty($_POST['txtFechIni'])) ? null : $_POST['txtFechIni'];
 $fechFin = (empty($_POST['txtFechFin'])) ? null : $_POST['txtFechFin'];
 
+/* Procesamiento peticiones al controlador */
 if (!empty($_POST['txtFechIni']) && !empty($_POST['txtFechFin']) && !isset($_POST['btnDescargar'])) {
     $tabla = InformeTiemposProductoServicio::busqueda($fechIni, $fechFin);
     echo $tabla;

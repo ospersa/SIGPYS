@@ -9,11 +9,11 @@
 					require('../Controllers/ctrl_convocatoria.php');
 				?>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<input id="txtNomConv" name="txtNomConv" type="text" class="validate" autofocus required value="<?php echo $var1;?>">
+					<input id="txtNomConv" name="txtNomConv" type="text" class="validate" autofocus required value="<?php echo $nomConv;?>">
 					<label for="txtNomConv" class="active">Nombre del convocatoria</label>
 				</div>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<textarea id="txtDescConv" name="txtDescConv" class="materialize-textarea"><?php echo $var2;?></textarea>
+					<textarea id="txtDescConv" name="txtDescConv" class="materialize-textarea"><?php echo $descConv;?></textarea>
 					<label for="txtDescConv" class="active">Descripción de la convocatoria</label>
 				</div>
 			</div>

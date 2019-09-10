@@ -1,31 +1,28 @@
 <?php
-    $nomCargo=$_POST["txtnomCargo"];
-    $descCargo=$_POST["txtdescCargo"];
-    $val = $_POST['val'];
-    $idCargo = $_REQUEST['id'];
-    $idCargo2 = $_POST['cod'];
+/* Inclusión del Modelo */
+include_once "../Models/mdl_cargo.php";
 
-    include_once "../Models/mdl_cargo.php";
+/* Inicialización variables*/
+$nomCargo    = (isset($_POST["txtnomCargo"])) ? $_POST["txtnomCargo"] : null;
+$descCargo   = (isset($_POST["txtdescCargo"])) ? $_POST["txtdescCargo"] : null;
+$val         = (isset($_POST['val'])) ? $_POST['val'] : null;
+$idCargo     = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+$idCargo2    = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 
-    if($idCargo != null){
-        $info = new Cargo();
-        $detail = $info->onLoad($idCargo);
-        if (is_array($detail) || is_object($valor)) {
-            foreach ($detail as $valor) {
-                $var=$valor[0];
-                $var1=$valor[1];
-                $var2=$valor[2];
-            }
-        }
-    }
+/* Carga de información en el Modal */
+if($idCargo){
+    $info = Cargo::onLoad($idCargo);
+    $nomCargo = $info['nombreCargo'];
+    $descCargo = $info['descripcionCargo'];
+}
 
-    if (($nomCargo != null) and ($val == null)) {
-        $resultado = Cargo::registrarCargo($nomCargo, $descCargo);
-    }
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['btnGuardarCargo'])) {
+    $resultado = Cargo::registrarCargo($nomCargo, $descCargo);
+} else if ($val == "1") {
+    Cargo::actualizarCargo($idCargo2, $nomCargo, $descCargo);
+} else if ($val == "2") {
+    Cargo::suprimirCargo($idCargo2);
+}
 
-    if ($val=="1") {
-        Cargo::actualizarCargo($idCargo2, $nomCargo, $descCargo);
-    } elseif ($val=="2") {
-        Cargo::suprimirCargo($idCargo2);
-    }
-
+?>

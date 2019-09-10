@@ -22,7 +22,7 @@ require('../Estructure/header.php');
                 <label for="txtNomCeco">Nombre Centro de Costos*</label>
             </div>
             <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Guardar</button>
+                <button class="btn waves-effect waves-light" type="submit" name="btnGuardarCenCos">Guardar</button>
             </div>
         </form>
     </div>

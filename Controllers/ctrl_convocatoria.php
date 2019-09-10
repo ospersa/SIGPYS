@@ -1,33 +1,30 @@
 <?php
-    $nomConv = (isset($_POST["txtNomConv"])) ? $_POST["txtNomConv"] : null;
-    $descConv = (isset($_POST["txtDescConv"])) ? $_POST["txtDescConv"] : null;
-    $val = (isset($_POST["val"])) ? $_POST["val"] : null;
-    $idConv = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
-    $idConv2 = (isset($_POST["cod"])) ? $_POST["cod"] : null;
-    $var1 = "";
-    $var2 = "";
+/* Inclusión del Modelo */
+include_once "../Models/mdl_convocatoria.php";
 
-    include_once "../Models/mdl_convocatoria.php";
+/* Inicialización variables*/
+$nomConv       = (isset($_POST["txtNomConv"])) ? $_POST["txtNomConv"] : null;
+$descConv      = (isset($_POST["txtDescConv"])) ? $_POST["txtDescConv"] : null;
+$val           = (isset($_POST["val"])) ? $_POST["val"] : null;
+$idConv        = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+$idConv2       = (isset($_POST["cod"])) ? $_POST["cod"] : null;
+$var1          = "";
+$var2          = "";
 
-    if($idConv != null){
-        $info = new Convocatoria();
-        $detail = $info->onLoad($idConv);
-        if (is_array($detail) || is_object($valor)) {
-            foreach ($detail as $valor) {
-                $var=$valor[0];
-                $var1=$valor[1];
-                $var2=$valor[2];
-            }
-        }
-    }
+/* Carga de información en el Modal */
+if($idConv){
+    $info = Convocatoria::onLoad($idConv);
+    $nomConv = $info['nombreConvocatoria'];
+    $descConv = $info['descrConvocatoria'];   
+}
 
-    if (($nomConv != null) and ($val == null)) {
-        $resultado = Convocatoria::registrarConv($nomConv, $descConv);
-    }
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['btnGuardarConv'])) {
+    $resultado = Convocatoria::registrarConv($nomConv, $descConv);
+} else if ($val == "1") {
+    Convocatoria::actualizarConv($idConv2, $nomConv, $descConv);
+} else if ($val == "2") {
+    Convocatoria::suprimirConv($idConv2);
+}
 
-    if ($val=="1") {
-        Convocatoria::actualizarConv($idConv2, $nomConv, $descConv);
-    } elseif ($val=="2") {
-        Convocatoria::suprimirConv($idConv2);
-    }
-
+?>

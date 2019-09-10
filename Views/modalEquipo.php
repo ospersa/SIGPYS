@@ -9,11 +9,11 @@
 					require('../Controllers/ctrl_equipo.php');
 				?>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<input id="txtNomEquipo" name="txtNomEquipo" type="text" class="validate" autofocus required value="<?php echo $var1;?>">
+					<input id="txtNomEquipo" name="txtNomEquipo" type="text" class="validate" autofocus required value="<?php echo $nomEquipo;?>">
 					<label for="txtNomEquipo" class="active">Nombre del equipo</label>
 				</div>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<textarea id="txtDescEquipo" name="txtDescEquipo" class="materialize-textarea" ><?php echo $var2;?></textarea>
+					<textarea id="txtDescEquipo" name="txtDescEquipo" class="materialize-textarea" ><?php echo $descEquipo;?></textarea>
 					<label for="txtDescEquipo" class="active">Descripción del equipo</label>
 				</div>
 			</div>

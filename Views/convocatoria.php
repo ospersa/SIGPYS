@@ -23,7 +23,7 @@ require('../Estructure/header.php');
                     <label for="txtDescConv">Descripción de la convocatoria</label>
                 </div>
             </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action">Guardar</button>
+            <button class="btn waves-effect waves-light" type="submit" name="btnGuardarConv">Guardar</button>
         </form>
     </div>
 </div>

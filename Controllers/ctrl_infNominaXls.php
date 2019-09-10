@@ -1,6 +1,11 @@
 <?php
+/* Inclusión del Modelo */
 require('../Models/mdl_infNominaXls.php');
+
+/* Variables que cargan Select en formularios*/
 $selectAnio = InformeNomima::selectAnioInforme();
+
+/* Procesamiento peticiones al controlador */
 if (isset($_POST['sltAnio']) && !isset($_POST['sltMes'])) {
     $anio = $_POST['sltAnio'];
     echo "  <script>

@@ -1,11 +1,14 @@
 
 <?php
-    $busqueda = $_POST["txt-search"];
+/* Inclusión del Modelo */
+include_once "../Models/mdl_fase.php";
+
+/* Inicialización variables*/
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
   
-    include_once "../Models/mdl_fase.php";
-    if ($busqueda === null) {
-        $resultado = Fase::busquedaTotal();
-    } else {
-        $resultado = Fase::busqueda($busqueda);
-    }
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Fase::busquedaTotal() : Fase::busqueda($busqueda);
+}
     
+?>

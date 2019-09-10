@@ -47,10 +47,8 @@ class Departamento {
             INNER JOIN pys_cargos ON pys_departamentos.cargoCoordDepto = pys_cargos.idCargo
             WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_departamentos.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1' AND pys_facdepto.estFacdeptoDepto = '1'  and pys_personas.est = '1' and pys_cargos.est = '1' and pys_departamentos.idDepto = '$idDepartamento';";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos =mysqli_fetch_array($resultado)){
-            $fetch[] = $datos;
-        }
-        return $fetch;
+        $datos =mysqli_fetch_array($resultado);
+        return $datos;
         mysqli_close($connection);
     }
 

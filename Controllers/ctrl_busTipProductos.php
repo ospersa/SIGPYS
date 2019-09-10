@@ -1,11 +1,11 @@
 <?php 
-/** Inclusión del modelo */
+/* Inclusión del modelo */
 include('../Models/mdl_productos.php');
 
-/** Inicialización de variables */
+/* Inicialización de variables */
 $busqueda = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
-/** Procesamiento peticiones al controlador */
+/* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
     Producto::busquedaTipoProductos($busqueda);
 }

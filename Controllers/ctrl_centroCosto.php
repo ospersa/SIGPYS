@@ -1,16 +1,24 @@
 <?php
+/* Inclusión del Modelo */
 include_once('../Models/mdl_centroCosto.php');
 
-if (isset($_POST['txt-search'])) {
-    $busqueda = $_POST['txt-search'];
-    if ($busqueda == null) {
-        CentroCosto::busquedaTotal();
-    } else {
-        CentroCosto::busqueda($busqueda);
-    }
+/* Inicialización variables*/
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
+/* Carga de información en el Modal */
+if (isset($_REQUEST['id'])) {
+    $id = $_REQUEST['id'];
+    $resultado = CentroCosto::onLoadCentroCosto($id);
+    $codCeco = $resultado['ceco'];
+    $nomCeco = $resultado['nombre'];
 }
 
-if (isset($_POST['txtCodCeco']) && isset($_POST['txtNomCeco']) && !isset($_POST['cod'])) {
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? CentroCosto::busquedaTotal() : CentroCosto::busqueda($busqueda);
+}
+
+if (isset($_POST['btnGuardarCenCos'])) {
     $codCeco = $_POST['txtCodCeco'];
     $nomCeco = $_POST['txtNomCeco'];
     CentroCosto::registrarCeco($codCeco, $nomCeco);
@@ -24,13 +32,6 @@ if (isset($_POST['val']) && isset($_POST['cod'])) {
     if ($val == 1) {
         CentroCosto::actualizarCeco($cod, $codCeco, $nomCeco);
     }
-}
-
-if (isset($_REQUEST['id'])) {
-    $id = $_REQUEST['id'];
-    $resultado = CentroCosto::onLoadCentroCosto($id);
-    $codCeco = $resultado['ceco'];
-    $nomCeco = $resultado['nombre'];
 }
 
 ?>

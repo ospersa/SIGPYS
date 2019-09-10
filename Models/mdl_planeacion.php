@@ -6,10 +6,8 @@ class Planeacion{
         require('../Core/connection.php');
         $consulta = "SELECT * FROM pys_asignaciones WHERE idAsignado = '$idAsignado';";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos = mysqli_fetch_array($resultado)){
-            $fetch[] = $datos;
-        }
-        return $fetch;
+        $datos = mysqli_fetch_array($resultado);
+        return $datos;
         mysqli_close($connection);
     }
 

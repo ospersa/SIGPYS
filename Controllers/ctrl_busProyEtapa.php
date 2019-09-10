@@ -1,9 +1,13 @@
 <?php
-$busqueda = $_POST["txt-search"];
+/* Inclusión del Modelo */
 include_once('../Models/mdl_proyecto.php');
-if ($busqueda == null) {
-    Proyecto::busquedaTotalEtapa();
-} else {
-    Proyecto::busquedaEtapa($busqueda);
+
+/* Inicialización variables*/
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Proyecto::busquedaTotalEtapa() : Proyecto::busquedaEtapa($busqueda);
 }
+
 ?>

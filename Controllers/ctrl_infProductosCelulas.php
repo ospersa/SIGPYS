@@ -1,15 +1,16 @@
 <?php
-/** Inclusión del Modelo */
+/* Inclusión del Modelo */
 include_once('../Models/mdl_infProductosCelulas.php');
 
-/** Inicialización de variables */
+/* Inicialización de variables */
 $idCelula = (isset($_POST['sltCelula'])) ? $_POST['sltCelula'] : null;
-$idProy = (isset($_POST['sltProyecto'])) ? $_POST['sltProyecto'] : null;
+$idProy   = (isset($_POST['sltProyecto'])) ? $_POST['sltProyecto'] : null;
 
-/** Select generados dinámicamente */
+/* Variables que cargan Select en formularios*/
 $selectCelula = InformeProductosCelulas::selectCelula();
 $selectProyecto = InformeProductosCelulas::selectProyecto("all");
 
+/* Procesamiento peticiones al controlador */
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['sltCelula']) && !isset($_POST['sltProyecto'])) {
         echo $selectProyecto = InformeProductosCelulas::selectProyecto($idCelula);
@@ -19,6 +20,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 }
 
+/* Verificación de envío de formulario para descarga del informe */
 if (isset($_POST['btnDescargar'])) {
     InformeProductosCelulas::descarga($idCelula, $idProy);
 }

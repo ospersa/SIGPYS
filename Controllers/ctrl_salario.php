@@ -1,16 +1,16 @@
 <?php
-/** Inclusión del Modelo */
+/* Inclusión del Modelo */
 include_once('../Models/mdl_salario.php');
 
-/** Inicialización de Variables */
-$idPersona = (isset($_POST["sltPersona"])) ? $_POST["sltPersona"] : null;
-$salario = (isset($_POST['txtSalario'])) ? $_POST['txtSalario'] : null;
-$vigDesde = (isset($_POST['txtVigIni'])) ? $_POST['txtVigIni'] : null;
-$vigFin = (isset($_POST['txtVigFin'])) ? $_POST['txtVigFin'] : null;
-$id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
-$idSalario = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-$val = (isset($_POST['val'])) ? $_POST['val'] : null;
-$nombreCompleto = null;
+/* Inicialización de Variables */
+$idPersona          = (isset($_POST["sltPersona"])) ? $_POST["sltPersona"] : null;
+$salario            = (isset($_POST['txtSalario'])) ? $_POST['txtSalario'] : null;
+$vigDesde           = (isset($_POST['txtVigIni'])) ? $_POST['txtVigIni'] : null;
+$vigFin             = (isset($_POST['txtVigFin'])) ? $_POST['txtVigFin'] : null;
+$id                 = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+$idSalario          = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$val                = (isset($_POST['val'])) ? $_POST['val'] : null;
+$nombreCompleto     = null;
 
 /** Variables que cargan select en otros formularios */
 $selectPersona = Salarios::selectPersonaConectate(null);
@@ -32,7 +32,5 @@ if ($id) {
     $vigDesde = $info['mes'];
     $vigFin = $info['anio'];
 }
-
-
 
 ?>

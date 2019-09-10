@@ -10,7 +10,7 @@
 				?>
 				<div class="input-field col l10 m10 s12 offset-l1 offset-m1">
                     <select id="selEntidad" name="selEntidad" class="select" required onchange="cargaSelect('#selEntidad.select','../Controllers/ctrl_departamento.php','#sltDinamicoModal')">
-                        <option value="<?php echo $var?>" selected><?php echo $var3?></option>
+                        <option value="<?php echo $idEntidad?>" selected><?php echo $nomEntidad?></option>
                         <?php
                             require ('../Core/connection.php');
 
@@ -34,14 +34,14 @@
                 <div id="sltDinamicoModal" class="col l10 m10 s12 offset-l1 offset-m1">
                     <div class="input-field col l12 m12 s12">
                         <select name="selFacultad" id="selFacultad" required>
-                            <option value="<?php echo $var1?>" selected><?php echo $var4?></option>
+                            <option value="<?php echo $idFacultad?>" selected><?php echo $nomFacultad?></option>
                         </select>
                         <label for="selFacultad">Facultad</label>
                     </div>
-                    <input id="txtNomFacultad" name="txtNomFacultad" type="hidden" class="validate" value="<?php echo $var4?>">
+                    <input id="txtNomFacultad" name="txtNomFacultad" type="hidden" class="validate" value="<?php echo $nomFacultad?>">
                 </div>
                 <div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-                    <input id="txtNomDepartamento" name="txtNomDepartamento" type="text" class="validate" required value="<?php echo $var5?>">
+                    <input id="txtNomDepartamento" name="txtNomDepartamento" type="text" class="validate" required value="<?php echo $nomDepartamento?>">
                     <label for="txtNomDepartamento" class="active">Nombre del departamento</label>
                 </div>
 			</div>

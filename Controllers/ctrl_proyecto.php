@@ -3,46 +3,50 @@
 include_once('../Models/mdl_proyecto.php');
 
 /** Inicialización de variables */
-$id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
-$val = (isset($_POST['val'])) ? $_POST['val'] : null;
-$idProy = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$id         = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+$val        = (isset($_POST['val'])) ? $_POST['val'] : null;
+$idProy     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+
 /** Variables de formulario: etapa de proyectos */
-$nombreEta = (isset($_POST['txtNomEta'])) ? $_POST['txtNomEta'] : null;
-$descripcionEta = (isset($_POST['txtDescEta'])) ? $_POST['txtDescEta'] : null;
-$tipoProy = (isset($_POST['sltTipoProy'])) ? $_POST['sltTipoProy'] : null;
+$nombreEta          = (isset($_POST['txtNomEta'])) ? $_POST['txtNomEta'] : null;
+$descripcionEta     = (isset($_POST['txtDescEta'])) ? $_POST['txtDescEta'] : null;
+$tipoProy           = (isset($_POST['sltTipoProy'])) ? $_POST['sltTipoProy'] : null;
+
 /** Variables de formulario: tipo de proyectos */
-$nombreTip = (isset($_POST['txtNomTipoProy'])) ? $_POST['txtNomTipoProy'] : null;
-$frente = (isset($_POST['sltFrente'])) ? $_POST['sltFrente'] : null;
+$nombreTip  = (isset($_POST['txtNomTipoProy'])) ? $_POST['txtNomTipoProy'] : null;
+$frente     = (isset($_POST['sltFrente'])) ? $_POST['sltFrente'] : null;
+
 /** Variables de formulario: estados de proyectos */
-$nombreEst = (isset($_POST['txtNomEst'])) ? $_POST['txtNomEst'] : null;
-$descripcionEst = (isset($_POST['txtDescEst'])) ? $_POST['txtDescEst'] : null;
+$nombreEst          = (isset($_POST['txtNomEst'])) ? $_POST['txtNomEst'] : null;
+$descripcionEst     = (isset($_POST['txtDescEst'])) ? $_POST['txtDescEst'] : null;
+
 /** Variables de formulario: proyectos */
-$idFrente = null;
-$idTipoProy = null;
-$idEtapaPry = null;
-$nombreCompleto = null;
-$actualizacion = null;
-$codConectate = null;
-$entidad = (isset($_POST['sltEntidad'])) ? $_POST['sltEntidad'] : null;
-$departamento = (isset($_POST['sltDepto'])) ? $_POST['sltDepto'] : null;
-$facultad = (isset($_POST['sltFacul'])) ? $_POST['sltFacul'] : null;
-$tipoIntExt = (isset($_POST['sltTipoIntExt'])) ? $_POST['sltTipoIntExt'] : null;
-$estadoPry = (isset($_POST['sltEstadoProy'])) ? $_POST['sltEstadoProy'] : null;
-$etapaPry = (isset($_POST['sltEtapaProy'])) ? $_POST['sltEtapaProy'] : null;
-$siglaFrente = (isset($_POST['txtSiglaFr'])) ? $_POST['txtSiglaFr'] : null;
-$anio = (isset($_POST['txtAnio'])) ? $_POST['txtAnio'] : null;
-$siglaProy = (isset($_POST['txtSiglaProy'])) ? $_POST['txtSiglaProy'] : null;
-$nombreProy = (isset($_POST['txtNomProy'])) ? $_POST['txtNomProy'] : null;
-$nombreCorto = (isset($_POST['txtNomCorProy'])) ? $_POST['txtNomCorProy'] : null;
-$contexto = (isset($_POST['txtContProy'])) ? $_POST['txtContProy'] : null;
-$presupuesto = (isset($_POST['txtPresupuesto'])) ? $_POST['txtPresupuesto'] : null;
-$convocatoria = (isset($_POST['sltConvocatoria'])) ? $_POST['sltConvocatoria'] : null;
-$financia = (isset($_POST['sltFinancia'])) ? $_POST['sltFinancia'] : null;
-$fechIni = (isset($_POST['txtFechIni'])) ? $_POST['txtFechIni'] : null;
-$fechFin = (isset($_POST['txtFechFin'])) ? $_POST['txtFechFin'] : null;
-$semanas = (isset($_POST['txtSemAcom'])) ? $_POST['txtSemAcom'] : null;
-$fechaColciencias = (isset($_POST['txtFechColciencias'])) ? $_POST['txtFechColciencias'] : null;
-$fteFinancia = (isset($_POST['sltFuenteFinanciamiento'])) ? $_POST['sltFuenteFinanciamiento'] : null;
+$idFrente               = null;
+$idTipoProy             = null;
+$idEtapaPry             = null;
+$nombreCompleto         = null;
+$actualizacion          = null;
+$codConectate           = null;
+$entidad                = (isset($_POST['sltEntidad'])) ? $_POST['sltEntidad'] : null;
+$departamento           = (isset($_POST['sltDepto'])) ? $_POST['sltDepto'] : null;
+$facultad               = (isset($_POST['sltFacul'])) ? $_POST['sltFacul'] : null;
+$tipoIntExt             = (isset($_POST['sltTipoIntExt'])) ? $_POST['sltTipoIntExt'] : null;
+$estadoPry              = (isset($_POST['sltEstadoProy'])) ? $_POST['sltEstadoProy'] : null;
+$etapaPry               = (isset($_POST['sltEtapaProy'])) ? $_POST['sltEtapaProy'] : null;
+$siglaFrente            = (isset($_POST['txtSiglaFr'])) ? $_POST['txtSiglaFr'] : null;
+$anio                   = (isset($_POST['txtAnio'])) ? $_POST['txtAnio'] : null;
+$siglaProy              = (isset($_POST['txtSiglaProy'])) ? $_POST['txtSiglaProy'] : null;
+$nombreProy             = (isset($_POST['txtNomProy'])) ? $_POST['txtNomProy'] : null;
+$nombreCorto            = (isset($_POST['txtNomCorProy'])) ? $_POST['txtNomCorProy'] : null;
+$contexto               = (isset($_POST['txtContProy'])) ? $_POST['txtContProy'] : null;
+$presupuesto            = (isset($_POST['txtPresupuesto'])) ? $_POST['txtPresupuesto'] : null;
+$convocatoria           = (isset($_POST['sltConvocatoria'])) ? $_POST['sltConvocatoria'] : null;
+$financia               = (isset($_POST['sltFinancia'])) ? $_POST['sltFinancia'] : null;
+$fechIni                = (isset($_POST['txtFechIni'])) ? $_POST['txtFechIni'] : null;
+$fechFin                = (isset($_POST['txtFechFin'])) ? $_POST['txtFechFin'] : null;
+$semanas                = (isset($_POST['txtSemAcom'])) ? $_POST['txtSemAcom'] : null;
+$fechaColciencias       = (isset($_POST['txtFechColciencias'])) ? $_POST['txtFechColciencias'] : null;
+$fteFinancia            = (isset($_POST['sltFuenteFinanciamiento'])) ? $_POST['sltFuenteFinanciamiento'] : null;
 
 /** Carga de información en Modales */
 if ($id) {
