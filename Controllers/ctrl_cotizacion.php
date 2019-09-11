@@ -1,6 +1,7 @@
 <?php
 /* Inclusión del Modelo */
 include_once "../Models/mdl_cotizacion.php";
+include_once "../Models/mdl_asignados.php";
 
 /* Inicialización variables*/
 $disabledMail  = "";
@@ -62,7 +63,7 @@ if (isset($_POST['enviar'])){
     $horas = $_POST['txtHoras'];
     $minutos = $_POST['txtMinutos'];
     if ($rol != null && $persona != null && $fase != null && $horas != null && $minutos != null) {
-        $result = Cotizacion::guardarAsignacion($solEsp, $proy, $persona, $rol, $fase, $registra, $horas, $minutos, $solicitante);
+        $result = Asignados::registrarAsignacion($solEsp, $proy, $persona, $rol, $fase, $registra, $horas, $minutos, $solicitante);
     } else {
         echo "<script>alert ('Existe algún campo VACÍO. Registro no válido');</script>";
         echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';

@@ -8,7 +8,6 @@ $idEquipo        = (isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
 $idServicio     = (isset($_POST['sltServicio'])) ? $_POST['sltServicio'] : null;
 $idClase        = (isset($_POST['sltClase'])) ? $_POST['sltClase'] : null;
 $id             = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
-$val            = (isset($_POST['val'])) ? $_POST['val'] : null;
 $cod            = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 
 /** Variables formulario tipos de productos */
@@ -35,9 +34,9 @@ if (isset($_POST['btnRegistrarTip'])) {
     Producto::registrarTipoProducto($idEquipo, $idServicio, $idClase, $nombreTipo, $descripcionTipo, $costoSin, $costoCon, $costoTipo);
 } else if (isset($_POST['btnRegistrarCla'])) {
     Producto::registrarClaseProducto($idEquipo, $idServicio, $nombreClase, $nombreCortoClase, $descripcionClase, $costoClase);
-} else if ($val == 2) {
+} else if (isset($_POST['btnActTipProd'])) {
     Producto::actualizarTipoProducto($cod, $idServicio, $idClase, $nombreTipo, $descripcionTipo, $costoSin, $costoCon, $costoTipo);
-} else if ($val == 3) {
+} else if (isset($_POST['btnActClaPro'])) {
     Producto::actualizarClaseProducto($cod, $idServicio, $nombreClase, $nombreCortoClase, $descripcionClase, $costoClase);
 }
 

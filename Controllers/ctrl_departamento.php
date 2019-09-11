@@ -10,6 +10,7 @@ $nomFacultad        = (isset($_POST["txtNomFacultad"])) ? $_POST["txtNomFacultad
 $val                = (isset($_POST["val"])) ? $_POST["val"] : null;
 $idDepartamento     = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idDepartamento2    = (isset($_POST["cod"])) ? $_POST["cod"] : null;
+$busqueda           = (isset($_POST["selEntidad"])) ? $_REQUEST["selEntidad"] : null;
 
 /* Carga de información en el Modal */
 if($idDepartamento){
@@ -22,17 +23,16 @@ if($idDepartamento){
 }
 
 /* Variables que cargan Select en formularios*/
-if (isset($_POST["selEntidad"])) {
-    $busqueda = $_REQUEST["selEntidad"];
+if ($busqueda) {
     $resultado = Departamento::selectFacultad($busqueda);
 }
 
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['btnGuardarDepto'])) {
     $resultado = Departamento::registrarDepartamento($idEntidad, $idFacultad, $nomDepartamento);
-} else if ($val == "1") {
+} else if (isset($_POST['btnActDepa'])) {
     Departamento::actualizarDepartamento($idDepartamento2, $idEntidad, $idFacultad, $nomFacultad, $nomDepartamento);
-} else if ($val == "2") {
+} else if (isset($_POST['btnEliDepa'])) {
     Departamento::suprimirDepartamento($idDepartamento2);
 }
 

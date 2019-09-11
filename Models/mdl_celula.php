@@ -97,8 +97,8 @@
 
         public static function registrarCelula ($nombreCelula, $coordinacion) {
             if ($nombreCelula != null) {
-                $begin = mysqli_query($connection, "BEGIN;");
                 require('../Core/connection.php');
+                mysqli_query($connection, "BEGIN;");
                 /** Generación del ID para la tabla pys_celulas */
                 $consulta = "SELECT COUNT(idCelula), MAX(idCelula) FROM pys_celulas;";
                 $resultado = mysqli_query($connection, $consulta);
@@ -141,6 +141,7 @@
 
         public static function guardarCoordinador($celula, $coordinador) {
             require '../Core/connection.php';
+            $guardado = 0;
             mysqli_query($connection, "BEGIN;");
             for ($i=0; $i < count($coordinador); $i++) {
                 $cons = "   SELECT pys_celulascoordinador.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres
@@ -171,6 +172,7 @@
         }
 
         public static function eliminarCoordinador($celula, $coordinador) {
+            $eliminado = 0;
             require '../Core/connection.php';
             mysqli_query($connection, "BEGIN;");
             for ($i=0; $i < count($coordinador) ; $i++) { 
@@ -192,6 +194,9 @@
 
         public static function actualizarCelula ($idCelula, $nombreCelula, $eliminar, $agregar) {
             require '../Core/connection.php';
+            $resultado2 = "";
+            $resultado3 = "";
+            $resultado4 = "";
             mysqli_query($connection, "BEGIN;");
             $consulta = "SELECT nombreCelula FROM pys_celulas WHERE idCelula = '$idCelula';";
             $resultado = mysqli_query($connection, $consulta);

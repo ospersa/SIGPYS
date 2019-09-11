@@ -164,20 +164,30 @@
             $consulta = "UPDATE pys_facultades SET nombreFac='$nomFacultad' WHERE idFac='$idFacultad2';";
             $resultado = mysqli_query($connection, $consulta);
             /*Código de actualización nombre facultad en la tabla pys_facdepto*/			
-            $sql2="UPDATE pys_facdepto SET idEnt = '$entidad', facDeptoFacultad = '$nomFacultad' WHERE idFac = '$idFacultad2';";
-            $resultado = mysqli_query($connection, $consulta);
+            $consulta2="UPDATE pys_facdepto SET idEnt = '$entidad', facDeptoFacultad = '$nomFacultad' WHERE idFac = '$idFacultad2';";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            if($resultado && $resultado2){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+            }else{
+                echo "<script> alert('Ocurrió un error al intentar actualizar el registro.');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
         }
 
         public static function suprimirFacultad($idFacultad2){
             require('../Core/connection.php');
             $consulta = "UPDATE pys_facdepto SET estFacdeptoFac = '0' WHERE pys_facdepto.idFac = '$idFacultad2';";
             $resultado = mysqli_query($connection, $consulta);
-            mysqli_close($connection);
-            echo "<script> alert ('Se eliminó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+            if($resultado){
+                echo "<script> alert ('Se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+            }else{
+                echo "<script> alert('Ocurrió un error al intentar eliminar la informacion.');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+            }
+                mysqli_close($connection);
         }
 
         public static function selectEntidad($idEntidad) {

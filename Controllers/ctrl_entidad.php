@@ -21,9 +21,9 @@ if($idEnti){
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['btnGuardarEnt'])) {
     $resultado = Entidad::registrarEntidad($nomEnti, $nomCortoEnti, $descEnti);
-} else if ($val == "1") {
+} else if (isset($_POST['btnActEnti'])) {
     Entidad::actualizarEntidad($idEnti2, $nomEnti, $nomCortoEnti, $descEnti);
-} else if ($val == "2") {
+} else if (isset($_POST['btnEliEnti'])) {
     Entidad::suprimirEntidad($idEnti2);
 }
 

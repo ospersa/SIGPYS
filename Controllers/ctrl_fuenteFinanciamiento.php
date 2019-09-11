@@ -19,7 +19,7 @@ if (isset($_POST['txt-search'])) {
 /* Procesamiento peticiones de inserción, y actualización al Controlador */
 if (isset($_POST['btnGuardarFteFin'])) {
     FuenteFinanciamiento::registrarFuenteFinanciamiento($sigla, $nombre);
-} else if ($val == 1) {
+} else if (isset($_POST['btnActFuenteF'])) {
     FuenteFinanciamiento::actualizarFuenteFinanciamiento($idFteFin, $sigla, $nombre);
 }
 

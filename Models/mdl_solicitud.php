@@ -24,7 +24,7 @@
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if ( mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table centered">
                             <thead>
                                 <tr>
@@ -43,6 +43,8 @@
                 }
                 echo '      </tbody>
                         </table>';
+            }else{
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }
@@ -71,7 +73,7 @@
                 echo '      </tbody>
                         </table>';
             } else {
-                echo "<h6>No hay resultados para la busqueda: <strong>$busqueda</strong></h6>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }
@@ -107,7 +109,7 @@
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_estadosol WHERE est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table centered">
                             <thead>
                                 <tr>
@@ -127,7 +129,7 @@
                 echo '      </tbody>
                         </table>';
             } else {
-                echo "<h6>No hay resultados para la busqueda: <strong>$busqueda</strong></h6>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }

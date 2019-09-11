@@ -4,7 +4,6 @@
         <form id="actForm" action="../Controllers/ctrl_elementoPep.php" method="post" class="col l12 m12 s12" autocomplete="off">
             <div class="row">
                 <input id="cod" name="cod" type="hidden">
-                <input id="val" name="val" type="hidden">
                 <?php
                     require('../Controllers/ctrl_elementoPep.php');
                 ?>
@@ -20,7 +19,7 @@
                     <?php echo $sltCeco; ?>
                 </div>
             </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_elementoPep.php')">Actualizar</button>
+            <button class="btn waves-effect waves-light" type="submit" name="btnActEPep">Actualizar</button>
         </form>
     </div>
 </div>

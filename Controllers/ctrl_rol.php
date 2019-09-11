@@ -16,9 +16,9 @@ $selectTipRol = Rol::selectTipoRol(null);
 /** Procesamiento de peticiones al Controlador */
 if (isset($_POST['btnGuardarRol'])) {
     Rol::registrarRol($tipRol, $nomRol, $descRol);
-} else if ($val == "1") {
+} else if (isset($_POST['btnActRol'])) {
     Rol::actualizarRol($idRol, $tipRol, $nomRol, $descRol);
-} else if ($val == "2") {
+} else if (isset($_POST['btnEliRol'])) {
     Rol::suprimirRol($idRol);
 }
 

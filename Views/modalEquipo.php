@@ -4,7 +4,6 @@
 		<form id="actForm" action="../Controllers/ctrl_equipo.php" method="post" class="col l12 m12 s12">
 			<div class="row">
 				<input type="hidden" id="cod" name="cod">
-				<input type="hidden" id="val" name="val">
 				<?php
 					require('../Controllers/ctrl_equipo.php');
 				?>
@@ -17,8 +16,8 @@
 					<label for="txtDescEquipo" class="active">Descripción del equipo</label>
 				</div>
 			</div>
-			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="action" onclick="suprimir('2','Controllers/ctrl_equipo.php')">Eliminar</button>
-			<button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_equipo.php')">Actualizar</button>
+			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="btnEliEqu">Eliminar</button>
+			<button class="btn waves-effect waves-light" type="submit" name="btnActEqu">Actualizar</button>
 		</form>
 	</div>
 </div>

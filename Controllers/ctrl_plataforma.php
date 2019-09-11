@@ -17,9 +17,9 @@ if($id){
 /* Peticiones realizadas al Controlador */
 if (isset($_POST['btnGuardarPlataforma'])) {
     Plataforma::registrarPlataforma($nomPlataforma);
-} else if ($val == "1") {
+} else if (isset($_POST['btnActplataforma'])) {
     Plataforma::actualizarPlataforma($idPlataforma, $nomPlataforma);
-} else if ($val == "2") {
+} else if (isset($_POST['btnEliplataforma'])) {
     Plataforma::suprimirPlataforma($idPlataforma);
 }
 

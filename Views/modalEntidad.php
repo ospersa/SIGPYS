@@ -21,8 +21,8 @@
 					<label for="txtDescEnti" class="active">Descripción de la Entidad</label>
 				</div>
 			</div>
-			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="action" onclick="suprimir('2','Controllers/ctrl_entidad.php')">Eliminar</button>
-			<button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_entidad.php')">Actualizar</button>
+			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="btnEliEnti">Eliminar</button>
+			<button class="btn waves-effect waves-light" type="submit" name="btnActEnti">Actualizar</button>
 		</form>
 	</div>
 </div>

@@ -33,9 +33,9 @@ if ($id) {
 }
 
 /* Peticiones de actualización de Estado o Tipo de solicitudes */
-if ($val == '1') { // 1 -> Actualización de estado de solicitud
+if (isset($_POST['btnActEstSol'])) { // Actualización de estado de solicitud
     Solicitud::actualizarEstadoSolicitud($cod, $nombreEst, $descripcionEst);
-} else if ($val == '2') { // 2 -> Actualización de tipo de solicitud
+} else if (isset($_POST['btnActTipSol'])) { // Actualización de tipo de solicitud
     Solicitud::actualizarTipoSolicitud($cod, $nombreTip, $descripcionTip);
 }
 

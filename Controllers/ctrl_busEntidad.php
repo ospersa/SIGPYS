@@ -1,4 +1,3 @@
-
 <?php
 /* Inclusión del Modelo */
 include_once "../Models/mdl_entidad.php";
@@ -8,7 +7,7 @@ $search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
-    $busqueda = ($search == null) ? Entidad::busquedaTotal() : Entidad::busqueda($busqueda);
+    $busqueda = ($search == null) ? Entidad::busquedaTotal() : Entidad::busqueda($search);
 }
  
 ?>   

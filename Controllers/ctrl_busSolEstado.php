@@ -7,7 +7,7 @@ $search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
-    $busqueda = ($search == null) ? Solicitud::busquedaTotalEstados() : Solicitud::busquedaEstados($busqueda);
+    $busqueda = ($search == null) ? Solicitud::busquedaTotalEstados() : Solicitud::busquedaEstados($search);
 }
 
 ?>

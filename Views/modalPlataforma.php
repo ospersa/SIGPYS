@@ -13,8 +13,8 @@
 					<label for="txtNomPlataforma" class="active">Nombre de la plataforma</label>
 				</div>
 			</div>
-			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="action" onclick="suprimir('2','Controllers/ctrl_plataforma.php')">Eliminar</button>
-			<button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_plataforma.php')">Actualizar</button>
+			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="btnEliplataforma">Eliminar</button>
+			<button class="btn waves-effect waves-light" type="submit" name="btnActplataforma">Actualizar</button>
 		</form>
 	</div>
 </div>

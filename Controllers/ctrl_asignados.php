@@ -24,31 +24,31 @@ $minutos           = "";
 
 /* Procesamiento peticiones al controlador  */
 if (isset($_GET['cod1'])) {
-    $idProy = $_GET['cod1'];
+    $idProy = (isset($_GET['cod1'])) ? $_GET['cod1'] : null;
     unset($_GET['cod1']);
     $resultado = Asignados::asignarPersonaProy($idProy);
 } else if (isset($_GET['cod2'])) {
-    $idSol = $_GET['cod2'];
+    $idSol = (isset($_GET['cod2'] )) ? $_GET['cod2'] : null;
     unset($_GET['cod2']);
     $resultado = Asignados::asignarPersonaSolIni($idSol);
 } else if (isset($_GET['cod3'])) {
-    $idSol = $_GET['cod3'];
+    $idSol = (isset($_GET['cod3'])) ? $_GET['cod3'] : null;
     unset($_GET['cod3']);
     $resultado = Asignados::asignarPersonaSolEsp($idSol);
 } else if (isset($_GET['sup'])) {
-    $idAsig = $_GET['sup'];
+    $idAsig = (isset($_GET['sup'])) ? $_GET['sup'] : null;
     unset($_GET['sup']);
     $resultado = Asignados::eliminarAsignacion($idAsig);
 }
 
 if (isset($_POST['btnAsignar'])) {
     session_start();
-    $registra = $_SESSION['usuario'];
-    $rol = $_POST['sltRol'];
-    $persona = $_POST['sltPersona'];
-    $fase = $_POST['sltFase'];
-    $idProy = $_POST['txtIdProy'];
-    $idCurso = "";
+    $registra   = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
+    $rol        = (isset($_POST['sltRol'])) ? $_POST['sltRol'] : null;
+    $persona    = (isset($_POST['sltPersona'])) ? $_POST['sltPersona'] : null;
+    $fase       = (isset($_POST['sltFase'])) ? $_POST['sltFase'] : null;
+    $idProy     = (isset($_POST['txtIdProy'])) ? $_POST['txtIdProy'] : null;
+    $idCurso    = "";
     $resultado = Asignados::registrarAsignacion($rol, $persona, $fase, $idProy, $idCurso, $registra, $maxHora, $maxMin, $idSol);
 } else if (isset($_POST['btnActualizar'])) {
     $resultado = Asignados::actualizarAsignacion($idAsig, $maxHora, $maxMin);
@@ -59,7 +59,7 @@ if (isset($_POST['btnAsignar'])) {
 }
 
 if (isset($_GET['id'])) {
-    $idAsig = $_GET['id'];
+    $idAsig = (isset($_GET['id'])) ? $_GET['id'] : null;
     $info = Asignados::onLoadAsignacion($idAsig);
     $nombreCompleto = strtoupper($info['apellido1']." ".$info['apellido2']." ".$info['nombres']);
     $nombreFase = $info['nombreFase'];

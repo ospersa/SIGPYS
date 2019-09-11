@@ -3,8 +3,7 @@
 	<div class="row">
 		<form id="actForm" action="../Controllers/ctrl_cargo.php" method="post" class="col l12 m12 s12">
 			<div class="row">
-				<input type="hidden" id="cod" name="cod" >
-				<input type="hidden" id="val" name="val" >
+				<input type="hidden" id="cod" name="cod">
 				<?php
 					require('../Controllers/ctrl_cargo.php');
 				?>
@@ -17,8 +16,8 @@
 					<label for="txtdescCargo" class="active">Descripción del cargo</label>
 				</div>
 			</div>
-			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="action" onclick="suprimir('2','Controllers/ctrl_cargo.php')">Eliminar</button>
-			<button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_cargo.php')">Actualizar</button>
+			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="btnEliCargo" >Eliminar</button>
+			<button class="btn waves-effect waves-light" type="submit" name="btnActCargo" >Actualizar</button>
 		</form>
 	</div>
 </div>

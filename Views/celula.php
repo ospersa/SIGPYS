@@ -24,7 +24,7 @@ require('../Estructure/header.php');
                 <?php echo $selectCoordinador;?>
             </div>
             <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Guardar</button>
+                <button class="btn waves-effect waves-light" type="submit" name="btnGuaCelula">Guardar</button>
             </div>
         </form>
     </div>

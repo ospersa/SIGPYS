@@ -7,7 +7,7 @@ $search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
     
 /* Inicialización variables*/
 if (isset($_POST['txt-search'])) {
-    $busqueda = ($search == null) ? $resultado = Rol::busquedaTotal() : $resultado = Rol::busqueda($busqueda);
+    $busqueda = ($search == null) ? $resultado = Rol::busquedaTotal() : $resultado = Rol::busqueda($search);
 }
  
 ?>   

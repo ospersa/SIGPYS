@@ -6,7 +6,7 @@ $search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
-    $busqueda = ($search == null) ? Cargo::busquedaTotal() : Cargo::busqueda($busqueda);
+    $busqueda = ($search == null) ? Cargo::busquedaTotal() : Cargo::busqueda($search);
 }
 
 ?>    

@@ -8,8 +8,6 @@ $descConv      = (isset($_POST["txtDescConv"])) ? $_POST["txtDescConv"] : null;
 $val           = (isset($_POST["val"])) ? $_POST["val"] : null;
 $idConv        = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idConv2       = (isset($_POST["cod"])) ? $_POST["cod"] : null;
-$var1          = "";
-$var2          = "";
 
 /* Carga de información en el Modal */
 if($idConv){
@@ -21,9 +19,9 @@ if($idConv){
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['btnGuardarConv'])) {
     $resultado = Convocatoria::registrarConv($nomConv, $descConv);
-} else if ($val == "1") {
+} else if (isset($_POST['btnActConv'])) {
     Convocatoria::actualizarConv($idConv2, $nomConv, $descConv);
-} else if ($val == "2") {
+} else if (isset($_POST['btnEliConv'])){
     Convocatoria::suprimirConv($idConv2);
 }
 

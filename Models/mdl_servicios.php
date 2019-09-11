@@ -32,7 +32,7 @@
             if ($registros > 0) {
                 
             } else {
-                echo "<h4>No hay resultados para la busqueda.</h4>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }

@@ -23,6 +23,12 @@ $categoriaCargo     = (isset($_POST['sltCategoriaCargo'])) ? $_POST['sltCategori
 $val                = (isset($_POST['val'])) ? $_POST['val'] : null;
 $cod                = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 
+/* Iniciacion de variables Modal */
+$entidadM = (isset($_POST['sltEntidad2'])) ? $_POST['sltEntidad2'] : null;
+$cargoM = (isset( $_POST['sltCargo2'])) ? $_POST['sltCargo2'] : null;
+$equipoM = (isset( $_POST['sltEquipo2'])) ? $_POST['sltEquipo2'] : null;
+$ciudadM = (isset( $_POST['sltCiudad2'])) ? $_POST['sltCiudad2'] : null;
+
 /* Procesamiento de peticiones realizadas al controlador */
 if (isset($_POST['btnRegistrar'])) {
     if (($entidad || $identificacion || $cargo || $tipo || $apellido1 || $nombres || $mail || $ciudad || $categoriaCargo) == null) {
@@ -30,16 +36,10 @@ if (isset($_POST['btnRegistrar'])) {
     } else {
         Usuario::registrarUsuario($entidad, $facultad, $departamento, $cargo, $tipo, $identificacion, $nombres, $apellido1, $apellido2, $ciudad, $equipo, $mail, $fijo, $extension, $celular, $categoriaCargo);
     }
-} else if ($val) {
-    $entidad = (isset($_POST['sltEntidad2'])) ? $_POST['sltEntidad2'] : null;
-    $cargo = $_POST['sltCargo2'];
-    $equipo = $_POST['sltEquipo2'];
-    $ciudad = $_POST['sltCiudad2'];
-    if ($val == '1') {
-        Usuario::actualizarUsuario($cod, $identificacion, $nombres, $apellido1, $apellido2, $entidad, $facultad, $departamento, $cargo, $tipo, $equipo, $ciudad, $mail, $fijo, $extension, $celular, $categoriaCargo);
-    } else if ($val == '2') {
-        Usuario::eliminarUsuario($cod);
-    }
+} else if (isset($_POST['btnActUsua'])){
+    Usuario::actualizarUsuario($cod, $identificacion, $nombres, $apellido1, $apellido2, $entidadM, $facultad, $departamento, $cargoM, $tipo, $equipoM, $ciudadM, $mail, $fijo, $extension, $celular, $categoriaCargo);
+}else if (isset($_POST['btnEliUsua'])) {
+    Usuario::eliminarUsuario($cod);
 }
 
 /* Carga de información en el Modal */
