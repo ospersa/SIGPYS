@@ -8,11 +8,11 @@
                     require('../Controllers/ctrl_centroCosto.php');
                 ?>
                 <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                    <input id="txtCodCeco2" name="txtCodCeco" type="text" class="validate" value="<?php echo $codCeco;?>" required>
+                    <input id="txtCodCeco2" name="txtCodCeco2" type="text" class="validate" value="<?php echo $codCeco;?>" required>
                     <label for="txtCodCeco2" class="active">Código Centro de Costos*</label>
                 </div>
                 <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                    <input id="txtNomCeco2" name="txtNomCeco" type="text" class="validate" value="<?php echo $nomCeco;?>" required>
+                    <input id="txtNomCeco2" name="txtNomCeco2" type="text" class="validate" value="<?php echo $nomCeco;?>" required>
                     <label for="txtNomCeco2" class="active">Nombre Centro de Costos*</label>
                 </div>
             </div>

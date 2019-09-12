@@ -9,17 +9,19 @@ $diasSeg1       = (isset($_POST['txtDiasSeg1'])) ? $_POST['txtDiasSeg1'] : null;
 $diasSeg2       = (isset($_POST['txtDiasSeg2'])) ? $_POST['txtDiasSeg2'] : null;
 $id             = (isset($_REQUEST["id"])) ? $_REQUEST['id'] : null;
 $idPeriodo      = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-$val            = (isset($_POST["val"])) ? $_POST['val'] : null;
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
-/* Procesamiento de peticiones al Controlador */
-if (isset($_POST['btnGuardarPeriodo'])) {
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Periodo::busquedaTotal() : Periodo::busqueda($search);
+} else if (isset($_POST['btnGuardarPeriodo'])) {
     if ($fechaInicial != null && $fechaFinal != null && $diasSeg1 != null && $diasSeg2 != null ) {
         Periodo::registrarPeriodo($fechaInicial, $fechaFinal, $diasSeg1, $diasSeg2);
     } else {
         echo "<script>alert ('Existe algún campo vacío. El registro no se pudo guardar');</script>";
         echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
     }
-} else if ($val == "1") {
+} else if (isset($_POST['btnActPerio'])) {
     Periodo::actualizarPeriodo($idPeriodo, $fechaInicial, $fechaFinal, $diasSeg1, $diasSeg2);
 } 
 

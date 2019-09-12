@@ -9,12 +9,15 @@ $descRol    = (isset($_POST["txtDescRol"])) ? $_POST["txtDescRol"] : null;
 $val        = (isset($_POST['val'])) ? $_POST['val'] : null;
 $id         = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idRol      = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /** Variables que cargan select en otros formularios */
 $selectTipRol = Rol::selectTipoRol(null);
-
-/** Procesamiento de peticiones al Controlador */
-if (isset($_POST['btnGuardarRol'])) {
+    
+/* Inicialización variables*/
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? $resultado = Rol::busquedaTotal() : $resultado = Rol::busqueda($search);
+}else if (isset($_POST['btnGuardarRol'])) {
     Rol::registrarRol($tipRol, $nomRol, $descRol);
 } else if (isset($_POST['btnActRol'])) {
     Rol::actualizarRol($idRol, $tipRol, $nomRol, $descRol);

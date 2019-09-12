@@ -74,7 +74,7 @@
                 echo '      </tbody>
                 </table>';
             } else {
-                echo "<h5 class='red-text'>No hay resultados para la busqueda: $busqueda.</h5>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }

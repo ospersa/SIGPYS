@@ -44,7 +44,7 @@
             require('../Core/connection.php');
             $consulta = "SELECT idFteFin, nombre, sigla FROM pys_fuentesfinanciamiento WHERE estado = '1' AND (nombre LIKE '%$busqueda%' OR sigla LIKE '%$busqueda%') ORDER BY sigla;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table centered">
                             <thead>
                                 <tr>
@@ -64,7 +64,7 @@
                 echo '      </tbody>
                         </table>';
             } else {
-                echo "<h5 class='red-text'>No hay resultados para la busqueda: '$busqueda'.</h5>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }

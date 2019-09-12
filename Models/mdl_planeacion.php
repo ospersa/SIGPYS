@@ -403,6 +403,8 @@ class Planeacion{
 
     public static function guardarPlaneacion($idDedicacion, $idAsignado, $hrsInvertir, $mtsInvertir, $hrsDispo, $observacion){
         require('../Core/connection.php');
+        $acumHrs = 0;
+        $acumMin = 0;
         $con1 = "SELECT * FROM pys_asignaciones;";
         $registros = mysqli_query($connection, $con1);
         $count = mysqli_num_rows($registros);
@@ -445,10 +447,10 @@ class Planeacion{
                 $acumHrs = floor($acumTot / 60);
                 $acumMin = round(((($acumTot / 60) - $acumHrs) * 60),0);
                 $acumTot1 = round(($acumTot / 60),2);
-                echo "<script> alert ('Se agregaron ".$acumHrs." horas y ".$acumMin." minutos. Quedan ".($hrsDispo - $acumTot1)." Horas disponibles para asignar.');</script>";
+                //echo "<script> alert ('Se agregaron ".$acumHrs." horas y ".$acumMin." minutos. Quedan ".($hrsDispo - $acumTot1)." Horas disponibles para asignar.');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/planeacion.php">';
             } else {
-                echo "<script> alert ('Se agregaron ".$acumMin." minutos. Quedan ".($hrsDispo - $acumTot1)." Horas disponibles para asignar.');</script>";
+                //echo "<script> alert ('Se agregaron ".$acumMin." minutos. Quedan ".($hrsDispo - $acumTot1)." Horas disponibles para asignar.');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/planeacion.php">';
             }
         }
@@ -489,9 +491,14 @@ class Planeacion{
             SET horasInvertir = '$hrsInvertir', minutosInvertir = '$mtsInvertir' 
             WHERE idAsignado = '$idAsignado';";
         $resultado = mysqli_query($connection, $consulta);
+        if ($resultado){
+            echo "<script> alert ('Se actualizó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/planeacion.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/planeacion.php">';
+        }
         mysqli_close($connection);
-        echo "<script> alert ('Se actualizó correctamente la información');</script>";
-        echo '<meta http-equiv="Refresh" content="0;url=../Views/planeacion.php">';
     }
 
 }

@@ -58,7 +58,7 @@
             $consulta = "SELECT * FROM pys_celulas WHERE estado = '1' AND nombreCelula LIKE '%$busqueda%' ORDER BY nombreCelula;";
             $resultado = mysqli_query($connection, $consulta);
             $personas = "";
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table centered">
                             <thead>
                                 <tr>
@@ -90,7 +90,7 @@
                 echo '      </tbody>
                         </table>';
             } else {
-                echo "<h5 class='red-text'>No hay resultados para la busqueda: <span class='teal-text'>$busqueda</span>.</h5>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }
@@ -231,7 +231,7 @@
             require '../Core/connection.php';
             $consulta = "SELECT idPersona, nombres, apellido1, apellido2 FROM pys_personas WHERE est = '1' AND idFacDepto = 'FD0034' ORDER BY apellido1;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 $string = ' <select name="sltCoordinador[]" id="sltCoordinador" multiple '.$required.'>
                                 <option value="" disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {

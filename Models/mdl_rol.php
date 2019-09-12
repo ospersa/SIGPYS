@@ -101,7 +101,7 @@
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/rol.php">';
             }else{
-                echo "<script> alert ('No se pudo guardar la información');</script>";
+                echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/rol.php">';
             }
             mysqli_close($connection);
@@ -115,7 +115,7 @@
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/rol.php">';
             }else{
-                echo "<script> alert ('No se pudo guardar la información');</script>";
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/rol.php">';
             }
             mysqli_close($connection);
@@ -130,7 +130,7 @@
                 echo "<script> alert ('Se eliminó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/rol.php">';
             }else{
-                echo "<script> alert ('No se pudo eliminar la información');</script>";
+                echo "<script> alert ('Ocurrió un error al intentar eliminar la informacion');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/rol.php">';
             }
             mysqli_close($connection);

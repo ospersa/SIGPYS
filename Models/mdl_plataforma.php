@@ -41,25 +41,30 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_plataformas WHERE est ='1' AND nombrePlt LIKE '%".$busqueda."%' ORDER BY nombrePlt;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'
-            <table class="centered responsive-table">
-                <thead>
-                    <tr>
-                        <th>Plataforma</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>';
-            while ($datos =mysqli_fetch_array($resultado)){
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){
                 echo'
-                    <tr>
-                        <td>'.$datos[1].'</td>
-                        <td><a href="#modalPlataforma" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPlataforma.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                    </tr>';
+                <table class="centered responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Plataforma</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                while ($datos =mysqli_fetch_array($resultado)){
+                    echo'
+                        <tr>
+                            <td>'.$datos[1].'</td>
+                            <td><a href="#modalPlataforma" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPlataforma.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        </tr>';
+                }
+                echo "
+                    </tbody>
+                </table>";
+            } else{
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
-            echo "
-                </tbody>
-            </table>";
             mysqli_close($connection);
         }
 
@@ -92,9 +97,14 @@
                     }		
                     $sql = "INSERT INTO pys_plataformas VALUES ('$codPlataforma', '$nomPlataforma', '1');";
                     $resultado = mysqli_query($connection, $sql);
-                    echo "<script> alert ('Se guardó correctamente la información');</script>";
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
-                }
+                    if ($resultado){
+                        echo "<script> alert ('Se guardó correctamente la información');</script>";
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+                    }else{
+                        echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+                    }
+                }   
             }
             mysqli_close($connection);
         }
@@ -103,18 +113,29 @@
             require('../Core/connection.php');
             $consulta = "update pys_plataformas set nombrePlt='$nomPlataforma' where idPlat = '$idPlataforma2'";
             $resultado = mysqli_query($connection, $consulta);
+            if ($resultado){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+            } else{
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+            
         }
 
         public static function suprimirPlataforma($idPlataforma2){
             require('../Core/connection.php');
             $consulta = "update pys_plataformas set est = '0' where idPlat = '$idPlataforma2';";
             $resultado = mysqli_query($connection, $consulta);
+            if ($resultado){
+                echo "<script> alert ('Se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar eliminar la informacion');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se eliminó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
         }
     }
 

@@ -26,7 +26,15 @@ if (!empty($_REQUEST['cod'])) {
     $idAsig = $_REQUEST['cod'];
 }
 
-if(empty($search)) {
+//Cambio del comentado de abajo 
+if(!isset($_SESSION)) { 
+    session_start();
+    }
+$usuario = $_SESSION['usuario'];
+SolicitudEspecifica::cargaEspecificasUsuario( $search, 2, $usuario);
+
+
+/* if(empty($search)) {
     if(!isset($_SESSION)) { 
         session_start();
     }
@@ -40,7 +48,7 @@ if (!empty($search)) {
     }
     $usuario = $_SESSION['usuario'];
     SolicitudEspecifica::cargaEspecificasUsuario($search, 2, $usuario);
-}
+} */
 
 if (isset($_POST['btnInactivar'])) {
     $resultado = Asignados::cambiarEstadoAsignacion($idAsig, 1);

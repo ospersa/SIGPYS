@@ -5,7 +5,7 @@ require_once('../Controllers/ctrl_rol.php');
 
 <div class="row search">
     <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" data-url="../Controllers/ctrl_busRol.php">
-    <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_busRol.php')">
+    <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_rol.php')">
         <i class="material-icons">search</i>
     </button>
 </div>

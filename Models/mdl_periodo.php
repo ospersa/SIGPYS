@@ -47,32 +47,37 @@
             require ('../Core/connection.php');
             $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo = '1' AND (inicioPeriodo LIKE '%$busqueda%' OR finPeriodo LIKE '%$busqueda%') ORDER BY idPeriodo DESC;";
             $resultado = mysqli_query($connection, $consulta);
-            echo '  <table class="centered responsive-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha Inicio Periodo</th>
-                                <th>Fecha Fin Periodo</th>
-                                <th>Días Segmento 1</th>
-                                <th>Horas Segmento 1</th>
-                                <th>Días Segmento 2</th>
-                                <th>Horas Segmento 2</th>
-                                <th>Editar</th>
-                            </tr>
-                        </thead>
-                        <tbody>';
-            while ($datos = mysqli_fetch_array($resultado)){
-                echo'       <tr>
-                                <td>'.$datos[1].'</td>
-                                <td>'.$datos[2].'</td>
-                                <td>'.$datos[3].'</td>
-                                <td>'.($datos[3] * 8).'</td>
-                                <td>'.$datos[4].'</td>
-                                <td>'.($datos[4] * 8).'</td>
-                                <td><a href="#modalPeriodo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPeriodo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                            </tr>';
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){
+                echo '  <table class="centered responsive-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha Inicio Periodo</th>
+                                    <th>Fecha Fin Periodo</th>
+                                    <th>Días Segmento 1</th>
+                                    <th>Horas Segmento 1</th>
+                                    <th>Días Segmento 2</th>
+                                    <th>Horas Segmento 2</th>
+                                    <th>Editar</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+                while ($datos = mysqli_fetch_array($resultado)){
+                    echo'       <tr>
+                                    <td>'.$datos[1].'</td>
+                                    <td>'.$datos[2].'</td>
+                                    <td>'.$datos[3].'</td>
+                                    <td>'.($datos[3] * 8).'</td>
+                                    <td>'.$datos[4].'</td>
+                                    <td>'.($datos[4] * 8).'</td>
+                                    <td><a href="#modalPeriodo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPeriodo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                </tr>';
+                }
+                echo '      </tbody>
+                        </table>';
+            }else{
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
-            echo '      </tbody>
-                    </table>';
             mysqli_close($connection);
         }
 
@@ -91,18 +96,28 @@
             }
             $sql="INSERT INTO pys_periodos VALUES ('$codPeriodo', '$fechIni',  '$fechFin', '$diasSeg1','$diasSeg2',1);";
             $resultado = mysqli_query($connection, $sql);
-            mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/dedicacion.php?cod='.$codPeriodo.'">';
+            if ($resultado){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/dedicacion.php?cod='.$codPeriodo.'">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
+            }
         }
 
         public static function actualizarPeriodo ($idPeriodo, $fechaIni, $fechaFin, $diasSeg1, $diasSeg2){
             require ('../Core/connection.php');
             $consulta = "UPDATE pys_periodos SET inicioPeriodo = '$fechaIni', finPeriodo = '$fechaFin', diasSegmento1 = '$diasSeg1', diasSegmento2 = '$diasSeg2' WHERE idPeriodo = '$idPeriodo';";
             $resultado = mysqli_query($connection, $consulta);
+            if ($resultado){
+                echo "<script> alert ('Se actualizó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
+            }   
             mysqli_close ($connection);
-            echo "<script> alert ('Se actualizó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
+                     
         }
 
     }

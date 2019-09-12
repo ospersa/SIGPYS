@@ -60,36 +60,43 @@
                 INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                 WHERE pys_frentes.est = '1' AND pys_personas.est = '1' AND pys_cargos.est = '1' AND (nombreFrente LIKE '%".$busqueda."%' OR descripcionFrente LIKE '%".$busqueda."%') ORDER BY idFrente;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'
-            <table class="centered responsive-table">
-                <thead>
-                    <tr>
-                        <th>Frente</th>
-                        <th>Descripción</th>
-                        <th>Coordinador de Frente</th>
-                        <th>Cargo</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>';
-            while ($datos =mysqli_fetch_array($resultado)){
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){ 
                 echo'
-                    <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td>'.$datos[3].' '.$datos[4].' '.$datos[5].'</td>
-                        <td>'.$datos[6].'</td>
-                        <td><a href="#modalFrente" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFrente.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                    </tr>';
+                <table class="centered responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Frente</th>
+                            <th>Descripción</th>
+                            <th>Coordinador de Frente</th>
+                            <th>Cargo</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                while ($datos =mysqli_fetch_array($resultado)){
+                    echo'
+                        <tr>
+                            <td>'.$datos[1].'</td>
+                            <td>'.$datos[2].'</td>
+                            <td>'.$datos[3].' '.$datos[4].' '.$datos[5].'</td>
+                            <td>'.$datos[6].'</td>
+                            <td><a href="#modalFrente" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFrente.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        </tr>';
+                }
+                echo "
+                    </tbody>
+                </table>";
+            }else{
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
+
             }
-            echo "
-                </tbody>
-            </table>";
             mysqli_close($connection);
         }
 
         public static function registrarFrente($nomFrente, $descFrente, $coorFrente){
             require('../Core/connection.php');
+            $count = 0;
             /** Verificación campos vacíos */
             if ($nomFrente == null || $nomFrente == "" || $nomFrente == " " || $coorFrente == null || $coorFrente == " ") {
                 echo "<script> alert('Existe algún campo vacío. Por favor intente nuevamente.');</script>";
@@ -105,18 +112,18 @@
                 } else {
                     $consulta1 = "SELECT COUNT(idFrente), MAX(idFrente) FROM pys_frentes;";
                     $resultado1 = mysqli_query($connection, $consulta1);
-                    while ($datos = mysqli_fetch_array($resultado)){
-                        $count = $datos[0];
-                        $max = $datos[1];
+                    while ($datos = mysqli_fetch_array($resultado1)){
+                        $count = $datos['COUNT(idFrente)'];
+                        $max = $datos['MAX(idFrente)'];
                     }
                     if ($count == 0){
                         $codFrente = "FRE001";	
                     } else {
                         $codFrente = 'FRE'.substr((substr($max,3)+1001),1);		
-                    }		
+                    }	
                     $consulta2 = "INSERT INTO pys_frentes VALUES ('$codFrente', '$nomFrente',  '$descFrente', '$coorFrente', '', '1');";
                     $resultado2 = mysqli_query($connection, $consulta2);
-                    if ($resultado2) {
+                    if ($resultado2 && $resultado1) {
                         echo "<script> alert ('Se guardó correctamente la información');</script>";
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';
                     } else {
@@ -132,18 +139,28 @@
             require('../Core/connection.php');
             $consulta = "UPDATE pys_frentes SET nombreFrente='$nomFrente', descripcionFrente='$descFrente', coordFrente='$coorFrente' WHERE idFrente='$idFrente2';";
             $resultado = mysqli_query($connection, $consulta);
+            if($resultado){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';
+            
         }
 
         public static function suprimirFrente($idFrente2){
             require('../Core/connection.php');
             $consulta = "UPDATE pys_frentes SET est = '0' WHERE idFrente = '$idFrente2';";
             $resultado = mysqli_query($connection, $consulta);
+            if($resultado){
+                echo "<script> alert ('Se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar eliminar la informacion');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';}
             mysqli_close($connection);
-            echo "<script> alert ('Se eliminó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/frente.php">';
         }
 
         public static function selectCoordinadorFrente ($idPersona) {

@@ -27,7 +27,7 @@ if (isset($_POST['txt-search'])) {
 if (isset($_POST['btnGuardarEpep'])) {
     ElementoPep::registrarElementoPep($nomPep, $codPep, $idCeco);
 }else if (isset($_POST['btnActEPep'])) {
-
+    $idCeco = $_POST['sltCeco2'];
     ElementoPep::actualizarElementoPep($cod, $nomPep, $codPep, $idCeco);
 }
 
