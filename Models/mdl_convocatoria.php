@@ -5,13 +5,10 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_convocatoria WHERE est='1' AND idConvocatoria ='".$idConv."';";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos =mysqli_fetch_array($resultado)){
-                $fetch[] = $datos;
-            }
-            return $fetch;
+            $datos =mysqli_fetch_array($resultado);
+            return $datos;
             mysqli_close($connection);
         }
-
 
         public static function busquedaTotal(){
             require('../Core/connection.php');

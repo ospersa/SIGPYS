@@ -1,21 +1,24 @@
-<?php
-       
-    include_once "../Models/mdl_personas.php";
+<?php       
+/* Inclusión del Modelo */
+include_once "../Models/mdl_personas.php";
+
+/* Procesamiento peticiones al controlador */
+if (isset($_POST["sltPeriodo"])) {
+    $busqueda = $_REQUEST["sltPeriodo"];
+    $resultado = Personas::validarDatos($busqueda);
     
-    if (isset($_POST["sltPeriodo"])) {
-        $busqueda = $_REQUEST["sltPeriodo"];
-        $resultado = Personas::validarDatos($busqueda);
-        if ($resultado) {
-            $resultado = Personas::completarInfo($busqueda);
-        } else {
-            $resultado = Personas::listPersonas($busqueda);
-        }
-    } else if (isset($_POST["sltPeriodo2"])) {
-        $busqueda = $_REQUEST["sltPeriodo2"];
-        $resultado = Personas::selectPersonas($busqueda);
-    } else if (isset($_POST["sltPeriodoPlan"])) {
-        $busqueda = $_REQUEST["sltPeriodoPlan"];
-        $resultado = Personas::selectPersonasPlaneacion($busqueda);
+    if ($resultado) {
+        $resultado = Personas::completarInfo($busqueda);
+    } else {
+        $resultado = Personas::listPersonas($busqueda);
     }
 
-    
+} else if (isset($_POST["sltPeriodo2"])) {
+    $busqueda = $_REQUEST["sltPeriodo2"];
+    $resultado = Personas::selectPersonas($busqueda);
+} else if (isset($_POST["sltPeriodoPlan"])) {
+    $busqueda = $_REQUEST["sltPeriodoPlan"];
+    $resultado = Personas::selectPersonasPlaneacion($busqueda);
+}
+
+?>

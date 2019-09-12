@@ -4,7 +4,6 @@
 		<form id="actForm" action="../Controllers/ctrl_rol.php" method="post" class="col l12 m12 s12">
 			<div class="row">
 				<input id="cod" name="cod" type="hidden">
-				<input id="val" name="val" type="hidden">
 				<?php
 					require('../Controllers/ctrl_rol.php');
 				?>
@@ -20,8 +19,8 @@
                     <label for="txtDescRol" class="active">Descripción del rol</label>
                 </div>
 			</div>
-			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="action" onclick="suprimir('2','Controllers/ctrl_rol.php')">Eliminar</button>
-			<button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_rol.php')">Actualizar</button>
+			<button class="btn waves-effect red darken-4 waves-light " type="submit" name="btnEliRol">Eliminar</button>
+			<button class="btn waves-effect waves-light" type="submit" name="btnActRol">Actualizar</button>
 		</form>
 	</div>
 </div>

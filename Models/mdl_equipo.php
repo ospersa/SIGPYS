@@ -5,10 +5,8 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_equipos WHERE est='1' AND idEqu ='".$idEquipo."';";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos =mysqli_fetch_array($resultado)){
-                $fetch[] = $datos;
-            }
-            return $fetch;
+            $datos = mysqli_fetch_array($resultado);
+            return $datos;
             mysqli_close($connection);
         }
 

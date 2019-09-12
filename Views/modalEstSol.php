@@ -4,7 +4,6 @@
         <form id="actForm" action="../Controllers/ctrl_solicitud.php" method="post" class="col l12 m12 s12" autocomplete="off">
             <div class="row">
                 <input type="hidden" id="cod" name="cod">
-				<input type="hidden" id="val" name="val">
                 <?php
 					require('../Controllers/ctrl_solicitud.php');
 				?>
@@ -17,7 +16,7 @@
 					<label for="txtDescEst" class="active">Descripción Estado Solicitud*</label>
 				</div>
                 <div class="row">
-                    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_solicitud.php')">Actualizar</button>
+                    <button class="btn waves-effect waves-light" type="submit" name="btnActEstSol">Actualizar</button>
                 </div>
             </div>
         </form>

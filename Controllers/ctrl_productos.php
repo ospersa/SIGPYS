@@ -1,41 +1,42 @@
 <?php 
-/** Inclusión del Modelo */
+/* Inclusión del Modelo */
 include('../Models/mdl_productos.php');
 include('../Models/mdl_equipo.php');
 
 /** Inicialización de Variables */
-$idEquipo = (isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
-$idServicio = (isset($_POST['sltServicio'])) ? $_POST['sltServicio'] : null;
-$idClase = (isset($_POST['sltClase'])) ? $_POST['sltClase'] : null;
-$id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
-$val = (isset($_POST['val'])) ? $_POST['val'] : null;
-$cod = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$idEquipo        = (isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
+$idServicio     = (isset($_POST['sltServicio'])) ? $_POST['sltServicio'] : null;
+$idClase        = (isset($_POST['sltClase'])) ? $_POST['sltClase'] : null;
+$id             = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+$cod            = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+
 /** Variables formulario tipos de productos */
-$nombreTipo = (isset($_POST['txtNombreTipo'])) ? $_POST['txtNombreTipo'] : null;
-$descripcionTipo = (isset($_POST['txtDescripcionTipo'])) ? $_POST['txtDescripcionTipo'] : null;
-$costoSin = (isset($_POST['txtCostoSin'])) ? $_POST['txtCostoSin'] : null;
-$costoCon = (isset($_POST['txtCostoCon'])) ? $_POST['txtCostoCon'] : null;
-$costoTipo = (isset($_POST['txtCostoTipo'])) ? $_POST['txtCostoTipo'] : null;
-$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$nombreTipo         = (isset($_POST['txtNombreTipo'])) ? $_POST['txtNombreTipo'] : null;
+$descripcionTipo    = (isset($_POST['txtDescripcionTipo'])) ? $_POST['txtDescripcionTipo'] : null;
+$costoSin           = (isset($_POST['txtCostoSin'])) ? $_POST['txtCostoSin'] : null;
+$costoCon           = (isset($_POST['txtCostoCon'])) ? $_POST['txtCostoCon'] : null;
+$costoTipo          = (isset($_POST['txtCostoTipo'])) ? $_POST['txtCostoTipo'] : null;
+$search             = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
 /** Variables formulario clases de productos */
-$nombreClase = (isset($_POST['txtNombreClase'])) ? $_POST['txtNombreClase'] : null;
-$nombreCortoClase = (isset($_POST['txtNombreCorClase'])) ? $_POST['txtNombreCorClase'] : null;
-$descripcionClase = (isset($_POST['txtDescripcionClase'])) ? $_POST['txtDescripcionClase'] : null;
-$costoClase = (isset($_POST['txtCostoClase'])) ? $_POST['txtCostoClase'] : null;
+$nombreClase        = (isset($_POST['txtNombreClase'])) ? $_POST['txtNombreClase'] : null;
+$nombreCortoClase   = (isset($_POST['txtNombreCorClase'])) ? $_POST['txtNombreCorClase'] : null;
+$descripcionClase   = (isset($_POST['txtDescripcionClase'])) ? $_POST['txtDescripcionClase'] : null;
+$costoClase         = (isset($_POST['txtCostoClase'])) ? $_POST['txtCostoClase'] : null;
 
 /** Variables que cargan select */
-$selectEquipo = Equipo::selectEquipo(null);
-$selectServicio = Producto::selectServicio(null, null);
-$selectClase = Producto::selectClase(null, null);
+$selectEquipo       = Equipo::selectEquipo(null);
+$selectServicio     = Producto::selectServicio(null, null);
+$selectClase        = Producto::selectClase(null, null);
 
 /** Procesamiento de peticiones realizadas al controlador */
 if (isset($_POST['btnRegistrarTip'])) {
     Producto::registrarTipoProducto($idEquipo, $idServicio, $idClase, $nombreTipo, $descripcionTipo, $costoSin, $costoCon, $costoTipo);
 } else if (isset($_POST['btnRegistrarCla'])) {
     Producto::registrarClaseProducto($idEquipo, $idServicio, $nombreClase, $nombreCortoClase, $descripcionClase, $costoClase);
-} else if ($val == 2) {
+} else if (isset($_POST['btnActTipProd'])) {
     Producto::actualizarTipoProducto($cod, $idServicio, $idClase, $nombreTipo, $descripcionTipo, $costoSin, $costoCon, $costoTipo);
-} else if ($val == 3) {
+} else if (isset($_POST['btnActClaPro'])) {
     Producto::actualizarClaseProducto($cod, $idServicio, $nombreClase, $nombreCortoClase, $descripcionClase, $costoClase);
 }
 

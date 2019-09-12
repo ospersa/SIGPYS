@@ -27,7 +27,7 @@ require('../Estructure/header.php');
                     <label for="txtDescEnti">Descripción de la Entidad/Empresa</label>
                 </div>
             </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action">Guardar</button>
+            <button class="btn waves-effect waves-light" type="submit" name="btnGuardarEnt">Guardar</button>
         </form>
     </div>
 </div>

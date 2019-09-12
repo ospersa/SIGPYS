@@ -5,10 +5,8 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_entidades WHERE est='1' AND idEnt='".$idEnti."';";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos =mysqli_fetch_array($resultado)){
-                $fetch[] = $datos;
-            }
-            return $fetch;
+            $datos = mysqli_fetch_array($resultado);
+            return $datos;
             mysqli_close($connection);
         }
 
@@ -74,6 +72,7 @@
 
         public static function registrarEntidad($nomEnti, $nomCortoEnti, $descEnti){
             require('../Core/connection.php');
+            $countFacDepto = "";
             //Contador tabla Entidades 
             $consulta = "SELECT COUNT(idEnt), MAX(idEnt) FROM pys_entidades;";
             $resultado = mysqli_query($connection, $consulta);
@@ -94,16 +93,15 @@
                 $count2=$datos2[0];
                 $max2=$datos2[1];
             }
-            if ($count2==0){
+            if ($count2 == 0){
                 $countFacDepto="FD0001";
             }
             else {
-                $countFacDepto='FD'.substr((substr($max,2)+10001),1);	
+                $countFacDepto='FD'.substr((substr($max,3)+10001),1);	
             }	
             //insert tabla Entidades 
             $sql="INSERT INTO pys_entidades VALUES ('$codEntidad', '$nomEnti', '$nomCortoEnti', '$descEnti', 'PR0042', 'CAR032', '1');";
             $resultado = mysqli_query($connection, $sql);
-            mysqli_close($connection);
             //insert tabla FacDEpto
             $sql2="INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$codEntidad', '', '', '', '', '1', '1', '1')";
             $resultado2 = mysqli_query($connection, $sql2);

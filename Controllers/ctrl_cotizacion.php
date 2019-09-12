@@ -1,17 +1,47 @@
 <?php
+/* Inclusión del Modelo */
 include_once "../Models/mdl_cotizacion.php";
-$disabledMail = "";
-$readNota = "";
-$readEnlace = "";
-$disabled = "";
-$cotizacion = "";
-$read = "";
-$valorCot = 0;
-$obsSol = "";
-$obsPys = "";
-$obsProd = "";
-$hidden = "";
+include_once "../Models/mdl_asignados.php";
 
+/* Inicialización variables*/
+$disabledMail  = "";
+$readNota      = "";
+$readEnlace    = "";
+$disabled      = "";
+$cotizacion    = "";
+$read          = "";
+$valorCot      = 0;
+$obsSol        = "";
+$obsPys        = "";
+$obsProd       = "";
+$hidden        = "";
+$idAsig        = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : null;
+$busqueda      = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
+/* Carga de información en el Modal */
+if ($idAsig) {
+    $id = substr($idAsig, 0, 2);
+    if ($id == "C_") {
+        $detail = Cotizacion::onLoad2(substr($idAsig, 2));
+        $valCot = $detail['valorPresupuesto'];
+        $obsSol = $detail['obsSolicitante'];
+        $obsPys = $detail['obsPyS'];
+        $obsPro = $detail['obsProducto'];
+        $idSolEsp = $detail['idSolEsp'];
+        $idCot = $detail['idCotizacion'];
+    } else {
+        $detail = Cotizacion::onLoad($idAsig);
+        $nombreCompletoAsig = $detail['apellido1']." ".$detail['apellido2']." ".$detail['nombres'];
+        $nombreFase = $detail['nombreFase'];
+        $horas = $detail['maxhora'];
+        $minutos = $detail['maxmin'];
+        $idSol = $detail['idSol'];
+        $estado = $detail['est'];
+        $solicitante = $detail['idSolicitante'];
+    }
+}
+ 
+/** Procesamiento peticiones al controlador */
 if (isset($_POST['enviar'])){ 
     $valCot = $_POST['txtValCotizacion'];
     $obsSol = $_POST['txtObsSolicitante'];
@@ -33,7 +63,7 @@ if (isset($_POST['enviar'])){
     $horas = $_POST['txtHoras'];
     $minutos = $_POST['txtMinutos'];
     if ($rol != null && $persona != null && $fase != null && $horas != null && $minutos != null) {
-        $result = Cotizacion::guardarAsignacion($solEsp, $proy, $persona, $rol, $fase, $registra, $horas, $minutos, $solicitante);
+        $result = Asignados::registrarAsignacion($solEsp, $proy, $persona, $rol, $fase, $registra, $horas, $minutos, $solicitante);
     } else {
         echo "<script>alert ('Existe algún campo VACÍO. Registro no válido');</script>";
         echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
@@ -68,6 +98,7 @@ if (isset($_POST['enviar'])){
     $idAsig = $_POST['cod'];
     Cotizacion::cambiarEstadoAsignacion($idAsig, $solEsp, $accion, $solicita);
 }
+
 if (isset($_REQUEST['cod'])) {
     $cod = $_REQUEST['cod'];
     if ($cod == 1){
@@ -113,36 +144,6 @@ if (isset($_REQUEST['cod'])) {
         $obsProd = $datosCotizacion['obsProducto'];
     }
 }
-if (isset($_REQUEST["id"])) {
-    $idAsig = $_REQUEST["id"];
-    $id = substr($idAsig, 0, 2);
-    if ($id == "C_") {
-        $detail = Cotizacion::onLoad2(substr($idAsig, 2));
-        if (is_array($detail)) {
-            foreach ($detail as $valor) {
-                $valCot = $valor['valorPresupuesto'];
-                $obsSol = $valor['obsSolicitante'];
-                $obsPys = $valor['obsPyS'];
-                $obsPro = $valor['obsProducto'];
-                $idSolEsp = $valor['idSolEsp'];
-                $idCot = $valor['idCotizacion'];
-            }
-        }
-    } else {
-        $detail = Cotizacion::onLoad($idAsig);
-        if (is_array($detail)) {
-            foreach ($detail as $valor) {
-                $nombreCompletoAsig = $valor['apellido1']." ".$valor['apellido2']." ".$valor['nombres'];
-                $nombreFase = $valor['nombreFase'];
-                $horas = $valor['maxhora'];
-                $minutos = $valor['maxmin'];
-                $idSol = $valor['idSol'];
-                $estado = $valor['est'];
-                $solicitante = $valor['idSolicitante'];
-            }
-        }
-    }
-}  
 
 /*if (isset($_POST['val'])) {
     $val = $_POST['val'];
@@ -163,12 +164,12 @@ if (isset($_REQUEST["id"])) {
         $resultado = Cotizacion::actualizarCotizacion($idCot, $valCot, $obsSol, $obsPys, $obsPro, $solicitante);
     } 
 }*/
-
 if (isset($_POST['txt-search'])) {
-    $busqueda = $_POST['txt-search'];
     if ($busqueda == null) {
         echo "<script>alert('Por favor no deje el campo de busqueda vacío.')</script>";
     } else {
         $resultado = Cotizacion::busqueda($busqueda);
     }
 }
+
+?>

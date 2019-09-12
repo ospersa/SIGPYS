@@ -3,7 +3,6 @@
     <div class="row">
         <form id="actForm" action="../Controllers/ctrl_usuario.php" method="post" class="col l12 m12 s12">
             <input id="cod" name="cod" type="hidden">
-            <input id="val" name="val" type="hidden">
             <?php
                 require('../Controllers/ctrl_usuario.php');
                 include_once('../Models/mdl_usuario.php');
@@ -86,8 +85,8 @@
                 </div>
             </div>
             <div class="row">
-                <button class="btn waves-effect red darken-4 waves-light " type="submit" name="action" onclick="suprimir('2','Controllers/ctrl_usuario.php')">Eliminar</button>
-                <button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_usuario.php')">Actualizar</button>
+                <button class="btn waves-effect red darken-4 waves-light " type="submit" name="btnEliUsua">Eliminar</button>
+                <button class="btn waves-effect waves-light" type="submit" name="btnActUsua">Actualizar</button>
             </div>
         </form>
     </div>

@@ -15,10 +15,8 @@ Class Cotizacion {
             AND pys_solicitudes.est = 1
             AND (pys_asignados.est = 1 OR pys_asignados.est = 2);";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos =mysqli_fetch_array($resultado)){
-            $fetch[] = $datos;
-        }
-        return $fetch;
+        $datos = mysqli_fetch_array($resultado);
+        return $datos;        
         mysqli_close($connection);
     }
 
@@ -29,10 +27,8 @@ Class Cotizacion {
             WHERE idCotizacion = '".$idCot."'
             AND pys_cotizaciones.estado = 1;";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos =mysqli_fetch_array($resultado)){
-            $fetch[] = $datos;
-        }
-        return $fetch;
+        $datos = mysqli_fetch_array($resultado);
+        return $datos;     
         mysqli_close($connection);
     }
 

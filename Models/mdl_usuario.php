@@ -95,43 +95,48 @@
                 (pys_personas.correo LIKE '%$busqueda%'))
                 ORDER BY pys_personas.apellido1;";
             $resultado = mysqli_query($connection, $consulta);
-            echo "
-                <table class='responsive-table' style='font-size:.85em;'>
-                    <thead>
-                        <tr>
-                            <th class='center-align'>Empresa</th>
-                            <th class='center-align'>Facultad - Departamento</th>
-                            <th class='center-align'>Cargo</th>
-                            <th class='center-align'>Tipo</th>
-                            <th class='center-align'>Identificación</th>
-                            <th class='center-align'>Apellidos y Nombres</th>
-                            <th class='center-align'>E-Mail</th>
-                            <th class='center-align'>Extensión</th>
-                            <th class='center-align'>Celular</th>
-                            <th class='center-align'>Equipo</th>
-                            <th class='center-align'>Editar</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-            while ($datos = mysqli_fetch_array($resultado)) {
-                echo '
-                        <tr>
-                            <td>'.$datos['nombreEnt'].'</td>
-                            <td>'.$datos['facDeptoFacultad'].' - '.$datos['facDeptoDepartamento'].'</td>
-                            <td>'.$datos['nombreCargo'].'</td>
-                            <td>'.$datos['tipoPersona'].'</td>
-                            <td>'.$datos['identificacion'].'</td>
-                            <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
-                            <td>'.$datos['correo'].'</td>
-                            <td>'.$datos['extension'].'</td>
-                            <td>'.$datos['celular'].'</td>
-                            <td>'.$datos['nombreEqu'].'</td>
-                            <td><a href="#modalUsuario" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalUsuario.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                        </tr>
-                ';
+            $registros = mysqli_num_rows($resultado);
+            if($registros){
+                echo "
+                    <table class='responsive-table' style='font-size:.85em;'>
+                        <thead>
+                            <tr>
+                                <th class='center-align'>Empresa</th>
+                                <th class='center-align'>Facultad - Departamento</th>
+                                <th class='center-align'>Cargo</th>
+                                <th class='center-align'>Tipo</th>
+                                <th class='center-align'>Identificación</th>
+                                <th class='center-align'>Apellidos y Nombres</th>
+                                <th class='center-align'>E-Mail</th>
+                                <th class='center-align'>Extensión</th>
+                                <th class='center-align'>Celular</th>
+                                <th class='center-align'>Equipo</th>
+                                <th class='center-align'>Editar</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    echo '
+                            <tr>
+                                <td>'.$datos['nombreEnt'].'</td>
+                                <td>'.$datos['facDeptoFacultad'].' - '.$datos['facDeptoDepartamento'].'</td>
+                                <td>'.$datos['nombreCargo'].'</td>
+                                <td>'.$datos['tipoPersona'].'</td>
+                                <td>'.$datos['identificacion'].'</td>
+                                <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                                <td>'.$datos['correo'].'</td>
+                                <td>'.$datos['extension'].'</td>
+                                <td>'.$datos['celular'].'</td>
+                                <td>'.$datos['nombreEqu'].'</td>
+                                <td><a href="#modalUsuario" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalUsuario.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            </tr>
+                    ';
+                }
+                echo "  </tbody>
+                        </table>";
+            }else{
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
-            echo "  </tbody>
-                    </table>";
             mysqli_close($connection);
         }
 

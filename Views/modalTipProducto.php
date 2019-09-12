@@ -6,7 +6,6 @@ require_once('../Controllers/ctrl_productos.php');
     <div class="row">
         <form id="actform" action="../Controllers/ctrl_productos.php" method="post" class="col l12 m12 s12">
             <input id="cod" name="cod" type="hidden">
-            <input id="val" name="val" type="hidden">
             <div class="input-field col l12 m12 s12">
                 <input type="hidden" name="sltEquipo" value="<?php echo $idEquipo;?>">
                 <?php echo $selectEquipo;?>
@@ -39,7 +38,7 @@ require_once('../Controllers/ctrl_productos.php');
                 <label for="txtCostoTipo" class="active">Costo tipo $</label>
             </div>
             <div class="row">
-                <button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('2','Controllers/ctrl_solicitud.php')">Actualizar</button>
+                <button class="btn waves-effect waves-light" type="submit" name="btnActTipProd">Actualizar</button>
             </div>
         </form>
     </div>

@@ -9,10 +9,8 @@
                 INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
                 WHERE estadoDedicacion='1' and idDedicacion ='".$idDedicacion."';";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos =mysqli_fetch_array($resultado)){
-                $fetch[] = $datos;
-            }
-            return $fetch;
+            $datos =mysqli_fetch_array($resultado);
+            return $datos;
             mysqli_close($connection);
         }
 

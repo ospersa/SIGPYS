@@ -1,9 +1,14 @@
 <?php
-$periodo = $_POST['sltPeriodoPlan'];
-$persona = $_POST['sltPersonaPlan'];
-$persona1 = $_POST['persona'];
-$periodo1 = $_POST['periodo'];
+/* Inclusión del Modelo */
 require('../Models/mdl_infPlaneacionXls.php');
+
+/* Inicialización variables*/
+$periodo    = (isset($_POST['sltPeriodoPlan'])) ?  $_POST['sltPeriodoPlan'] : null;
+$persona    = (isset($_POST['sltPersonaPlan'])) ?  $_POST['sltPersonaPlan'] : null;
+$persona1   = (isset($_POST['persona'])) ?  $_POST['persona'] : null;
+$periodo1   = (isset($_POST['periodo'])) ?  $_POST['periodo']: null;
+
+/* Procesamiento peticiones al controlador */
 if (isset($_POST['consultar'])) {
     $resultado = InformePlaneacion::consultaDatosPeriodo($periodo, $persona);
 } else if (isset($_POST['sltPeriodoPlan']) && $persona == null){

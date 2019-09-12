@@ -38,7 +38,7 @@ Class SolicitudInicial {
             WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_convocatoria.est = '1' AND pys_solicitudes.idTSol = 'TSOL01' AND (pys_solicitudes.idSol LIKE '%$busqueda' OR pys_estadosol.nombreEstSol LIKE '%$busqueda%' OR pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%')
             ORDER BY pys_solicitudes.fechSol DESC;";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             echo '  <table class="responsive-table centered" id="tblProyecto">
                         <thead>
                             <tr>
@@ -111,6 +111,8 @@ Class SolicitudInicial {
             }
             echo '      </tbody>
                     </table>';
+        }else{
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }
@@ -131,7 +133,7 @@ Class SolicitudInicial {
             WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_convocatoria.est = '1' AND pys_solicitudes.idTSol = 'TSOL01'
             ORDER BY pys_solicitudes.fechSol DESC;";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             echo '  <table class="responsive-table centered" id="tblProyecto">
                         <thead>
                             <tr>
@@ -204,6 +206,8 @@ Class SolicitudInicial {
             }
             echo '      </tbody>
                     </table>';
+        }else{
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }

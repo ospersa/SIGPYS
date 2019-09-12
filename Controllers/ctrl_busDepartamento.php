@@ -1,11 +1,13 @@
-
 <?php
-    $busqueda = $_POST["txt-search"];
-  
-    include_once "../Models/mdl_departamento.php";
-    if ($busqueda === null) {
-        $resultado = Departamento::busquedaTotal();
-    } else {
-        $resultado = Departamento::busqueda($busqueda);
-    }
-    
+/* Inclusión del Modelo */
+include_once "../Models/mdl_departamento.php";
+
+/* Inicialización variables*/
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Departamento::busquedaTotal() : Departamento::busqueda($search);
+}
+
+?>

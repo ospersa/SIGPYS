@@ -1,29 +1,33 @@
 <?php
+/* Inclusión del Modelo */
 include_once('../Models/mdl_solicitudEspecifica.php');
 //session_start();
 
-$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
-$solIni = null;
-$solEsp = null;
-$nombreTipo = null;
-$idEstadoSol = null;
-$presupuesto = null;
-$horas = null;
-$equipo = null;
-$servicio = null;
-$proyecto = null;
-$fechaPrev = null;
-$observacion = null;
-$fechCreacion = null;
-$ultActualizacion = null;
-$idTipoSol = null;
-$idCM = null;
+/* Inicialización variables*/
+$search             = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$solIni             = null;
+$solEsp             = null;
+$nombreTipo         = null;
+$idEstadoSol        = null;
+$presupuesto        = null;
+$horas              = null;
+$equipo             = null;
+$servicio           = null;
+$proyecto           = null;
+$fechaPrev          = null;
+$observacion        = null;
+$fechCreacion       = null;
+$ultActualizacion   = null;
+$idTipoSol          = null;
+$idCM               = null;
 
+/* Variables que cargan Select en formularios*/
 if (isset($_POST['sltEquipo']) && !isset($_POST['btnRegistrarSolEsp']) && !isset($_POST['val'])) {
     $equipo = $_POST['sltEquipo'];
     SolicitudEspecifica::selectServicio($equipo, null);
 } 
 
+/* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
     SolicitudEspecifica::cargaEspecificas($search, 2);
 }

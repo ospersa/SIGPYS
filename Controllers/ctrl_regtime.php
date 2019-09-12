@@ -1,6 +1,8 @@
 <?php
+/* Inclusión del Modelo */
 include_once('../Models/mdl_solicitudEspecifica.php');
 
+/* Procesamiento peticiones al controlador */
 if (!empty($_REQUEST['id'])) {
     $idSolEsp = $_REQUEST['id'];
 }

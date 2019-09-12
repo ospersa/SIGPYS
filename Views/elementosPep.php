@@ -28,7 +28,7 @@ require('../Estructure/header.php');
                 ?>
             </div>
             <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Guardar</button>
+                <button class="btn waves-effect waves-light" type="submit" name="btnGuardarEpep">Guardar</button>
             </div>
         </form>
     </div>
