@@ -15,12 +15,12 @@
             $consulta="SELECT * FROM pys_cargos WHERE est='1' ORDER BY nombreCargo;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Nombre del cargo</th>
                         <th>Descripción del cargo</th>
-                        <th></th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -29,7 +29,7 @@
                     <tr>
                         <td>'.$datos[1].'</td>
                         <td>'.$datos[2].'</td>
-                        <td><a href="#modalCargo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td><a href="#modalCargo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -45,12 +45,12 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Nombre del cargo</th>
                             <th>Descripción del cargo</th>
-                            <th></th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -59,7 +59,7 @@
                         <tr>
                             <td>'.$datos[1].'</td>
                             <td>'.$datos[2].'</td>
-                            <td><a href="#modalCargo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td><a href="#modalCargo" class="waves-effect waves-light  modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons teal-text ">edit</i></a></td>
                         </tr>';
                 }
                 echo "

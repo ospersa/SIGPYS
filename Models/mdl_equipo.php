@@ -110,15 +110,19 @@
             echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
         }
 
-        public static function selectEquipo ($idEquipo) {
+        public static function selectEquipo ($idEquipo, $modal) {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_equipos WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
-                if ($idEquipo != null) {
+                if ($idEquipo != null && $modal == null) {
                     $select = ' <select name="sltEquipo" id="sltEquipo" disabled>
                                     <option value="" selected disabled>Seleccione</option>';
+                } else if ($idEquipo != null && $modal == "modal"){    
+                    $select = ' <select name="sltEquipo" id="sltEquipo">
+                                    <option value="" selected disabled>Seleccione</option>';
+                
                 } else {
                     $select = ' <select name="sltEquipo" id="sltEquipo" onchange="cargaSelect(\'#sltEquipo\',\'../Controllers/ctrl_productos.php\',\'#sltServicioLoad\')" required>
                                     <option value="" selected disabled>Seleccione</option>';

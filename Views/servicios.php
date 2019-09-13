@@ -38,7 +38,7 @@ require_once('../Controllers/ctrl_productos.php');
                 <label for="sltProducto">Genera producto?*</label>
             </div>
             <div class="input-field col l3 m3 s12">
-                <input type="number" name="txtCostoServicio" id="txtCostoServicio" placeholder="$" min="0">
+                <input type="number" name="txtCostoServicio" id="txtCostoServicio" onchange="format('#txtCostoServicio');" placeholder="$" min="0">
                 <label for="txtCostoServicio">Costo servicio $</label>
             </div>
         </div>
@@ -52,6 +52,12 @@ require_once('../Controllers/ctrl_productos.php');
     <div id="div_dinamico" name="div_dinamico" class="col l10 m10 s12 offset-l1 offset-m1"></div>
 </div>
 
+<!-- Modal Structure -->
+<div id="modalServicio" class="modal">
+    <?php
+        require('modalServicio.php');
+    ?>
+</div>
 <?php
 require('../Estructure/footer.php');
 ?>

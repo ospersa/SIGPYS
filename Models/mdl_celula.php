@@ -59,7 +59,7 @@
             $resultado = mysqli_query($connection, $consulta);
             $personas = "";
             if (mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Nombre Célula</th>
