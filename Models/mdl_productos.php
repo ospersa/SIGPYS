@@ -73,7 +73,7 @@ Class Producto {
             echo '      </tbody>
                     </table>';
         } else {
-            echo "<h4 class='center-align'>No hay resultados para la busqueda realizada.</h4>";
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }
@@ -116,7 +116,7 @@ Class Producto {
             echo '      </tbody>
                     </table>';
         } else {
-            echo "<h4 class='center-align'>No hay resultados para la busqueda realizada.</h4>";
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }

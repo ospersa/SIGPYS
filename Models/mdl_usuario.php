@@ -565,6 +565,7 @@
                 }
                 $consulta8 = "INSERT INTO pys_personas VALUES ('$idPer', '$departamento', '$cargo', '$tipo', '$identificacion', '$apellido1', '$apellido2', '$nombres', '$mail' , '$fijo', '$extension', '$celular', '$ciudad', '$equipo', '$categoriaCargo', '1');";
                 $resultado8 = mysqli_query($connection, $consulta8);
+                echo $consulta8;
                 if ($resultado8) {
                     echo "<script> alert ('El registro se insertó correctamente');</script>";
 			        echo '<meta http-equiv="Refresh" content="0;url=../Views/usuario.php">';

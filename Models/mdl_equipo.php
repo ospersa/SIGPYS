@@ -42,27 +42,32 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_equipos WHERE est='1' AND nombreEqu LIKE '%".$busqueda."%' ORDER BY nombreEqu;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'
-            <table class="centered responsive-table">
-                <thead>
-                    <tr>
-                        <th>Nombre del equipo</th>
-                        <th>Descripción del equipo</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>';
-            while ($datos =mysqli_fetch_array($resultado)){
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){    
                 echo'
-                    <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td><a href="#modalEquipo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEquipo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                    </tr>';
-            }
-            echo "
-                </tbody>
-            </table>";
+                <table class="centered responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del equipo</th>
+                            <th>Descripción del equipo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                while ($datos =mysqli_fetch_array($resultado)){
+                    echo'
+                        <tr>
+                            <td>'.$datos[1].'</td>
+                            <td>'.$datos[2].'</td>
+                            <td><a href="#modalEquipo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEquipo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        </tr>';
+                }
+                echo "
+                    </tbody>
+                </table>";
+            } else {
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
+            }    
             mysqli_close($connection);
         }
 

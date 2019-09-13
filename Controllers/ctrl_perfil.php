@@ -3,11 +3,15 @@
 include_once "../Models/mdl_perfil.php";
 
 /* Inicialización variables*/
-$nomPerf=$_POST["txtnomPerf"];
-$descPerf=$_POST["txtdescPerf"];
+$nomPerf    = (isset($_POST["txtnomPerf"])) ? $_POST["txtnomPerf"] : null;
+$descPerf   = (isset($_POST["txtdescPerf"])) ? $_POST["txtdescPerf"] :null;
+$search     = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Procesamiento peticiones al controlador */
-if ($nomPerf == null) {
+
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Perfiles::busquedaTotal() : Perfiles::busqueda($search);
+} else if ($nomPerf == null) {
     echo '<script type="text/javascript">
         alert("Disculpe, no se guardó la información, existe algún campo vacío.");
     </script>';

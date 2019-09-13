@@ -112,30 +112,6 @@ class Proyecto {
 
     public static function busqueda ($busqueda) {
         require('../Core/connection.php');
-        echo '  <table class="responsive-table centered" id="tblProyecto">
-                <thead>
-                    <tr>
-                        <th>Empresa</th>
-                        <th>Facultad - Departamento</th>
-                        <th>Estado</th>
-                        <th>Tipo</th>
-                        <th>Etapa</th>
-                        <th>Cod. Conecta-TE</th>
-                        <th>Proyecto</th>
-                        <th>Convocatoria</th>
-                        <th>Nombre Corto</th>
-                        <th>Presupuesto</th>
-                        <th>Inicio</th>
-                        <th>Cierre</th>
-                        <th>*Fecha Colciencias</th>
-                        <th>Creación</th>
-                        <th>Última Actualización</th>
-                        <th>Editar</th>
-                        <th>Asignar Personas</th>
-                        <th>Agregar Colciencias</th>
-                    </tr>
-                </thead>
-                <tbody>';
         $consulta = "SELECT pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, pys_facdepto.facDeptoDepartamento, pys_tiposproy.nombreTProy, pys_frentes.idFrente, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_estadoproy.nombreEstProy, pys_etapaproy.nombreEtaProy, pys_proyectos.idProy, pys_actualizacionproy.proyecto, pys_actualizacionproy.codProy, pys_actualizacionproy.idEstProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.nombreCortoProy, pys_actualizacionproy.descripcionProy, pys_actualizacionproy.fechaIniProy, pys_actualizacionproy.fechaCierreProy, pys_actualizacionproy.idConvocatoria, pys_proyectos.fechaCreacionProy, pys_actualizacionproy.fechaActualizacionProy, pys_actualizacionproy.idResponRegistro, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actualizacionproy.presupuestoProy, pys_actualizacionproy.financia, pys_convocatoria.nombreConvocatoria, pys_actualizacionproy.fechaColciencias
             FROM pys_actualizacionproy
             INNER JOIN pys_estadoproy ON pys_estadoproy.idEstProy = pys_actualizacionproy.idEstProy
@@ -157,71 +133,100 @@ class Proyecto {
                 (pys_estadoproy.nombreEstProy LIKE '%".$busqueda."%'))
             ORDER BY pys_proyectos.fechaCreacionProy DESC;";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos = mysqli_fetch_array($resultado)) {
-            $presupuesto = ($datos['presupuestoProy'] == '') ? 0 : $datos['presupuestoProy'];
-            echo "      <tr>
-                            <td>".$datos['nombreEnt']."</td>
-                            <td>".$datos['facDeptoFacultad']." - ".$datos['facDeptoDepartamento']."</td>
-                            <td>".$datos['nombreEstProy']."</td>
-                            <td>".$datos['nombreTProy']."</td>
-                            <td>".$datos['nombreEtaProy']."</td>
-                            <td>".$datos['codProy']."</td>
-                            <td>".$datos['nombreProy']."</td>
-                            <td>".$datos['nombreConvocatoria']."</td>
-                            <td>".$datos['nombreCortoProy']."</td>
-                            <td>$ ".number_format($presupuesto, '0', '.', ',')."</td>
-                            <td>".$datos['fechaIniProy']."</td>
-                            <td>".$datos['fechaCierreProy']."</td>
-                            <td>".$datos['fechaColciencias']."</td>";
-            /** Comparación de fecha_creación vs fecha_actualización para dejar una clase de color diferente en la celda */
-            if ($datos['fechaCreacionProy'] != $datos['fechaActualizacionProy']) {
-                echo "      <td>".$datos['fechaCreacionProy']."</td>
-                            <td class='teal lighten-2'>".$datos['fechaActualizacionProy']."</td>";
-            } else {
-                echo "      <td>".$datos['fechaCreacionProy']."</td>
-                            <td>".$datos['fechaActualizacionProy']."</td>";
-            }
-            if ($datos['idEstProy'] == 'ESP002') { // ESP002 - Proyecto en Estado Cancelado
-                echo '      <td><a href="#modalProyecto" class="modal-trigger" onclick="envioData('."'$datos[10]'".','."'modalProyecto.php'".');" title="Editar Proyecto"><i class="material-icons teal-text">edit</i></a></td>
-                            <td></td>
-                            <td></td>';    
-            } else if ($datos['idEstProy'] == 'ESP004') { // ESP004 - Proyecto en Estado Terminado
-                echo '      <td><a href="#modalProyecto" class="modal-trigger" onclick="envioData('."'$datos[10]'".','."'modalProyecto.php'".');" title="Editar Proyecto"><i class="material-icons teal-text">edit</i></a></td>
-                            <td></td>';
-                $idProy = $datos['idProy'];
-                $consulta2 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '$idProy';";
-                $resultado2 = mysqli_query($connection, $consulta2);
-                $datos2 = mysqli_fetch_array($resultado2);
-                $idProyColciencias = $datos2[0];
-                if ($idProy == $idProyColciencias) {
-                    echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+        $count=mysqli_num_rows($resultado);
+        if($count > 0){
+            echo '  <table class="responsive-table centered" id="tblProyecto">
+            <thead>
+                <tr>
+                    <th>Empresa</th>
+                    <th>Facultad - Departamento</th>
+                    <th>Estado</th>
+                    <th>Tipo</th>
+                    <th>Etapa</th>
+                    <th>Cod. Conecta-TE</th>
+                    <th>Proyecto</th>
+                    <th>Convocatoria</th>
+                    <th>Nombre Corto</th>
+                    <th>Presupuesto</th>
+                    <th>Inicio</th>
+                    <th>Cierre</th>
+                    <th>*Fecha Colciencias</th>
+                    <th>Creación</th>
+                    <th>Última Actualización</th>
+                    <th>Editar</th>
+                    <th>Asignar Personas</th>
+                    <th>Agregar Colciencias</th>
+                </tr>
+            </thead>
+            <tbody>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                $presupuesto = ($datos['presupuestoProy'] == '') ? 0 : $datos['presupuestoProy'];
+                echo "      <tr>
+                                <td>".$datos['nombreEnt']."</td>
+                                <td>".$datos['facDeptoFacultad']." - ".$datos['facDeptoDepartamento']."</td>
+                                <td>".$datos['nombreEstProy']."</td>
+                                <td>".$datos['nombreTProy']."</td>
+                                <td>".$datos['nombreEtaProy']."</td>
+                                <td>".$datos['codProy']."</td>
+                                <td>".$datos['nombreProy']."</td>
+                                <td>".$datos['nombreConvocatoria']."</td>
+                                <td>".$datos['nombreCortoProy']."</td>
+                                <td>$ ".number_format($presupuesto, '0', '.', ',')."</td>
+                                <td>".$datos['fechaIniProy']."</td>
+                                <td>".$datos['fechaCierreProy']."</td>
+                                <td>".$datos['fechaColciencias']."</td>";
+                /** Comparación de fecha_creación vs fecha_actualización para dejar una clase de color diferente en la celda */
+                if ($datos['fechaCreacionProy'] != $datos['fechaActualizacionProy']) {
+                    echo "      <td>".$datos['fechaCreacionProy']."</td>
+                                <td class='teal lighten-2'>".$datos['fechaActualizacionProy']."</td>";
                 } else {
-                    echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
+                    echo "      <td>".$datos['fechaCreacionProy']."</td>
+                                <td>".$datos['fechaActualizacionProy']."</td>";
                 }
-            } else {
-                echo '      <td><a href="#modalProyecto" class="modal-trigger" onclick="envioData('."'$datos[10]'".','."'modalProyecto.php'".');" title="Editar Proyecto"><i class="material-icons teal-text">edit</i></a></td>';
-                /** Consulta para obtener el ID del proyecto en la tabla pys_asignados */
-                $consulta2 = "SELECT idProy FROM pys_asignados WHERE idSol = '' AND idCurso = '' AND est = '1' AND idProy = '".$datos['idProy']."';";
-                $resultado2 = mysqli_query($connection, $consulta2);
-                if ($registros2 = mysqli_num_rows($resultado2) > 0) {
-                    echo '  <td><a href="asignados.php?cod1='.$datos[10].'" onclick="envioData('."'$datos[10]'".','."'asignados.php'".');" title="Ya existen personas asignadas"><i class="material-icons teal-text">person_add</i></a></td>';
+                if ($datos['idEstProy'] == 'ESP002') { // ESP002 - Proyecto en Estado Cancelado
+                    echo '      <td><a href="#modalProyecto" class="modal-trigger" onclick="envioData('."'$datos[10]'".','."'modalProyecto.php'".');" title="Editar Proyecto"><i class="material-icons teal-text">edit</i></a></td>
+                                <td></td>
+                                <td></td>';    
+                } else if ($datos['idEstProy'] == 'ESP004') { // ESP004 - Proyecto en Estado Terminado
+                    echo '      <td><a href="#modalProyecto" class="modal-trigger" onclick="envioData('."'$datos[10]'".','."'modalProyecto.php'".');" title="Editar Proyecto"><i class="material-icons teal-text">edit</i></a></td>
+                                <td></td>';
+                    $idProy = $datos['idProy'];
+                    $consulta2 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '$idProy';";
+                    $resultado2 = mysqli_query($connection, $consulta2);
+                    $datos2 = mysqli_fetch_array($resultado2);
+                    $idProyColciencias = $datos2[0];
+                    if ($idProy == $idProyColciencias) {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
+                    }
                 } else {
-                    echo '  <td><a href="asignados.php?cod1='.$datos[10].'" onclick="envioData('."'$datos[10]'".','."'asignados.php'".');" title="Asignar personas"><i class="material-icons red-text">person_add</i></a></td>';
+                    echo '      <td><a href="#modalProyecto" class="modal-trigger" onclick="envioData('."'$datos[10]'".','."'modalProyecto.php'".');" title="Editar Proyecto"><i class="material-icons teal-text">edit</i></a></td>';
+                    /** Consulta para obtener el ID del proyecto en la tabla pys_asignados */
+                    $consulta2 = "SELECT idProy FROM pys_asignados WHERE idSol = '' AND idCurso = '' AND est = '1' AND idProy = '".$datos['idProy']."';";
+                    $resultado2 = mysqli_query($connection, $consulta2);
+                    if ($registros2 = mysqli_num_rows($resultado2) > 0) {
+                        echo '  <td><a href="asignados.php?cod1='.$datos[10].'" onclick="envioData('."'$datos[10]'".','."'asignados.php'".');" title="Ya existen personas asignadas"><i class="material-icons teal-text">person_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="asignados.php?cod1='.$datos[10].'" onclick="envioData('."'$datos[10]'".','."'asignados.php'".');" title="Asignar personas"><i class="material-icons red-text">person_add</i></a></td>';
+                    }
+                    $consulta3 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '".$datos['idProy']."';";
+                    $resultado3 = mysqli_query($connection, $consulta3);
+                    $datos3 = mysqli_fetch_array($resultado3);
+                    $idProyColciencias = $datos3[0];
+                    if ($datos['idProy'] == $idProyColciencias) {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
+                    }
                 }
-                $consulta3 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '".$datos['idProy']."';";
-                $resultado3 = mysqli_query($connection, $consulta3);
-                $datos3 = mysqli_fetch_array($resultado3);
-                $idProyColciencias = $datos3[0];
-                if ($datos['idProy'] == $idProyColciencias) {
-                    echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
-                } else {
-                    echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
-                }
-            }
-            echo "      </tr>";
-        }
-        echo'       </tbody>
-                </table>';
+                echo "      </tr>"; 
+            }   
+            echo'       </tbody>
+                    </table>';
+        }else{
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
+        }        
         mysqli_close($connection);
     }
 
@@ -283,23 +288,28 @@ class Proyecto {
         require('../Core/connection.php');
         $consulta = "SELECT nombreEstProy, descripcionEstProy FROM pys_estadoproy WHERE est = '1' AND nombreEstProy LIKE '%$busqueda%';";
         $resultado = mysqli_query($connection, $consulta);
-        echo '  <table class="responsive-table centered">
-                    <thead>
-                        <tr>
-                            <th>Estado del proyecto</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
-        while ($datos = mysqli_fetch_array($resultado)) {
-            echo "      <tr>
-                            <td>$datos[0]</td>
-                            <td>$datos[1]</td>
-                        </tr>";
+        $count=mysqli_num_rows($resultado);
+        if($count > 0){
+            echo '  <table class="responsive-table centered">
+                        <thead>
+                            <tr>
+                                <th>Estado del proyecto</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                echo "      <tr>
+                                <td>$datos[0]</td>
+                                <td>$datos[1]</td>
+                            </tr>";
+            }
+            echo '      </tbody>
+                    </table>';
+        } else{
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
-        echo '      </tbody>
-                </table>';
-        mysqli_close($connection);
+                mysqli_close($connection);
     }
 
     public static function registrarEstado ($nombre, $descripcion) {
@@ -538,7 +548,7 @@ class Proyecto {
         $consulta = "SELECT pys_etapaproy.idEtaProy, pys_tiposproy.idTProy, pys_tiposproy.nombreTProy, pys_etapaproy.nombreEtaProy, pys_etapaproy.descripcionEtaProy FROM pys_etapaproy
             INNER JOIN pys_tiposproy ON pys_tiposproy.idTProy = pys_etapaproy.idTProy WHERE pys_etapaproy.est = '1' AND (pys_etapaproy.nombreEtaProy LIKE '%$busqueda%' OR pys_tiposproy.nombreTProy LIKE '%$busqueda%');";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             echo '  <table class="responsive-table centered">
                         <thead>
                             <tr>
@@ -574,6 +584,7 @@ class Proyecto {
         $datos = mysqli_fetch_array($resultado);
         $count = $datos[0];
         $max = $datos[1];
+        $duplicado = 0;
         if ($count == 0) {
             $countEta = "ETP001";
         } else {
@@ -646,7 +657,7 @@ class Proyecto {
             ORDER BY pys_entidades.nombreEnt ASC;";
             $resultado2 = mysqli_query($connection, $consulta2);
             echo '  <select name="sltEntidad" id="sltEntidadProy" onchange="cargaSelect(\'#sltEntidadProy\',\'../Controllers/ctrl_proyecto.php\',\'#sltFacultadProy\');">';
-            if (($registros2 = mysqli_num_rows($resultado2)) > 0) {
+            if ((mysqli_num_rows($resultado2)) > 0) {
                 $datos2 = mysqli_fetch_array($resultado2);
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if ($datos['idEnt'] == $datos2['idEnt']) {
@@ -667,7 +678,7 @@ class Proyecto {
         $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = '' AND idFac != '' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
         $resultado = mysqli_query($connection, $consulta);
         if ($idProy == null) {
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <select name="sltFacul" id="sltFacul2" onchange="cargaSelect(\'#sltFacul2\',\'../Controllers/ctrl_proyecto.php\',\'#sltDeptoProy\');">';
                 echo '  <option value="" selected>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
@@ -677,7 +688,7 @@ class Proyecto {
                         <label for="sltFacul">Facultad</label>';
             }
         } else {
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 $consulta2 = "SELECT idFac, facDeptoFacultad
                     FROM pys_actualizacionproy
                     INNER JOIN pys_facdepto ON pys_facdepto.idFacDepto = pys_actualizacionproy.idFacDepto 
@@ -743,7 +754,7 @@ class Proyecto {
         $consulta = "SELECT descripcionFrente, idFrente, nombreFrente FROM pys_frentes WHERE est = '1';";
         $resultado = mysqli_query($connection, $consulta);
         if ($idProy == null) {
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <select name="sltFrente" id="sltFrente" onchange="cargaSelect(\'#sltFrente\', \'../Controllers/ctrl_proyecto.php\',\'#divInfo\');">
                             <option value="" disabled selected>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
@@ -900,7 +911,7 @@ class Proyecto {
             WHERE (nombreTProy LIKE '%$busqueda%' OR nombreFrente LIKE '%$busqueda%' OR descripcionFrente LIKE '%$busqueda%')
             ORDER BY nombreFrente;";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             echo '  <table class="responsive-table centered">
                         <thead>
                             <tr>
@@ -997,7 +1008,7 @@ class Proyecto {
         require('../Core/connection.php');
         $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1';";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             if ($idProy == null) {
                 echo '  <div class="input-field col l3 m3 s12 offset-l3 offset-m3 select-plugin">
                             <select name="sltCeco" id="sltCeco" onchange=cargaSelect(\'#sltCeco\',\'../Controllers/ctrl_proyecto.php\',\'#divInfo3\');>
@@ -1037,7 +1048,7 @@ class Proyecto {
         require('../Core/connection.php');
         $consulta = "SELECT idConvocatoria, nombreConvocatoria FROM pys_convocatoria WHERE est = '1';";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             echo '  <select name="sltConvocatoria" id="sltConvocatoria">';
             while ($datos = mysqli_fetch_array($resultado)) {
                 if ($datos['idConvocatoria'] == $idConvocatoria) {
@@ -1120,7 +1131,7 @@ class Proyecto {
         require('../Core/connection.php');
         $consulta = "SELECT idEtaProy, nombreEtaProy FROM pys_etapaproy where est = '1' and idTProy = '$idProy' ORDER BY idEtaProy;";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0) {
+        if (mysqli_num_rows($resultado) > 0) {
             echo '  <div class="input-field col l3 m3 s12 offset-l3 offset-m3 select-plugin">
                         <select name="sltEtapaProy" id="sltEtapaProy">
                             <option value="" disabled selected>Seleccione</option>';
@@ -1169,7 +1180,7 @@ class Proyecto {
                 ';
         $consulta2 = "SELECT idConvocatoria, nombreConvocatoria FROM pys_convocatoria WHERE est = '1' ORDER BY nombreConvocatoria;";
         $resultado2 = mysqli_query($connection, $consulta2);
-        if ($registros2 = mysqli_num_rows($resultado2) > 0) {
+        if (mysqli_num_rows($resultado2) > 0) {
             echo '  <div class="input-field col l2 m2 s12 offset-l3 offset-m3 select-plugin">
                         <select name="sltConvocatoria" id="sltConvocatoria">
                             <option value="" disabled selected>Seleccione</option>';
@@ -1257,7 +1268,7 @@ class Proyecto {
         /** Verificación si el código de proyecto ya está creado */
         $consulta3 = "SELECT codProy FROM pys_proyectos WHERE codProy = '$codConectate';";
         $resultado3 = mysqli_query($connection, $consulta3);
-        if ($registros3 = mysqli_num_rows($resultado3) > 0){
+        if (mysqli_num_rows($resultado3) > 0){
             echo "<script> alert ('El proyecto ya se encuentra registrado en el sistema.');</script>";
         } else {
             /** Validación de Campos Vacíos */

@@ -7,6 +7,7 @@ $nomEquipo      = (isset($_POST["txtNomEquipo"])) ? $_POST["txtNomEquipo"] : nul
 $descEquipo     = (isset($_POST["txtDescEquipo"])) ? $_POST["txtDescEquipo"] : null;
 $idEquipo       = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : null;
 $idEquipo2      = (isset($_POST["cod"])) ? $_POST["cod"] : null;
+$search         = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Carga de información en el Modal */
 if($idEquipo){
@@ -16,7 +17,9 @@ if($idEquipo){
 }
 
 /* Procesamiento peticiones al controlador */
-if (isset($_POST['btnGuardarEqu'])) {
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Equipo::busquedaTotal() : Equipo::busqueda($search);
+} else if (isset($_POST['btnGuardarEqu'])) {
     $resultado = Equipo::registrarEquipo($nomEquipo, $descEquipo);
 } else if (isset($_POST['btnActEqu'])) {
     Equipo::actualizarEquipo($idEquipo2, $nomEquipo, $descEquipo);

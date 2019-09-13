@@ -316,7 +316,7 @@
                 if ($cod == '1') {
                     $string = "<div class='card-panel teal darken-1'> <h4 class='white-text'>No hay solicitudes específicas creadas.</h4></div>";
                 } else {
-                    $string = "<div class='card-panel teal darken-1'> <h4 class='white-text'>No hay resultados para la busqueda.</h4></div>";
+                    echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$inicial.'</strong></h6></div>';
                 }
             }
             if ($cod == '1') {
