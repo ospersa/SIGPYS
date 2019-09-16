@@ -17,7 +17,7 @@ Class Salarios {
     public static function busquedaTotal () {
         require('../Core/connection.php');
         echo '
-            <table class="responsive-table centered">
+            <table class="responsive-table left">
                 <thead>
                     <tr>
                         <th>Persona</th>
@@ -41,7 +41,7 @@ Class Salarios {
                         <td>$ '.number_format($datos['salario'], 2,",",".").'</td>
                         <td>'.$datos['mes'].'</td>
                         <td>'.$datos['anio'].'</td>
-                        <td><a href="#modalSalario" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[3]'".','."'modalSalario.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td><a href="#modalSalario" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[3]'".','."'modalSalario.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>
             ';
         }
@@ -61,7 +61,7 @@ Class Salarios {
         if ($registros > 0) {
             echo '
             <h5 class="center-align">'.$registros.' Resultados para la busqueda: '.$busqueda.'</h5>
-            <table class="responsive-table centered">
+            <table class="responsive-table left">
                 <thead>
                     <tr>
                         <th>Persona</th>
@@ -80,7 +80,7 @@ Class Salarios {
                             <td>$ '.number_format($datos['salario'], 2,",",".").'</td>
                             <td>'.$datos['mes'].'</td>
                             <td>'.$datos['anio'].'</td>
-                            <td><a href="#modalSalario" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[3]'".','."'modalSalario.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td><a href="#modalSalario" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[3]'".','."'modalSalario.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>
                 ';
             }

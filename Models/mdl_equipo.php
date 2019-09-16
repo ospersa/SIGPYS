@@ -15,21 +15,21 @@
             $consulta="SELECT * FROM pys_equipos WHERE est='1' ORDER BY nombreEqu;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Nombre del equipo</th>
                         <th>Descripción del equipo</th>
-                        <th></th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td><a href="#modalEquipo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEquipo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreEqu'].'</td>
+                        <td>'.$datos['descripcionEqu'].'</td>
+                        <td><a href="#modalEquipo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEquipo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -45,21 +45,21 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){    
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Nombre del equipo</th>
                             <th>Descripción del equipo</th>
-                            <th></th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>';
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td>'.$datos[2].'</td>
-                            <td><a href="#modalEquipo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEquipo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td>'.$datos['nombreEqu'].'</td>
+                            <td>'.$datos['descripcionEqu'].'</td>
+                            <td><a href="#modalEquipo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEquipo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

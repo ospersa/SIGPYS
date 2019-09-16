@@ -16,7 +16,7 @@
             $consulta="SELECT * FROM pys_plataformas WHERE est ='1' ORDER BY nombrePlt ";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Plataforma</th>
@@ -27,8 +27,8 @@
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td><a href="#modalPlataforma" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPlataforma.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombrePlt'].'</td>
+                        <td><a href="#modalPlataforma" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPlataforma.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -44,7 +44,7 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Plataforma</th>
@@ -55,8 +55,8 @@
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td><a href="#modalPlataforma" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPlataforma.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td>'.$datos['nombrePlt'].'</td>
+                            <td><a href="#modalPlataforma" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPlataforma.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

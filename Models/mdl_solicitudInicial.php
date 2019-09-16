@@ -39,7 +39,7 @@ Class SolicitudInicial {
             ORDER BY pys_solicitudes.fechSol DESC;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
-            echo '  <table class="responsive-table centered" id="tblProyecto">
+            echo '  <table class="responsive-table  left" id="tblProyecto">
                         <thead>
                             <tr>
                                 <th>CSI</th>
@@ -134,7 +134,7 @@ Class SolicitudInicial {
             ORDER BY pys_solicitudes.fechSol DESC;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
-            echo '  <table class="responsive-table centered" id="tblProyecto">
+            echo '  <table class="responsive-table  left" id="tblProyecto">
                         <thead>
                             <tr>
                                 <th>CSI</th>

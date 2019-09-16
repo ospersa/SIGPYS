@@ -15,7 +15,7 @@
             $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1' ORDER BY ceco;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Código Centro de Costos</th>
@@ -28,7 +28,7 @@
                     echo '      <tr>
                                     <td>'.$datos['ceco'].'</td>
                                     <td>'.$datos['nombre'].'</td>
-                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
@@ -44,7 +44,7 @@
             $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1' AND (ceco LIKE '%$busqueda%' OR nombre LIKE '%$busqueda%') ORDER BY ceco;";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Código Centro de Costos</th>
@@ -57,7 +57,7 @@
                     echo '      <tr>
                                     <td>'.$datos['ceco'].'</td>
                                     <td>'.$datos['nombre'].'</td>
-                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>

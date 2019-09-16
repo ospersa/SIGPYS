@@ -29,7 +29,7 @@
                 ORDER BY pys_facultades.nombreFac;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Empresa</th>
@@ -43,11 +43,11 @@
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[0].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td>'.$datos[5].' '.$datos[6].' '.$datos[7].'</td>
-                        <td>'.$datos[8].'</td>
-                        <td><a href="#modalFacultad" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreEnt'].'</td>
+                        <td>'.$datos['nombreFac'].'</td>
+                        <td>'.$datos["apellido1"].' '.$datos["apellido2"].' '.$datos["nombres"].'</td>
+                        <td>'.$datos['nombreCargo'].'</td>
+                        <td><a href="#modalFacultad" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -71,7 +71,7 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Empresa</th>
@@ -89,7 +89,7 @@
                             <td>'.$datos['nombreFac'].'</td>
                             <td>'.$datos["apellido1"].' '.$datos["apellido2"].' '.$datos["nombres"].'</td>
                             <td>'.$datos['nombreCargo'].'</td>
-                            <td><a href="#modalFacultad" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td><a href="#modalFacultad" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

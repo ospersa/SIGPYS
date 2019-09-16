@@ -64,7 +64,7 @@ class Departamento {
             WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_departamentos.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1' AND pys_facdepto.estFacdeptoDepto = '1' AND pys_personas.est = '1' AND pys_cargos.est = '1';";
         $resultado = mysqli_query($connection, $consulta);
         echo'
-        <table class="centered responsive-table">
+        <table class="left responsive-table">
             <thead>
                 <tr>
                     <th>Empresa</th>
@@ -79,11 +79,11 @@ class Departamento {
         while ($datos = mysqli_fetch_array($resultado)){
             echo'
                 <tr>
-                    <td>'.$datos[0].'</td>
-                    <td>'.$datos[1].'</td>
-                    <td>'.$datos[3].'</td>
-                    <td>'.$datos[6].' '.$datos[7].' '.$datos[8].'</td>
-                    <td><a href="#modalDepartamento" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                    <td>'.$datos['nombreEnt'].'</td>
+                    <td>'.$datos['nombreFac'].'</td>
+                    <td>'.$datos['nombreDepto'].'</td>
+                    <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                    <td><a href="#modalDepartamento" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                 </tr>';
         }
         echo "
@@ -107,7 +107,7 @@ class Departamento {
         $count=mysqli_num_rows($resultado);
         if($count > 0){
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Empresa</th>
@@ -121,11 +121,11 @@ class Departamento {
             while ($datos =mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[0].'</td>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[3].'</td>
-                        <td>'.$datos[6].' '.$datos[7].' '.$datos[8].'</td>
-                        <td><a href="#modalDepartamento" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreEnt'].'</td>
+                        <td>'.$datos['nombreFac'].'</td>
+                        <td>'.$datos['nombreDepto'].'</td>
+                        <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                        <td><a href="#modalDepartamento" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "

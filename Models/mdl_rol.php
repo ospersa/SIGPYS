@@ -20,7 +20,7 @@
                 WHERE pys_roles.est='1' ORDER BY pys_roles.nombreRol";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Rol</th>
@@ -33,10 +33,10 @@
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td>'.$datos[3].'</td>
-                        <td><a href="#modalRol" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalRol.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreRol'].'</td>
+                        <td>'.$datos['descripcionRol'].'</td>
+                        <td>'.$datos['nombreTipRol'].'</td>
+                        <td><a href="#modalRol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalRol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -53,7 +53,7 @@
             $registros = mysqli_num_rows($resultado);
             if($registros){
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Rol</th>
@@ -66,10 +66,10 @@
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td>'.$datos[2].'</td>
-                            <td>'.$datos[3].'</td>
-                            <td><a href="#modalRol" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalRol.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td>'.$datos['nombreRol'].'</td>
+                            <td>'.$datos['descripcionRol'].'</td>
+                            <td>'.$datos['nombreTipRol'].'</td>
+                            <td><a href="#modalRol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalRol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

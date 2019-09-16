@@ -4,7 +4,7 @@ class Proyecto {
 
     public static function busquedaTotalProyecto () {
         require('../Core/connection.php');
-        echo '  <table class="responsive-table centered" id="tblProyecto">
+        echo '  <table class="responsive-table left" id="tblProyecto">
                     <thead>
                         <tr>
                             <th>Empresa</th>
@@ -135,7 +135,7 @@ class Proyecto {
         $resultado = mysqli_query($connection, $consulta);
         $count=mysqli_num_rows($resultado);
         if($count > 0){
-            echo '  <table class="responsive-table centered" id="tblProyecto">
+            echo '  <table class="responsive-table left" id="tblProyecto">
             <thead>
                 <tr>
                     <th>Empresa</th>
@@ -265,7 +265,7 @@ class Proyecto {
         require('../Core/connection.php');
         $consulta = "SELECT nombreEstProy, descripcionEstProy FROM pys_estadoproy WHERE est = '1';";
         $resultado = mysqli_query($connection, $consulta);
-        echo '  <table class="responsive-table centered">
+        echo '  <table class="responsive-table left">
                     <thead>
                         <tr>
                             <th>Estado del proyecto</th>
@@ -290,7 +290,7 @@ class Proyecto {
         $resultado = mysqli_query($connection, $consulta);
         $count=mysqli_num_rows($resultado);
         if($count > 0){
-            echo '  <table class="responsive-table centered">
+            echo '  <table class="responsive-table left">
                         <thead>
                             <tr>
                                 <th>Estado del proyecto</th>
@@ -520,7 +520,7 @@ class Proyecto {
         $consulta = "SELECT pys_etapaproy.idEtaProy, pys_tiposproy.idTProy, pys_tiposproy.nombreTProy, pys_etapaproy.nombreEtaProy, pys_etapaproy.descripcionEtaProy FROM pys_etapaproy
             INNER JOIN pys_tiposproy ON pys_tiposproy.idTProy = pys_etapaproy.idTProy WHERE pys_etapaproy.est = '1';";
         $resultado = mysqli_query($connection, $consulta);
-        echo '  <table class="responsive-table centered">
+        echo '  <table class="responsive-table left">
                     <thead>
                         <tr>
                             <th>Tipo proyecto</th>
@@ -549,7 +549,7 @@ class Proyecto {
             INNER JOIN pys_tiposproy ON pys_tiposproy.idTProy = pys_etapaproy.idTProy WHERE pys_etapaproy.est = '1' AND (pys_etapaproy.nombreEtaProy LIKE '%$busqueda%' OR pys_tiposproy.nombreTProy LIKE '%$busqueda%');";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
-            echo '  <table class="responsive-table centered">
+            echo '  <table class="responsive-table left">
                         <thead>
                             <tr>
                                 <th>Tipo proyecto</th>
@@ -883,7 +883,7 @@ class Proyecto {
             INNER JOIN pys_frentes ON pys_frentes.idFrente = pys_tiposproy.idFrente
             ORDER BY nombreFrente;";
         $resultado = mysqli_query($connection, $consulta);
-        echo '  <table class="responsive-table centered">
+        echo '  <table class="responsive-table left">
                     <thead>
                         <tr>
                             <th>Frente</th>
@@ -912,7 +912,7 @@ class Proyecto {
             ORDER BY nombreFrente;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
-            echo '  <table class="responsive-table centered">
+            echo '  <table class="responsive-table left">
                         <thead>
                             <tr>
                                 <th>Frente</th>

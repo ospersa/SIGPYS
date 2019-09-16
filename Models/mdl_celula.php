@@ -16,8 +16,8 @@
             $personas = "";
             $consulta = "SELECT * FROM pys_celulas WHERE estado = '1' ORDER BY nombreCelula;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+            if (mysqli_num_rows($resultado) > 0) {
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Nombre Célula</th>
@@ -41,7 +41,7 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreCelula'].'</td>
                                     <td>'.$personas.'</td>
-                                    <td><a href="#modalCelula" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCelula" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                     $personas = "";
                 }
@@ -83,7 +83,8 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreCelula'].'</td>
                                     <td>'.$personas.'</td>
-                                    <td><a href="#modalCelula" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCelula" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons teal-text
+                                    ">edit</i></a></td>
                                 </tr>';
                     $personas = "";
                 }

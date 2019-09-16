@@ -15,23 +15,23 @@
             $consulta="SELECT * FROM pys_entidades WHERE est='1' ORDER BY nombreEnt;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Nombre de la Entidad/Empresa</th>
                         <th>Nombre corto de la Entidad/Empresa</th>
                         <th>Descripción de la Entidad/Empresa</th>
-                        <th></th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td>'.$datos[3].'</td>
-                        <td><a href="#modalEntidad" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEntidad.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreEnt'].'</td>
+                        <td>'.$datos['nombreCortoEnt'].'</td>
+                        <td>'.$datos['descripcionEnt'].'</td>
+                        <td><a href="#modalEntidad" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEntidad.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -47,23 +47,23 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Nombre de la Entidad/Empresa</th>
                             <th>Nombre corto de la Entidad/Empresa</th>
                             <th>Descripción de la Entidad/Empresa</th>
-                            <th></th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>';
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td>'.$datos[2].'</td>
-                            <td>'.$datos[3].'</td>
-                            <td><a href="#modalEntidad" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEntidad.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td>'.$datos['nombreEnt'].'</td>
+                            <td>'.$datos['nombreCortoEnt'].'</td>
+                            <td>'.$datos['descripcionEnt'].'</td>
+                            <td><a href="#modalEntidad" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEntidad.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

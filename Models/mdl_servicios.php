@@ -46,7 +46,7 @@
                 ORDER BY pys_equipos.nombreEqu;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
-            if($registros > 0){    
+            if ($registros > 0){    
                 echo'
                 <table class="left responsive-table">
                     <thead>
@@ -71,7 +71,7 @@
                             <td>'.$datos['descripcionSer'].'</td>
                             <td>'.$datos['productoOservicio'].'</td>
                             <td>$'.$costo.'</td>
-                            <td><a href="#modalServicio" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalServicio.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td><a href="#modalServicio" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalServicio.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

@@ -27,8 +27,8 @@
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
+                        <td>'.$datos['nombreCargo'].'</td>
+                        <td>'.$datos['descripcionCargo'].'</td>
                         <td><a href="#modalCargo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
@@ -57,8 +57,8 @@
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td>'.$datos[2].'</td>
+                            <td>'.$datos['nombreCargo'].'</td>
+                            <td>'.$datos['descripcionCargo'].'</td>
                             <td><a href="#modalCargo" class="waves-effect waves-light  modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons teal-text ">edit</i></a></td>
                         </tr>';
                 }

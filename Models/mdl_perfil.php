@@ -7,7 +7,7 @@
             $consulta="SELECT * FROM pys_perfil WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Nombre del perfil</th>
@@ -18,8 +18,8 @@
             while ($datos =mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
+                        <td>'.$datos['nombrePerfil'].'</td>
+                        <td>'.$datos['descripcionPerfil'].'</td>
                     </tr>';
             }
             echo "
@@ -34,7 +34,7 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Nombre del perfil</th>
@@ -45,8 +45,8 @@
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td>'.$datos[2].'</td>
+                            <td>'.$datos['nombrePerfil'].'</td>
+                            <td>'.$datos['descripcionPerfil'].'</td>
                         </tr>';
                 }
                 echo "

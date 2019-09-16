@@ -24,25 +24,25 @@
                 ORDER BY pys_frentes.idFrente;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Frente</th>
                         <th>Descripción</th>
                         <th>Coordinador de Frente</th>
                         <th>Cargo</th>
-                        <th></th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td>'.$datos[3].' '.$datos[4].' '.$datos[5].'</td>
-                        <td>'.$datos[6].'</td>
-                        <td><a href="#modalFrente" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFrente.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreFrente'].'</td>
+                        <td>'.$datos['descripcionFrente'].'</td>
+                        <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                        <td>'.$datos['nombreCargo'].'</td>
+                        <td><a href="#modalFrente" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFrente.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
 
@@ -63,7 +63,7 @@
             $count=mysqli_num_rows($resultado);
             if($count > 0){ 
                 echo'
-                <table class="centered responsive-table">
+                <table class="left responsive-table">
                     <thead>
                         <tr>
                             <th>Frente</th>
@@ -77,11 +77,11 @@
                 while ($datos =mysqli_fetch_array($resultado)){
                     echo'
                         <tr>
-                            <td>'.$datos[1].'</td>
-                            <td>'.$datos[2].'</td>
-                            <td>'.$datos[3].' '.$datos[4].' '.$datos[5].'</td>
-                            <td>'.$datos[6].'</td>
-                            <td><a href="#modalFrente" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFrente.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td>'.$datos['nombreFrente'].'</td>
+                            <td>'.$datos['descripcionFrente'].'</td>
+                            <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                            <td>'.$datos['nombreCargo'].'</td>
+                            <td><a href="#modalFrente" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFrente.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>';
                 }
                 echo "

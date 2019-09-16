@@ -255,7 +255,7 @@
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
-                $string = ' <table class="responsive-table centered">
+                $string = ' <table class="responsive-table  left">
                                 <thead>
                                     <tr>
                                         <th>CSI</th>
@@ -358,7 +358,7 @@
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
-                $string = ' <table class="responsive-table centered">
+                $string = ' <table class="responsive-table  left">
                                 <thead>
                                     <tr>
                                         <th>Código solicitud</th>

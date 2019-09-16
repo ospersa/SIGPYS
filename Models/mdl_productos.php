@@ -42,7 +42,7 @@ Class Producto {
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
-            echo '  <table class="responsive-table">
+            echo '  <table class=" left responsive-table">
                         <thead>
                             <tr>
                                 <th>Equipo</th>
@@ -67,7 +67,7 @@ Class Producto {
                                 <td>'.$datos['costoSin'].'</td>
                                 <td>'.$datos['costoCon'].'</td>
                                 <td>'.$datos['costo'].'</td>
-                                <td><a href="#modalTipProducto" class="waves-effect waves-light btn modal-trigger" onclick="envioData(\''.$datos['idTProd'].'\',\'modalTipProducto.php\');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                <td><a href="#modalTipProducto" class="waves-effect waves-light modal-trigger" onclick="envioData(\''.$datos['idTProd'].'\',\'modalTipProducto.php\');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             </tr>';
             }
             echo '      </tbody>
@@ -89,7 +89,7 @@ Class Producto {
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
-            echo '  <table class="responsive-table">
+            echo '  <table class="left responsive-table">
                         <thead>
                             <tr>
                                 <th>Equipo</th>
@@ -110,7 +110,7 @@ Class Producto {
                                 <td>'.$datos['nombreCortoClProd'].'</td>
                                 <td>'.$datos['descripcionClProd'].'</td>
                                 <td>'.$datos['costo'].'</td>
-                                <td><a href="#modalClaProducto" class="waves-effect waves-light btn modal-trigger" onclick="envioData(\''.$datos['idClProd'].'\',\'modalClaProducto.php\');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                <td><a href="#modalClaProducto" class="waves-effect waves-light modal-trigger" onclick="envioData(\''.$datos['idClProd'].'\',\'modalClaProducto.php\');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             </tr>';
             }
             echo '      </tbody>

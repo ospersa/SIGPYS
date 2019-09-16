@@ -14,7 +14,7 @@
             require ('../Core/connection.php');
             $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo='1' ORDER BY idPeriodo DESC;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'   <table class="centered responsive-table">
+            echo'   <table class="left responsive-table">
                         <thead>
                             <tr>
                                 <th>Fecha Inicio Periodo</th>
@@ -29,13 +29,13 @@
                         <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'       <tr>
-                                <td>'.$datos[1].'</td>
-                                <td>'.$datos[2].'</td>
-                                <td>'.$datos[3].'</td>
-                                <td>'.($datos[3] * 8).'</td>
-                                <td>'.$datos[4].'</td>
-                                <td>'.($datos[4] * 8).'</td>
-                                <td><a href="#modalPeriodo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPeriodo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                <td>'.$datos['inicioPeriodo'].'</td>
+                                <td>'.$datos['finPeriodo'].'</td>
+                                <td>'.$datos['diasSegmento1'].'</td>
+                                <td>'.($datos['diasSegmento1'] * 8).'</td>
+                                <td>'.$datos['diasSegmento2'].'</td>
+                                <td>'.($datos['diasSegmento2'] * 8).'</td>
+                                <td><a href="#modalPeriodo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPeriodo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             </tr>';
             }
             echo '      </tbody>
@@ -49,7 +49,7 @@
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
             if($count > 0){
-                echo '  <table class="centered responsive-table">
+                echo '  <table class="left responsive-table">
                             <thead>
                                 <tr>
                                     <th>Fecha Inicio Periodo</th>
@@ -64,13 +64,13 @@
                             <tbody>';
                 while ($datos = mysqli_fetch_array($resultado)){
                     echo'       <tr>
-                                    <td>'.$datos[1].'</td>
-                                    <td>'.$datos[2].'</td>
-                                    <td>'.$datos[3].'</td>
-                                    <td>'.($datos[3] * 8).'</td>
-                                    <td>'.$datos[4].'</td>
-                                    <td>'.($datos[4] * 8).'</td>
-                                    <td><a href="#modalPeriodo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPeriodo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td>'.$datos['inicioPeriodo'].'</td>
+                                    <td>'.$datos['finPeriodo'].'</td>
+                                    <td>'.$datos['diasSegmento1'].'</td>
+                                    <td>'.($datos['diasSegmento1'] * 8).'</td>
+                                    <td>'.$datos['diasSegmento2'].'</td>
+                                    <td>'.($datos['diasSegmento2'] * 8).'</td>
+                                    <td><a href="#modalPeriodo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPeriodo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
