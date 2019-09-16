@@ -8,7 +8,7 @@ $descConv      = (isset($_POST["txtDescConv"])) ? $_POST["txtDescConv"] : null;
 $val           = (isset($_POST["val"])) ? $_POST["val"] : null;
 $idConv        = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idConv2       = (isset($_POST["cod"])) ? $_POST["cod"] : null;
-$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$search        = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Carga de información en el Modal */
 if($idConv){

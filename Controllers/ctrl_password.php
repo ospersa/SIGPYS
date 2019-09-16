@@ -3,21 +3,47 @@
 include_once "../Models/mdl_password.php";
 
 /* Inicialización variables*/
-$userPerfil     = (isset($_POST['SMPerfil'])) ? $_POST['SMPerfil'] : null;
+$search         = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$userPerfil     = (isset($_POST['sltPerfil'])) ? $_POST['sltPerfil'] : null;
 $userId         = (isset($_POST['SMPersona'])) ? $_POST['SMPersona'] : null;
 $userName       = (isset($_POST['txtloginPer'])) ? $_POST['txtloginPer'] : null;
 $userPass       = (isset($_POST['txtpassPer'])) ? $_POST['txtpassPer'] : null;
-$val            = (isset($_POST['val'])) ? $_POST['val'] : null;
 $idLogin        = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idLogin2       = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 $busqueda       = (isset($_REQUEST["SMPersona"])) ? $_REQUEST["SMPersona"] : null;
+$busUsuario     = (isset($_REQUEST["txt-usu"])) ? $_REQUEST["txt-usu"] : null;
+$user           ="";
+
+/* Carga select */
+$selectPerfil= Password::selectPerfil(null);
+if (isset($_POST["txt-usu"]) AND ( ( $userName AND $userPass) == "" )){
+    echo $resultado = Password::selectBuscarUsuario($busUsuario);
+} else if (isset($_POST["SMPersona"]) AND ( ($userName AND $userPass) == "" )) {
+    $resultado = Password::buscarUserCorreo($busqueda, null);    
+}
+// continuar, configurar id login para enviar
+if ($idLogin){
+    $info = Password::onLoad($idLogin);
+    $idlogin = $info['idLogin'];
+    $idPersona = $info['idPersona'];
+    $nomUsuario = $info['nombres'].' '.$info['apellido1'].' '.$info['apellido2'];
+    $userName = $info['usrLogin'];
+    $userPass = $info['passwLogin'];
+    $idPerfil = $info['idPerfil'];
+    $nomPerfil = $info['nombrePerfil'];
+    $selectPerfil = Password::selectPerfil($idPerfil); 
+    $user = Password::buscarUserCorreo ($idPersona, 'modal');  
+}
+/*Carga de información en el Modal */
 /* Procesamiento peticiones al controlador */
-if (isset($_POST["SMPersona"]) AND ( ($userPerfil AND $userName AND $userPass AND $val) == "" )) {
-    $resultado = Password::selectUser($busqueda);
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Password::busquedaTotal() : Password::busqueda($search);
+} else if (isset($_POST['btnGuardarPassword'])) {
+    Password::registroUser($userPerfil, $userName, $userId, $userPass);
+} else if (isset($_POST["btnActPassword"])) {
+    Password::Actualizar($idLogin, $selectPerfil, $userName);
+
 }
 
-if( (($userPerfil AND $userName AND $userId AND $userPass) != "") AND ($val == NULL) ){
-    $resultado = Password::registroUser($userPerfil, $userName, $userId, $userPass);
-}
 
 ?>

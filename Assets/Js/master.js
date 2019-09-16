@@ -344,6 +344,23 @@ function busqueda(url) {
     });
     return false;
 }
+function busquedaUsu(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#txt-usu").serialize(),
+        beforeSend: function(){
+            $('#div_usuario').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $('#div_usuario').html(data);
+            $('#div_usuario').slideDown("slow");
+            $("select").formSelect();
+            
+        }
+    });
+    return false;
+}
 
 function pruebas(url) {
     $.ajax({

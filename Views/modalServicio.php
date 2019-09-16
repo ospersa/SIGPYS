@@ -1,5 +1,5 @@
 <div class="modal-content center-align">
-	<h4>Editar/Eliminar Rol</h4>
+	<h4>Editar/Eliminar Servicio</h4>
 	<div class="row">
 		<form id="actForm" action="../Controllers/ctrl_servicios.php" method="post" class="col l12 m12 s12">
 			<div class="row">
