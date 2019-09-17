@@ -35,7 +35,7 @@ require('../Controllers/ctrl_password.php');
                     <label for="txtpassPer">Password*</label>
                 </div>
                 <div class="input-field col l3 m3 s12 ">
-                    <input id="txtpass1Per" name="txtpass1Per" type="password"  class="validate" required  value="" />
+                    <input id="txtpass1Per" name="txtpass1Per" type="password"  class="validate" required  value="" onkeyup="confirPassword('#txtpassPer', '#txtpass1Per','#btn-pass')" />
                     <label for="txtpass1Per">Confirmar Password*</label>
                     <span id="passText" class="red-text helper-text hide">Las contraseñas no coinciden.</span>
                     <a onmouseover="M.toast({html: 'Default Pass: Conecta-TE.'})" class="help teal-text text-accent-4"><i class="material-icons small">help_outline</i></a>
@@ -54,7 +54,7 @@ require('../Controllers/ctrl_password.php');
 <!-- Modal Structure -->
 <div id="modalPassword" class="modal">
     <?php
-        require('modalPassword.php');
+    require('modalPassword.php');
     ?>
 </div>
 <?php

@@ -77,18 +77,6 @@ $(document).ready(function () {
         }
     });
 
-    $("#txtpass1Per").change(function(){
-        var val1 = $("#txtpassPer").val();
-        var val2 = $("#txtpass1Per").val();
-
-        if(val1 != val2){
-            $("#passText").removeClass("hide");
-        }else{
-            $("#passText").addClass("hide");
-            $("#btn-pass").removeClass("disabled");
-        }
-    })
-
     $('table tbody#cotizacion').paginathing({
         perPage: 10,
         insertAfter: 'table.responsive-table',
@@ -323,6 +311,38 @@ $(document).ready(function () {
 
 });
 
+function confirPassword(val1, val2, boton){
+    val1 = $(val1).val();
+    val2 = $(val2).val();
+    if(val1 == val2){
+        $("#passText").addClass("hide");
+        $(boton).removeClass("disabled");
+    }else{
+        $("#passText").removeClass("hide");
+        $(boton).addClass("disabled");
+    }
+}
+
+function checkbox(check) {
+    var checkActive = $(check);
+    var checked = $(check).attr('data-checked');
+    if (checked == 'false') {
+        $(checkActive).attr('checked', 'checked');
+        $('#txtpassPer1, #txtpass1Per1').removeAttr('disabled');
+        $(checkActive).attr('data-checked', 'true');
+        $('#passwords').removeClass('hide');
+        $("#btnActPassword").addClass("disabled");
+    } else if (checked == 'true') {
+        $(checkActive).removeAttr('checked');
+        $('#txtpassPer1, #txtpass1Per1').attr('disabled', true);
+        $('#txtpassPer1, #txtpass1Per1').removeClass('validate');
+        $(checkActive).attr('data-checked', 'false');
+        $('#passwords').addClass('hide');
+        $("#btnActPassword").removeClass("disabled");
+        
+    }
+
+}
 
 function busqueda(url) {
     $.ajax({

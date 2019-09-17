@@ -45,16 +45,24 @@ require('../Core/sessions.php');
                     </div>
                     <button id="btn-login" class="btn waves-effect waves-light right" type="submit" name="action">Log In</button>
                     <a href="Views/visitante.php" class="waves-effect waves-light btn cyan darken-2 left">Invited</a>
+                    <a class="col s12 waves-effect waves-light right modal-trigger" href="#modalLogin">¿olvido su contraseña?</a>
                 </form>
             </div>
             <div class="row">
                 <div id="message" class="red darken-3 white-text center-align col l6 m6 s12 offset-l3 offset-m3"></div>
             </div>
+            
         </div>
-    </main>
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+        <!-- Modal Structure -->
+<div id="modalLogin" class="modal">
+    <?php
+    require('modalLogin.php');
+    ?>
+</div>
+
+  <!-- Compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="../Assets/Js/materialize.js"></script>
     <script src="../Assets/Js/login.js"></script>
 </body>
 

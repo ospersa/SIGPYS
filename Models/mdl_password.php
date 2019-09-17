@@ -8,7 +8,7 @@ class Password {
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             INNER JOIN pys_perfil ON pys_login.idPerfil = pys_perfil.idPerfil
             WHERE pys_personas.est = 1 
-            AND  pys_personas.idPersona = '$id' 
+            AND  pys_login.idLogin = '$id' 
             ORDER BY nombres";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
@@ -21,7 +21,7 @@ class Password {
         $consulta = "SELECT * FROM pys_personas 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             INNER JOIN pys_perfil ON pys_login.idPerfil = pys_perfil.idPerfil
-            WHERE pys_personas.est = 1 
+            WHERE pys_personas.est = 1 AND pys_login.est = 1
             AND (apellido1 LIKE '%$buscar%' OR apellido2 LIKE '%$buscar%' OR nombres LIKE '%$buscar%' ) 
             ORDER BY nombres";
         $resultado = mysqli_query($connection, $consulta);
@@ -39,12 +39,14 @@ class Password {
                 </thead>
                 <tbody>';
             while ($datos =mysqli_fetch_array($resultado)){
+                $idLogin= $datos['idLogin'];
+                
                 echo'
                     <tr>
                         <td>'.$datos['nombres'].' '.$datos['apellido1'].' '.$datos['apellido2'].'</td>
                         <td>'.$datos['usrLogin'].'</td>
                         <td>'.$datos['nombrePerfil'].'</td>
-                        <td><a href="#modalPassword" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPassword.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                        <td><a href="#modalPassword" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$idLogin'".','."'modalPassword.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                 </tr>';
             }    
             echo "
@@ -62,7 +64,7 @@ class Password {
         $consulta = "SELECT * FROM pys_personas 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             INNER JOIN pys_perfil ON pys_login.idPerfil = pys_perfil.idPerfil
-            WHERE pys_personas.est = 1 
+            WHERE pys_personas.est = 1 AND pys_login.est = 1
             ORDER BY nombres";
         $resultado = mysqli_query($connection, $consulta);
         echo'
@@ -77,12 +79,13 @@ class Password {
             </thead>
             <tbody>';
         while ($datos =mysqli_fetch_array($resultado)){
+            $idLogin= $datos['idLogin'];
             echo'
                 <tr>
                     <td>'.$datos['nombres'].' '.$datos['apellido1'].' '.$datos['apellido2'].'</td>
                     <td>'.$datos['usrLogin'].'</td>
                     <td>'.$datos['nombrePerfil'].'</td>
-                    <td><a href="#modalPassword" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalPassword.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                    <td><a href="#modalPassword" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$idLogin'".','."'modalPassword.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
             </tr>';
         }    
         echo "
@@ -208,10 +211,10 @@ class Password {
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
             if ($id != null) {
-                $select = ' <select name="sltPerfil" id="sltPerfil">
+                $select = ' <select name="sltPerfil2" id="sltPerfil2">
                                 <option value="" selected>Seleccione</option>';
             } else {
-                $select = ' <select name="sltPerfil" id="sltPerfil" onchange="cargaSelect(\'#sltPerfil\',\'../Controllers/ctrl_password.php\',\'#sltServicioLoad\')" required>
+                $select = ' <select name="sltPerfil" id="sltPerfil" onchange="cargaSelect(\'#sltPerfil2\',\'../Controllers/ctrl_password.php\',\'#sltServicioLoad\')" required>
                                 <option value="" selected>Seleccione</option>';
             }
             
@@ -234,5 +237,44 @@ class Password {
         mysqli_close($connection);
     }
 
-    public static function actualizar($id, $perfil, $user)
+
+    public static function ActualizarConPassword($id, $perfil, $user,$pass){
+        require('../Core/connection.php');
+        $consulta = "UPDATE pys_login SET  usrLogin = '$user', idPerfil = '$perfil', passwLogin ='$pass'  WHERE idLogin = '$id';";
+        $resultado = mysqli_query($connection, $consulta);
+        if ($resultado){
+            echo "<script> alert ('Se actualizó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/password.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/password.php">';
+        }   
+        mysqli_close ($connection);
+    }
+    public static function actualizar($id, $perfil, $user){
+        require('../Core/connection.php');
+        $consulta = "UPDATE pys_login SET  usrLogin = '$user', idPerfil = '$perfil' WHERE idLogin = '$id';";
+        $resultado = mysqli_query($connection, $consulta);
+        if ($resultado){
+            echo "<script> alert ('Se actualizó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/password.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/password.php">';
+        }   
+        mysqli_close ($connection);
+    }
+    public static function inactivar($id){
+        require('../Core/connection.php');
+        $consulta = "UPDATE pys_login SET  est = '0' WHERE idLogin = '$id';";
+        $resultado = mysqli_query($connection, $consulta);
+        if ($resultado){
+            echo "<script> alert ('Se inactivo correctamente el usuario');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/password.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar inactivar el usuario');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/password.php">';
+        }   
+        mysqli_close ($connection);
+    }
 }

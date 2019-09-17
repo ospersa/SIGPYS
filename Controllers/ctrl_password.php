@@ -5,6 +5,7 @@ include_once "../Models/mdl_password.php";
 /* Inicialización variables*/
 $search         = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 $userPerfil     = (isset($_POST['sltPerfil'])) ? $_POST['sltPerfil'] : null;
+$userPerfil2     = (isset($_POST['sltPerfil2'])) ? $_POST['sltPerfil2'] : null;
 $userId         = (isset($_POST['SMPersona'])) ? $_POST['SMPersona'] : null;
 $userName       = (isset($_POST['txtloginPer'])) ? $_POST['txtloginPer'] : null;
 $userPass       = (isset($_POST['txtpassPer'])) ? $_POST['txtpassPer'] : null;
@@ -21,7 +22,7 @@ if (isset($_POST["txt-usu"]) AND ( ( $userName AND $userPass) == "" )){
 } else if (isset($_POST["SMPersona"]) AND ( ($userName AND $userPass) == "" )) {
     $resultado = Password::buscarUserCorreo($busqueda, null);    
 }
-// continuar, configurar id login para enviar
+/*Carga de información en el Modal */
 if ($idLogin){
     $info = Password::onLoad($idLogin);
     $idlogin = $info['idLogin'];
@@ -29,20 +30,21 @@ if ($idLogin){
     $nomUsuario = $info['nombres'].' '.$info['apellido1'].' '.$info['apellido2'];
     $userName = $info['usrLogin'];
     $userPass = $info['passwLogin'];
-    $idPerfil = $info['idPerfil'];
+    $userPerfil = $info['idPerfil'];
     $nomPerfil = $info['nombrePerfil'];
-    $selectPerfil = Password::selectPerfil($idPerfil); 
+    $selectPerfil2 = Password::selectPerfil($userPerfil); 
     $user = Password::buscarUserCorreo ($idPersona, 'modal');  
 }
-/*Carga de información en el Modal */
+
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['txt-search'])) {
     $busqueda = ($search == null) ? Password::busquedaTotal() : Password::busqueda($search);
 } else if (isset($_POST['btnGuardarPassword'])) {
     Password::registroUser($userPerfil, $userName, $userId, $userPass);
 } else if (isset($_POST["btnActPassword"])) {
-    Password::Actualizar($idLogin, $selectPerfil, $userName);
-
+    ( !empty($userPass) ) ? Password::ActualizarConPassword($idLogin2, $userPerfil2, $userName,$userPass) : Password::Actualizar($idLogin2, $userPerfil2, $userName); 
+} else if (isset($_POST["btnincPassword"])) {
+    Password::Inactivar($idLogin2); 
 }
 
 

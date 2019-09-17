@@ -1,10 +1,15 @@
 <?php
 //Conectamos a la base de datos
 require('../Core/connection.php');
+include_once('../Models/mdl_login.php');
+
 
 //Obtenemos los datos del formulario de acceso
-$userPOST = $_POST["usserName"]; 
-$passPOST = $_POST["password"];
+$userPOST = (isset($_POST['usserName'])) ? $_POST["usserName"] : null;
+$passPOST = (isset($_POST['password'])) ? $_POST["password"] : null;
+$id		  = (isset($_POST["numCedula"])) ? $_POST["numCedula"] : null ;
+$user 	  = (isset($_POST["nomUsu"])) ? $_POST["nomUsu"] : null ;
+$resul 	  = "";
 $string = mysqli_real_escape_string($connection, $userPOST);
 
 //Filtro anti-XSS
@@ -30,7 +35,7 @@ $perfil = $datos['idPerfil'];
 //Comprobamos si los datos son correctos
 if(($userBD == $userPOSTMinusculas) and ($passPOST == $passwordBD)){
 
-	session_start();
+	//session_start();
 	$_SESSION['usuario'] = $userBD;
 	$_SESSION['estado'] = 'Autenticado';
 	$_SESSION['perfil'] = $perfil;
@@ -41,5 +46,9 @@ if(($userBD == $userPOSTMinusculas) and ($passPOST == $passwordBD)){
 	die ('<script>$(".login").val("");</script> User name or password incorrect');
 } else {
 	die('Error');
-};
+}
+//modal recuperacion de contraseña
+if(isset($_POST['ValidarUser'])){
+	$resul = Login::validar($id, $user);
+}
 
