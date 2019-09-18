@@ -14,7 +14,7 @@ $idLogin2       = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 $busqueda       = (isset($_REQUEST["SMPersona"])) ? $_REQUEST["SMPersona"] : null;
 $busUsuario     = (isset($_REQUEST["txt-usu"])) ? $_REQUEST["txt-usu"] : null;
 $user           ="";
-
+$selectPerfil2  ="";
 /* Carga select */
 $selectPerfil= Password::selectPerfil(null);
 if (isset($_POST["txt-usu"]) AND ( ( $userName AND $userPass) == "" )){

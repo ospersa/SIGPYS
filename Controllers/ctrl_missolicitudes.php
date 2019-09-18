@@ -33,23 +33,6 @@ if(!isset($_SESSION)) {
 $usuario = $_SESSION['usuario'];
 SolicitudEspecifica::cargaEspecificasUsuario( $search, 2, $usuario);
 
-
-/* if(empty($search)) {
-    if(!isset($_SESSION)) { 
-        session_start();
-    }
-    $usuario = $_SESSION['usuario'];
-    SolicitudEspecifica::cargaEspecificasUsuario( $search, 2, $usuario);
-}
-
-if (!empty($search)) {
-    if(!isset($_SESSION)) { 
-        session_start();
-    }
-    $usuario = $_SESSION['usuario'];
-    SolicitudEspecifica::cargaEspecificasUsuario($search, 2, $usuario);
-} */
-
 if (isset($_POST['btnInactivar'])) {
     $resultado = Asignados::cambiarEstadoAsignacion($idAsig, 1);
 }

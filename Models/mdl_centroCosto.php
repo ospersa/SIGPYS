@@ -43,7 +43,7 @@
             require('../Core/connection.php');
             $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1' AND (ceco LIKE '%$busqueda%' OR nombre LIKE '%$busqueda%') ORDER BY ceco;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
@@ -75,7 +75,7 @@
                 /** Verificación que la información no esté duplicada en la tabla */
                 $consulta = "SELECT idCeco FROM pys_centrocostos WHERE ceco = '$codigo';";
                 $resultado = mysqli_query($connection, $consulta);
-                if ($registros = mysqli_num_rows($resultado) == 0) {
+                if (mmysqli_num_rows($resultado) == 0) {
                     /** Generación del ID a registrar en la tabla */
                     $consulta2 = "SELECT COUNT(idCeco), MAX(idCeco) FROM pys_centrocostos;";
                     $resultado2 = mysqli_query($connection, $consulta2);
