@@ -2,24 +2,6 @@
 
     Class Tiempos {
 
-        public static function Provisional () {//Cambiar nombre, antes no estaba definido 
-            require('../Core/connection.php');
-            $consulta = "SELECT pys_solicitudes.idSolIni, pys_solicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_equipos.idEqu, pys_servicios.nombreSer, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct, pys_tipossolicitud.nombreTSol, pys_tipossolicitud.idTSol, pys_actsolicitudes.idEstSol, pys_actsolicitudes.idCM, pys_actsolicitudes.presupuesto, pys_actsolicitudes.horas, pys_solicitudes.idSer
-                FROM pys_solicitudes
-                INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idPersona
-                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_solicitudes.idSer
-                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu
-                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
-                INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
-                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
-                INNER JOIN pys_tipossolicitud ON pys_tipossolicitud.idTSol = pys_solicitudes.idTSol
-                WHERE pys_solicitudes.est = '1' AND pys_solicitudes.idSol = '$id' AND pys_personas.est = '1' AND pys_equipos.est = '1' AND pys_servicios.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1';";
-            $resultado = mysqli_query($connection, $consulta);
-            $datos = mysqli_fetch_array($resultado);
-            return $datos;
-            mysqli_close($connection);
-        }
-
         public static function OnloadTiempoInvertido($codsol){
             require('../Core/connection.php');
             $consulta = "SELECT  pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase, pys_asignados.idAsig, pys_asignados.hora, pys_asignados.minuto, pys_asignados.maxhora, pys_asignados.maxmin
@@ -51,7 +33,7 @@
                 <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 $idAsig = $datos['idAsig'];
-                $consulta2 = "SELECT SUM(horaTiempo) as totHora, SUM(minTiempo) as totMinu FROM pys_tiempos WHERE idAsig = $idAsig";
+                $consulta2 = "SELECT SUM(horaTiempo) as totHora, SUM(minTiempo) as totMinu FROM pys_tiempos WHERE idAsig = $idAsig  AND estTiempo = 1";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $info = mysqli_fetch_array($resultado2);
                 $hora = ($info['totHora'] == null) ? 0 : $info['totHora'];
@@ -79,16 +61,16 @@
 
         public static function OnloadTiempoRegistrado($codsol,$idPer){
             require('../Core/connection.php');
-            $consulta = "SELECT pys_tiempos.fechTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.notaTiempo, pys_fases.nombreFase 
+            $consulta = "SELECT pys_tiempos.idTiempo, pys_tiempos.fechTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.notaTiempo, pys_fases.nombreFase 
                 FROM `pys_asignados` 
                 INNER JOIN pys_personas on pys_asignados.idPersona=pys_personas.idPersona 
                 INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-                INNER JOIN pys_fases ON pys_asignados.idFase=pys_fases.idFase 
                 INNER JOIN pys_tiempos on pys_asignados.idAsig=pys_tiempos.idAsig 
+                INNER JOIN pys_fases ON pys_tiempos.idFase=pys_fases.idFase 
                 WHERE pys_asignados.idSol= '$codsol' AND pys_login.usrLogin ='$idPer' AND pys_tiempos.estTiempo=1 AND pys_asignados.est=1";
             $resultado = mysqli_query($connection, $consulta);
-            if($dat= mysqli_num_rows($resultado) > 0){
-                echo $dat;
+            $dat= mysqli_num_rows($resultado);
+            if( $dat > 0){                
                 $string = '
                 <table class="left responsive-table">
                     <thead>
@@ -97,6 +79,9 @@
                             <th>Tiempo</th>
                             <th>Fase</th>
                             <th>Nota</th>
+                            <th>Editar</th>
+                            <th>Suprimir</th>
+                            
                         </tr>
                     </thead>
                     <tbody>';
@@ -115,6 +100,8 @@
                             <td>'.$hora.'h '.$minutos.'m </td>
                             <td>'.$datos['nombreFase'].'</td>
                             <td>'.$datos['notaTiempo'].'</td>
+                            <td><a href="#!" class="waves-effect waves-light" onclick ="editarRegistro(\''.$datos[0].'\')"title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                            <td><a href="#!" class="waves-effect waves-light" onclick ="ocultarEditar(\''.$datos[0].'\')"title="Suprimir"><i class="material-icons red-text">delete</i></a></td>
                     </tr>';
                 }    
                 $string .= "
@@ -126,6 +113,127 @@
             return $string;
             mysqli_close($connection);   
 
+        }
+
+        public static function registrarTiempos($idsol, $user, $fecha, $nota, $horas, $minutos, $fase){
+            require('../Core/connection.php');
+            $consulta = "SELECT idAsig FROM pys_asignados
+            INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
+            INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
+            WHERE pys_login.usrLogin= '$user' AND pys_asignados.idSol ='$idsol' AND pys_asignados.est = 1 AND pys_personas.est = 1 AND pys_login.est = 1 ";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            $idAsig = $datos['idAsig']; 
+            $consulta2 = "INSERT INTO pys_tiempos VALUES (DEFAULT, '$idAsig', '$fecha', '$nota', '$horas', '$minutos', now() , '$fase', '1')";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            if ($resultado && $resultado2) {                    
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+            } else { 
+                echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+            }
+            mysqli_close($connection);   
+        }
+
+        public static function editarTiemposRe($id, $fecha, $tiempoH, $tiempoM, $fase, $nota){
+            require('../Core/connection.php');
+            $consulta = "UPDATE pys_tiempos SET fechTiempo = '$fecha', notaTiempo ='$nota', horaTiempo = '$tiempoH', minTiempo ='$tiempoM', idFase = '$fase' WHERE idTiempo = '$id'";
+            $resultado = mysqli_query($connection, $consulta);
+            if ($resultado) {                    
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+            } else { 
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+            }
+            mysqli_close($connection);   
+        }
+
+        public static function SuprimirTiempoRe($id){
+            require('../Core/connection.php');
+            $consulta = "UPDATE pys_tiempos SET estTiempo = 0 WHERE idTiempo = '$id'";
+            $resultado = mysqli_query($connection, $consulta);
+            if ($resultado) {                    
+                echo "Se guardó correctamente la información";
+
+            } else { 
+                echo "Ocurrió un error al intentar actualizar el registro";
+            }
+            mysqli_close($connection);   
+        }
+        public static function llenarFormEditar($id){
+            require('../Core/connection.php');
+            $consulta = "SELECT * FROM pys_tiempos WHERE idTiempo = $id;";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            $string= '
+            <div class="row">
+            <h4>Editar tiempo resgistrado</h4>
+            </div>
+            <div class="row">
+            <form id="edit" action="../Controllers/ctrl_regtime.php" method="post">
+                    <input id="idTiempo" name="idTiempo" value="'.$id.'"type="hidden">
+                    <div class="input-field col s12 m2 l2">
+                        <input id="dateEdit" name="dateEdit" type="text" value='.$datos["fechTiempo"].' class="datepicker">
+                        <label class="active" for="dateEdit">Fecha</label>
+                    </div>
+                    <div class="input-field col s12 m1 l1 offset-m1 offset-l1">
+                        <input id="horasEdit" name="horasEdit" type="number" value="'.$datos["horaTiempo"].'" min="0" max="12">
+                        <label class="active" for="horasEdit">Horas</label>
+                    </div>
+                    <div class="input-field col s12 m1 l1 offset-m1 offset-l1">
+                        <input id="minutosEdit" name="minutosEdit" type="number" value="'.$datos["minTiempo"].'" min="0" max="59">
+                        <label class="active" for="minutosEdit">Minutos</label>
+                    </div>
+                    <div class="input-field col s12 m5 l5 offset-m1 offset-l1">'.
+                        Tiempos::selectFase($datos["idFase"]).'
+                        
+                    </div>
+                    <div class="input-field col s12">
+                        <textarea id="notaTEdit" name ="notaTEdit" class="materialize-textarea textarea">'.$datos["notaTiempo"].'</textarea>
+                        <label class="active" for="notaTEdit">Nota:</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="btnActRegTiempo">Actualizar</button>
+                    </div>
+                </form>
+                </div>
+                ';
+                echo $string;
+        }
+
+        public static function selectFase ($cod) {
+            require('../Core/connection.php');
+            $consulta = "SELECT * FROM pys_fases WHERE est = '1' ;";
+            $resultado = mysqli_query($connection, $consulta);
+            if (mysqli_num_rows($resultado) > 0) {
+                if($cod == null){
+                    $string = '  <select name="sltFase" id="sltFase" class="asignacion">
+                                <option value="" selected disabled>Seleccione</option>';
+
+                } else {
+                    $string = '  <select name="sltFaseEdit" id="sltFaseEdit" class="asignacion">
+                                <option value="" selected disabled>Seleccione</option>';
+                }
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    if( $datos['idFase'] == $cod){
+                        $string .= '  <option selected value="'.$datos['idFase'].'">'.$datos['nombreFase'].'</option>';
+                    }
+                    $string .= '  <option value="'.$datos['idFase'].'">'.$datos['nombreFase'].'</option>';
+                }
+                if($cod == null){
+                    $string .= '  </select>
+                            <label for="sltFase">Fase*</label>';
+                } else {
+                    $string .= '  </select>
+                            <label for="sltFaseEdit">Fase*</label>';
+                }
+            } else {
+                echo "<script>alert ('No hay categorías creadas')</script>";
+            }
+            return $string;
+            mysqli_close($connection);
         }
     
     }

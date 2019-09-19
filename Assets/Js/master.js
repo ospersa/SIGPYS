@@ -22,7 +22,9 @@ $(document).ready(function () {
 
     $('select').formSelect();
 
-    $(".dropdown-trigger").dropdown();
+    if ($(".dropdown-trigger")){
+        $(".dropdown-trigger").dropdown();
+    }
 
     $('.modal').modal({
         onOpenEnd:function(){
@@ -310,6 +312,46 @@ $(document).ready(function () {
     });
 
 });
+
+function editarRegistro(idTiempo){
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_regtime.php',
+        data: {
+            idTiempo : idTiempo
+        },
+        beforeSend: function(){
+            $('#fondo').removeClass("hide");
+            $('#editRegistro').removeClass("hide");
+        },
+        success: function (data) {
+            $('#editRegistro').html(data);
+            $('#editRegistro').slideDown("slow");
+            $('#sltFaseEdit').formSelect();
+        }
+    });
+};
+
+function ocultarEditar(id){
+    var mensaje = confirm("¿Esta seguro de eliminar el Registro?");
+    //Detectamos si el usuario acepto el mensaje
+    if (mensaje) {
+        $.ajax({
+            type: "POST",
+            url: '../Controllers/ctrl_regtime.php',
+            data: {
+                idDeletTiempo : id
+            },
+            success: function (data) {
+                alert(data);
+                location.reload();                
+            }
+        });
+    }
+
+}
+
+
 
 function confirPassword(val1, val2, boton){
     val1 = $(val1).val();

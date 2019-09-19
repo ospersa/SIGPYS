@@ -370,8 +370,8 @@
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
                                         <th>Registrar tiempos</th>
+                                        <th>Información Producto/Servicio</th>
                                         <th>Marcar como terminado</th>
-                                        <th>Cerrar producto/servicio</th>
                                     </tr>
                                 </thead>
                                 <tbody id="misSolicitudes">';
@@ -402,8 +402,19 @@
                     } else {
                         $string .= '<td><a href="#modalTiempos" class="modal-trigger" onclick="envioData(\''.$datos['idSol'].'\',\'modalTiempos.php\');" title="Aun no ha registrado tiempos"><i class="material-icons red-text">timer</i></a></td>';
                     }
-
-                    /** Sí ha registrado tiempos y el estado de asignacion es diferente a 0 o 2 se habilita para marcar como terminada la labor*/
+                    /** Sí ha registrado tiempos y el estado de asignacion es diferente a 0 o 2 se habilita para completar informacion P&S */
+                    if( $registros1 > 0){
+                        $consulta2 = "SELECT est FROM pys_asignados WHERE idPersona = '".$idUsuario."' AND idSol = '".$datos['idSol']."' AND idAsig = '".$idAsig."' AND est = 1;";
+                        $resultado2 = mysqli_query($connection, $consulta2);
+                        $registros2 = mysqli_num_rows($resultado2);
+                        if ($registros2 > 0) {
+                            $string .= '<td><a href="#modalTerminar" class="modal-trigger" onclick="envioData(\''.$idAsig.'\',\'modalTerminar.php\');" title="Marcar como terminado"><i class="material-icons red-text">assignment</i></a></td>';
+                        }
+                    } else {
+                        $string .= '<td></td>';
+                    }
+/** verificar que se hayan registrado tiempos, consulta asignados y revisar que por lo menos uno este en estado 1  y si no revisar la tabla que llena el formulario correspondiente y validar que este completo camnpos obligatorios */
+                    /** Sí ha registrado tiempos y el estado de asignacion es diferente a 0 o 1 y si no es el ultimo asignado en marcar como terminado se habilita para marcar como terminada la labor */
                     if( $registros1 > 0){
                         $consulta2 = "SELECT est FROM pys_asignados WHERE idPersona = '".$idUsuario."' AND idSol = '".$datos['idSol']."' AND idAsig = '".$idAsig."' AND est = 1;";
                         $resultado2 = mysqli_query($connection, $consulta2);
@@ -415,18 +426,6 @@
                         $string .= '<td></td>';
                     }
 
-                    /** Sí ha registrado tiempos se activa la opción de cerrar producto/servicio*/
-                    if( $registros1 > 0){
-                        $consulta3 = "SELECT est FROM pys_asignados WHERE idPersona = '".$idUsuario."' AND idSol = '".$datos['idSol']."' AND idAsig = '".$idAsig."' AND est = 1;";
-                        $resultado3 = mysqli_query($connection, $consulta3);
-                        $registros3 = mysqli_num_rows($resultado3);
-                        if ($registros3 > 0) {
-                            $string .= '<td><a href="#modalTerminar" class="modal-trigger" onclick="envioData(\''.$idAsig.'\',\'modalTerminar.php\');" title="Marcar como terminado"><i class="material-icons red-text">done</i></a></td>
-                            </tr>';
-                        }
-                    } else {
-                        $string .= '<td></td></tr>';
-                    }
                 }
                 $string .= '    </tbody>
                             </table>';

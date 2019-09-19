@@ -39,6 +39,9 @@ body {
     left: 0; }
 
 /********* Estilos de estructura *********/
+.pd-0 {
+  padding-bottom: 0; }
+
 /********* Estilos de login *********/
 .login {
   padding: 20px !important;
@@ -284,3 +287,43 @@ td:hover .truncate {
   padding-bottom: 1rem !important; }
 
 /***** Ajuste en tabs *****/
+.overlay-edit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.753); }
+
+.editTimes {
+  position: absolute;
+  width: 90%;
+  height: 85%;
+  margin: 5%;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: white;
+  z-index: 6; }
