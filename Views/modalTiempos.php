@@ -1,25 +1,23 @@
-<?php
-    include_once('../Controllers/ctrl_regtime.php');
-    include_once('../Models/mdl_tiempos.php');
-?>
+
 <div class="modal-content center-align">
     <h4>Registro de tiempos</h4>
     <div class="row">
         <div class="col s12 my-2">
-            <ul class="tabs">
-                <li class="tab col s4"><a href="#test1">Tiempos</a></li>
-                <li class="tab col s4"><a href="#test2">Resumen tiempo invertido</a></li>
-                <li class="tab col s4"><a href="#test3">Resumen Producto/Servicio</a></li>
+            <ul class="tabs teal lighten-2">
+                <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test1">Tiempos</a></li>
+                <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test2">Resumen tiempo invertido</a></li>
+                <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test3">Resumen Producto/Servicio</a></li>
+                <li class="indicator"></li>
             </ul>
         </div>
         <div id="test1" class="col s12 tab-container">
             <ul class="collapsible">
                 <li>
-                    <div class="collapsible-header">Registrar Tiempos</div>
+                    <div class="collapsible-header teal-text"><h6>Registrar Tiempos</h6></div>
                     <div class="collapsible-body pd-0">
                         <div class="row">
                             <form id="actForm" action="../Controllers/ctrl_regtime.php" method="post">
-                                <input id="idSol" name="idSol" value="<?php echo $idSol;?>"type="hidden">    
+                                <input id="idSol" name="idSol" value="<?php echo $idSolEsp;?>"type="hidden">    
                                 <div class="input-field col s12 m2 l2">
                                     <input id="date" name="date" type="text" class="datepicker">
                                     <label for="date">Fecha</label>
@@ -47,7 +45,7 @@
                     </div>
                 </li>
                 <li>
-                    <div class="collapsible-header">Tiempos Registrados</div>
+                    <div class="collapsible-header teal-text">Tiempos Registrados</div>
                     <div class="collapsible-body pd-0">
                         <div class="row">
                             <?php echo $tiempoRegistrado;?>

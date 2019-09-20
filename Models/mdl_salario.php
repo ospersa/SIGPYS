@@ -159,7 +159,7 @@ Class Salarios {
 
     public static function selectPersonaConectate ($idPersona) {
         require('../Core/connection.php');
-        $consulta = "SELECT idPersona, apellido1, apellido2, nombres FROM pys_personas WHERE est = '1' AND (idEquipo = 'EQU001' OR idEquipo = 'EQU002' OR idEquipo = 'EQU003') ORDER BY apellido1;";
+        $consulta = "SELECT idPersona, apellido1, apellido2, nombres FROM pys_personas WHERE est = '1' AND (idEquipo = 'EQU001' OR idEquipo = 'EQU002' OR idEquipo = 'EQU003' OR idEquipo = 'EQU005') ORDER BY apellido1;";
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {

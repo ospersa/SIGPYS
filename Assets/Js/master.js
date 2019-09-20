@@ -486,6 +486,7 @@ function envioData(valor, dir) {
 
 /*------- Fin envio de datos a modal -------*/
 function cargaSelect(elem, dir, destino) {
+    console.log("test");
     $.ajax({
         type: "POST",
         url: dir,

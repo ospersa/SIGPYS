@@ -1,0 +1,59 @@
+<div class="modal-content center-align">
+    <h4>Resultado de servicio</h4>
+    <div class="row">
+        <form id="actForm" action="../Controllers/ctrl_missolicitudes.php" method="post" class="col l12 m12 s12">
+            <div class="row">
+                <div class="input-field col l8 m8 s12 ">
+                    <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
+                    <p class ="left-align"><?php echo $idProy. " - ".$nomProy ;?></p>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <label for="prodOSerNo" class="active">Producto/Servicio No:</label>
+                    <p class ="left-align">P<?php echo $idSol;?></p>
+                </div>
+                <div class="input-field col l8 m8 s12 ">
+                    <label for="monEqu" class="active">Equipo - Servicio:</label>
+                    <p class ="left-align"><?php echo $nomEqu. " - ".$nomSer;?></p>
+                </div>
+                <div class="input-field col l3 m3 s12">
+                    <label for="duraSer" class="active">Duración del Servicio:</label>
+                    <p class ="left-align"><?php echo $tiempoTotal?></p>
+                </div>
+
+                <div class="input-field col l12 m12 s12 ">
+                    <label for="descripSol" class="active">Descripción Producto/Servicio:</label>
+                    <p class ="left-align"><?php echo $desSol;?></p>
+                </div>
+                <div class="input-field col l6 m6 s12 ">
+                    <?php echo $sltPlata;?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col l6 m6 s12">
+                <?php echo $sltClase;?>
+                </div>
+                <div class="input-field col l5 m5 s12 offset-l1 offset-m1" id="sltModalTipo">
+                </div>
+                <div class="input-field col l12 m12 s12  left-align">
+                    <textarea name="descripSer" id="descripSer" class="materialize-textarea" ></textarea>
+                    <label for="descripSer" class="active">Descripción Producto/Servicio:</label>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <input type="number" name="numEst" id="numEst" value="" min = 0>
+                    <label for="numEst" class="active">Numero de estudiantes:</label>
+                </div>
+                <div class="input-field col l2 m2 s12 offset-l1 offset-m1">
+                    <input type="number" name="numDoc" id="numDoc" value="" min = 0>
+                    <label for="numDoc" class="active">Numero de docentes:</label>
+                </div>
+                <div class="input-field col l6 m6 s12 offset-l1 offset-m1">
+                    <input type="url" name="url" id="url" value="" >
+                    <label for="url" class="active">URL:</label>
+                </div>
+            </div>
+            <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
+                <button class="btn waves-effect waves-light" type="submit" name="btnActServicio">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

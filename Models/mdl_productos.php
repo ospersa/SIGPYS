@@ -368,6 +368,63 @@ Class Producto {
         mysqli_close($connection);
     }
 
+    public static function selectClaseConTipo ($idServicio, $idClase) {
+        require ('../Core/connection.php');
+        $consulta = "SELECT idClProd, nombreClProd FROM pys_claseproductos WHERE est = '1' AND idSer = '$idServicio';";
+        $resultado = mysqli_query($connection, $consulta);
+        $registros = mysqli_num_rows($resultado);
+        if ($registros > 0) {
+            $select = '     <select name="sltClaseM" id="sltClaseM" onchange="cargaSelect(\'#sltClaseM\',\'../Controllers/ctrl_missolicitudes.php\',\'#sltModalTipo\')" required>
+                                <option value="">Seleccione</option>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                if ($datos['idClProd'] == $idClase) {
+                    $select .= '<option value="'.$datos['idClProd'].'" selected>'.$datos['nombreClProd'].'</option>';
+                } else {
+                    $select .= '<option value="'.$datos['idClProd'].'">'.$datos['nombreClProd'].'</option>';
+                }
+            }
+            $select .= '    </select>
+                            <label for="sltClaseM">Clase de producto*</label>';
+        } else {
+            $select = '     <select name="sltClaseM" id="sltClaseM">
+                                <option value="">No aplica</option>
+                            </select>
+                            <label for="sltClaseM">Clase de producto*</label>';
+        }
+
+        return $select;
+        mysqli_close($connection);
+    }
+
+    public static function selectTipoProducto($idServicio, $codTipo){
+        require ('../Core/connection.php');
+        $consulta = "SELECT idTProd, nombreTProd FROM pys_tiposproductos WHERE est = '1' AND idSer = '$idServicio';";
+        $resultado = mysqli_query($connection, $consulta);
+        $registros = mysqli_num_rows($resultado);
+        if ($registros > 0) {
+            $select = '     <select name="sltTipo" id="sltTipo" required>
+                                <option value="" selected disabled>Seleccione</option>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                if ($datos['idTProd'] == $codTipo) {
+                    $select .= '<option value="'.$datos['idTProd'].'" selected>'.$datos['nombreTProd'].'</option>';
+                } else {
+                    $select .= '<option value="'.$datos['idTProd'].'">'.$datos['nombreTProd'].'</option>';
+                }
+            }
+            $select .= '    </select>
+                            <label for="sltTipo">Tipo de producto*</label>';
+        } else {
+            $select = '     <select name="sltTipo" id="sltTipo">
+                                <option value="" selected >No aplica</option>
+                            </select>
+                            <label for="sltTipo">Tipo de producto*</label>';
+        }
+
+        return $select;
+        mysqli_close($connection);
+
+    }
+
 }
 
 ?>

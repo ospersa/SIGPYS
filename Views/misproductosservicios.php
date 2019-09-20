@@ -32,14 +32,9 @@ require('../Estructure/header.php');
 </div>
 
 <!-- Modal Structure -->
-<div id="modalTiempos" class="modal">
+<div id="modalResultadoServicio" class="modal">
     <?php
-        require('modalTiempos.php');
-    ?>
-</div>
-<div id="modalTerminar" class="modal">
-    <?php
-        require('modalTerminar.php');
+        require('modalResultadoServicio.php');
     ?>
 </div>
 

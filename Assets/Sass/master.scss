@@ -1,7 +1,7 @@
 //Variables de color
 $color1: #ffffff;
 $color2: #00897b;
-
+$color3: #a7ffeb;
 //Variable Media query para mobiles y tabletas
 $mobile: "only screen and (max-width: 768px)";
 
@@ -407,4 +407,10 @@ td {
     background: white;
     z-index: 6;
     
+}
+.tabs{
+    .indicator{
+        height: 3px;
+        background-color: $color3;
+    }
 }

@@ -327,3 +327,7 @@ td:hover .truncate {
           align-items: center;
   background: white;
   z-index: 6; }
+
+.tabs .indicator {
+  height: 3px;
+  background-color: #a7ffeb; }
