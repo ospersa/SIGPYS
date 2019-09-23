@@ -12,7 +12,7 @@
         </div>
         <div id="test1" class="col s12 tab-container">
             <ul class="collapsible">
-                <li>
+                <li class="active">
                     <div class="collapsible-header teal-text"><h6>Registrar Tiempos</h6></div>
                     <div class="collapsible-body pd-0">
                         <div class="row">
@@ -45,7 +45,7 @@
                     </div>
                 </li>
                 <li>
-                    <div class="collapsible-header teal-text">Tiempos Registrados</div>
+                    <div class="collapsible-header teal-text"><h6>Tiempos Registrados</h6></div>
                     <div class="collapsible-body pd-0">
                         <div class="row">
                             <?php echo $tiempoRegistrado;?>

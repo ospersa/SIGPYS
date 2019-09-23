@@ -3,6 +3,8 @@
     <div class="row">
         <form id="actForm" action="../Controllers/ctrl_missolicitudes.php" method="post" class="col l12 m12 s12">
             <div class="row">
+                <input type="text" name="idSol" id="idSol" value="<?php echo $idSol;?>" hidden>
+                <input type="text" name="idSer" id="idSer" value="<?php echo $idSer;?>" hidden>
                 <div class="input-field col l8 m8 s12 ">
                     <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
                     <p class ="left-align"><?php echo $idProy. " - ".$nomProy ;?></p>
@@ -17,7 +19,7 @@
                 </div>
                 <div class="input-field col l3 m3 s12">
                     <label for="duraSer" class="active">Duración del Servicio:</label>
-                    <p class ="left-align"><?php echo $tiempoTotal?></p>
+                    <p class ="left-align"><?php echo $hora." h ".$min." m"?></p>
                 </div>
 
                 <div class="input-field col l12 m12 s12 ">

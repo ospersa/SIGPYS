@@ -8,7 +8,12 @@ if ($prep == "GEN") {
     require('modalResultadoGeneral.php');
 } else if ($prep == "TIE") {
     require('modalTiempos.php');
+} else if ($prep == "SOP"){
+    require('modalResultadoSoporte.php');
+} else if ($prep == "DIS"){
+    echo "h2";
+} else if ($prep == "REA"){
+    echo "h3";
 }
-
 ?>
 </div>

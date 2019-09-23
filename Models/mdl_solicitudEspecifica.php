@@ -389,7 +389,7 @@
                                         <td>'.$datos['fechSol'].'</td>
                                         <td>'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).'</td>
                                         <td>'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
-                                        <td>s</td>';
+                                        <td></td>';
                                         
 
                     
@@ -447,11 +447,13 @@
                 if ($datos2['productoOservicio'] == 'SI') {
                     if ($datos2['idEqu'] == 'EQU001') {
                         /**Realizacion */
-
+                        $string .= '<a href="#modalResultadoServicio" class="modal-trigger" onclick="envioData(\'REA'.$idSol.'\',\'modalResultadoServicio.php\');" title="Completar información"><i class="material-icons red-text">assignment</i></a>';
                     } else if ($datos2['idEqu'] == 'EQU002') {
                         /**Diseño grafico */
+                        $string .= '<a href="#modalResultadoServicio" class="modal-trigger" onclick="envioData(\'DIS'.$idSol.'\',\'modalResultadoServicio.php\');" title="Completar información"><i class="material-icons red-text">assignment</i></a>';
                     } else if ($datos2['idEqu'] == 'EQU003') {
                         /**Soporte */
+                        $string .= '<a href="#modalResultadoServicio" class="modal-trigger" onclick="envioData(\'SOP'.$idSol.'\',\'modalResultadoServicio.php\');" title="Completar información"><i class="material-icons red-text">assignment</i></a>';
                     }
                 } if ($datos2['productoOservicio'] == 'NO') {
                     $string .= '<a href="#modalResultadoServicio" class="modal-trigger" onclick="envioData(\'GEN'.$idSol.'\',\'modalResultadoServicio.php\');" title="Completar información"><i class="material-icons red-text">assignment</i></a>';
@@ -461,7 +463,7 @@
             }
             return $string;
         }
-        public static function formResultadoServicio($idSol, $idUsuario){
+        public static function formResultadoServicio($idSol){
             require('../Core/connection.php');
             $consulta= "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, 
             pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol,
@@ -494,6 +496,27 @@
             $datos = mysqli_fetch_array($resultado);
             return $datos;
         }
+        public static function formResultadoSoprte($idSol){
+            require('../Core/connection.php');
+            $consulta= "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_Cursosmodulos.idCM, pys_Cursosmodulos.nombreCursoCM, pys_Cursosmodulos.nombreModuloCM, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_servicios.idSer, pys_servicios.nombreSer, pys_cursosmodulos.codigoCursoCM, pys_equipos.nombreEqu
+            FROM pys_solicitudes
+            INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
+            INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+            INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
+            INNER JOIN pys_personas ON pys_actsolicitudes.idPersona = pys_personas.idPersona
+            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+            INNER JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
+            INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
+            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+            INNER JOIN pys_convocatoria ON pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
+            WHERE pys_solicitudes.est = '1'  AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_solicitudes.idSolIni != '' AND pys_convocatoria.est = '1' AND pys_solicitudes.idSol = '$idSol' 
+            ORDER BY pys_proyectos.nombreProy";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            return $datos;
+        }
 
         public static function totalTiempo($idSol){
             require('../Core/connection.php');
@@ -512,9 +535,52 @@
                 $horas = intval(( $min/60 )+$horas);
                 $min = intval( $min%60);
             } 
-            $string = $horas." horas ".$min." minutos.";
+            $tiempos;
+            $tiempo[0] = $horas;
+            $tiempo[1] = $min;
+            
             mysqli_close($connection);
+            return $tiempo;
+        }
+
+        public static function selectRED ($id){
+            $string = '<select name="SMRed" id="SMRed" class="asignacion">';
+            if ($id == null){
+                $string .= '<option value="" selected disabled>Seleccione</option>
+			        <option value="Si">Si</option>
+			        <option value="No">No</option>';
+            }else if ($id == 'Si'){
+                $string .= '<option value="'.$id.'" selected>Si</option>
+                <option value="No">No</option>';
+            }else if ($id == 'No'){
+                $string .= '<option value="'.$id.'" selected>No</option>
+                <option value="Si">Si</option>';
+            }
+		    $string .= ' </select>
+            <label for="SMRed">¿Es una RED?*</label>';
             return $string;
+        }
+
+        public static function guardarResultadoServicio ($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $otrosImpac, $urlResultado, $motivoAnulacion, $usuario, $duracionhora, $duracionmin){
+            require('../Core/connection.php');
+            $consulta = "SELECT count(idResultServ),Max(idResultServ) FROM pys_resultservicio";
+            $resultado = mysqli_query($connection, $consulta);
+            while ($datos=mysql_fetch_array($resultado)){
+                echo $count=$datos[0];
+                $max=$datos[1];
+            }
+            if ($count==0){
+            $countResServ="R00001";	
+            }
+            else {
+            $countResServ='R'.substr((substr($max,3)+100001),1);		
+            }
+            $consulta2= "SELECT idPersona FROM pys_login where usrLogin = '$usuario'";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            $datos2=mysql_fetch_array($resultado2);
+            $idResponRegistro = $datos2[0];
+            $consulta3 = "INSERT INTO pys_resultservicio VALUES ('$countResServ', '$idSol', '$idPlat', '$idSer', '$idClProd', '$idTipoPro', '$observacion', '$estudiantesImpac', '$docentesImpac', '$otrosImpac', '$urlResultado', '$motivoAnulacion', '$idResponRegistro', '$duracionhora', '$duracionmin', now(), '1')";
+            //$resultado3 = mysqli_query($connection, $consulta3);
         }
     }
 
