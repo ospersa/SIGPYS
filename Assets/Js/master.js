@@ -486,11 +486,28 @@ function envioData(valor, dir) {
 
 /*------- Fin envio de datos a modal -------*/
 function cargaSelect(elem, dir, destino) {
-    console.log("test");
     $.ajax({
         type: "POST",
         url: dir,
         data: $(elem).serialize(),
+        beforeSend: function(){
+            $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $(destino).html(data);
+            $("select").formSelect();
+            $(".datepicker").datepicker();
+        }
+    })
+}
+function cargaSelectTipProduc(elem1,elem2, dir, destino) {
+    $.ajax({
+        type: "POST",
+        url: dir,
+        data: {
+            dato1: $(elem1).val(),
+            dato2: elem2,
+        },
         beforeSend: function(){
             $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },

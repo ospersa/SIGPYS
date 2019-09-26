@@ -4,6 +4,10 @@
 
         public static function OnloadTiempoInvertido($codsol){
             require('../Core/connection.php');
+            $horasTotal1 = 0;
+            $minTotal1 = 0;
+            $horasTotal = 0;
+            $minTotal = 0;
             $consulta = "SELECT  pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase, pys_asignados.idAsig, pys_asignados.hora, pys_asignados.minuto, pys_asignados.maxhora, pys_asignados.maxmin
             FROM pys_asignados
             inner join pys_solicitudes on pys_asignados.idSol = pys_solicitudes.idSol
@@ -43,17 +47,36 @@
                     $hora = intval(( $minutos/60 )+$hora);
                     $minutos = intval( $minutos%60);
                 } 
+                $horasTotal1 += $hora;
+                $minTotal1 += $minutos;
+                $horasTotal += $datos['maxhora'];
+                $minTotal += $datos['maxmin'];
                 $string .= '
-                    <tr>
-                        <td>'.$datos['nombres'].' '.$datos['apellido1'].' '.$datos['apellido2'].'</td>
-                        <td>'.$datos['nombreRol'].'</td>
-                        <td>'.$datos['nombreFase'].'</td>
-                        <td>'.$datos['maxhora'].'h '.$datos['maxmin'].'m </td>
-                        <td>'.$hora.'h '.$minutos.'m </td>
+                <tr>
+                <td>'.$datos['nombres'].' '.$datos['apellido1'].' '.$datos['apellido2'].'</td>
+                <td>'.$datos['nombreRol'].'</td>
+                <td>'.$datos['nombreFase'].'</td>
+                <td>'.$datos['maxhora'].'h '.$datos['maxmin'].'m </td>
+                <td>'.$hora.'h '.$minutos.'m </td>
                 </tr>';
             }    
+            if ($minTotal1 >= 60){
+                $horasTotal1 = intval(( $minTotal1/60 )+$horasTotal1);
+                $minTotal1 = intval( $minTotal1%60);
+            } 
+            if ($minTotal >= 60){
+                $horasTotal = intval(( $minTotal/60 )+$horasTotal);
+                $minTotal = intval( $minTotal%60);
+            } 
             $string .= "
-                </tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>Tiempo Total</b></td>
+                <td>".$horasTotal."h".$minTotal."m</td>
+                <td>".$horasTotal1."h".$minTotal1."m</td>
+            </tr>
+            </tbody>
             </table>";
             mysqli_close($connection);               
             return $string;    

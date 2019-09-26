@@ -269,6 +269,10 @@ td:hover .truncate {
   td:hover .truncate::-webkit-scrollbar-thumb {
     background-color: #009688;
     border-radius: 50px; }
+  @media only screen and (max-width: 768px) {
+    td:hover .truncate {
+      text-overflow: inherit;
+      overflow: auto; } }
 
 /***** Ajuste clase para cortar texto largo *****/
 /***** Ajuste en modal *****/

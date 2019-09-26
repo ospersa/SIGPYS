@@ -359,6 +359,11 @@ td {
                 background-color: #009688 ;
                 border-radius: 50px;
             }
+        
+            @include mobiles(){
+                text-overflow: inherit;
+                overflow: auto;
+            }
         }
     }
 }

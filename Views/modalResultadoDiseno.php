@@ -1,4 +1,4 @@
-<h4>Resultado de Soporte</h4>
+<h4>Resultado de Diseño</h4>
 <div class="row">
     <form id="actForm" action="../Controllers/ctrl_missolicitudes.php" method="post" class="col l12 m12 s12">
         <div class="row">
