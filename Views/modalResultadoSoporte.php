@@ -11,7 +11,7 @@
                 <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
                 <p class="left-align"><?php echo $idProy. " - ".$nomProy ;?></p>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l12 m12 s12 ">
                 <label for="descSol" class="active">Descripción Solicitud Específica:</label>
                 <p class="left-align"><?php echo $desSol ;?></p>
             </div>
@@ -19,11 +19,11 @@
                 <label for="duraSer" class="active">Fecha prevista de entrega al cliente:</label>
                 <p class="left-align"><?php echo $fechaPrev?></p>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l7 m12 s12 ">
                 <label for="monEqu" class="active">Equipo - Servicio:</label>
                 <p class="left-align"><?php echo $equipo. " - ".$nomProdOSer;?></p>
             </div>
-            <div class="input-field col l3 m12 s12">
+            <div class="input-field col l2 m12 s12">
                 <label for="duraSer" class="active">Duración del Servicio:</label>
                 <p class="left-align"><?php echo $hora." h ".$min." m";?></p>
             </div>
