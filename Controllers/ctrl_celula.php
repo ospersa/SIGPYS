@@ -7,7 +7,8 @@ $search         = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 $celula         = (isset($_POST['txtNomCelula'])) ? $_POST['txtNomCelula'] : null;
 $cod            = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 $coordinador    = (isset($_POST['sltCoordinador']) )? $_POST['sltCoordinador'] : null;
-$eliminar   = (isset($_POST['chkDeleteCoor'])) ? $_POST['chkDeleteCoor'] : null;
+$eliminar       = (isset($_POST['chkDeleteCoor'])) ? $_POST['chkDeleteCoor'] : null;
+$id             = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $nombreCelula   = "";
 $idCelula       = "";
 
@@ -16,7 +17,6 @@ $selectCoordinador = Celula::selectCoordinador("required");
 
 /* Carga de información en el Modal */
 if (isset($_REQUEST['id'])) {
-    $id = $_REQUEST['id'];
     $resultado = Celula::onLoadCelula($id);
     $nombreCelula = $resultado['nombreCelula'];
     $idCelula = $resultado['idCelula'];
@@ -30,7 +30,7 @@ if(isset($_POST['txt-search'])){
 if (isset($_POST['btnGuaCelula'])) {
     Celula::registrarCelula($celula, $coordinador);
 }else if (isset($_POST['btnActCelula'])) {
-        Celula::actualizarCelula($cod, $celula, $eliminar, $coordinador);
+    Celula::actualizarCelula($cod, $celula, $eliminar, $coordinador);
 }
 
 ?>

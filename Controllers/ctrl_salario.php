@@ -10,12 +10,15 @@ $vigFin             = (isset($_POST['txtVigFin'])) ? $_POST['txtVigFin'] : null;
 $id                 = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idSalario          = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 $nombreCompleto     = null;
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /** Variables que cargan select en otros formularios */
 $selectPersona = Salarios::selectPersonaConectate(null);
 
-/** Procesamiento peticiones al controlador */
-if (isset($_POST['btnGuardarSalario'])) {
+/* Procesamiento peticiones al controlador */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Salarios::busquedaTotal() : Salarios::busqueda($search);
+} else if (isset($_POST['btnGuardarSalario'])) {
     Salarios::registrarSalario($idPersona, $salario, $vigDesde, $vigFin);
 } else if (isset($_POST['btnActSalario'])) {
     Salarios::actualizarSalario($idSalario, $salario, $vigDesde, $vigFin);

@@ -11,16 +11,19 @@ require('../Controllers/ctrl_cotizacion.php');
 
 <div id="content" class="center-align">
     <h4>CONSULTA COTIZACIONES</h4>
-    <div class="row">
-        <?php
-        $cotizaciones = Cotizacion::listarCotizaciones();
-        echo $cotizaciones;
-        ?>
-    </div>
 </div>
 
 <div class="row">
-    <div id="div_dinamico" name="div_dinamico" class="col l10 m10 s12 offset-l1 offset-m1"></div>
+    <div id="div_dinamico" name="div_dinamico" class="col l12 m12 s12">
+    <?php
+        if ($cotizaciones == null){
+            $cotizaciones = Cotizacion::listarCotizaciones();
+            echo $cotizaciones;    
+        } else {
+            echo $cotizaciones;
+        }
+        ?>
+    </div>
 </div>
 
 <?php

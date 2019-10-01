@@ -8,7 +8,7 @@ require('../Estructure/header.php');
 <div class="row">
     <div class="col l10 m10 s12 offset-l1 offset-m1">
         <p class="left-align teal-text">
-            Para consultar solicitudes de producto/servicio, ingrese el código de la solicitud, código o nombre de
+            Para consultar solicitudes de producto/servicio, ingrese el código del producto/servicio, código o nombre de
             proyecto Conecta-TE.
         </p>
         <nav>
@@ -32,14 +32,9 @@ require('../Estructure/header.php');
 </div>
 
 <!-- Modal Structure -->
-<div id="modalTiempos" class="modal">
+<div id="modalResultadoServicio" class="modal">
     <?php
-        require('modalTiempos.php');
-    ?>
-</div>
-<div id="modalTerminar" class="modal">
-    <?php
-        require('modalTerminar.php');
+        require('modalResultadoServicio.php');
     ?>
 </div>
 

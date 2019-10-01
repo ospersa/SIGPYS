@@ -42,7 +42,7 @@ Class Producto {
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
-            echo '  <table class="responsive-table">
+            echo '  <table class=" left responsive-table">
                         <thead>
                             <tr>
                                 <th>Equipo</th>
@@ -67,13 +67,13 @@ Class Producto {
                                 <td>'.$datos['costoSin'].'</td>
                                 <td>'.$datos['costoCon'].'</td>
                                 <td>'.$datos['costo'].'</td>
-                                <td><a href="#modalTipProducto" class="waves-effect waves-light btn modal-trigger" onclick="envioData(\''.$datos['idTProd'].'\',\'modalTipProducto.php\');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                <td><a href="#modalTipProducto" class="waves-effect waves-light modal-trigger" onclick="envioData(\''.$datos['idTProd'].'\',\'modalTipProducto.php\');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             </tr>';
             }
             echo '      </tbody>
                     </table>';
         } else {
-            echo "<h4 class='center-align'>No hay resultados para la busqueda realizada.</h4>";
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }
@@ -89,7 +89,7 @@ Class Producto {
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
-            echo '  <table class="responsive-table">
+            echo '  <table class="left responsive-table">
                         <thead>
                             <tr>
                                 <th>Equipo</th>
@@ -110,13 +110,13 @@ Class Producto {
                                 <td>'.$datos['nombreCortoClProd'].'</td>
                                 <td>'.$datos['descripcionClProd'].'</td>
                                 <td>'.$datos['costo'].'</td>
-                                <td><a href="#modalClaProducto" class="waves-effect waves-light btn modal-trigger" onclick="envioData(\''.$datos['idClProd'].'\',\'modalClaProducto.php\');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                <td><a href="#modalClaProducto" class="waves-effect waves-light modal-trigger" onclick="envioData(\''.$datos['idClProd'].'\',\'modalClaProducto.php\');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             </tr>';
             }
             echo '      </tbody>
                     </table>';
         } else {
-            echo "<h4 class='center-align'>No hay resultados para la busqueda realizada.</h4>";
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }
@@ -366,6 +366,66 @@ Class Producto {
         }
         return $select;
         mysqli_close($connection);
+    }
+
+    public static function selectClaseConTipo ($idServicio, $idClase) {
+        require ('../Core/connection.php');
+        $consulta = "SELECT idClProd, nombreClProd FROM pys_claseproductos WHERE est = '1' AND idSer = '$idServicio';";
+        $resultado = mysqli_query($connection, $consulta);
+        $registros = mysqli_num_rows($resultado);
+        if ($registros > 0) {
+            $select = '     <select name="sltClaseM" id="sltClaseM" onchange="cargaSelectTipProduc(\'#sltClaseM\',\''.$idServicio.'\',\'../Controllers/ctrl_missolicitudes.php\',\'#sltModalTipo\')" >
+                                <option value="">Seleccione</option>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                if ($datos['idClProd'] == $idClase) {
+                    $select .= '<option value="'.$datos['idClProd'].'" selected>'.$datos['nombreClProd'].'</option>';
+                } else {
+                    $select .= '<option value="'.$datos['idClProd'].'">'.$datos['nombreClProd'].'</option>';
+                }
+            }
+            $select .= '    </select>
+                            <label for="sltClaseM">Clase de producto*</label>';
+        } else {
+            $select = '     <select name="sltClaseM" id="sltClaseM">
+                                <option value="">No aplica</option>
+                            </select>
+                            <label for="sltClaseM">Clase de producto*</label>';
+        }
+
+        return $select;
+        mysqli_close($connection);
+    }
+
+    public static function selectTipoProducto($idClase, $idServicio, $codTipo){
+        require ('../Core/connection.php');
+        $select = '     <select name="sltTipo" id="sltTipo" >
+                            <option value="" selected disabled>Seleccione</option>';
+        $consulta = "SELECT idTProd FROM `pys_costos` WHERE idSer = '$idServicio' AND idClProd ='$idClase'";
+        $resultado = mysqli_query($connection, $consulta);
+        while ($datos = mysqli_fetch_array($resultado)) {
+            if ($datos['idTProd'] != null){
+                $idTipo = $datos['idTProd'];
+                $consulta1= "SELECT * FROM pys_tiposproductos WHERE idTProd ='$idTipo'";
+                $resultado1 = mysqli_query($connection, $consulta1);
+                $registros = mysqli_num_rows($resultado1);
+                if ($registros > 0) {
+                    while ($datos1 = mysqli_fetch_array($resultado1)) {
+                        if ($datos1['idTProd'] == $codTipo) {
+                            $select .= '<option value="'.$datos1['idTProd'].'" selected>'.$datos1['nombreTProd'].' - '.$datos1['descripcionTProd'].' </option>';
+                        } else {
+                            $select .= '<option value="'.$datos1['idTProd'].'">'.$datos1['nombreTProd'].' - '.$datos1['descripcionTProd'].'</option>';
+                        }
+                    }
+                } else {
+                    $select .= '<option value="" selected >No registra tipo</option>';
+                }       
+            } 
+        }
+        $select .= '    </select>
+                        <label for="sltTipo">Tipo de producto*</label>';
+        return $select;
+        mysqli_close($connection);
+
     }
 
 }

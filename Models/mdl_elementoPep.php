@@ -19,7 +19,7 @@
                 WHERE pys_elementospep.estado = '1' ORDER BY nombreElemento;";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Código Elemento PEP</th>
@@ -34,7 +34,7 @@
                                     <td>'.$datos['codigoElemento'].'</td>
                                     <td>'.$datos['nombreElemento'].'</td>
                                     <td>'.$datos['ceco'].'</td>
-                                    <td><a href="#modalElementosPep" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalElementosPep.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalElementosPep" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalElementosPep.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
@@ -53,7 +53,7 @@
                 WHERE pys_elementospep.estado = '1' AND (pys_elementospep.nombreElemento LIKE '%$busqueda%' OR pys_elementospep.codigoElemento LIKE '%$busqueda%' OR pys_centrocostos.ceco LIKE '%$busqueda%') ORDER BY nombreElemento;";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Código Elemento PEP</th>
@@ -68,13 +68,13 @@
                                     <td>'.$datos['codigoElemento'].'</td>
                                     <td>'.$datos['nombreElemento'].'</td>
                                     <td>'.$datos['ceco'].'</td>
-                                    <td><a href="#modalElementosPep" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalElementosPep.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalElementosPep" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalElementosPep.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
                 </table>';
             } else {
-                echo "<h5 class='red-text'>No hay resultados para la busqueda: $busqueda.</h5>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }

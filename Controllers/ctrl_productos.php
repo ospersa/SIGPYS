@@ -25,7 +25,7 @@ $descripcionClase   = (isset($_POST['txtDescripcionClase'])) ? $_POST['txtDescri
 $costoClase         = (isset($_POST['txtCostoClase'])) ? $_POST['txtCostoClase'] : null;
 
 /** Variables que cargan select */
-$selectEquipo       = Equipo::selectEquipo(null);
+$selectEquipo       = Equipo::selectEquipo(null, null);
 $selectServicio     = Producto::selectServicio(null, null);
 $selectClase        = Producto::selectClase(null, null);
 
@@ -61,7 +61,7 @@ if ($id) {
         $nombreCortoClase = (isset($info['nombreCortoClProd'])) ? $info['nombreCortoClProd'] : null;
         $descripcionClase = (isset($info['descripcionClProd'])) ? $info['descripcionClProd'] : null;
         $costoClase = (isset($info['costo'])) ? $info['costo'] : null;
-        $selectEquipo = Equipo::selectEquipo($idEquipo);
+        $selectEquipo = Equipo::selectEquipo($idEquipo, null);//revisar 
         $selectServicio = Producto::selectServicio($idEquipo, $idServicio);
         $selectClase = Producto::selectClase($idServicio, $idClase);
     }

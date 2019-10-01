@@ -1,6 +1,6 @@
 <?php
 require('../Estructure/header.php');
-$proyecto = $_GET['cod'];
+$proyecto = (isset($_GET['cod'])) ? $_GET['cod'] : null;
 ?>
 
 <div id="content" class="center-align">

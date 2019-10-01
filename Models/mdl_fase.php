@@ -15,7 +15,7 @@
             $consulta="SELECT * FROM pys_fases WHERE est='1' ORDER BY nombreFase;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Nombre de la fase</th>
@@ -27,9 +27,9 @@
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td><a href="#modalFase" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFase.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreFase'].'</td>
+                        <td>'.$datos['descripcionFase'].'</td>
+                        <td><a href="#modalFase" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFase.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -42,27 +42,32 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_fases WHERE est='1' AND nombreFase LIKE '%".$busqueda."%' ORDER BY nombreFase;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'
-            <table class="centered responsive-table">
-                <thead>
-                    <tr>
-                        <th>Nombre de la fase</th>
-                        <th>Descripción de la fase</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>';
-            while ($datos =mysqli_fetch_array($resultado)){
-                echo'
-                    <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td><a href="#modalFase" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFase.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                    </tr>';
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){
+                    echo'
+                <table class="left responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre de la fase</th>
+                            <th>Descripción de la fase</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                while ($datos =mysqli_fetch_array($resultado)){
+                    echo'
+                        <tr>
+                            <td>'.$datos['nombreFase'].'</td>
+                            <td>'.$datos['descripcionFase'].'</td>
+                            <td><a href="#modalFase" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalFase.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                        </tr>';
+                }
+                echo "
+                    </tbody>
+                </table>";
+            } else {
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
-            echo "
-                </tbody>
-            </table>";
             mysqli_close($connection);
         }
 
@@ -111,18 +116,29 @@
             require('../Core/connection.php');
             $consulta = "UPDATE pys_fases SET nombreFase='$nomFase', descripcionFase='$descFase' WHERE idFase='$idFase2';";
             $resultado = mysqli_query($connection, $consulta);
+            if ($resultado){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
         }
 
         public static function suprimirFase($idFase2){
             require('../Core/connection.php');
             $consulta = "UPDATE pys_fases SET est='0' WHERE idFase='$idFase2';";
             $resultado = mysqli_query($connection, $consulta);
+            if ($resultado){
+                echo "<script> alert ('Se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
+            }else{
+                echo "<script> alert ('Ocurrió un error al intentar eliminar la informacion');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se eliminó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
         }
 
     }
+?>

@@ -34,7 +34,6 @@ Class Cotizacion {
 
     public static function busqueda($busqueda) {
         require ('../Core/connection.php');
-        echo "<script>$('#tblCotizaciones').empty();</script>";
         $consulta = "SELECT idSolIni, idSolEsp, codProy, nombreProy, ObservacionAct, idCotizacion FROM pys_actsolicitudes 
             INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy

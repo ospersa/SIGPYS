@@ -25,7 +25,7 @@
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             if ( mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table  left">
                             <thead>
                                 <tr>
                                     <th>Tipo de Solicitud</th>
@@ -38,7 +38,7 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreTSol'].'</td>
                                     <td>'.$datos['descripcionTSol'].'</td>
-                                    <td><a href="#modalTipSol" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalTipSol.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalTipSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalTipSol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
@@ -54,7 +54,7 @@
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1' AND (nombreTSol LIKE '%$busqueda%' OR descripcionTSol LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Tipo de Solicitud</th>
@@ -67,7 +67,7 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreTSol'].'</td>
                                     <td>'.$datos['descripcionTSol'].'</td>
-                                    <td><a href="#modalTipSol" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalTipSol.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalTipSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalTipSol.php'".');" title="Editar"><i class="material-icons teal-text teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
@@ -83,7 +83,7 @@
             $consulta = "SELECT * FROM pys_estadosol WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Estado de Solicitud</th>
@@ -96,7 +96,7 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreEstSol'].'</td>
                                     <td>'.$datos['descripcionEstSol'].'</td>
-                                    <td><a href="#modalEstSol" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalEstSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
@@ -110,7 +110,7 @@
             $consulta = "SELECT * FROM pys_estadosol WHERE est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Estado de Solicitud</th>
@@ -123,7 +123,7 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreEstSol'].'</td>
                                     <td>'.$datos['descripcionEstSol'].'</td>
-                                    <td><a href="#modalEstSol" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalEstSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>

@@ -29,7 +29,7 @@
                 ORDER BY pys_facultades.nombreFac;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Empresa</th>
@@ -43,11 +43,11 @@
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[0].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td>'.$datos[5].' '.$datos[6].' '.$datos[7].'</td>
-                        <td>'.$datos[8].'</td>
-                        <td><a href="#modalFacultad" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreEnt'].'</td>
+                        <td>'.$datos['nombreFac'].'</td>
+                        <td>'.$datos["apellido1"].' '.$datos["apellido2"].' '.$datos["nombres"].'</td>
+                        <td>'.$datos['nombreCargo'].'</td>
+                        <td><a href="#modalFacultad" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -68,31 +68,36 @@
                 WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1' AND pys_facdepto.idDepto = '' AND pys_personas.est = '1' AND pys_cargos.est = '1' AND pys_facultades.nombreFac LIKE '%".$busqueda."%' 
                 ORDER BY pys_facultades.nombreFac;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'
-            <table class="centered responsive-table">
-                <thead>
-                    <tr>
-                        <th>Empresa</th>
-                        <th>Facultad</th>
-                        <th>Decano</th>
-                        <th>Cargo</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>';
-            while ($datos =mysqli_fetch_array($resultado)){
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){
                 echo'
-                    <tr>
-                        <td>'.$datos['nombreEnt'].'</td>
-                        <td>'.$datos['nombreFac'].'</td>
-                        <td>'.$datos["apellido1"].' '.$datos["apellido2"].' '.$datos["nombres"].'</td>
-                        <td>'.$datos['nombreCargo'].'</td>
-                        <td><a href="#modalFacultad" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                    </tr>';
+                <table class="left responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Empresa</th>
+                            <th>Facultad</th>
+                            <th>Decano</th>
+                            <th>Cargo</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                while ($datos =mysqli_fetch_array($resultado)){
+                    echo'
+                        <tr>
+                            <td>'.$datos['nombreEnt'].'</td>
+                            <td>'.$datos['nombreFac'].'</td>
+                            <td>'.$datos["apellido1"].' '.$datos["apellido2"].' '.$datos["nombres"].'</td>
+                            <td>'.$datos['nombreCargo'].'</td>
+                            <td><a href="#modalFacultad" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[1]'".','."'modalFacultad.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                        </tr>';
+                }
+                echo "
+                    </tbody>
+                </table>";
+            }else{
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
-            echo "
-                </tbody>
-            </table>";
             mysqli_close($connection);
         }
 

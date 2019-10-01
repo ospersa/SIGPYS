@@ -14,8 +14,8 @@
             require('../Core/connection.php');
             $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1' ORDER BY ceco;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+            if (mysqli_num_rows($resultado) > 0) {
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Código Centro de Costos</th>
@@ -28,7 +28,7 @@
                     echo '      <tr>
                                     <td>'.$datos['ceco'].'</td>
                                     <td>'.$datos['nombre'].'</td>
-                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
@@ -43,8 +43,8 @@
             require('../Core/connection.php');
             $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1' AND (ceco LIKE '%$busqueda%' OR nombre LIKE '%$busqueda%') ORDER BY ceco;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+            if (mysqli_num_rows($resultado) > 0) {
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Código Centro de Costos</th>
@@ -57,13 +57,13 @@
                     echo '      <tr>
                                     <td>'.$datos['ceco'].'</td>
                                     <td>'.$datos['nombre'].'</td>
-                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCentroCosto" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCentroCosto.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
                 echo '      </tbody>
                 </table>';
             } else {
-                echo "<h5 class='red-text'>No hay resultados para la busqueda: <span class='teal-text'>$busqueda</span>.</h5>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }
@@ -75,7 +75,7 @@
                 /** Verificación que la información no esté duplicada en la tabla */
                 $consulta = "SELECT idCeco FROM pys_centrocostos WHERE ceco = '$codigo';";
                 $resultado = mysqli_query($connection, $consulta);
-                if ($registros = mysqli_num_rows($resultado) == 0) {
+                if (mmysqli_num_rows($resultado) == 0) {
                     /** Generación del ID a registrar en la tabla */
                     $consulta2 = "SELECT COUNT(idCeco), MAX(idCeco) FROM pys_centrocostos;";
                     $resultado2 = mysqli_query($connection, $consulta2);

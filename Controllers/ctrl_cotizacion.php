@@ -166,9 +166,9 @@ if (isset($_REQUEST['cod'])) {
 }*/
 if (isset($_POST['txt-search'])) {
     if ($busqueda == null) {
-        echo "<script>alert('Por favor no deje el campo de busqueda vacío.')</script>";
+        echo $cotizaciones = Cotizacion::listarCotizaciones();
     } else {
-        $resultado = Cotizacion::busqueda($busqueda);
+        $cotizaciones = Cotizacion::busquedaPendientes($busqueda);
     }
 }
 

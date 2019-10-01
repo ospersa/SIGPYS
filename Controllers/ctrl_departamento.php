@@ -11,6 +11,7 @@ $val                = (isset($_POST["val"])) ? $_POST["val"] : null;
 $idDepartamento     = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $idDepartamento2    = (isset($_POST["cod"])) ? $_POST["cod"] : null;
 $busqueda           = (isset($_POST["selEntidad"])) ? $_REQUEST["selEntidad"] : null;
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Carga de información en el Modal */
 if($idDepartamento){
@@ -28,7 +29,9 @@ if ($busqueda) {
 }
 
 /* Procesamiento peticiones al controlador */
-if (isset($_POST['btnGuardarDepto'])) {
+if (isset($_POST['txt-search'])) {
+    $bus = ($search == null) ? Departamento::busquedaTotal() : Departamento::busqueda($search);
+} else if (isset($_POST['btnGuardarDepto'])) {
     $resultado = Departamento::registrarDepartamento($idEntidad, $idFacultad, $nomDepartamento);
 } else if (isset($_POST['btnActDepa'])) {
     Departamento::actualizarDepartamento($idDepartamento2, $idEntidad, $idFacultad, $nomFacultad, $nomDepartamento);

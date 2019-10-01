@@ -16,8 +16,8 @@
             $personas = "";
             $consulta = "SELECT * FROM pys_celulas WHERE estado = '1' ORDER BY nombreCelula;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+            if (mysqli_num_rows($resultado) > 0) {
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Nombre Célula</th>
@@ -41,7 +41,7 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreCelula'].'</td>
                                     <td>'.$personas.'</td>
-                                    <td><a href="#modalCelula" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCelula" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                     $personas = "";
                 }
@@ -58,8 +58,8 @@
             $consulta = "SELECT * FROM pys_celulas WHERE estado = '1' AND nombreCelula LIKE '%$busqueda%' ORDER BY nombreCelula;";
             $resultado = mysqli_query($connection, $consulta);
             $personas = "";
-            if ($registros = mysqli_num_rows($resultado) > 0) {
-                echo '  <table class="responsive-table centered">
+            if (mysqli_num_rows($resultado) > 0) {
+                echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Nombre Célula</th>
@@ -83,14 +83,15 @@
                     echo '      <tr>
                                     <td>'.$datos['nombreCelula'].'</td>
                                     <td>'.$personas.'</td>
-                                    <td><a href="#modalCelula" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                    <td><a href="#modalCelula" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCelula.php'".');" title="Editar"><i class="material-icons teal-text
+                                    ">edit</i></a></td>
                                 </tr>';
                     $personas = "";
                 }
                 echo '      </tbody>
                         </table>';
             } else {
-                echo "<h5 class='red-text'>No hay resultados para la busqueda: <span class='teal-text'>$busqueda</span>.</h5>";
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }
@@ -231,7 +232,7 @@
             require '../Core/connection.php';
             $consulta = "SELECT idPersona, nombres, apellido1, apellido2 FROM pys_personas WHERE est = '1' AND idFacDepto = 'FD0034' ORDER BY apellido1;";
             $resultado = mysqli_query($connection, $consulta);
-            if ($registros = mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 $string = ' <select name="sltCoordinador[]" id="sltCoordinador" multiple '.$required.'>
                                 <option value="" disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {

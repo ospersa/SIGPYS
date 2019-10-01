@@ -35,20 +35,20 @@
             $resultado = mysqli_query($connection, $consulta);
             
             echo "
-                <table class='responsive-table' style='font-size:.85em;'>
+                <table class='left responsive-table' style='font-size:.85em;'>
                     <thead>
                         <tr>
-                            <th class='center-align'>Empresa</th>
-                            <th class='center-align'>Facultad - Departamento</th>
-                            <th class='center-align'>Cargo</th>
-                            <th class='center-align'>Tipo</th>
-                            <th class='center-align'>Identificación</th>
-                            <th class='center-align'>Apellidos y Nombres</th>
-                            <th class='center-align'>E-Mail</th>
-                            <th class='center-align'>Extensión</th>
-                            <th class='center-align'>Celular</th>
-                            <th class='center-align'>Equipo</th>
-                            <th class='center-align'>Editar</th>
+                            <th>Empresa</th>
+                            <th>Facultad - Departamento</th>
+                            <th>Cargo</th>
+                            <th>Tipo</th>
+                            <th>Identificación</th>
+                            <th>Apellidos y Nombres</th>
+                            <th>E-Mail</th>
+                            <th>Extensión</th>
+                            <th>Celular</th>
+                            <th>Equipo</th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -65,7 +65,7 @@
                             <td>'.$datos['extension'].'</td>
                             <td>'.$datos['celular'].'</td>
                             <td>'.$datos['nombreEqu'].'</td>
-                            <td><a href="#modalUsuario" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalUsuario.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                            <td><a href="#modalUsuario" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalUsuario.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                         </tr>
                 ';
             }
@@ -98,20 +98,20 @@
             $registros = mysqli_num_rows($resultado);
             if($registros){
                 echo "
-                    <table class='responsive-table' style='font-size:.85em;'>
+                    <table class='left responsive-table' style='font-size:.85em;'>
                         <thead>
                             <tr>
-                                <th class='center-align'>Empresa</th>
-                                <th class='center-align'>Facultad - Departamento</th>
-                                <th class='center-align'>Cargo</th>
-                                <th class='center-align'>Tipo</th>
-                                <th class='center-align'>Identificación</th>
-                                <th class='center-align'>Apellidos y Nombres</th>
-                                <th class='center-align'>E-Mail</th>
-                                <th class='center-align'>Extensión</th>
-                                <th class='center-align'>Celular</th>
-                                <th class='center-align'>Equipo</th>
-                                <th class='center-align'>Editar</th>
+                                <th>Empresa</th>
+                                <th>Facultad - Departamento</th>
+                                <th>Cargo</th>
+                                <th>Tipo</th>
+                                <th>Identificación</th>
+                                <th>Apellidos y Nombres</th>
+                                <th>E-Mail</th>
+                                <th>Extensión</th>
+                                <th>Celular</th>
+                                <th>Equipo</th>
+                                <th>Editar</th>
                             </tr>
                         </thead>
                         <tbody>";
@@ -128,7 +128,7 @@
                                 <td>'.$datos['extension'].'</td>
                                 <td>'.$datos['celular'].'</td>
                                 <td>'.$datos['nombreEqu'].'</td>
-                                <td><a href="#modalUsuario" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalUsuario.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                                <td><a href="#modalUsuario" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalUsuario.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             </tr>
                     ';
                 }
@@ -565,6 +565,7 @@
                 }
                 $consulta8 = "INSERT INTO pys_personas VALUES ('$idPer', '$departamento', '$cargo', '$tipo', '$identificacion', '$apellido1', '$apellido2', '$nombres', '$mail' , '$fijo', '$extension', '$celular', '$ciudad', '$equipo', '$categoriaCargo', '1');";
                 $resultado8 = mysqli_query($connection, $consulta8);
+                echo $consulta8;
                 if ($resultado8) {
                     echo "<script> alert ('El registro se insertó correctamente');</script>";
 			        echo '<meta http-equiv="Refresh" content="0;url=../Views/usuario.php">';

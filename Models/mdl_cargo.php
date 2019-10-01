@@ -15,21 +15,21 @@
             $consulta="SELECT * FROM pys_cargos WHERE est='1' ORDER BY nombreCargo;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
-            <table class="centered responsive-table">
+            <table class="left responsive-table">
                 <thead>
                     <tr>
                         <th>Nombre del cargo</th>
                         <th>Descripción del cargo</th>
-                        <th></th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 echo'
                     <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td><a href="#modalCargo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                        <td>'.$datos['nombreCargo'].'</td>
+                        <td>'.$datos['descripcionCargo'].'</td>
+                        <td><a href="#modalCargo" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                     </tr>';
             }
             echo "
@@ -42,27 +42,32 @@
             require('../Core/connection.php');
             $consulta="SELECT * FROM pys_cargos WHERE est='1' AND nombreCargo LIKE '%".$busqueda."%' ORDER BY nombreCargo;";
             $resultado = mysqli_query($connection, $consulta);
-            echo'
-            <table class="centered responsive-table">
-                <thead>
-                    <tr>
-                        <th>Nombre del cargo</th>
-                        <th>Descripción del cargo</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>';
-            while ($datos =mysqli_fetch_array($resultado)){
+            $count=mysqli_num_rows($resultado);
+            if($count > 0){
                 echo'
-                    <tr>
-                        <td>'.$datos[1].'</td>
-                        <td>'.$datos[2].'</td>
-                        <td><a href="#modalCargo" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                    </tr>';
+                <table class="left responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del cargo</th>
+                            <th>Descripción del cargo</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                while ($datos =mysqli_fetch_array($resultado)){
+                    echo'
+                        <tr>
+                            <td>'.$datos['nombreCargo'].'</td>
+                            <td>'.$datos['descripcionCargo'].'</td>
+                            <td><a href="#modalCargo" class="waves-effect waves-light  modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalCargo.php'".');" title="Editar"><i class="material-icons teal-text ">edit</i></a></td>
+                        </tr>';
+                }
+                echo "
+                    </tbody>
+                </table>";
+            } else {
+                echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
-            echo "
-                </tbody>
-            </table>";
             mysqli_close($connection);
         }
 

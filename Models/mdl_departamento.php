@@ -64,7 +64,7 @@ class Departamento {
             WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_departamentos.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1' AND pys_facdepto.estFacdeptoDepto = '1' AND pys_personas.est = '1' AND pys_cargos.est = '1';";
         $resultado = mysqli_query($connection, $consulta);
         echo'
-        <table class="centered responsive-table">
+        <table class="left responsive-table">
             <thead>
                 <tr>
                     <th>Empresa</th>
@@ -79,11 +79,11 @@ class Departamento {
         while ($datos = mysqli_fetch_array($resultado)){
             echo'
                 <tr>
-                    <td>'.$datos[0].'</td>
-                    <td>'.$datos[1].'</td>
-                    <td>'.$datos[3].'</td>
-                    <td>'.$datos[6].' '.$datos[7].' '.$datos[8].'</td>
-                    <td><a href="#modalDepartamento" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
+                    <td>'.$datos['nombreEnt'].'</td>
+                    <td>'.$datos['nombreFac'].'</td>
+                    <td>'.$datos['nombreDepto'].'</td>
+                    <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                    <td><a href="#modalDepartamento" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                 </tr>';
         }
         echo "
@@ -104,31 +104,36 @@ class Departamento {
             WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_departamentos.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1' AND pys_facdepto.estFacdeptoDepto = '1' AND pys_personas.est = '1' AND pys_cargos.est = '1' AND ((pys_facultades.nombreFac LIKE '%".$busqueda."%') OR (pys_departamentos.nombreDepto LIKE '%".$busqueda."%'))
             ORDER BY pys_facdepto.facDeptoFacultad;";
         $resultado = mysqli_query($connection, $consulta);
-        echo'
-        <table class="centered responsive-table">
-            <thead>
-                <tr>
-                    <th>Empresa</th>
-                    <th>Facultad</th>
-                    <th>Departamento</th>
-                    <th>Director Departamento</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>';
-        while ($datos =mysqli_fetch_array($resultado)){
+        $count=mysqli_num_rows($resultado);
+        if($count > 0){
             echo'
-                <tr>
-                    <td>'.$datos[0].'</td>
-                    <td>'.$datos[1].'</td>
-                    <td>'.$datos[3].'</td>
-                    <td>'.$datos[6].' '.$datos[7].' '.$datos[8].'</td>
-                    <td><a href="#modalDepartamento" class="waves-effect waves-light btn modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons">edit</i></a></td>
-                </tr>';
+            <table class="left responsive-table">
+                <thead>
+                    <tr>
+                        <th>Empresa</th>
+                        <th>Facultad</th>
+                        <th>Departamento</th>
+                        <th>Director Departamento</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>';
+            while ($datos =mysqli_fetch_array($resultado)){
+                echo'
+                    <tr>
+                        <td>'.$datos['nombreEnt'].'</td>
+                        <td>'.$datos['nombreFac'].'</td>
+                        <td>'.$datos['nombreDepto'].'</td>
+                        <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>
+                        <td><a href="#modalDepartamento" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[2]'".','."'modalDepartamento.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                    </tr>';
+            }
+            echo "
+                </tbody>
+            </table>";
+        }else{
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
-        echo "
-            </tbody>
-        </table>";
         mysqli_close($connection);
     }
 
@@ -172,9 +177,15 @@ class Departamento {
         /*Código de inserción en la tabla pys_facdepto*/
         $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
         $resultado3 = mysqli_query($connection, $sql3);
+
+        if($resultado && $resultado2 && $resultado3){
+            echo "<script> alert ('Se guardó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
+        }
         mysqli_close($connection);
-        echo "<script> alert ('Se guardó correctamente la información');</script>";
-        echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
     }
 
     public static function actualizarDepartamento($idDepartamento2, $idEntidad, $idFacultad, $nomFacultad, $nomDepartamento){
@@ -182,10 +193,15 @@ class Departamento {
         $consulta = "UPDATE pys_departamentos SET nombreDepto = '$nomDepartamento' WHERE idDepto = '$idDepartamento2';";
         $resultado = mysqli_query($connection, $consulta);
         echo $consulta = "UPDATE pys_facdepto SET idEnt = '$idEntidad', idFac = '$idFacultad', idDepto = '$idDepartamento2', facDeptoFacultad = '$nomFacultad', facDeptoDepartamento = '$nomDepartamento' WHERE idDepto = '$idDepartamento2';";
-        $resultado = mysqli_query($connection, $consulta);
+        $resultado2 = mysqli_query($connection, $consulta);
+        if($resultado && $resultado2){
+            echo "<script> alert ('Se guardó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
+        }
         mysqli_close($connection);
-        echo "<script> alert ('Se guardó correctamente la información');</script>";
-        echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
     }
 
     public static function suprimirDepartamento($idDepartamento2){
@@ -193,10 +209,17 @@ class Departamento {
         $consulta = "UPDATE pys_departamentos SET est = '0' WHERE idDepto='$idDepartamento2';";
         $resultado = mysqli_query($connection, $consulta);
         $consulta = "UPDATE pys_facdepto SET estFacdeptoDepto = '0' WHERE idDepto='$idDepartamento2';";
-        $resultado = mysqli_query($connection, $consulta);
+        $resultado2 = mysqli_query($connection, $consulta);
+        if($resultado && $resultado2){
+            echo "<script> alert ('Se eliminó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
+        }else{
+            echo "<script> alert ('Ocurrió un error al intentar eliminar la informacion');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
+        }
         mysqli_close($connection);
-        echo "<script> alert ('Se eliminó correctamente la información');</script>";
-        echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
     }
     
 }
+
+?>

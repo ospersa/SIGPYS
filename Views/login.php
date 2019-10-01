@@ -17,7 +17,8 @@ require('../Core/sessions.php');
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"> -->
+    <link rel="stylesheet" href="../Assets/Css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="../Assets/Css/master.css">
 
     <!--Let browser know website is optimized for mobile-->
@@ -48,13 +49,22 @@ require('../Core/sessions.php');
                 </form>
             </div>
             <div class="row">
+                <a class=" white-text modal-trigger col l6 m6 s12 offset-l3 offset-m3" href="#modalLogin">¿Olvido su contraseña?</a>
+            </div>
+            <div class="row">
                 <div id="message" class="red darken-3 white-text center-align col l6 m6 s12 offset-l3 offset-m3"></div>
             </div>
         </div>
-    </main>
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <!-- Modal Structure -->
+<div id="modalLogin" class="modal">
+    <?php
+    require('modalLogin.php');
+    ?>
+</div>
+  <!-- Compiled and minified JavaScript -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
+    <script src="../Assets/Js/jquery-3.1.0.min.js"></script>
+    <script src="../Assets/Js/materialize.js"></script>
     <script src="../Assets/Js/login.js"></script>
 </body>
 

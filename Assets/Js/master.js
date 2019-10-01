@@ -14,6 +14,9 @@ $('.modal').on('change', function () {
 
 $(document).ready(function () {
 
+    inicializarCampos();
+
+
     $('.tabs').tabs();
 
     $('.collapsible').collapsible();
@@ -22,7 +25,9 @@ $(document).ready(function () {
 
     $('select').formSelect();
 
-    $(".dropdown-trigger").dropdown();
+    if ($(".dropdown-trigger")){
+        $(".dropdown-trigger").dropdown();
+    }
 
     $('.modal').modal({
         onOpenEnd:function(){
@@ -76,18 +81,6 @@ $(document).ready(function () {
             $('#txtFechFin').prop('disabled', false);
         }
     });
-
-    $("#txtpass1Per").change(function(){
-        var val1 = $("#txtpassPer").val();
-        var val2 = $("#txtpass1Per").val();
-
-        if(val1 != val2){
-            $("#passText").removeClass("hide");
-        }else{
-            $("#passText").addClass("hide");
-            $("#btn-pass").removeClass("disabled");
-        }
-    })
 
     $('table tbody#cotizacion').paginathing({
         perPage: 10,
@@ -323,6 +316,78 @@ $(document).ready(function () {
 
 });
 
+function editarRegistro(idTiempo){
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_regtime.php',
+        data: {
+            idTiempo : idTiempo
+        },
+        beforeSend: function(){
+            $('#fondo').removeClass("hide");
+            $('#editRegistro').removeClass("hide");
+        },
+        success: function (data) {
+            $('#editRegistro').html(data);
+            $('#editRegistro').slideDown("slow");
+            $('#sltFaseEdit').formSelect();
+        }
+    });
+};
+
+function ocultarEditar(id){
+    var mensaje = confirm("¿Esta seguro de eliminar el Registro?");
+    //Detectamos si el usuario acepto el mensaje
+    if (mensaje) {
+        $.ajax({
+            type: "POST",
+            url: '../Controllers/ctrl_regtime.php',
+            data: {
+                idDeletTiempo : id
+            },
+            success: function (data) {
+                alert(data);
+                location.reload();                
+            }
+        });
+    }
+
+}
+
+
+
+function confirPassword(val1, val2, boton){
+    val1 = $(val1).val();
+    val2 = $(val2).val();
+    if(val1 == val2){
+        $("#passText").addClass("hide");
+        $(boton).removeClass("disabled");
+    }else{
+        $("#passText").removeClass("hide");
+        $(boton).addClass("disabled");
+    }
+}
+
+function checkbox(check) {
+    var checkActive = $(check);
+    var checked = $(check).attr('data-checked');
+    if (checked == 'false') {
+        $(checkActive).attr('checked', 'checked');
+        $('#txtpassPer1, #txtpass1Per1').removeAttr('disabled');
+        $(checkActive).attr('data-checked', 'true');
+        $('#passwords').removeClass('hide');
+        $("#btnActPassword").addClass("disabled");
+    } else if (checked == 'true') {
+        $(checkActive).removeAttr('checked');
+        $('#txtpassPer1, #txtpass1Per1').attr('disabled', true);
+        $('#txtpassPer1, #txtpass1Per1').removeClass('validate');
+        $(checkActive).attr('data-checked', 'false');
+        $('#passwords').addClass('hide');
+        $("#btnActPassword").removeClass("disabled");
+        
+    }
+
+}
 
 function busqueda(url) {
     $.ajax({
@@ -340,6 +405,23 @@ function busqueda(url) {
                 insertAfter: 'table.responsive-table',
                 pageNumbers: false,
             });
+        }
+    });
+    return false;
+}
+function busquedaUsu(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#txt-usu").serialize(),
+        beforeSend: function(){
+            $('#div_usuario').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $('#div_usuario').html(data);
+            $('#div_usuario').slideDown("slow");
+            $("select").formSelect();
+            
         }
     });
     return false;
@@ -373,7 +455,6 @@ function actualiza(val, url) {
         url: url,
         data: $("#actForm").serialize(),
         success: function(){
-            console.log(url);
         }
     });
     return false;
@@ -411,6 +492,24 @@ function cargaSelect(elem, dir, destino) {
         type: "POST",
         url: dir,
         data: $(elem).serialize(),
+        beforeSend: function(){
+            $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $(destino).html(data);
+            $("select").formSelect();
+            $(".datepicker").datepicker();
+        }
+    })
+}
+function cargaSelectTipProduc(elem1,elem2, dir, destino) {
+    $.ajax({
+        type: "POST",
+        url: dir,
+        data: {
+            dato1: $(elem1).val(),
+            dato2: elem2,
+        },
         beforeSend: function(){
             $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
@@ -555,6 +654,12 @@ function inicializarCampos() {
     var datepickers = $(".datepicker");
     if (datepickers.length != 0) {
         $('.datepicker').datepicker();
+
+    }
+    
+    var tooltips =  $('.tooltipped');
+    if (tooltips.length != 0){
+        $('.tooltipped').tooltip();
     }
 
 }

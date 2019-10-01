@@ -110,9 +110,9 @@ if ($val) {
     session_start();
     $persona = $_SESSION['usuario'];
     if ($val == '1') {
-        Proyecto::actualizarEtapa($cod, $tipoProy, $nombreEta, $descripcionEta);
+        Proyecto::actualizarEtapa($idProy, $tipoProy, $nombreEta, $descripcionEta);
     } else if ($val == '2') {
-        Proyecto::actualizarTipo($cod, $frente, $nombreTip);
+        Proyecto::actualizarTipo($idProy, $frente, $nombreTip);
     } else if ($val == '3') {
         $notaAnulacion = $_POST['txtAnulacion'];
         Proyecto::suprimirProyecto($idProy, $notaAnulacion, $persona);
