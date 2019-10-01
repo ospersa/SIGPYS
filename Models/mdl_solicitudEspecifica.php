@@ -484,7 +484,7 @@
                         }
                         $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'SOP'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
                     }
-                } if ($datos2['productoOservicio'] == 'NO' /* && $datos2['idEqu'] != 'EQU004' */ ) {
+                } if ($datos2['productoOservicio'] == 'NO' && $datos2['idEqu'] != 'EQU004' ) {
                     $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'GEN'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
 
                 }

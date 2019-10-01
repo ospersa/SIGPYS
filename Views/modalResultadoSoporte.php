@@ -51,7 +51,7 @@
             }
             ?>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l11 m12 s12 ">
                 <input type="url" name="url" id="url" value="<?php echo $url;?>">
                 <label for="url" class="active">URL store easy Conecta-TE:</label>
             </div>

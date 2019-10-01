@@ -63,15 +63,15 @@
                 <textarea name="autores" id="autores" class="materialize-textarea"><?php echo $autores;?></textarea>
                 <label for="autores" class="active">Autores*:</label>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l11 m12 s12 ">
                 <input type="url" name="url" id="url" value="<?php echo $url;?>">
                 <label for="url" class="active">URL store easy Conecta-TE:</label>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l11 m12 s12 ">
                 <input type="url" name="urlY" id="url" value="<?php echo $urlY;?>">
                 <label for="urlY" class="active">URL Lista de YouTube :</label>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l11 m12 s12 ">
                 <input type="url" name="urlV" id="urlV" value="<?php echo $urlVimeo;?>">
                 <label for="urlV" class="active">URL álbum de Vimeo:</label>
             </div>

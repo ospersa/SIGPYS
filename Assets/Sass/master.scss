@@ -48,7 +48,7 @@ body {
 
 /********* Estilos de estructura *********/
 //quitar padding en bottom 
-.pd-0{
+.pd-0 {
     padding-bottom: 0;
 }
 
@@ -181,7 +181,7 @@ input[type=number] {
         -webkit-appearance: none;
         margin: 0;
     }
-}    
+}
 
 .texto-resaltado {
     color: teal;
@@ -196,7 +196,7 @@ input[type=number] {
 /********* Estilos de campos númericos y resaltado  *********/
 
 /********* Estilos de boton ayuda  *********/
-.help{
+.help {
     position: absolute;
     display: initial;
     float: right;
@@ -206,6 +206,7 @@ input[type=number] {
     border-radius: 50%;
     cursor: help;
 }
+
 /********* Estilos de boton ayuda  *********/
 
 /********* Estilos de tablas en informes  *********/
@@ -216,22 +217,22 @@ input[type=number] {
             max-width: 110px;
             min-width: 110px;
         }
-        
+
         &:nth-child(2) {
             max-width: 510px;
             min-width: 510px;
         }
-        
+
         &:nth-child(3) {
             max-width: 60px;
             min-width: 60px;
         }
-        
+
         &:nth-child(4) {
             max-width: 60px;
             min-width: 60px;
         }
-        
+
         &:nth-child(5) {
             max-width: 75px;
             min-width: 75px;
@@ -244,22 +245,22 @@ input[type=number] {
         &:nth-child(1) {
             width: 300px;
         }
-        
+
         &:nth-child(2) {
             max-width: 150px;
             min-width: 150px;
         }
-        
+
         &:nth-child(3) {
             max-width: 710px;
             min-width: 710px;
         }
-        
+
         &:nth-child(4) {
             max-width: 80px;
             min-width: 80px;
         }
-        
+
         &:nth-child(6) {
             min-width: 105px;
             max-width: 105px;
@@ -290,7 +291,8 @@ input[type=number] {
     display: table;
     font-size: .9em;
 
-    input[type=text], input[type=number] {
+    input[type=text],
+    input[type=number] {
         font-size: .9em;
         width: 50px;
         max-width: 300px;
@@ -345,50 +347,62 @@ td {
             overflow: auto;
             max-height: 150px;
             margin: 0;
-            
-            &::-webkit-scrollbar-track{
+
+            &::-webkit-scrollbar-track {
                 border-radius: 50px;
                 border: 1px solid #00897b;
             }
 
-            &::-webkit-scrollbar{
+            &::-webkit-scrollbar {
                 width: 8px;
             }
-            
-            &::-webkit-scrollbar-thumb{
-                background-color: #009688 ;
+
+            &::-webkit-scrollbar-thumb {
+                background-color: #009688;
                 border-radius: 50px;
             }
-        
-            @include mobiles(){
+
+            @include mobiles() {
                 text-overflow: inherit;
                 overflow: auto;
             }
         }
     }
 }
+
+#infMisTiempos td {
+    &:first-child {
+        width: 7%;
+    }
+    &:last-child{
+        width: 7%;
+    }
+}
+
 /***** Ajuste clase para cortar texto largo *****/
 
 /***** Ajuste en modal *****/
-.modal{
+.modal {
     width: 60%;
     min-height: 70% !important;
-    
-    &.datepicker-modal{
+
+    &.datepicker-modal {
         min-height: auto !important;
     }
 }
+
 /***** Ajuste en modal *****/
 
 /***** Ajuste en tabs *****/
-.tab-container{
+.tab-container {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
 }
+
 /***** Ajuste en tabs *****/
 
 
-.overlay-edit{
+.overlay-edit {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -398,7 +412,7 @@ td {
     background-color: rgba(0, 0, 0, 0.753);
 }
 
-.editTimes{
+.editTimes {
     position: absolute;
     width: 90%;
     height: 85%;
@@ -411,10 +425,11 @@ td {
     align-items: center;
     background: white;
     z-index: 6;
-    
+
 }
-.tabs{
-    .indicator{
+
+.tabs {
+    .indicator {
         height: 3px;
         background-color: $color3;
     }

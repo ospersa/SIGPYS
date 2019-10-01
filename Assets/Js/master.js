@@ -455,7 +455,6 @@ function actualiza(val, url) {
         url: url,
         data: $("#actForm").serialize(),
         success: function(){
-            console.log(url);
         }
     });
     return false;
@@ -655,12 +654,12 @@ function inicializarCampos() {
     var datepickers = $(".datepicker");
     if (datepickers.length != 0) {
         $('.datepicker').datepicker();
+
     }
     
     var tooltips =  $('.tooltipped');
     if (tooltips.length != 0){
         $('.tooltipped').tooltip();
-        console.log("glkjlñ");
     }
 
 }

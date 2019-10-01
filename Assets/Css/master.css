@@ -223,7 +223,8 @@ input[type=number] {
 .tdl-planeacion {
   display: table;
   font-size: .9em; }
-  .tdl-planeacion input[type=text], .tdl-planeacion input[type=number] {
+  .tdl-planeacion input[type=text],
+  .tdl-planeacion input[type=number] {
     font-size: .9em;
     width: 50px;
     max-width: 300px; }
@@ -273,6 +274,12 @@ td:hover .truncate {
     td:hover .truncate {
       text-overflow: inherit;
       overflow: auto; } }
+
+#infMisTiempos td:first-child {
+  width: 7%; }
+
+#infMisTiempos td:last-child {
+  width: 7%; }
 
 /***** Ajuste clase para cortar texto largo *****/
 /***** Ajuste en modal *****/
