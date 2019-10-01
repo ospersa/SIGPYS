@@ -9,11 +9,13 @@ if ($prep == "GEN") {
 } else if ($prep == "TIE") {
     require('modalTiempos.php');
 } else if ($prep == "SOP"){
-    require('modalResultado.php');
+    require('modalResultadoSoporte.php');
 } else if ($prep == "DIS"){
     require('modalResultadoDiseno.php');
 } else if ($prep == "REA"){
     require('modalResultadoRealizacion.php');
+} else if ($prep == "TER"){
+    require('modalTerminar.php');
 }
 ?>
 </div>

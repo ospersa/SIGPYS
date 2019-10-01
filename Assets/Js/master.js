@@ -14,6 +14,9 @@ $('.modal').on('change', function () {
 
 $(document).ready(function () {
 
+    inicializarCampos();
+
+
     $('.tabs').tabs();
 
     $('.collapsible').collapsible();
@@ -652,6 +655,12 @@ function inicializarCampos() {
     var datepickers = $(".datepicker");
     if (datepickers.length != 0) {
         $('.datepicker').datepicker();
+    }
+    
+    var tooltips =  $('.tooltipped');
+    if (tooltips.length != 0){
+        $('.tooltipped').tooltip();
+        console.log("glkjlñ");
     }
 
 }

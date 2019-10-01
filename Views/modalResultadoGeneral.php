@@ -35,21 +35,25 @@
                 <?php echo $sltClase;?>
                 </div>
                 <div class="input-field col l5 m12 s12 offset-l1  " id="sltModalTipo">
+                    <?php if ( !empty($tipo)){
+                        echo $sltTipo;
+                    }
+                    ?>
                 </div>
                 <div class="input-field col l12 m12 s12  left-align">
-                    <textarea name="descripSer" id="descripSer" class="materialize-textarea" ></textarea>
+                    <textarea name="descripSer" id="descripSer" class="materialize-textarea" ><?php echo $observacion;?></textarea>
                     <label for="descripSer" class="active">Descripción Producto/Servicio:</label>
                 </div>
                 <div class="input-field col l2 m12 s12">
-                    <input type="number" name="numEst" id="numEst" value="" min = 0>
+                    <input type="number" name="numEst" id="numEst" min = 0 value = "<?php echo $estudiantesImpac;?>">
                     <label for="numEst" class="active">Numero de estudiantes:</label>
                 </div>
                 <div class="input-field col l2 m12 s12 offset-l1">
-                    <input type="number" name="numDoc" id="numDoc" value="" min = 0>
+                    <input type="number" name="numDoc" id="numDoc" min = 0 value = "<?php echo $docentesImpac;?>" > 
                     <label for="numDoc" class="active">Numero de docentes:</label>
                 </div>
                 <div class="input-field col l6 m12 s12 offset-l1">
-                    <input type="url" name="url" id="url" value="" >
+                    <input type="url" name="url" id="url" value="<?php echo $url;?>" >
                     <label for="url" class="active">URL:</label>
                 </div>
             </div>

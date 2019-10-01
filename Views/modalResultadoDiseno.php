@@ -28,11 +28,11 @@
                 <p class="left-align"><?php echo $hora." h ".$min." m";?></p>
             </div>
             <div class="input-field col l5 m12 s12 ">
-                <input type="text" name="nomProd" id="nomProd" value="" require>
+                <input type="text" name="nomProd" id="nomProd" value="<?php echo $nomProduc;?>" >
                 <label for="nomProd" class="active">Nombre Producto*</label>
             </div>
             <div class="input-field col l5 m12 s12 offset-l1 ">
-                <input class="datepicker" type="text" name="txtfechEntr" id="txtfechEntr" require>
+                <input class="datepicker" type="text" name="txtfechEntr" id="txtfechEntr"  value="<?php echo $fechaEntre;?>" >
                 <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente*</label>
             </div>
             <div class="input-field col l5 m12 s12 ">
@@ -45,13 +45,18 @@
                 <?php echo $sltClase;?>
             </div>
             <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
+            <?php 
+            if (!empty($tipo)){
+                echo $sltTipo;
+            }
+            ?>
             </div>
             <div class="input-field col l8 m12 s12 ">
-                <input type="url" name="url" id="url" value="">
+                <input type="url" name="url" id="url" value="<?php echo $url;?>">
                 <label for="url" class="active">URL store easy Conecta-TE:</label>
             </div>
             <div class="input-field col l11 m12 s12  left-align">
-                <textarea name="labor" id="labor" class="materialize-textarea"></textarea>
+                <textarea name="labor" id="labor" class="materialize-textarea"><?php echo $labor;?></textarea>
                 <label for="labor" class="active">Labor realizada:</label>
             </div>
         </div>
