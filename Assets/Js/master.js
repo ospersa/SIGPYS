@@ -280,7 +280,27 @@ $(document).ready(function () {
             }
         })
     })
-
+    /* */
+    $('#txtBusquedaProyUsu').keyup(function(){
+        consulta = $('#txtBusquedaProyUsu').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_terminacionProductoServicio.php",
+            data: "b="+consulta,
+            dataType: "html",
+            beforeSend: function(){
+                $('#sltProyectoUsu').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function(){
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function(data){
+                $("#sltProyectoUsu").empty();
+                $("#sltProyectoUsu").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
     $('#btnDescargar').click(function(){
         $('select[required]').css({
             display: 'inline',

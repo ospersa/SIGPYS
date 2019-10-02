@@ -389,8 +389,9 @@
                                         <td>'.$datos['fechSol'].'</td>
                                         <td>'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).'</td>
                                         <td>'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
-                                        <td>'.SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>';
-                                        
+                                        <td>'.SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>
+                                    </tr>';
+                                       
 
                     
                 }
