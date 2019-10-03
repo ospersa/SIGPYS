@@ -224,6 +224,7 @@
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             $string= '
+            <a class="botonSalir btn-floating waves-effect waves-light  transparent " onclick="cerrar()"><i class="material-icons red-text">clear</i></a>
             <div class="row">
             <h4>Editar tiempo resgistrado</h4>
             </div>

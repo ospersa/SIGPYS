@@ -25,18 +25,18 @@ $(document).ready(function () {
 
     $('select').formSelect();
 
-    if ($(".dropdown-trigger")){
+    if ($(".dropdown-trigger")) {
         $(".dropdown-trigger").dropdown();
     }
 
     $('.modal').modal({
-        onOpenEnd:function(){
+        onOpenEnd: function () {
             inicializarCampos();
         }
     });
 
     $('.collapsible').collapsible({
-        onOpenEnd: function(){
+        onOpenEnd: function () {
             M.textareaAutoResize($(".materialize-textarea"));
         }
     });
@@ -50,9 +50,9 @@ $(document).ready(function () {
         i18n: {
             clear: 'Borrar'
         },
-        onSelect: function(){
+        onSelect: function () {
             $('#check').prop('disabled', true),
-            $('#txtFechFin').focus()
+                $('#txtFechFin').focus()
         }
     });
 
@@ -61,18 +61,18 @@ $(document).ready(function () {
         i18n: {
             clear: 'Borrar'
         },
-        onSelect: function(){
+        onSelect: function () {
             $('#check').prop('disabled', true)
         }
     });
 
-    $('.datepicker-clear').click(function(){
+    $('.datepicker-clear').click(function () {
         if ($('#txtFechIni').val() === "" && $('#txtFechFin').val() === "") {
             $('#check').prop('disabled', false);
         }
     });
 
-    $('#check').change(function(){
+    $('#check').change(function () {
         if ($(this).is(':checked')) {
             $('#txtFechIni').prop('disabled', true);
             $('#txtFechFin').prop('disabled', true);
@@ -103,12 +103,12 @@ $(document).ready(function () {
         $('#txt-search').val('');
     });
 
-    $('#btnAsignar').click(function(){
+    $('#btnAsignar').click(function () {
         $('#txtValCotizacion').removeAttr("required");
     });
 
-    $('#frmPeriodos').submit(function(){
-        $('#cantDias').prop('disabled',false);
+    $('#frmPeriodos').submit(function () {
+        $('#cantDias').prop('disabled', false);
     });
 
     $('#sltPeriodo').change(function () {
@@ -147,7 +147,7 @@ $(document).ready(function () {
                                 persona: persona,
                                 periodo: periodo
                             },
-                            beforeSend: function(xhr){
+                            beforeSend: function (xhr) {
                                 $('#div_dinamico').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
                             },
                             success: function (data) {
@@ -173,27 +173,30 @@ $(document).ready(function () {
         }
     });
 
-    $('#sltPeriodoPlan').change(function(){
+    $('#sltPeriodoPlan').change(function () {
         $('#div_dinamico').empty();
         var periodo = $(this).val();
         $.ajax({
             type: "POST",
             url: "../Controllers/ctrl_busPersona.php",
             data: $('#sltPeriodoPlan').serialize(),
-            success: function(data){
+            success: function (data) {
                 $('#div_sltdinamico').html(data);
                 $('select').formSelect();
-                $('#sltPersonaPlan').change(function(){
+                $('#sltPersonaPlan').change(function () {
                     var persona = $(this).val();
                     $('#div_dinamico').empty();
                     $.ajax({
                         type: "POST",
                         url: "../Controllers/ctrl_infPlaneacionXls.php",
-                        data: {persona:persona, periodo:periodo},
-                        beforeSend: function(){
+                        data: {
+                            persona: persona,
+                            periodo: periodo
+                        },
+                        beforeSend: function () {
                             $('#div_dinamico').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
                         },
-                        success: function(data){
+                        success: function (data) {
                             $('#div_dinamico').html(data);
                             M.textareaAutoResize($("textarea"));
                         }
@@ -202,46 +205,46 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $('#sltPeriodoPlan').change(function(){
+
+    $('#sltPeriodoPlan').change(function () {
         $('#div_dinamico').empty();
         $.ajax({
             type: "POST",
             url: "../Controllers/ctrl_infPlaneacionXls.php",
             data: $('#sltPeriodoPlan').serialize(),
-            success: function(data){
+            success: function (data) {
                 $('#div_dinamico').html(data);
             }
         });
     });
 
     /* MODULO COTIZACIONES */
-    $(function() {
+    $(function () {
         var $form = $("#frmCotizador");
         var $input = $form.find("#txtValCotizacion, #txtDiferencia");
-        $input.on("keyup change", function(event){
+        $input.on("keyup change", function (event) {
             var selection = window.getSelection().toString();
-            if (selection !== ''){
+            if (selection !== '') {
                 return;
             }
-            if ($.inArray(event.keyCode,[38,40,37,39]) !== -1) {
+            if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
                 return;
             }
-            var $this = $( this );
+            var $this = $(this);
             var input = $this.val();
             var input = input.replace(/[\D\s\._\-]+/g, "");
-            input = input ? parseInt( input, 10 ) : 0;
-            $this.val( function() {
-                return ( input === 0 ) ? "" : "$ " + input.toLocaleString("es-CO");
-            } );
+            input = input ? parseInt(input, 10) : 0;
+            $this.val(function () {
+                return (input === 0) ? "" : "$ " + input.toLocaleString("es-CO");
+            });
         });
     })
 
     $('#btnAsignar').prop('disabled', true);
 
-    $('.asignacion').on("keyup change",function() {
+    $('.asignacion').on("keyup change", function () {
         var disable = false;
-        $('.asignacion').each(function() {
+        $('.asignacion').each(function () {
             if (!$(this).val()) {
                 disable = true;
             }
@@ -254,26 +257,26 @@ $(document).ready(function () {
         $('#txtObsAprobacion').prop("readonly", "true");
         $('#txtEnlAprobacion').prop("readonly", "true");
     }
-    
+
     $('#txtDiferencia').val("$ " + ($('#txtValCot').text() - $('#txtTotalRecurso').val()).toLocaleString("es-CO"));
     /* MODULO COTIZACIONES */
 
     /** Busqueda proyecto en solicitud inicial*/
     var consulta;
-    $('#txtBusquedaProy').keyup(function(){
+    $('#txtBusquedaProy').keyup(function () {
         consulta = $('#txtBusquedaProy').val();
         $.ajax({
             type: "POST",
             url: "../Controllers/ctrl_solicitudInicial.php",
-            data: "b="+consulta,
+            data: "b=" + consulta,
             dataType: "html",
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#sltProyecto').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
             },
-            error: function(){
+            error: function () {
                 alert("Error: No se puede realizar la busqueda en este momento");
             },
-            success: function(data){
+            success: function (data) {
                 $("#sltProyecto").empty();
                 $("#sltProyecto").append(data);
                 $('select').formSelect();
@@ -281,27 +284,27 @@ $(document).ready(function () {
         })
     })
     /* */
-    $('#txtBusquedaProyUsu').keyup(function(){
+    $('#txtBusquedaProyUsu').keyup(function () {
         consulta = $('#txtBusquedaProyUsu').val();
         $.ajax({
             type: "POST",
             url: "../Controllers/ctrl_terminacionProductoServicio.php",
-            data: "b="+consulta,
+            data: "b=" + consulta,
             dataType: "html",
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#sltProyectoUsu').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
             },
-            error: function(){
+            error: function () {
                 alert("Error: No se puede realizar la busqueda en este momento");
             },
-            success: function(data){
+            success: function (data) {
                 $("#sltProyectoUsu").empty();
                 $("#sltProyectoUsu").append(data);
                 $('select').formSelect();
             }
         })
     })
-    $('#btnDescargar').click(function(){
+    $('#btnDescargar').click(function () {
         $('select[required]').css({
             display: 'inline',
             position: 'absolute',
@@ -320,7 +323,7 @@ $(document).ready(function () {
     })
 
     /** Busqueda de solicitudes específicas */
-    $('#txt-search').keypress(function(e) {
+    $('#txt-search').keypress(function (e) {
         var tecla = (e.keyCode ? e.keyCode : e.wich);
         var url = $('#txt-search').data('url');
         if (tecla == 13) {
@@ -336,14 +339,14 @@ $(document).ready(function () {
 
 });
 
-function editarRegistro(idTiempo){
+function editarRegistro(idTiempo) {
     $.ajax({
         type: "POST",
         url: '../Controllers/ctrl_regtime.php',
         data: {
-            idTiempo : idTiempo
+            idTiempo: idTiempo
         },
-        beforeSend: function(){
+        beforeSend: function () {
             $('#fondo').removeClass("hide");
             $('#editRegistro').removeClass("hide");
         },
@@ -354,8 +357,16 @@ function editarRegistro(idTiempo){
         }
     });
 };
+function cerrar() {
+    $.ajax({
+        beforeSend: function () {
+            $('#fondo').addClass("hide");
+            $('#editRegistro').addClass("hide");
+        }
+    });
+};
 
-function ocultarEditar(id){
+function ocultarEditar(id) {
     var mensaje = confirm("¿Esta seguro de eliminar el Registro?");
     //Detectamos si el usuario acepto el mensaje
     if (mensaje) {
@@ -363,11 +374,11 @@ function ocultarEditar(id){
             type: "POST",
             url: '../Controllers/ctrl_regtime.php',
             data: {
-                idDeletTiempo : id
+                idDeletTiempo: id
             },
             success: function (data) {
                 alert(data);
-                location.reload();                
+                location.reload();
             }
         });
     }
@@ -376,13 +387,13 @@ function ocultarEditar(id){
 
 
 
-function confirPassword(val1, val2, boton){
+function confirPassword(val1, val2, boton) {
     val1 = $(val1).val();
     val2 = $(val2).val();
-    if(val1 == val2){
+    if (val1 == val2) {
         $("#passText").addClass("hide");
         $(boton).removeClass("disabled");
-    }else{
+    } else {
         $("#passText").removeClass("hide");
         $(boton).addClass("disabled");
     }
@@ -404,7 +415,7 @@ function checkbox(check) {
         $(checkActive).attr('data-checked', 'false');
         $('#passwords').addClass('hide');
         $("#btnActPassword").removeClass("disabled");
-        
+
     }
 
 }
@@ -414,7 +425,7 @@ function busqueda(url) {
         type: "POST",
         url: url,
         data: $("#txt-search").serialize(),
-        beforeSend: function(){
+        beforeSend: function () {
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
@@ -429,19 +440,44 @@ function busqueda(url) {
     });
     return false;
 }
+
+function busquedaMultiple(url) {
+    $("#terminarSerPro").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#terminarSerPro").serialize(),
+            beforeSend: function () {
+                $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+            },
+            success: function (data) {
+                $('#div_dinamico').empty();
+                $('#div_dinamico').html(data);
+                $('#div_dinamico').slideDown("slow");
+                $('table tbody').paginathing({
+                    perPage: 6,
+                    insertAfter: 'table.responsive-table',
+                    pageNumbers: false,
+                });
+            }
+        });
+    });
+}
+
 function busquedaUsu(url) {
     $.ajax({
         type: "POST",
         url: url,
         data: $("#txt-usu").serialize(),
-        beforeSend: function(){
+        beforeSend: function () {
             $('#div_usuario').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
             $('#div_usuario').html(data);
             $('#div_usuario').slideDown("slow");
             $("select").formSelect();
-            
+
         }
     });
     return false;
@@ -452,7 +488,7 @@ function pruebas(url) {
         type: "POST",
         url: url,
         data: $("#txt-search").serialize(),
-        beforeSend: function(){
+        beforeSend: function () {
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
@@ -474,8 +510,7 @@ function actualiza(val, url) {
         type: "POST",
         url: url,
         data: $("#actForm").serialize(),
-        success: function(){
-        }
+        success: function () {}
     });
     return false;
 }
@@ -512,7 +547,7 @@ function cargaSelect(elem, dir, destino) {
         type: "POST",
         url: dir,
         data: $(elem).serialize(),
-        beforeSend: function(){
+        beforeSend: function () {
             $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
@@ -522,7 +557,8 @@ function cargaSelect(elem, dir, destino) {
         }
     })
 }
-function cargaSelectTipProduc(elem1,elem2, dir, destino) {
+
+function cargaSelectTipProduc(elem1, elem2, dir, destino) {
     $.ajax({
         type: "POST",
         url: dir,
@@ -530,7 +566,7 @@ function cargaSelectTipProduc(elem1,elem2, dir, destino) {
             dato1: $(elem1).val(),
             dato2: elem2,
         },
-        beforeSend: function(){
+        beforeSend: function () {
             $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
@@ -541,35 +577,39 @@ function cargaSelectTipProduc(elem1,elem2, dir, destino) {
     })
 }
 
-function validar(i){
-    var hrsPresup = $("input[name='tiempoDisponible["+i+"]']").val();
-    var hrsAsig = parseInt($("input[name='horasInvertir["+i+"]']").val());
-    var minAsig = parseInt($("input[name='minutosInvertir["+i+"]']").val());
+function validar(i) {
+    var hrsPresup = $("input[name='tiempoDisponible[" + i + "]']").val();
+    var hrsAsig = parseInt($("input[name='horasInvertir[" + i + "]']").val());
+    var minAsig = parseInt($("input[name='minutosInvertir[" + i + "]']").val());
     var totalHrsDisponible = $('#txtHorasMes').val();
     var totalDisponible = parseFloat(totalHrsDisponible * 60);
     var totalHrsAsignado = 0;
     var totalMinAsignado = 0;
-    $('.hrsInvertir').each(function (){
+    $('.hrsInvertir').each(function () {
         if (!isNaN($(this).val())) {
             totalHrsAsignado += Number($(this).val());
-        } 
+        }
     })
-    $('.minInvertir').each(function (){
+    $('.minInvertir').each(function () {
         if (!isNaN($(this).val())) {
             totalMinAsignado += Number($(this).val());
-        } 
+        }
     })
     totalAsignado = (totalHrsAsignado * 60) + totalMinAsignado;
 
     var tiempoDisponible = totalDisponible - totalAsignado;
-    
+
     if (!isNaN(hrsAsig) && !isNaN(minAsig)) {
         if (tiempoDisponible >= 0) {
-            M.toast({html: "<i class='small material-icons white-text'>done</i><p class='white-text'>  Horas disponibles para asignar: <strong>"+(tiempoDisponible / 60).toFixed(2)+"<strong></p>"});
+            M.toast({
+                html: "<i class='small material-icons white-text'>done</i><p class='white-text'>  Horas disponibles para asignar: <strong>" + (tiempoDisponible / 60).toFixed(2) + "<strong></p>"
+            });
         } else {
-            M.toast({html: "<i class='small material-icons red-text'>error</i><p class='red-text'>  Se ha excedido en: <strong>"+Math.abs((tiempoDisponible / 60).toFixed(2))+" horas.<strong></p>"});
+            M.toast({
+                html: "<i class='small material-icons red-text'>error</i><p class='red-text'>  Se ha excedido en: <strong>" + Math.abs((tiempoDisponible / 60).toFixed(2)) + " horas.<strong></p>"
+            });
         }
-        
+
     }
 
     if (isNaN(hrsAsig)) {
@@ -582,36 +622,36 @@ function validar(i){
     var minPresup = hrsPresup * 60;
     var minTotales = (hrsAsig * 60) + minAsig;
     if (minTotales > minPresup) {
-        $('#horasInvertir'+ i +'').addClass("alert-input");
-        $('#minutosInvertir'+ i +'').addClass("alert-input");
+        $('#horasInvertir' + i + '').addClass("alert-input");
+        $('#minutosInvertir' + i + '').addClass("alert-input");
     } else {
-        $('#horasInvertir'+ i +'').removeClass("alert-input");
-        $('#minutosInvertir'+ i +'').removeClass("alert-input");
+        $('#horasInvertir' + i + '').removeClass("alert-input");
+        $('#minutosInvertir' + i + '').removeClass("alert-input");
     }
 }
 
-function calcula(){
+function calcula() {
     cot = $('#txtValCotizacion').val().replace(/[($)\s\._\-]+/g, '');
     rec = $('#txtTotalRecurso').val();
     dif = cot - rec;
     $('#txtDiferencia').val("$ " + (cot - rec).toLocaleString("es-CO"));
 }
 
-function format(val){
-    num = $(val).val().replace(/\./g,'');
+function format(val) {
+    num = $(val).val().replace(/\./g, '');
     if (!isNaN(num)) {
-        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,'$1.');
-        num = num.split('').reverse().join('').replace(/^[\.]/,'');
+        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
+        num = num.split('').reverse().join('').replace(/^[\.]/, '');
         $(val).val(num);
     } else {
         alert("Solo se permite numeración en '$' pesos colombianos");
-        $(val).val().replace(/[^\d\.]*/g,'');
+        $(val).val().replace(/[^\d\.]*/g, '');
     }
-    
+
 }
 
 /**  */
-function mostrarInfo(url){
+function mostrarInfo(url) {
     $.ajax({
         type: "POST",
         url: url,
@@ -631,15 +671,15 @@ function mostrarInfo(url){
 
 /** Función para enviar los datos de formulario para el informe de P/S */
 
-function buscar(url){
+function buscar(url) {
     $.ajax({
         type: "POST",
         url: url,
         data: $('form').serialize(),
-        beforeSend: function(){
+        beforeSend: function () {
             $('#div_dinamico').html("<div class='row'><div class='col l6 m6 s12 offset-l3 offset-m3'><div class='progress'><div class='indeterminate'></div></div><p class='center-align'>Cargando...</p></div></div>");
         },
-        success: function (data){
+        success: function (data) {
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
         }
@@ -648,24 +688,24 @@ function buscar(url){
 
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {
-    
+
     var collapsibles = $('.collapsible');
     if (collapsibles.length != 0) {
         $('.collapsible').collapsible();
     }
-    
-    var tabs =  $('.tabs');
+
+    var tabs = $('.tabs');
     if (tabs.length != 0) {
         $('.tabs').tabs();
         //var active = $('.tabs .active').attr('href');
         //$('.tabs-content ' + active).show();
     }
-    
+
     var selects = $('.collapsible');
     if (selects.length != 0) {
         $('select').formSelect();
     }
-    
+
     var textareas = $(".textarea");
     if (textareas.length != 0) {
         M.textareaAutoResize($(".textarea"));
@@ -676,9 +716,9 @@ function inicializarCampos() {
         $('.datepicker').datepicker();
 
     }
-    
-    var tooltips =  $('.tooltipped');
-    if (tooltips.length != 0){
+
+    var tooltips = $('.tooltipped');
+    if (tooltips.length != 0) {
         $('.tooltipped').tooltip();
     }
 
