@@ -15,6 +15,7 @@ $obsSol        = "";
 $obsPys        = "";
 $obsProd       = "";
 $hidden        = "";
+$cotizaciones  = null;
 $idAsig        = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : null;
 $busqueda      = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 

@@ -357,6 +357,7 @@ function editarRegistro(idTiempo) {
         }
     });
 };
+
 function cerrar() {
     $.ajax({
         beforeSend: function () {
@@ -442,27 +443,24 @@ function busqueda(url) {
 }
 
 function busquedaMultiple(url) {
-    $("#terminarSerPro").on("submit", function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#terminarSerPro").serialize(),
-            beforeSend: function () {
-                $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
-            },
-            success: function (data) {
-                $('#div_dinamico').empty();
-                $('#div_dinamico').html(data);
-                $('#div_dinamico').slideDown("slow");
-                $('table tbody').paginathing({
-                    perPage: 6,
-                    insertAfter: 'table.responsive-table',
-                    pageNumbers: false,
-                });
-            }
-        });
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#terminarSerPro").serialize(),
+        beforeSend: function () {
+            $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            $('#div_dinamico').empty();
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+            var tooltips = $('.tooltipped');
+                if (tooltips.length != 0) {
+                $('.tooltipped').tooltip();
+            };
+        }
     });
+
 }
 
 function busquedaUsu(url) {
