@@ -8,7 +8,7 @@
             $minTotal1 = 0;
             $horasTotal = 0;
             $minTotal = 0;
-            $consulta = "SELECT  pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase, pys_asignados.idAsig, pys_asignados.hora, pys_asignados.minuto, pys_asignados.maxhora, pys_asignados.maxmin
+            $consulta = "SELECT  pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase, pys_asignados.idAsig, pys_asignados.hora, pys_asignados.minuto, pys_asignados.maxhora, pys_asignados.maxmin, pys_asignados.est
             FROM pys_asignados
             inner join pys_solicitudes on pys_asignados.idSol = pys_solicitudes.idSol
             inner join pys_actsolicitudes on pys_actsolicitudes.idSol = pys_solicitudes.idSol
@@ -21,7 +21,7 @@
             inner join pys_fases on pys_asignados.idFase = pys_fases.idFase
             inner join pys_convocatoria on pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
 
-            where pys_asignados.est = '1' and pys_actsolicitudes.est = '1' and pys_solicitudes.est = '1' and pys_cursosmodulos.estProy = '1' and pys_cursosmodulos.estCurso = '1' and pys_actualizacionproy.est = '1' and pys_proyectos.est = '1' and pys_frentes.est = '1' and ((pys_personas.est = '1') or (pys_personas.est = '0')) and pys_convocatoria.est = '1' and pys_roles.est = '1' and pys_fases.est = '1' and pys_actsolicitudes.idSol = '$codsol'";
+            where pys_asignados.est != '0' and pys_actsolicitudes.est = '1' and pys_solicitudes.est = '1' and pys_cursosmodulos.estProy = '1' and pys_cursosmodulos.estCurso = '1' and pys_actualizacionproy.est = '1' and pys_proyectos.est = '1' and pys_frentes.est = '1' and ((pys_personas.est = '1') or (pys_personas.est = '0')) and pys_convocatoria.est = '1' and pys_roles.est = '1' and pys_fases.est = '1' and pys_actsolicitudes.idSol = '$codsol'";
             $resultado = mysqli_query($connection, $consulta);
             $string = '
             <table class="left responsive-table">
@@ -32,17 +32,25 @@
                         <th>Fase</th>
                         <th>Tiempo maximo a invertir</th>
                         <th>Tiempo invertirdo</th>
+                        <th>Estado de tarea</th>
                     </tr>
                 </thead>
                 <tbody>';
             while ($datos = mysqli_fetch_array($resultado)){
                 $idAsig = $datos['idAsig'];
+                $est = $datos['est'];
                 $consulta2 = "SELECT SUM(horaTiempo) as totHora, SUM(minTiempo) as totMinu FROM pys_tiempos WHERE idAsig = $idAsig  AND estTiempo = 1";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $info = mysqli_fetch_array($resultado2);
                 $hora = ($info['totHora'] == null) ? 0 : $info['totHora'];
                 $minutos = ($info['totMinu']== null) ? 0 : $info['totMinu']; 
-
+                if ($est == 1 ){
+                    $msjTool = "Tarea no terminada";
+                    $color = "red";
+                } else {
+                    $msjTool = "Tarea terminada";
+                    $color = "teal";
+                }
                 if ($minutos >= 60){
                     $hora = intval(( $minutos/60 )+$hora);
                     $minutos = intval( $minutos%60);
@@ -58,6 +66,7 @@
                 <td>'.$datos['nombreFase'].'</td>
                 <td>'.$datos['maxhora'].'h '.$datos['maxmin'].'m </td>
                 <td>'.$hora.'h '.$minutos.'m </td>
+                <td><a class=" tooltipped" data-tooltip="'.$msjTool.'" ><i class="material-icons '.$color.'-text">done</i></a></td>
                 </tr>';
             }    
             if ($minTotal1 >= 60){

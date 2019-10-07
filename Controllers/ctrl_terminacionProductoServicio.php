@@ -10,7 +10,10 @@ $cod        = 0;
 $usuario    = $_SESSION['usuario'];
 $id         = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $prep ="";
-if (isset($_POST['b']) ) {
+if (isset($_POST['btnTerEnvi'])){
+    echo "Holaaaa";
+    Terminar::enviarEmail();
+}else if (isset($_POST['b']) ) {
     $busqueda = $_POST['b'];
     Terminar::selectProyectoUsuario($busqueda, $usuario);
 } else if($id != null) {
@@ -18,7 +21,15 @@ if (isset($_POST['b']) ) {
     $id = substr($id, 3);
     echo $prep;
     $tiempoInvertido = Tiempos::OnloadTiempoInvertido($id);
-    
+    $info = Terminar::informacionProdSer($id); 
+    $proOser ="sd";
+    $msjEmail = Terminar::infoEmail($id);
+    $datos =Terminar::infoUsuario($usuario,$id);
+    $nombre= $datos['nombres'];
+    $apellido1= $datos['apellido1'];
+    $apellido2= $datos['apellido2'];
+    $nombreRol= $datos['nombreRol'];
+
 }else {
     if ($busProy != '' && $fechFin == null){
         $cod = 1;
@@ -34,6 +45,7 @@ if (isset($_POST['b']) ) {
         echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
     }
 }
+
 
 
 

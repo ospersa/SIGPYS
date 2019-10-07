@@ -374,7 +374,7 @@ Class Producto {
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
-            $select = '     <select name="sltClaseM" id="sltClaseM" onchange="cargaSelectTipProduc(\'#sltClaseM\',\''.$idServicio.'\',\'../Controllers/ctrl_missolicitudes.php\',\'#sltModalTipo\')" >
+            $select = '     <select name="sltClaseM" id="sltClaseM" onchange="cargaSelectTipProduc(\'#sltClaseM\',\''.$idServicio.'\',\'../Controllers/ctrl_missolicitudes.php\',\'#sltModalTipo\')" required>
                                 <option value="">Seleccione</option>';
             while ($datos = mysqli_fetch_array($resultado)) {
                 if ($datos['idClProd'] == $idClase) {
@@ -398,10 +398,13 @@ Class Producto {
 
     public static function selectTipoProducto($idClase, $idServicio, $codTipo){
         require ('../Core/connection.php');
-        $select = '     <select name="sltTipo" id="sltTipo" >
+        $select = '     <select name="sltTipo" id="sltTipo" required>
                             <option value="" selected disabled>Seleccione</option>';
         $consulta = "SELECT idTProd FROM `pys_costos` WHERE idSer = '$idServicio' AND idClProd ='$idClase'";
         $resultado = mysqli_query($connection, $consulta);
+        if (mysqli_num_rows($resultado)){
+            
+        }
         while ($datos = mysqli_fetch_array($resultado)) {
             if ($datos['idTProd'] != null){
                 $idTipo = $datos['idTProd'];
@@ -419,7 +422,7 @@ Class Producto {
                 } else {
                     $select .= '<option value="" selected >No registra tipo</option>';
                 }       
-            } 
+            }     
         }
         $select .= '    </select>
                         <label for="sltTipo">Tipo de producto*</label>';

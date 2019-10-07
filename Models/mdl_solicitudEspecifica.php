@@ -531,7 +531,7 @@
             }
             if( $tiempos > 0 && $asignados > 1){
                 $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
-            } else if ($tiempos > 0 && $asignados == 1 && ($validarLLeno==TRUE || $validarLLenoPro == true) ){
+            } else if ($tiempos > 0 && $asignados == 1 && ($validarLLeno==TRUE || $validarLLenoPro == true || $datos2['idEqu'] == 'EQU004') ){
                 $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">done</i></a>';
             } else {
                 $string .= '';
@@ -674,7 +674,7 @@
         }
 
         public static function selectRED ($id){
-            $string = '<select name="SMRed" id="SMRed" class="asignacion">';
+            $string = '<select name="SMRed" id="SMRed" class="asignacion" required>';
             if ($id == null){
                 $string .= '<option value="" selected disabled>Seleccione</option>
 			        <option value="Si">Si</option>
@@ -733,9 +733,9 @@
             require('../Core/connection.php');
             $countProd = SolicitudEspecifica::generarCodigoProducto();
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', '$fechaEntre', now(), '', '', '','$url', '$labor', '', '$idPersona', '', '0', '0', '1000/01/01', '1')";
+            $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', '$fechaEntre', now(), '', '', '','$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '1')";
             $resultado = mysqli_query($connection, $consulta);
-            $consulta1="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'', '', '', '$url', '$labor', '', '$idPersona', '', '0', '0', '1000/01/01', '', '', '1')";
+            $consulta1="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'', '', '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1')";
             $resultado1 = mysqli_query($connection, $consulta1);
             if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
@@ -748,20 +748,26 @@
         }
 
         public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlY, $urlVimeo, $min, $seg){
+            if ($min == ""){
+                $min =0;
+            }
+            if ($seg == ""){
+                $seg =0;
+            } 
             require('../Core/connection.php');
             $countProd = SolicitudEspecifica::generarCodigoProducto();
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', '$fechaEntre', now(), '$urlY', '', '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, '1000/01/01', '1')";
+            ECHO $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', '$fechaEntre', now(), '$urlY', '', '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
             $resultado = mysqli_query($connection, $consulta);
-            $consulta1 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'$urlY', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, '1000/01/01', '$sinopsis', '$autores', '1')";
+            echo $consulta1 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'$urlY', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
             $resultado1 = mysqli_query($connection, $consulta1);
-            if($resultado && $resultado1){
+           /*  if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
             } else {
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
-            }
+            } */
             mysqli_close($connection);
         }
 
@@ -790,7 +796,7 @@
             $consulta1 = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = 1";
             $resultado1 = mysqli_query($connection, $consulta1);
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'', '', '', '$url', '$labor', '', '$idPersona', '', '0', '0', '1000/01/01', '', '', '1')";
+            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'', '', '', '$url', '$labor', '', '$idPersona', '', '0', '0',DEFAULT , '', '', '1')";
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
@@ -810,7 +816,7 @@
             $consulta = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = 1";
             $resultado = mysqli_query($connection, $consulta);
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'$urlY', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, '1000/01/01', '$sinopsis', '$autores', '1')";
+            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'$urlY', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
