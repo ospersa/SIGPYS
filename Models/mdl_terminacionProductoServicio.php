@@ -308,50 +308,63 @@
                 }
             }
             return $string;
+            mysqli_close($connection);
         }
 
         public static function infoEmail ($idSol){
             require('../Core/connection.php');
-            $string ="";
-            $consulta = "SELECT idEqu, nombreProy, productoOservicio, idSolIni FROM pys_actsolicitudes 
+            $consulta = "SELECT idEqu, codProy,nombreProy, productoOservicio, idSolIni, pys_personas.correo FROM pys_actsolicitudes 
             INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer
             INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
             INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
             INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idPersona
             WHERE pys_actsolicitudes.idSol='".$idSol."' AND pys_actsolicitudes.est = 1 AND pys_servicios.est=1 AND pys_proyectos.est = 1 AND  pys_actsolicitudes.est = 1;";
             $resultado = mysqli_query($connection, $consulta);
-            $consulta1 = "SELECT * FROM pys_productos WHERE pys_productos.idSol = '$idSol' AND pys_productos.est = 1 ";
             $datos = mysqli_fetch_array($resultado);
-            $idEqu = $datos['idEqu'];
-            $idSolIni = $datos['idSolIni'];
-            $nombreProy = $datos['nombreProy'];
-            $string .='
-                Cordial saludo,<br />
-                Mediante este mensaje notifico que hemos terminado la realización del siguiente productos/servicio, garantizando que  se encuentra toda la información necesaria para el desarrollo de otros procedimientos.<br />
-                Código de la solicitud: '.$idSolIni.'<br />
-                Proyecto: '.$nombreProy.'<br />';
-            if ($datos['productoOservicio'] == 'SI') {   
-                $resultado1 = mysqli_query($connection, $consulta1);
-                $datos1 = mysqli_fetch_array($resultado1);
-                $nomProduc  = $datos1['nombreProd'];
-                $string .='Nombre del producto: '.$nomProduc.'<br />
-                Código Producto: P'.$idSol.'<br />';
-            } else if ($datos['productoOservicio'] == 'NO'){
-                $consulta2 = "SELECT * FROM pys_resultservicio 
-                WHERE pys_resultservicio.idSol = '$idSol' AND pys_resultservicio.est = 1 ;";
-                $resultado2 = mysqli_query($connection, $consulta2);
-                $datos2 = mysqli_fetch_array($resultado2);
-                $observacion = $datos2['observacion'];
-                $string .=' Descripción del servicio:'.$observacion.'<br />
-                Código Servicio: P'.$idSol.'<br />';
+            return $datos;
+            mysqli_close($connection);
+        }
 
-            } else if ($datos['productoOservicio'] == 'SI' && $idEqu == 'EQU001' ) {
-                $resultado1 = mysqli_query($connection, $consulta1);
-                $datos1 = mysqli_fetch_array($resultado1);
+        public static function infoEmailPro($idSol, $idEqu){
+            require('../Core/connection.php');
+            $consulta1 = "SELECT nombreProd, urlVimeo FROM pys_productos WHERE pys_productos.idSol = '$idSol' AND pys_productos.est = 1 ";
+            $resultado1 = mysqli_query($connection, $consulta1);
+            $datos1 = mysqli_fetch_array($resultado1);
+            $nomProduc  = $datos1['nombreProd'];
+            $string ='<strong>Nombre del producto: </strong>'.$nomProduc.'<br>
+            <strong>Código Producto:</strong> P'.$idSol.'<br>';
+            if ($idEqu == 'EQU001'){
                 $urlVimeo =$datos1['urlVimeo'];
                 $string .= 'URL versión Final (Vimeo): '.$urlVimeo.'<br />';
             }
             return $string;
+            mysqli_close($connection);
+        }
+
+        public static function infoEmailSer($idSol){
+            require('../Core/connection.php');
+            $consulta2 = "SELECT * FROM pys_resultservicio WHERE pys_resultservicio.idSol = '$idSol' AND pys_resultservicio.est = 1 ;";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            $datos2 = mysqli_fetch_array($resultado2);
+            $observacion = $datos2['observacion'];
+            $string =' <strong>Descripción del servicio: </strong>'.$observacion.'<br />
+            <strong>Código Servicio:</strong> P'.$idSol.'<br />';
+            return $string;
+            mysqli_close($connection);
+
+        }
+        
+        public static function infoSolicitante($idSolIni){
+            require('../Core/connection.php');
+            $consulta = "SELECT correo FROM pys_solicitudes 
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idSolicitante
+            WHERE idSol = '$idSolIni' AND pys_personas.est = 1 AND pys_solicitudes.est = 1 AND idTSol='TSOL01';";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            $correo = $datos['correo'];
+            return $correo;
+            mysqli_close($connection);
         }
 
         public static function infoUsuario($usuario,$id){
@@ -369,11 +382,40 @@
             WHERE pys_login.usrLogin = '$usuario' AND (pys_asignados.idRol= 'ROL024' OR pys_asignados.idRol= 'ROL025') AND pys_actualizacionproy.est=1  AND pys_asignados.idSol='' AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  AND pys_solicitudes.idSol ='$id'";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
-            return $datos;            
+            return $datos;      
+            mysqli_close($connection);      
         }
-//$usuario,$destino,$msj1, $obs, $msj2
-        public static function enviarEmail(){
-            
+
+        public static function terminarProducto($idSol){
+            require('../Core/connection.php');
+            echo $consulta ="SELECT * FROM pys_actsolicitudes WHERE idSol='$idSol' AND est=1; ";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            $idEstSol = $datos ['idEstSol'];
+            $idSol= $datos ['idSol']; 
+            $idCM= $datos ['idCM'];
+            $idSer= $datos ['idSer'];
+            $idPersona= $datos ['idPersona'];
+            $idSolicitante= $datos ['idSolicitante'];
+            $fechPrev= $datos ['fechPrev'];
+            $fechAct= $datos ['fechAct'];
+            $ObservacionAct= $datos ['ObservacionAct'];
+            $presupuesto= $datos ['presupuesto'];
+            $horas= $datos ['horas'];
+            $est= $datos ['est'];
+            echo $consulta1 = "UPDATE pys_actsolicitudes SET est=2 WHERE idSol='$idSol' AND est=1; ";
+            $resultado1 = mysqli_query($connection, $consulta1);
+            echo $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL,'ESS006', '$idSol','$idCM', '$idSer', '$idPersona', '$idSolicitante', '$fechPrev', '$fechAct', '$ObservacionAct', $presupuesto, '$horas', '$est')";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            mysqli_close($connection);
+            if ($resultado && $resultado1 && $resultado2){
+                echo '<script>alert("Se terminó el producto/Servicio correctamente.")</script>';
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/terminacionServiciosProductos.php">';
+            } else{
+                echo '<script>alert("No se terminó el producto/Servicio correctamente.")</script>';
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/terminacionServiciosProductos.php">';
+            }
         }
-    }
+        
+}
 ?>
