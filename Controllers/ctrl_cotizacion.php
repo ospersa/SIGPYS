@@ -44,25 +44,25 @@ if ($idAsig) {
  
 /** Procesamiento peticiones al controlador */
 if (isset($_POST['enviar'])){ 
-    $valCot = $_POST['txtValCotizacion'];
-    $obsSol = $_POST['txtObsSolicitante'];
-    $obsPys = $_POST['txtObsPyS'];
-    $obsProd = $_POST['txtDescProd'];
-    $solEsp = $_POST['txtSolEsp'];
-    $solicitante = $_POST['txtVal'];
+    $valCot         = (isset($_POST['txtValCotizacion'])) ? $_POST['txtValCotizacion'] : null;
+    $obsSol         = (isset($_POST['txtObsSolicitante'])) ? $_POST['txtObsSolicitante'] : null;
+    $obsPys         = (isset($_POST['txtObsPyS'])) ? $_POST['txtObsPyS'] : null;
+    $obsProd        = (isset($_POST['txtDescProd'])) ? $_POST['txtDescProd'] : null;
+    $solEsp         = (isset($_POST['txtSolEsp'])) ? $_POST['txtSolEsp'] : null;
+    $solicitante    = (isset($_POST['txtVal'])) ? $_POST['txtVal'] : null;
     $result = Cotizacion::guardarCotizacion($solEsp, $valCot, $obsSol, $obsPys, $obsProd, $solicitante);
 } else if (isset($_POST['btnAsignar'])) {
     session_start();
-    $solicitante = $_POST['txtVal'];
+    $solicitante    = $_POST['txtVal'];
     $usuario = $_SESSION['usuario'];
     $registra = Cotizacion::obtenerPersonaRegistra($usuario);
-    $rol = $_POST['sltRol'];
-    $persona = $_POST['sltPersona'];
-    $fase = $_POST['sltFase'];
-    $proy = $_POST['txtIdProy'];
+    $rol            = (isset($_POST['sltRol'])) ? $_POST[''] : null;
+    $persona        = (isset($_POST['sltPersona'])) ? $_POST[''] : null;
+    $fase           = (isset($_POST['sltFase'])) ? $_POST[''] : null;
+    $proy           = (isset($_POST['txtIdProy'])) ? $_POST[''] : null;
     $solEsp = substr($_POST['txtSolEsp'],1);
-    $horas = $_POST['txtHoras'];
-    $minutos = $_POST['txtMinutos'];
+    $horas          = (isset($_POST['txtHoras'])) ? $_POST[''] : null;
+    $minutos        = (isset($_POST['txtMinutos'])) ? $_POST[''] : null;
     if ($rol != null && $persona != null && $fase != null && $horas != null && $minutos != null) {
         $result = Asignados::registrarAsignacion($solEsp, $proy, $persona, $rol, $fase, $registra, $horas, $minutos, $solicitante);
     } else {
@@ -70,8 +70,8 @@ if (isset($_POST['enviar'])){
         echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
     }
 } else if (isset($_POST['btnAprobar'])) {
-    $nota = $_POST['txtObsAprobacion'];
-    $enlace = $_POST['txtEnlAprobacion'];
+    $nota       = (isset($_POST['txtObsAprobacion'])) ? $_POST['txtObsAprobacion'] : null;
+    $enlace     = (isset($_POST['txtEnlAprobacion'])) ? $_POST['txtEnlAprobacion'] : null;
     $cotizacion = $_REQUEST['txtCot'];
     $resultado = Cotizacion::aprobarCotizacion($cotizacion, $nota, $enlace);
 } else if (isset($_POST['btnEnviarCorreoCot']) || isset($_POST['btnEnviarCorreoReCot'])) {
@@ -80,23 +80,23 @@ if (isset($_POST['enviar'])){
     } else {
         $accion = 2;
     }
-    $solEsp = $_POST['txtSolEsp'];
-    $solIni = $_POST['txtSolIni'];
-    $codProy = $_POST['txtCodProy'];
-    $nomProy = $_POST['txtNomProy'];
-    $obsProd = $_POST['txtObsProd'];
-    $obsProdCot = $_POST['txtObsProdCot'];
-    $valCot = $_POST['txtValCot'];
-    $obsSol = $_POST['txtObsSol'];
-    $idProy = $_POST['txtIdProy'];
-    $idCot = $_POST['txtIdCot'];
-    $totRecurso = $_POST['txtTotalRecurso'];
+    $solEsp         = (isset($_POST['txtSolEsp'])) ? $_POST['txtSolEsp'] : null;
+    $solIni         = (isset($_POST['txtSolIni'])) ? $_POST['txtSolIni'] : null;
+    $codProy        = (isset($_POST['txtCodProy'])) ? $_POST['txtCodProy'] : null;
+    $nomProy        = (isset($_POST['txtNomProy'])) ? $_POST['txtNomProy'] : null;
+    $obsProd        = (isset($_POST['txtObsProd'])) ? $_POST['txtObsProd'] : null;
+    $obsProdCot     = (isset($_POST['txtObsProdCot'])) ? $_POST['txtObsProdCot'] : null;
+    $valCot         = (isset($_POST['txtValCot'])) ? $_POST['txtValCot'] : null;
+    $obsSol         = (isset($_POST['txtObsSol'])) ? $_POST['txtObsSol'] : null;
+    $idProy         = (isset($_POST['txtIdProy'])) ? $_POST['txtIdProy'] : null;
+    $idCot          = (isset($_POST['txtIdCot'])) ? $_POST['txtIdCot'] : null;
+    $totRecurso     = (isset($_POST['txtTotalRecurso'])) ? $_POST['txtTotalRecurso'] : null;
     $result = Cotizacion::enviarCorreoCotizacion($solEsp, $solIni, $codProy, $nomProy, $obsProd, $obsProdCot, $valCot, $obsSol, $idProy, $idCot, $totRecurso, $accion);
 } else if (isset($_POST['btnEstado'])) {
-    $accion = $_POST['btnEstado'];
-    $solEsp = $_POST['idSol'];
-    $solicita = $_POST['txtSolicita'];
-    $idAsig = $_POST['cod'];
+    $accion     = (isset($_POST['btnEstado'])) ? $_POST['btnEstado'] : null;
+    $solEsp     = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
+    $solicita   = (isset($_POST['txtSolicita'])) ? $_POST['txtSolicita'] : null;
+    $idAsig     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
     Cotizacion::cambiarEstadoAsignacion($idAsig, $solEsp, $accion, $solicita);
 }
 

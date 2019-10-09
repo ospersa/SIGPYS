@@ -336,6 +336,7 @@ Class Cotizacion {
 
     public static function enviarCorreoCotizacion($solEsp, $solIni, $codProy, $nomProy, $obsProd, $obsProdCot, $valCot, $obsSol, $idProy, $idCot, $totRec, $accion) {
         require('../Core/connection.php');
+        require('../Models/mdl_enviarEmail.php');
         $consulta = "SELECT * FROM dbpys.pys_actsolicitudes 
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_actsolicitudes.idSolicitante
             WHERE idSol = '$solIni'
@@ -354,19 +355,12 @@ Class Cotizacion {
             $correo = $datos2[0];
             $copia .= "$correo;";
         }
-        $consulta3 = "SELECT fechaRegistro FROM pys_cotizaciones WHERE idCotizacion = '$idCot';";
+        $consulta3 = "SELECT fechaRegistro FROM pys_cotizaciones WHERE idCotizacion = '$idCot';"; 
         $resultado3 = mysqli_query($connection, $consulta3);
         $datos3 = mysqli_fetch_array($resultado3);
         $fechaSolIni = Cotizacion::infoSolicitudInicial($solIni);
         $nombreCompleto = $datos['nombres'] ." ". $datos['apellido1'] ." ". $datos['apellido2'];
         $solicita = $datos['correo'];
-        $envia = "apoyoconectate@uniandes.edu.co";
-        $headers = "MIME-Version: 1.0\r\n"; 
-        $headers .= "Content-type: text/html; charset=UTF-8\r\n"; 
-        $headers .= "From: ".$envia."\r\n";
-        $destino ="$solicita".",";
-        $headers .= "Cc: ".$copia."\r\n";
-        $headers .= "Bcc: ".$envia."\r\n";
         if ($accion == 1) {
             $titulo = "Presupuesto: Solicitud ".$solIni." / P".$solEsp." / ".$codProy." - ".$nomProy;
             $mail = "
@@ -452,7 +446,7 @@ Class Cotizacion {
                 <a href='mailto:apoyoconectate@uniandes.edu.co'>apoyoconectate@uniandes.edu.co</a>
             </p>";
         }
-        $bool = mail($destino, $titulo, $mail, $headers);
+        $bool = EnviarCorreo::enviarCorreoCotizacion($solicita, $correo, $titulo, $mail);
         if(($bool != NULL) or ($bool != 0)){
             $consulta3 = "UPDATE pys_cotizaciones SET fechaCorreo = now() WHERE idCotizacion = '$idCot';";
             $resultado3 = mysqli_query($connection, $consulta3);
