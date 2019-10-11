@@ -28,7 +28,7 @@
     </li>
    
     <li>
-        <a class="dropdown-trigger" href="#!" data-target="terminacion">Terminación 
+        <a class="dropdown-trigger" href="#!" data-target="terminacion">Asesores/Gestores 
             <i class="material-icons right">arrow_drop_down</i>
         </a>
     </li>
@@ -77,7 +77,7 @@
         <div class="divider"></div>
     </li>
     <li>
-        <a href="#!">Inventario</a>
+        <a href="inventario.php">Inventario</a>
     </li>
     <li>
         <div class="divider"></div>
@@ -134,7 +134,7 @@
 
 <ul id="terminacion" class="dropdown-content teal darken-1">
     <li>
-        <a href="terminacionServiciosProductos.php">Productos/Servicios</a>
+        <a href="terminacionServiciosProductos.php">Terminación PS</a>
     </li>
 </ul>
 
