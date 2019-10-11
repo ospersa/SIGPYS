@@ -244,7 +244,12 @@
                                         </tr>';
                     }
                     $string .= '    </tbody>
-                                </table>';
+                                </table>
+                                <form action="../Controllers/ctrl_cotizacion.php" method="post" class="col l12 m12 s12" autocomplete="off">
+                                <div class="input-field col l6 m12 s12 offset-l3 ">
+                                <button href="#modalCorreoAsignacion" class=" modal-trigger btn waves-effect waves-light" onclick="envioData('."'$id'".','."'modalCorreoAsignacion.php'".');">Enviar correo de asignados</button>
+                            </div>
+                            </form>';
                 }
             } else if ($tipo == "Cot") {
                 $totalHoras = 0;
@@ -566,5 +571,94 @@
             mysqli_close($connection);
         }
 
+        public static function infoEnviarCorreoSolIni($idSol){
+            require('../Core/connection.php');
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_personas.nombres, pys_personas.apellido1, pys_personas.apellido2, pys_personas.correo , pys_proyectos.codProy, pys_proyectos.nombreProy FROM pys_solicitudes 
+            INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSolIni= pys_actsolicitudes.idSol
+            INNER JOIN pys_personas ON pys_actsolicitudes.idSolicitante = pys_personas.idPersona
+            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+            INNER JOIN pys_actualizacionproy on pys_actualizacionproy.idProy = pys_proyectos.idProy
+            WHERE pys_solicitudes.est = '1' AND pys_solicitudes.idSol ='$idSol' AND pys_actsolicitudes.est=1 AND pys_personas.est= 1;";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            return $datos;
+            mysqli_close($connection);
+        }
+
+        public static function infoEnviarCorreoAsig($idSol){
+            require('../Core/connection.php');
+            $consulta = "SELECT  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev FROM pys_solicitudes
+            INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+            INNER JOIN pys_personas ON pys_solicitudes.idPersona = pys_personas.idPersona
+            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+            INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
+            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+            WHERE pys_solicitudes.est = '1'  AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1'  AND pys_personas.est = '1' AND pys_cursosmodulos.estProy = '1'  AND pys_solicitudes.idSol = '$idSol'";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            return $datos;
+            mysqli_close($connection);
+        } 
+
+        public static function infoEnviarCorreoResponsable($idSol){
+            require('../Core/connection.php');
+            $string ="";
+            $consulta = "SELECT  pys_personas.correo, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase
+				FROM pys_asignados
+				INNER JOIN pys_solicitudes ON pys_asignados.idSol = pys_solicitudes.idSol
+				INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+				INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+				INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+				INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+				INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
+				INNER JOIN pys_roles ON pys_asignados.idRol = pys_roles.idRol
+				INNER JOIN pys_fases ON pys_asignados.idFase = pys_fases.idFase
+				WHERE pys_asignados.est = '1' AND pys_actsolicitudes.est = '1' AND pys_solicitudes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_actualizacionproy.est = '1' AND pys_proyectos.est = '1' AND ((pys_personas.est = '1') or (pys_personas.est = '0'))  AND pys_roles.est = '1' AND pys_fases.est = '1' AND pys_actsolicitudes.idSol = '$idSol'";
+            $resultado = mysqli_query($connection, $consulta);
+            while ($datos = mysqli_fetch_array($resultado)) {
+                $correo=$datos['correo'];
+                $apellido1=$datos['apellido1'];
+                $apellido2=$datos['apellido2'];
+                $nombres=$datos['nombres'];
+                $nombreRol=$datos['nombreRol'];
+                $nombreFase=$datos['nombreFase'];
+
+                $string .= "
+                    <strong>Responsable: </strong>$nombres $apellido1 $apellido2 <br />
+                    <strong>Rol: </strong>$nombreRol <br />
+                    <strong>Fase: </strong>$nombreFase <br />
+                    <strong>Correo: </strong>$correo <br />
+                <br />";
+            }
+            return $string;
+            mysqli_close($connection);
+        }
+        public static function correosResponsable($idSol){
+            require('../Core/connection.php');
+            $string ="";
+            $consulta = "SELECT  pys_personas.correo
+				FROM pys_asignados
+				INNER JOIN pys_solicitudes ON pys_asignados.idSol = pys_solicitudes.idSol
+				INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+				INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+				INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+				INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+				INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
+				INNER JOIN pys_roles ON pys_asignados.idRol = pys_roles.idRol
+				INNER JOIN pys_fases ON pys_asignados.idFase = pys_fases.idFase
+				WHERE pys_asignados.est = '1' AND pys_actsolicitudes.est = '1' AND pys_solicitudes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_actualizacionproy.est = '1' AND pys_proyectos.est = '1' AND ((pys_personas.est = '1') or (pys_personas.est = '0'))  AND pys_roles.est = '1' AND pys_fases.est = '1' AND pys_actsolicitudes.idSol = '$idSol'";
+            $resultado = mysqli_query($connection, $consulta);
+            while ($datos = mysqli_fetch_array($resultado)) {
+                $count = count($datos);
+                $correo=$datos['correo'];
+                $string .= $correo.";";
+            }
+            $string =substr($string,0,-1);  
+            return $string;
+            mysqli_close($connection);
+        }
     }
 ?>
