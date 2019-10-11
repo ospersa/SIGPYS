@@ -28,7 +28,7 @@
     </li>
    
     <li>
-        <a class="dropdown-trigger" href="#!" data-target="terminacion">Terminación 
+        <a class="dropdown-trigger" href="#!" data-target="gestores">Gestor/Asesor RED
             <i class="material-icons right">arrow_drop_down</i>
         </a>
     </li>
@@ -132,9 +132,9 @@
     </li>
 </ul>
 
-<ul id="terminacion" class="dropdown-content teal darken-1">
+<ul id="gestores" class="dropdown-content teal darken-1">
     <li>
-        <a href="terminacionServiciosProductos.php">Productos/Servicios</a>
+        <a href="terminacionServiciosProductos.php">Terminación P/S</a>
     </li>
 </ul>
 

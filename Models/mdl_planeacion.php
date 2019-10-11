@@ -320,13 +320,18 @@ class Planeacion{
 
     public static function mostrarInfoPeriodo ($idPeriodo, $idPersona) {
         require('../Core/connection.php');
+        $horasTotales = 0;
         $consulta = "SELECT idDedicacion, porcentajeDedicacion1, porcentajeDedicacion2, diasSegmento1, diasSegmento2, inicioPeriodo, finPeriodo
             FROM pys_dedicaciones
             INNER JOIN pys_periodos ON pys_periodos.idPeriodo = pys_dedicaciones.periodo_IdPeriodo
             WHERE pys_dedicaciones.persona_IdPersona = '$idPersona'
             AND pys_periodos.idPeriodo = $idPeriodo;";
         $resultado = mysqli_query($connection, $consulta);
-        $registros = mysqli_num_rows($resultado);
+        if(!empty($resultado)){
+            $registros = mysqli_num_rows($resultado);
+        }else{
+            $registros = 0;
+        }
         if ($registros > 0) {
             $datos = mysqli_fetch_array($resultado);
             $horasDedicacion1 = $datos['porcentajeDedicacion1'] * ($datos['diasSegmento1'] * 8) / 100;
@@ -393,8 +398,8 @@ class Planeacion{
                             </div>
                         </div>
                     </div>
-                    <input hidden readonly id='txtHorasMes' class='center-align' name='txtHorasMes' value='".$horasTotales."' type='number'/>
-                    <input hidden readonly id='txtIdDedicacion' class='center-align' name='txtIdDedicacion' value='".$datos['idDedicacion']."' type='number'/>";
+                    <input hidden readonly id='txtHorasMes' class='center-align' name='txtHorasMes' value='' type='number'/>
+                    <input hidden readonly id='txtIdDedicacion' class='center-align' name='txtIdDedicacion' value='' type='number'/>";
             $planear = false;
         }
         return $planear;

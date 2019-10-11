@@ -1,4 +1,9 @@
 <?php
+/* Inicializar variables de sesión */
+if(!isset($_SESSION)) { 
+    session_start();
+}
+
 /* Inclusión del Modelo */
 include_once('../Models/mdl_solicitudEspecifica.php');
 include_once('../Models/mdl_asignados.php');
@@ -32,20 +37,16 @@ $sltClase2          = (isset($_POST['dato1'])) ? $_POST['dato1'] : null;
 $idSer2             = (isset($_POST['dato2'])) ? $_POST['dato2'] : null;
 $sinopsis           = (isset($_POST['sinopsis'])) ? $_POST['sinopsis'] : null;
 $autores            = (isset($_POST['autores'])) ? $_POST['autores'] : null;
-$urlY               = (isset($_POST['urlY'])) ? $_POST['urlY'] : null;
 $urlVimeo           = (isset($_POST['urlV'])) ? $_POST['urlV'] : null;
 $minDura            = (isset($_POST['minutosDura'])) ? $_POST['minutosDura'] : null;
 $segDura            = (isset($_POST['segundosDura'])) ? $_POST['segundosDura'] : null;
 $prep               = null;
+$usuario            = $_SESSION['usuario'];
 
 /* Procesamiento peticiones al controlador */
 if (!empty($_REQUEST['cod'])) {
     $idAsig = $_REQUEST['cod'];
 }
-if(!isset($_SESSION)) { 
-    session_start();
-}
-$usuario = $_SESSION['usuario'];
 
 if (!$id && !isset($_POST['dato1']) && !isset($_POST['btnActServicio']) && !isset($_POST['btnGuaSopo']) && !isset($_POST['btnGuaReal'])) {
     SolicitudEspecifica::cargaEspecificasUsuario( $search, 2, $usuario);
@@ -54,60 +55,60 @@ if (!$id && !isset($_POST['dato1']) && !isset($_POST['btnActServicio']) && !isse
 }
 
 if($id) {
-    $prep = substr($id, 0, 3);
-    $id = substr($id, 3);
-    $validarSer = SolicitudEspecifica::comprobraExisResultadoServicio($id);
-    $validarPro = SolicitudEspecifica::comprobraExisResultadoProductos($id);
-    $info = SolicitudEspecifica::formResultado($id);
-    $idSol = $info['idSol'];
-    $desSol = $info['descripcionSol'];
-    $idProy = $info['codProy'];
-    $nomProy = $info['nombreProy'];
-    $nomProdOSer = $info['nombreSer'];
-    $equipo = $info['nombreEqu'];
-    $servicio = $info['nombreSer'];
-    $solEspecifica = $info['ObservacionAct'];
-    $fechaPrev = $info['fechPrev'];
-    $idSer = $info['idSer'];
-    $sltPlata = Plataforma::selectPlataforma (null);
-    $sltRED = SolicitudEspecifica::selectRED (null);
-    $sltClase = Producto::selectClaseConTipo ($idSer,null);
-    $tiempoTotal = SolicitudEspecifica::totalTiempo ($idSol);
-    $hora = $tiempoTotal[0];
-    $min = $tiempoTotal[1];
+    $prep           = substr($id, 0, 3);
+    $id             = substr($id, 3);
+    $validarSer     = SolicitudEspecifica::comprobraExisResultadoServicio($id);
+    $validarPro     = SolicitudEspecifica::comprobraExisResultadoProductos($id);
+    $info           = SolicitudEspecifica::formResultado($id);
+    $idSol          = $info['idSol'];
+    $desSol         = $info['descripcionSol'];
+    $idProy         = $info['codProy'];
+    $nomProy        = $info['nombreProy'];
+    $nomProdOSer    = $info['nombreSer'];
+    $equipo         = $info['nombreEqu'];
+    $servicio       = $info['nombreSer'];
+    $solEspecifica  = $info['ObservacionAct'];
+    $fechaPrev      = $info['fechPrev'];
+    $idSer          = $info['idSer'];
+    $sltPlata       = Plataforma::selectPlataforma (null);
+    $sltRED         = SolicitudEspecifica::selectRED (null);
+    $sltClase       = Producto::selectClaseConTipo ($idSer,null);
+    $tiempoTotal    = SolicitudEspecifica::totalTiempo ($idSol);
+    $hora           = $tiempoTotal[0];
+    $min            = $tiempoTotal[1];
+
     if ($validarSer == True){
-        $info2= SolicitudEspecifica::cargarInformacionServicio($id);
-        $plat = $info2['idPlat']; 
-        $clase = $info2['idClProd']; 
-        $observacion = $info2['observacion']; 
-        $estudiantesImpac = $info2['estudiantesImpac'];
-        $docentesImpac = $info2['docentesImpac'];
-        $url = $info2['urlResultado'];
-        $tipo = $info2['idTProd'];
-        $sltPlata = Plataforma::selectPlataforma ($plat);
-        $sltClase = Producto::selectClaseConTipo ($idSer,$clase);
-        $sltTipo = Producto::selectTipoProducto($clase, $idSer, $tipo);
+        $info2              = SolicitudEspecifica::cargarInformacionServicio($id);
+        $plat               = $info2['idPlat']; 
+        $clase              = $info2['idClProd']; 
+        $observacion        = $info2['observacion']; 
+        $estudiantesImpac   = $info2['estudiantesImpac'];
+        $docentesImpac      = $info2['docentesImpac'];
+        $url                = $info2['urlResultado'];
+        $tipo               = $info2['idTProd'];
+        $sltPlata           = Plataforma::selectPlataforma ($plat);
+        $sltClase           = Producto::selectClaseConTipo ($idSer,$clase);
+        $sltTipo            = Producto::selectTipoProducto($clase, $idSer, $tipo);
             
     } else if ($validarPro == True){
-        $info2= SolicitudEspecifica::cargarInformacionProducto($id);
-        $plat = $info2['idPlat']; 
-        $clase = $info2['idClProd']; 
-        $tipo = $info2['idTProd'];
-        $labor = $info2['observacionesProd']; 
-        $nomProduc = $info2['nombreProd'];
-        $RED = $info2['descripcionProd'];
-        $url = $info2['urlservidor'];  
-        $urlY = $info2['urlyoutubeOficial'];     
-        $urlVimeo = $info2['urlVimeo']; 
-        $minDura = $info2['duracionmin'];  
-        $segDura = $info2['duracionseg'];  
-        $sinopsis = $info2['sinopsis'];
-        $autores = $info2['autorExterno'];
+        $info2      = SolicitudEspecifica::cargarInformacionProducto($id);
+        $plat       = $info2['idPlat']; 
+        $clase      = $info2['idClProd']; 
+        $tipo       = $info2['idTProd'];
+        $labor      = $info2['observacionesProd']; 
+        $nomProduc  = $info2['nombreProd'];
+        $RED        = $info2['descripcionProd'];
+        $url        = $info2['urlservidor'];    
+        $urlVimeo   = $info2['urlVimeo']; 
+        $minDura    = $info2['duracionmin'];  
+        $segDura    = $info2['duracionseg'];  
+        $sinopsis   = $info2['sinopsis'];
+        $autores    = $info2['autorExterno'];
         $fechaEntre = $info2['fechEntregaProd'];
-        $sltRED = SolicitudEspecifica::selectRED ($RED);
-        $sltPlata = Plataforma::selectPlataforma ($plat);
-        $sltClase = Producto::selectClaseConTipo ($idSer,$clase);
-        $sltTipo = Producto::selectTipoProducto($clase, $idSer, $tipo);
+        $sltRED     = SolicitudEspecifica::selectRED ($RED);
+        $sltPlata   = Plataforma::selectPlataforma ($plat);
+        $sltClase   = Producto::selectClaseConTipo ($idSer,$clase);
+        $sltTipo    = Producto::selectTipoProducto($clase, $idSer, $tipo);
     }
 }
 
@@ -134,8 +135,8 @@ if (isset($_POST['btnInactivar'])) {
 } else if (isset($_POST['btnGuaReal'])){
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
-        SolicitudEspecifica::guardarResultadoRealizacion ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlY, $urlVimeo, $minDura, $segDura);
+        SolicitudEspecifica::guardarResultadoRealizacion ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura);
     } else{
-        SolicitudEspecifica::actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlY, $urlVimeo, $minDura, $segDura);
+        SolicitudEspecifica::actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura);
     }
 }

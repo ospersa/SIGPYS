@@ -4,7 +4,10 @@
 
         public static function busqueda ($fechaInicial, $fechaFinal, $user) {
             require('../Core/connection.php');
-            $fech == NULL;
+            $fech   = "";
+            $tabla  = "";
+            $tothor = 0;
+            $totmin = 0;
             $consulta = "SELECT pys_asignados.idSol, pys_asignados.idProy, pys_proyectos.codProy, pys_proyectos.nombreProy, pys_tiempos.idTiempo, pys_tiempos.idAsig, pys_tiempos.fechTiempo,pys_tiempos.notaTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.idFase, pys_fases.nombreFase
             FROM pys_asignados
             INNER JOIN pys_tiempos ON pys_asignados.idAsig = pys_tiempos.idAsig
@@ -75,10 +78,12 @@
                                 <th class='teal lighten-4' colspan='5' style='text-align: center;'>$tothor Horas y $totmin minutos</th>
                             </tr>";
                         $fech = $datos['fechTiempo'];
-                        $tothor = '';
-                        $totmin = '';
-                        $tothor += $datos['horaTiempo'];
-                        $totmin += $datos['minTiempo'];
+                        $tothor = 0;
+                        $totmin = 0;
+                        $tiemposHora    = $datos['horaTiempo'];
+                        $tiemposMin     = $datos['minTiempo'];
+                        $tothor += $tiemposHora;
+                        $totmin += $tiemposMin;
                         
                         if($totmin >= 60){
                             $tothor = $tothor + ($totmin/60);
