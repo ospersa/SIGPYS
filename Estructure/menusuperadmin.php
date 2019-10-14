@@ -77,7 +77,7 @@
         <div class="divider"></div>
     </li>
     <li>
-        <a href="#!">Inventario</a>
+        <a href="inventario.php">Inventario</a>
     </li>
     <li>
         <div class="divider"></div>

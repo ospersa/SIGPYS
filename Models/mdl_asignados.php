@@ -247,7 +247,7 @@
                                 </table>
                                 <form action="../Controllers/ctrl_cotizacion.php" method="post" class="col l12 m12 s12" autocomplete="off">
                                 <div class="input-field col l6 m12 s12 offset-l3 ">
-                                <button href="#modalCorreoAsignacion" class=" modal-trigger btn waves-effect waves-light" onclick="envioData('."'$id'".','."'modalCorreoAsignacion.php'".');">Enviar correo de asignados</button>
+                                <button href="#modalCorreoAsignacion" class=" modal-trigger btn waves-effect waves-light" onclick="envioData('."'$id'".','."'modalCorreoAsignacion.php'".');">Enviar correo de asignación</button>
                             </div>
                             </form>';
                 }

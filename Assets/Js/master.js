@@ -304,6 +304,90 @@ $(document).ready(function () {
             }
         })
     })
+    /** Selects para inventario */
+    $('#txtBusquedaPersona').keyup(function () {
+        consulta = $('#txtBusquedaPersona').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_inventario.php",
+            data: "persona=" + consulta,
+            dataType: "html",
+            beforeSend: function () {
+                $('#sltPersona').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function () {
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function (data) {
+                $("#sltPersona").empty();
+                $("#sltPersona").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
+
+    $('#txtBusquedaProyecto').keyup(function () {
+        consulta = $('#txtBusquedaProyecto').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_inventario.php",
+            data: "proyecto=" + consulta,
+            dataType: "html",
+            beforeSend: function () {
+                $('#sltProyecto').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function () {
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function (data) {
+                $("#sltProyecto").empty();
+                $("#sltProyecto").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
+    $('#txtBusquedaEquipo').keyup(function () {
+        consulta = $('#txtBusquedaEquipo').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_inventario.php",
+            data: "equipo=" + consulta,
+            dataType: "html",
+            beforeSend: function () {
+                $('#sltEquipo').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function () {
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function (data) {
+                $("#sltEquipo").empty();
+                $("#sltEquipo").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
+
+    $('#txtBusquedaProducto').keyup(function () {
+        consulta = $('#txtBusquedaProducto').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_inventario.php",
+            data: "producto=" + consulta,
+            dataType: "html",
+            beforeSend: function () {
+                $('#sltProducto').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function () {
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function (data) {
+                $("#sltProducto").empty();
+                $("#sltProducto").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
+
     $('#btnDescargar').click(function () {
         $('select[required]').css({
             display: 'inline',

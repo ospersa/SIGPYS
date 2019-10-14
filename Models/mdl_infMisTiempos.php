@@ -83,15 +83,12 @@
                         $tiemposHora    = $datos['horaTiempo'];
                         $tiemposMin     = $datos['minTiempo'];
                         $tothor += $tiemposHora;
-                        $totmin += $tiemposMin;
-                        
+                        $totmin += $tiemposMin;                        
                         if($totmin >= 60){
                             $tothor = $tothor + ($totmin/60);
                             $totmin = $totmin%60; 
                         }
                     }
-                    
-                        
                     $fecha = $datos['fechTiempo'];
                     $idSol = $datos['idSol'];
                     $codProy = $datos['codProy'];
