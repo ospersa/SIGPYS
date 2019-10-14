@@ -1,9 +1,9 @@
 <div class="modal-content center-align">
-    <h4>Editar/Inactivar</h4>
+    <h4>Recuperar Contraseña</h4>
     <br>
     <div class="row">
         <div class="col l10 m10 s12 offset-l1 offset-m1 left-align">
-            <h6>Ingrese su numero de cedula y usuario de ingreso</h6>
+            <p>Ingrese su numero de cedula y usuario.</p>
         </div>
     </div>
     <div class="row">

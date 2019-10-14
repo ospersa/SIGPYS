@@ -4,11 +4,11 @@
 
         public static function busqueda ($fechaInicial, $fechaFinal, $user) {
             require('../Core/connection.php');
-            $fech = NULL;
-            $tabla = "";
+            $fech   = "";
+            $tabla  = "";
             $tothor = 0;
             $totmin = 0;
-            echo $consulta = "SELECT pys_asignados.idSol, pys_asignados.idProy, pys_proyectos.codProy, pys_proyectos.nombreProy, pys_tiempos.idTiempo, pys_tiempos.idAsig, pys_tiempos.fechTiempo,pys_tiempos.notaTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.idFase, pys_fases.nombreFase
+            $consulta = "SELECT pys_asignados.idSol, pys_asignados.idProy, pys_proyectos.codProy, pys_proyectos.nombreProy, pys_tiempos.idTiempo, pys_tiempos.idAsig, pys_tiempos.fechTiempo,pys_tiempos.notaTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.idFase, pys_fases.nombreFase
             FROM pys_asignados
             INNER JOIN pys_tiempos ON pys_asignados.idAsig = pys_tiempos.idAsig
             INNER JOIN pys_proyectos ON pys_asignados.idProy = pys_proyectos.idProy
@@ -77,19 +77,18 @@
                                 <th class='teal lighten-4' colspan='6' style='text-align: right;'>Tiempo total trabajado el $fech</th>
                                 <th class='teal lighten-4' colspan='5' style='text-align: center;'>$tothor Horas y $totmin minutos</th>
                             </tr>";
-                        $fech = $datos['horaTiempo'];
-                        $tothor = '';
-                        $totmin = '';
-                        $tothor += $datos['horaTiempo'];
-                        $totmin += $datos['minTiempo'];
-                        
+                        $fech = $datos['fechTiempo'];
+                        $tothor = 0;
+                        $totmin = 0;
+                        $tiemposHora    = $datos['horaTiempo'];
+                        $tiemposMin     = $datos['minTiempo'];
+                        $tothor += $tiemposHora;
+                        $totmin += $tiemposMin;                        
                         if($totmin >= 60){
                             $tothor = $tothor + ($totmin/60);
                             $totmin = $totmin%60; 
                         }
                     }
-                    
-                        
                     $fecha = $datos['fechTiempo'];
                     $idSol = $datos['idSol'];
                     $codProy = $datos['codProy'];

@@ -4,6 +4,10 @@
 
         public static function informePeriodo($periodo){
             require('../Core/connection.php');
+            $acumHrs    = 0;
+            $acumMin    = 0;
+            $acumPorcen = 0;
+            $tiemDisp   = 0;
             header("Content-type: application/vnd.ms-excel");
             header("Content-Disposition: attachment; filename=inf-planeacion-periodo.xls");
             header('Cache-Control: max-age=0');
@@ -245,6 +249,10 @@
 
         public static function informePeriodoPersona($periodo, $persona) {
             require('../Core/connection.php');
+            $acumHrs    = 0;
+            $acumMin    = 0;
+            $acumPorcen = 0;
+            $tiemDisp   = 0;
             header("Content-type: application/vnd.ms-excel");
             header("Content-Disposition: attachment; filename=inf-planeacion-persona.xls");
             header("Cache-Control: max-age=0");
@@ -405,6 +413,10 @@
 
         public static function listarPlaneacionPeriodo ($periodo) {
             require('../Core/connection.php');
+            $acumHrs    = 0;
+            $acumMin    = 0;
+            $acumPorcen = 0;
+            $tiemDisp   = 0;
             $consulta = "SELECT inicioPeriodo, finPeriodo, diasSegmento1, diasSegmento2 FROM pys_periodos WHERE idPeriodo = $periodo;";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
@@ -532,6 +544,12 @@
 
         public static function listarPlaneacionPeriodoPersona ($periodo, $persona) {
             require('../Core/connection.php');
+            $acumHrs    = 0;
+            $acumMin    = 0;
+            $acumPorcen = 0;
+            $tiemDisp   = 0;
+            $minDisp    = 0;
+            $porcenDisp = 0;
             $consulta = "SELECT apellido1, apellido2, nombres, inicioPeriodo, finPeriodo, idPersona, diasSegmento1, diasSegmento2, porcentajeDedicacion1, porcentajeDedicacion2 
                 FROM pys_periodos
                 INNER JOIN pys_dedicaciones ON pys_dedicaciones.periodo_IdPeriodo = pys_periodos.idPeriodo

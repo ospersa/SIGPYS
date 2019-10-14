@@ -336,10 +336,8 @@
                 $idUsuario = $data[0];
             };
 
-            $consulta = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_Cursosmodulos.idCM, pys_Cursosmodulos.nombreCursoCM, pys_Cursosmodulos.nombreModuloCM, pys_Cursosmodulos.codigoCursoCM, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_servicios.idSer, pys_servicios.nombreSer, pys_servicios.productoOservicio, pys_equipos.nombreEqu, pys_asignados.idPersona, pys_asignados.idRol, pys_asignados.idFase, pys_asignados.idResponRegistro, pys_solicitudes.idSolIni
-       
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol
             FROM pys_solicitudes
-       
             INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
             inner JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
             inner JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
@@ -351,9 +349,7 @@
             inner JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
             inner JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
             inner JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
-            inner JOIN pys_convocatoria ON pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
-	   	   
-	        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_convocatoria.est = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '1' AND   pys_asignados.idPersona = '".$idUsuario."' AND pys_solicitudes.idTSol = 'TSOL02' AND ((pys_estadosol.idEstSol != 'ESS001') AND (pys_estadosol.idEstSol != 'ESS006') AND (pys_estadosol.idEstSol != 'ESS007')) AND ((pys_actualizacionproy.codProy like '%".$buscar."%') or (pys_actualizacionproy.nombreProy like '%$buscar%') or(pys_solicitudes.idSol like '%$buscar%') or (pys_estadosol.nombreEstSol like '%$buscar%')) 
+	        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '1' AND   pys_asignados.idPersona = '".$idUsuario."' AND pys_solicitudes.idTSol = 'TSOL02' AND ((pys_estadosol.idEstSol != 'ESS001') AND (pys_estadosol.idEstSol != 'ESS006') AND (pys_estadosol.idEstSol != 'ESS007')) AND ((pys_actualizacionproy.codProy like '%".$buscar."%') or (pys_actualizacionproy.nombreProy like '%$buscar%') or(pys_solicitudes.idSol like '%$buscar%')) 
             ORDER BY pys_actsolicitudes.idSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
@@ -376,7 +372,6 @@
                                 </thead>
                                 <tbody id="misSolicitudes">';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    $registra = $datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'];
                     $idSol = $datos['idSol'];
                     $string .= '    <tr>
                                         <td>'.$datos['idSolIni'].'</td>
@@ -391,9 +386,6 @@
                                         <td>'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
                                         <td>'.SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>
                                     </tr>';
-                                       
-
-                    
                 }
                 $string .= '    </tbody>
                             </table>';
@@ -545,7 +537,7 @@
                 $estudiantesImpac = $datos['estudiantesImpac'];
                 $docentesImpac = $datos['docentesImpac'];
                 $urlResultado  = $datos['urlResultado'];
-                if (($idPlat && $idClProd && $idTProd && $observacion && $estudiantesImpac && $docentesImpac && $urlResultado) != null){
+                if (($idPlat && $idClProd && $idTProd && $observacion) != null){
                     return 1;
                 } else {
                     return 0;
@@ -585,7 +577,7 @@
                     $segDura = $datos['duracionseg'];  
                     $sinopsis = $datos['sinopsis'];
                     $autores = $datos['autorExterno'];
-                    if (($plat && $clase && $tipo && $labor  && $nomProduc && $RED  && $url  && $urlY  && $urlVimeo &&  $minDura && $segDura && $sinopsis && $autores && $fechaEntre) != null){
+                    if (($plat && $clase && $tipo && $labor  && $nomProduc && $RED  && $url && $urlVimeo &&  $minDura && $segDura && $sinopsis && $autores && $fechaEntre) != null){
                         return 1;
                     } else {
                         return 0;
@@ -730,9 +722,9 @@
            } else {
                 $fechaEntre = "null";
            }
-            ECHO $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '', '', '','$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '1')";
+            $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '', '', '','$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '1')";
             $resultado = mysqli_query($connection, $consulta);
-            ECHO $consulta1="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(),'', '', '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1')";
+            $consulta1="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(),'', '', '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1')";
             $resultado1 = mysqli_query($connection, $consulta1);
             if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
@@ -744,7 +736,7 @@
             mysqli_close($connection);
         }
 
-        public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlY, $urlVimeo, $min, $seg){
+        public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores,  $urlVimeo, $min, $seg){
             if ($min == ""){
                 $min =0;
             }
@@ -759,9 +751,9 @@
             require('../Core/connection.php');
             $countProd = SolicitudEspecifica::generarCodigoProducto();
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            ECHO $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '$urlY', '', '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
+            $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '', '', '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
             $resultado = mysqli_query($connection, $consulta);
-            echo $consulta1 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(),'$urlY', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
+            $consulta1 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(),'', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
             $resultado1 = mysqli_query($connection, $consulta1);
             if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
@@ -809,7 +801,7 @@
             }
         }
 
-        public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlY, $urlVimeo, $min, $seg){
+        public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg){
             require('../Core/connection.php');
             $consulta1 = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = 1";
             $resultado1 = mysqli_query($connection, $consulta1);
@@ -818,7 +810,7 @@
             $consulta = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = 1";
             $resultado = mysqli_query($connection, $consulta);
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'$urlY', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
+            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(),'', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
