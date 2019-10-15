@@ -1,9 +1,15 @@
 <div class="modal-content center-align">
 <?php 
 include_once('../Controllers/ctrl_resultadoProductoDis.php');
+if ($prep == "COM") {
+    require('modalResulProTerCompleto.php');
+} else if ($prep == "SOP"){
+    require('modalResultadoSoporte.php');
+} else if ($prep == "DIS"){
+    require('modalResultadoDiseno.php');
+} else if ($prep == "REA"){
+    require('modalResultadoRealizacion.php');
+}
 ?>
-<h4>Más información sobre el Producto</h4>
-<div class="row">
-<?php echo $info;?>
-</div>
+
 </div>

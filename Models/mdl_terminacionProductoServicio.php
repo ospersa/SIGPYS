@@ -125,8 +125,7 @@
             INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
             INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
             INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            
-            where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1 AND pys_proyectos.est = 1 AND  pys_actsolicitudes.est = 1 AND  pys_equipos.est = 1;";
+            WHERE idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1 AND pys_proyectos.est = 1 AND  pys_actsolicitudes.est = 1 AND  pys_equipos.est = 1;";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             $idEqu = $datos['idEqu'];
@@ -265,24 +264,24 @@
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $registro2 =  mysqli_num_rows($resultado2);
                 if ($resultado2 == TRUE && $registro2 > 0){
-                    $datos2 = mysqli_fetch_array($resultado);
-                    $plat               = (empty($datos1['nombrePlt'])) ? $vacio : '<p class="left-align">'.$datos1['nombrePlt'].' </p>' ;
-                    $clase              = (empty($datos1['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreClProd'].' </p>' ;
-                    $tipo               = (empty($datos1['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreTProd'].' </p>' ;
-                    $observacion        = (empty($datos1['observacion'])) ? $vacio : '<p class="left-align">'.$datos1['observacion'].' </p>' ;
-                    $estudiantesImpac   = (empty($datos1['estudiantesImpac'])) ? $vacio : '<p class="left-align">'.$datos1['estudiantesImpac'].' </p>' ;
-                    $docentesImpac      = (empty($datos1['docentesImpac'])) ? $vacio : '<p class="left-align">'.$datos1['docentesImpac'].' </p>' ;
-                    $urlResultado       = (empty($datos1['urlResultado'])) ? $vacio : '<p class="left-align">'.$datos1['urlResultado'].' </p>' ;
-                    $string = '
-                    <div class="input-field col l5 m12 s12 offset-l1 ">
+                    $datos2 = mysqli_fetch_array($resultado2);
+                    $plat               = (empty($datos2['nombrePlt'])) ? $vacio : '<p class="left-align">'.$datos2['nombrePlt'].' </p>' ;
+                    $clase              = (empty($datos2['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos2['nombreClProd'].' </p>' ;
+                    $tipo               = (empty($datos2['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos2['nombreTProd'].' </p>' ;
+                    $observacion        = (empty($datos2['observacion'])) ? $vacio : '<p class="left-align">'.$datos2['observacion'].' </p>' ;
+                    $estudiantesImpac   = (empty($datos2['estudiantesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['estudiantesImpac'].' </p>' ;
+                    $docentesImpac      = (empty($datos2['docentesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['docentesImpac'].' </p>' ;
+                    $urlResultado       = (empty($datos2['urlResultado'])) ? $vacio : '<p class="left-align">'.$datos2['urlResultado'].' </p>' ;
+                    $string .= '
+                    <div class="input-field col l3 m3 s12">
                         <label for="plat" class="active">Plataforma:</label>
                         '.$plat.'
                     </div>
-                    <div class="input-field col l5 m12 s12">
+                    <div class="input-field col l3 m3 s12">
                         <label for="clase" class="active">Clase de Producto:</label>
                         '.$clase.'
                     </div>
-                    <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
+                    <div class="input-field col l3 m3 s12" id="sltModalTipo">
                         <label for="tipo" class="active">Tipo de Producto:</label>
                         '.$tipo.'
                     </div>

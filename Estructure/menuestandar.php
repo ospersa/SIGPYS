@@ -91,7 +91,7 @@
             <i class="material-icons right">arrow_drop_down</i>
         </a>
     </li>
-    <!--
+    
     <li>
         <div class="divider"></div>
     </li>
@@ -103,6 +103,7 @@
     <li>
         <div class="divider"></div>
     </li>
+    <!--
     <li>
         <a class="dropdown-trigger" href="#!" data-target="proyectos">Proyectos
             <i class="material-icons right">arrow_drop_down</i>
@@ -192,18 +193,18 @@
     <li>
         <a href="ResultadoSoporte.php">Productos de soporte</a>
     </li>
-    <li>
+    <!-- <li>
         <a href="#!">Clases de productos</a>
     </li>
     <li>
         <a href="#!" >Resultados de servicio</a>
-    </li>
+    </li> -->
     <li>
         <a href="resultadoServicio.php" >Servicios</a>
     </li>
-    <li>
+    <!-- <li>
         <a href="#!">Tipos de productos </a>
-    </li>
+    </li> -->
 </ul>
 <ul id="proyectos" class="dropdown-content teal darken-1">
     <li>

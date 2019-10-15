@@ -389,6 +389,14 @@ td {
     }
 }
 
+#resulProd td {
+
+    &:nth-child(7),
+    &:nth-child(8) {
+        width: 10%;
+    }
+}
+
 /***** Ajuste clase para cortar texto largo *****/
 
 /***** Ajuste en modal *****/

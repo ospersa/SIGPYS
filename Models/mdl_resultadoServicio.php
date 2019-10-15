@@ -3,6 +3,7 @@
 
         public static function cargaUsuario ($user) {
             require('../Core/connection.php');
+            require_once('mdl_solicitudEspecifica.php');
             $sql = "SELECT idPersona FROM pys_login where usrLogin = '$user';";
             $result = mysqli_query($connection, $sql);
             while($data = mysqli_fetch_array($result)){
@@ -36,9 +37,17 @@
                                         <th>Información Servicio</th>
                                     </tr>
                                 </thead>
-                                <tbody id="misSolicitudes">';
+                                <tbody id="missolicitudes">';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
+                    $comprobar = SolicitudEspecifica::validarResultadoServicio($idSol);
+                    if ($comprobar == 1){
+                        $color = 'teal';
+                        $modal = 'COM';
+                    } else {
+                        $color = 'red';
+                        $modal = 'INC';
+                    }
                     $string .= '    <tr>
                                         <td>'.$datos['idSolIni'].'</td>
                                         <td>P'.$datos['idSol'].'</td>
@@ -48,7 +57,7 @@
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
                                         <td>'.$datos['fechPrev'].'</td>
                                         <td>'.$datos['fechSol'].'</td>
-                                        <td><a href="#modalResulSerTer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Servicio" onclick="envioData(\''.$idSol.'\',\'modalResulSerTer.php\')"><i class="material-icons teal-text">info_outline</i></a></td>
+                                        <td><a href="#modalResulSerTer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Servicio" onclick="envioData(\''.$modal.$idSol.'\',\'modalResulSerTer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
                                     </tr>';
                 }
                 $string .= '    </tbody>
@@ -66,6 +75,7 @@
 
         public static function cargaBusqueda($user, $buscar) {
             require('../Core/connection.php');
+            require_once('mdl_solicitudEspecifica.php');
             $sql = "SELECT idPersona FROM pys_login where usrLogin = '$user';";
             $result = mysqli_query($connection, $sql);
             while($data = mysqli_fetch_array($result)){
@@ -99,9 +109,17 @@
                                         <th>Información Servicio</th>
                                     </tr>
                                 </thead>
-                                <tbody id="misSolicitudes">';
+                                <tbody id="">';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
+                    $comprobar = SolicitudEspecifica::validarResultadoServicio($idSol);
+                    if ($comprobar == 1){
+                        $color = 'teal';
+                        $modal = 'COM';
+                    } else {
+                        $color = 'red';
+                        $modal = 'INC';
+                    }
                     $string .= '    <tr>
                                         <td>'.$datos['idSolIni'].'</td>
                                         <td>P'.$datos['idSol'].'</td>
@@ -111,7 +129,7 @@
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
                                         <td>'.$datos['fechPrev'].'</td>
                                         <td>'.$datos['fechSol'].'</td>
-                                        <td><a href="#modalResulSerTer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Servicio" onclick="envioData(\''.$idSol.'\',\'modalResulSerTer.php\')"><i class="material-icons teal-text">info_outline</i></a></td>
+                                        <td><a href="#modalResulSerTer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Servicio" onclick="envioData(\''.$modal.$idSol.'\',\'modalResulSerTer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
                                     </tr>';
                 }
                 $string .= '    </tbody>

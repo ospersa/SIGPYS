@@ -434,7 +434,7 @@
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
             $validarLLenoSer = SolicitudEspecifica::validarResultadoServicio($idSol); 
-            if ($validarLLenoSer == true){
+            if ($validarLLenoSer == 1){
                 $color = "teal";
                 $tooltips = 'data-position="right" data-tooltip="Editar resultado de servicio"';
             } else {
@@ -468,7 +468,7 @@
                     } else if ($datos2['idEqu'] == 'EQU003') {
                         /**Soporte */
                         $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
-                        if ($validarLLenoPro == true){
+                        if ($validarLLenoPro == 1){
                             $color = "teal";
                             $tooltips = 'data-position="right" data-tooltip="Editar resultado de Producto"';
                         } else {
@@ -537,7 +537,7 @@
                 $estudiantesImpac = $datos['estudiantesImpac'];
                 $docentesImpac = $datos['docentesImpac'];
                 $urlResultado  = $datos['urlResultado'];
-                if (($idPlat && $idClProd && $idTProd && $observacion) != null){
+                if (($idPlat && $idClProd /* && $idTProd */ && $observacion) != null){
                     return 1;
                 } else {
                     return 0;
@@ -705,10 +705,10 @@
             $resultado2 = mysqli_query($connection, $consulta2);
             if ($resultado && $resultado2){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
         }
@@ -728,10 +728,10 @@
             $resultado1 = mysqli_query($connection, $consulta1);
             if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
         }
@@ -757,10 +757,10 @@
             $resultado1 = mysqli_query($connection, $consulta1);
             if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
         }
@@ -772,10 +772,10 @@
             $resultado = mysqli_query($connection, $consulta);
             if($resultado){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
             } else {         
                 echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
 
@@ -794,10 +794,10 @@
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
                 echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
         }
 
@@ -814,10 +814,10 @@
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
                 echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
         }
         public static function generarCodigoProducto(){
