@@ -183,14 +183,14 @@
     </li>
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
-    <li>
-        <a href="#!">Productos de diseño</a>
+<li>
+        <a href="resultadoDiseño.php">Productos de diseño</a>
     </li>
     <li>
-        <a href="#!">Productos de realización</a>
+        <a href="resultadoRealizacion.php">Productos de realización</a>
     </li>
     <li>
-        <a href="#!">Productos de soporte</a>
+        <a href="ResultadoSoporte.php">Productos de soporte</a>
     </li>
     <li>
         <a href="#!">Clases de productos</a>
@@ -199,7 +199,7 @@
         <a href="#!" >Resultados de servicio</a>
     </li>
     <li>
-        <a href="#!" >Servicios</a>
+        <a href="resultadoServicio.php" >Servicios</a>
     </li>
     <li>
         <a href="#!">Tipos de productos </a>
