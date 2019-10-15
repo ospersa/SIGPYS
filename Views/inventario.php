@@ -6,7 +6,8 @@ require('../Estructure/header.php');
     <h4>Inventario de Productos</h4>
 </div>
 <?php
-if ($perfil == ('PERF01' || 'PERF02')  ){
+echo $perfil;
+if ($perfil == 'PERF01' || $perfil == 'PERF02' ){
     echo '<div class="row">
     <form id="terminarSerPro">
         <div class="row">

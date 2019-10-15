@@ -107,15 +107,23 @@
                                         <td>'.$datos['nombreProy'].'</td>
                                         <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
-                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Agregar Información" onclick="envioData(\''.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">group</i></a></td>
+                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Personas Asignadas" onclick="envioData(\'ASI'.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">group</i></a></td>
                                         <td>----</td>
-                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="---" onclick="envioData(\''.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">description</i></a></td>
+                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Entrega de inventario" onclick="envioData(\'INF'.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">description</i></a></td>
                                     </tr>';
                 }
                 $string .= '    </tbody>
                             </table>';
             }
             echo $string;
+            mysqli_close($connection);
+        }
+
+        public static function formularioInventario($id){
+            require('../Core/connection.php');
+            $string ="";
+            $consulta = "SELECT * FROM pys_solicitudes";
+            return $string;
             mysqli_close($connection);
         }
 
@@ -207,6 +215,112 @@
             }
             echo $string;
             mysqli_close($connection);
+        }
+
+        public static function selectEstadoInv($id) {
+            require('../Core/connection.php');
+            $consulta = "SELECT estadoInv FROM pys_inventario 
+            INNER JOIN  pys_productos  ON  pys_productos.idProd = pys_inventario.idProd
+            WHERE pys_actproductos.est = '1' AND pys_productos.idSol = $id;";
+            $resultado = mysqli_query($connection, $consulta);
+            $string = '  <select name="sltEstadoInv">
+            <option value="" disabled selected>Seleccione</option>';
+            if ($resultado && mysqli_num_rows($resultado) > 0){
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    if ($datos['estadoInv'] == 'Sin inventario'){
+                        $string .='
+                        <option value="Sin inventario" selected>Sin inventario</option>
+                        <option value="Proceso de inventario">Proceso de inventario</option>
+                        <option value="Terminado">Terminado</option>';
+                    }  else if ($datos['estadoInv'] == 'Proceso de inventario'){
+                        $string .='
+                        <option value="Sin inventario" >Sin inventario</option>
+                        <option value="Proceso de inventario" selected>Proceso de inventario</option>
+                        <option value="Terminado">Terminado</option>';
+                    } else if ($datos['estadoInv'] == 'Terminado'){
+                        $string .='
+                        <option value="Sin inventario" >Sin inventario</option>
+                        <option value="Proceso de inventario">Proceso de inventario</option>
+                        <option value="Terminado" selected>Terminado</option>';
+                    } else{
+                        $string .='
+                        <option value="Sin inventario">Sin inventario</option>
+                        <option value="Proceso de inventario">Proceso de inventario</option>
+                        <option value="Terminado">Terminado</option>';
+                    }
+                }
+            } else {
+                $string .='
+                        <option value="Sin inventario">Sin inventario</option>
+                        <option value="Proceso de inventario">Proceso de inventario</option>
+                        <option value="Terminado">Terminado</option>';
+            }
+            $string .= '  </select>
+                    <label for="sltEstadoInv">Estado del inventario*</label>';
+        
+
+            
+        
+            return $string;
+            
+            mysqli_close($connection);
+        }
+
+        public static function OnLoadAsignados($codsol){
+            require('../Core/connection.php');
+            $horasTotal1 = 0;
+            $minTotal1 = 0;
+            $horasTotal = 0;
+            $minTotal = 0;
+            $consulta = "SELECT  pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase, pys_asignados.est
+            FROM pys_asignados
+            inner join pys_solicitudes on pys_asignados.idSol = pys_solicitudes.idSol
+            inner join pys_actsolicitudes on pys_actsolicitudes.idSol = pys_solicitudes.idSol
+            inner join pys_cursosmodulos on pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+            inner join pys_proyectos on pys_cursosmodulos.idProy = pys_proyectos.idProy
+            inner join pys_actualizacionproy on pys_actualizacionproy.idProy = pys_proyectos.idProy
+            inner join pys_frentes on pys_proyectos.idFrente = pys_frentes.idFrente
+            inner join pys_personas on pys_asignados.idPersona = pys_personas.idPersona
+            inner join pys_roles on pys_asignados.idRol = pys_roles.idRol
+            inner join pys_fases on pys_asignados.idFase = pys_fases.idFase
+            inner join pys_convocatoria on pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
+
+            where pys_asignados.est != '0' and pys_actsolicitudes.est = '1' and pys_solicitudes.est = '1' and pys_cursosmodulos.estProy = '1' and pys_cursosmodulos.estCurso = '1' and pys_actualizacionproy.est = '1' and pys_proyectos.est = '1' and pys_frentes.est = '1' and ((pys_personas.est = '1') or (pys_personas.est = '0')) and pys_convocatoria.est = '1' and pys_roles.est = '1' and pys_fases.est = '1' and pys_actsolicitudes.idSol = '$codsol'";
+            $resultado = mysqli_query($connection, $consulta);
+            $string = '
+            <table class="left responsive-table">
+                <thead>
+                    <tr>
+                        <th>Responsable</th>
+                        <th>Rol</th>
+                        <th>Fase</th>
+                        <th>Estado de tarea</th>
+                    </tr>
+                </thead>
+                <tbody>';
+            while ($datos = mysqli_fetch_array($resultado)){
+                $est = $datos['est'];
+                if ($est == 1 ){
+                    $msjTool = "Tarea no terminada";
+                    $color = "red";
+                } else {
+                    $msjTool = "Tarea terminada";
+                    $color = "teal";
+                }
+                $string .= '
+                <tr>
+                <td>'.$datos['nombres'].' '.$datos['apellido1'].' '.$datos['apellido2'].'</td>
+                <td>'.$datos['nombreRol'].'</td>
+                <td>'.$datos['nombreFase'].'</td>
+                <td><a class=" tooltipped" data-tooltip="'.$msjTool.'" ><i class="material-icons '.$color.'-text">done</i></a></td>
+                </tr>';
+            }    
+            
+            $string .= "
+            </tbody>
+            </table>";
+            mysqli_close($connection);               
+            return $string;    
         }
     }
 
