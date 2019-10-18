@@ -44,7 +44,7 @@
                                         <th>Descripción Producto</th>
                                         <th>Asignados</th>
                                         <th>Estado inventario</th>
-                                        <th></th>
+                                        <th>Completar inventario</th>
                                     </tr>
                                 </thead>
                                 <tbody id="misSolicitudes">';
@@ -116,7 +116,7 @@
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Asignados</th>
                                         <th>Estado inventario</th>
-                                        <th></th>
+                                        <th>Completar inventario</th>
                                     </tr>
                                 </thead>
                                 <tbody id="misSolicitudes">';
@@ -307,17 +307,17 @@
         
         public static function tablaActualizaciones($idSol){
             require('../Core/connection.php');
+            $string = "";
             $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
             $resultadoE = mysqli_query($connection, $consultaE);
             $datos2 = mysqli_fetch_array($resultadoE);
             $equipo = $datos2['idEqu'];
-            echo $consulta = "SELECT estadoInv, crudoCarpeta, crudoPeso, proyectoCarpeta, proyectoPeso, finalesCarpeta, finalesPeso, recursosCarpeta, recursosPeso, documentosCarpeta, documentosPeso, diseñoCarpeta, diseñoPeso, soporteCarpeta, soportePeso, idPersonaRecibe, idPersonaEntrega, observacion, rutaServidor, fechaActInventario FROM pys_actinventario
+            $consulta = "SELECT estadoInv, crudoCarpeta, crudoPeso, proyectoCarpeta, proyectoPeso, finalesCarpeta, finalesPeso, recursosCarpeta, recursosPeso, documentosCarpeta, documentosPeso, diseñoCarpeta, diseñoPeso, soporteCarpeta, soportePeso, idPersonaRecibe, idPersonaEntrega, observacion, rutaServidor, fechaActInventario FROM pys_actinventario
             INNER JOIN pys_productos ON pys_productos.idProd = pys_actinventario.idProd
             WHERE pys_actinventario.est = '2' AND pys_productos.est AND pys_productos.idSol='$idSol';";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
-            if ($registros > 0) {
-                $string = ' <table class="responsive-table  left">
+            $string = ' <table class="responsive-table  left">
                         <thead>
                             <tr>
                                 <th>Estado</th>
@@ -326,6 +326,8 @@
                                 <th>Observaciones</th>
                                 <th>Url</th>
                                 <th>Fecha Actualización</th>';
+            if ($registros > 0) {
+                
                 if ($equipo == 'EQU001'){//realizar
                     
                 }else if($equipo == 'EQU002'){//diseño
@@ -397,7 +399,9 @@
                 }
                 $string .= '    </tbody>
                             </table>';
-            }
+            }else{
+                $string = "<h6> No hay Actualizaciones registradas</h6>";
+            }   
             return $string;
 
         }
@@ -460,7 +464,7 @@
             $string ="";
             $consulta = "SELECT idEqu, nombreEqu
                 FROM pys_equipos
-                WHERE est = '1' AND nombreEqu LIKE '%$busqueda%';";
+                WHERE est = '1' AND (idEqu='EQU001' OR idEqu='EQU002' OR idEqu='EQU003' OR idEqu='EQU004') AND nombreEqu LIKE '%$busqueda%';";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 && $busqueda != null) {
                 $string .='  <select name="sltEquipo" id="sltEquipo">';

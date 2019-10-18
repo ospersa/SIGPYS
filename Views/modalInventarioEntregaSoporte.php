@@ -1,5 +1,12 @@
 <h4>Entrega de inventario Producto de Soporte</h4>
 <div class="row">
+    <div class="col s12 my-2">
+    <ul class="tabs teal lighten-2">
+        <li class="tab col s6"><a class="waves-effect waves-light white-text" href="#test1">Entrega de
+                inventario</a></li>
+        <li class="tab col s6"><a class="waves-effect waves-light white-text" href="#test2">Actualizaciones</a></li>
+    </div>
+    <div id="test1" class="col s12 tab-container">
     <form id="actForm" action="../Controllers/ctrl_inventario.php" method="post" class="col l12 m12 s12">
         <div class="row">
         <input type="text" name="idSol" id="idSol" value="<?php echo $id; ?>" hidden>
@@ -23,41 +30,43 @@
                 <label for="monEqu" class="active">Equipo - Servicio:</label>
                 <p class="left-align"><?php echo $equipo. " - ".$nomProdOSer;?></p>
             </div>
-            <div class="input-field col l3 m12 s12 ">
+            <div class="input-field col l6 m6 s12 ">
                 <?php echo $selectEstado ;?>
             </div>            
+            
+            <div class="input-field col l5 m5 s12 offset-l6 offset-m6 "></div>  
             <div class="input-field col l12 m12 s12 ">
                 <input id="txtSopCarp" name="txtSopCarp" type="text" class="validate" value="<?php echo $sopCarp;?>">
                 <label for="txtSopCarp" class="active">Soporte-Carpeta</label>
             </div>
 
-            <div class="input-field col l12 m12 s12 ">
+            <div class="input-field col l5 m5 s12 offset-l1 offset-m1 ">
                 <input id="txtSopPeso" name="txtSopPeso" type="text" class="validate" value="<?php echo $sopPeso;?>">
                 <label for="txtSopPeso" class="active">Soporte-Peso</label>
             </div>
             </div>
             <?php if ($perfil == 'PERF01' || $perfil == 'PERF02'){
                 echo' 
-            <div class="input-field col l12 m12 s12 ">
+            <div class="input-field col l6 m6 s12 ">
                 <select name="sltPerEnt" id="sltPerEnt">
                     '.$stlPerEnt.'
                 </select>
                 <label for="sltPerEnt">Persona que entrega</label>
             </div>
-            <div class="input-field col l12 m12 s12 ">
+            <div class="input-field col l5 m5 s12 offset-l1 offset-m1 ">
             <label for="sltPerEnt" class="active">Persona que recibe</label>
                 <p class="left-align">'.$nombreUser.'</p>
                 <input type="text" name="sltPerEnt" id="sltPerEnt" value="'.$idUser.'" hidden >
             </div>';
             } else {
                 echo'
-            <div class="input-field col l12 m12 s12 ">
+            <div class="input-field col l6 m6 s12 ">
                 <label for="sltPerEnt" class="active">Persona que entrega</label>
                 <p class="left-align">'.$nombreUser.'</p>
                 <input type="text" name="sltPerEnt" id="sltPerEnt" value="'.$idUser.'" hidden >
                 </div>
 
-            <div class="input-field col l12 m12 s12 ">
+            <div class="input-field col l5 m5 s12 offset-l1 offset-m1 ">
                 <select name="sltPerRec" id="sltPerRec">
                 '.$stlPerRec.'
                 </select>
@@ -79,4 +88,8 @@
             <button class="btn waves-effect waves-light" type="submit" name="btnGuaInv">Guardar</button>
         </div>
     </form>
+    </div>
+    <div id="test2" class="col s12 tab-container">
+        <?php echo $tablaAct;?>
+    </div>
 </div>

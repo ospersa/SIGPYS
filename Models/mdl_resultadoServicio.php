@@ -63,11 +63,7 @@
                 $string .= '    </tbody>
                             </table>';
             } else {
-                if ($cod == '1') {
-                    $string = "<div class='card-panel teal darken-1'><h6 class='white-text'>No hay solicitudes específicas creadas.</h6></div>";
-                } else {
-                    $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$buscar.'</strong></h6></div>';
-                }
+                $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados </h6></div>';
             }
             echo $string;
         

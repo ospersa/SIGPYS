@@ -40,6 +40,20 @@ $idPerRec       = (isset($_POST['sltPerRec'])) ? $_POST['sltPerRec'] : null;
 $estadoInv      = (isset($_POST['sltEstadoInv'])) ? $_POST['sltEstadoInv'] : null;
 $cod            = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
 
+if (isset($_POST['persona'])) {
+    $busqueda = $_POST['persona'];
+    Inventario::selectPersona(1, $busqueda);
+} else if (isset($_POST['equipo'])) {
+    $busqueda = $_POST['equipo'];
+    Inventario::selectEquipo($busqueda);
+} else if (isset($_POST['producto'])) {
+    $busqueda = $_POST['producto'];
+    Inventario::selectProducto($busqueda);
+} else if (isset($_POST['proyecto'])) {
+    $busqueda = $_POST['proyecto'];
+    Inventario::selectProyecto($busqueda);
+} 
+
 if ($id != null){
     $prep  = substr($id, 0, 3);
     $id    = substr($id, 3);
@@ -56,7 +70,7 @@ if ($id != null){
     $fechaPrev              = $info['fechPrev'];
     $idSer                  = $info['idSer'];
     $validarInv = Inventario::validarInventario($id);
-    $tabla = Inventario::tablaActualizaciones($id);
+    $tablaAct = Inventario::tablaActualizaciones($id);
     if($validarInv != null){
         
         $crudosCarp     = $validarInv['crudoCarpeta'];
@@ -94,20 +108,6 @@ if ($id != null){
 } else{ 
     Inventario::onLoadUsuario($usuario);
     
-}
-
-if (isset($_POST['persona'])) {
-    $busqueda = $_POST['persona'];
-    Inventario::selectPersona(1, $busqueda);
-} else if (isset($_POST['equipo'])) {
-    $busqueda = $_POST['equipo'];
-    Inventario::selectEquipo($busqueda);
-} else if (isset($_POST['producto'])) {
-    $busqueda = $_POST['producto'];
-    Inventario::selectProducto($busqueda);
-} else if (isset($_POST['proyecto'])) {
-    $busqueda = $_POST['proyecto'];
-    Inventario::selectProyecto($busqueda);
 } 
 
 
