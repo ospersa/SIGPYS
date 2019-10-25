@@ -1,5 +1,71 @@
 <?php
 
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    use PhpOffice\PhpSpreadsheet\IOFactory;
+    require '../php_libraries/vendor/autoload.php';
+    const STYLETABLETITLE = [
+        'font' => [
+            'bold' => true
+        ],
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            'wrapText' => TRUE,  
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+            'textRotation' => 0, 
+            'wrapText' => TRUE  
+        ],
+        'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'startColor' => [
+            'argb' => '80cbc4',
+            ]
+        ]
+    ];
+    const STYLETABLETITLESUB = [
+        'font' => [
+            'bold' => true
+        ],
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            'wrapText' => TRUE,  
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+            'textRotation' => 0, 
+            'wrapText' => TRUE  
+        ],
+        'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'startColor' => [
+            'argb' => 'b2dfdb',
+            ]
+        ]
+    ];
+    const STYLETABLETI = ['font' => [
+        'bold' => true,
+        'size' => '24'
+        ],
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,  
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+            'textRotation' => 0, 
+            'wrapText' => TRUE  
+        ]
+    ];
+    const STYLEBORDER = ['allBorders'=>[
+        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        'color' => ['rgb' => '000000' ]
+        ]
+    ];
+    
+    const STYLEBODY = [
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+            'textRotation' => 0, 
+            'wrapText' => TRUE  
+        ]
+    ];
+    
     Class InformeProductoServicio{
 
         public static function obtenerNombreProyecto ($idProy) {
@@ -758,7 +824,7 @@
                         .$fecha.
                         " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
                         AND pys_actsolicitudes.presupuesto <> '0'
-                        ORDER BY pys_actsolicitudes.idSol;";
+                        ORDER BY pys_actsolicitudes.idSol ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     $registros2 = mysqli_num_rows($resultado2);
                     $consulta3 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.presupuesto, pys_estadosol.nombreEstSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct
@@ -897,6 +963,7 @@
                                                 <td>'.$tablaInt.'</td>';
                         $tabla .= '         </tr>
                                         </tbody>
+                                        </tbody>
                                     </table>';
                     }
                 }
@@ -916,11 +983,11 @@
                 header("Pragma: no-cache");
                 header("Expires: 0");
                 echo '  <html>
-                            <head>
-                                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
                                 <style>
-                                    .row-teal3 {
-                                        background-color: #80cbc4;
+                                .row-teal3 {
+                                    background-color: #80cbc4;
                                         height: 30px;
                                     }
                                     .row-teal4 {
@@ -946,16 +1013,344 @@
                                     .row60 {
                                         min-height: 60px;
                                     }
-                                </style>
-                            </head>
-                            <body>
+                                    </style>
+                                    </head>
+                                    <body>
                             <h1 align="center">Informe de Ejecuciones - Productos/Servicios</h1>';
-                echo $tabla;
-                echo '      </body>
-                        </html>';
+                            echo $tabla;
+                            echo '      </body>
+                            </html>';
+                        }
+        }
+        
+
+
+
+
+ /** Nueva forma */
+                    
+        public static function busqueda2 ($fechaInicial, $fechaFinal, $historico, $proyecto) {
+            require('../Core/connection.php');
+                echo "<strong>No hay solicitudes en estado terminado 1</strong>";
+            
+            
+        }
+        public static function consulta2($fecha, $idProy){
+            require('../Core/connection.php');
+            $consulta2 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.presupuesto, pys_estadosol.nombreEstSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct
+                FROM pys_actualizacionproy 
+                INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idProy = pys_actualizacionproy.idProy 
+                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM 
+                INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
+                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
+                AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
+                .$fecha.
+                " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                ORDER BY pys_actsolicitudes.idSol, pys_actsolicitudes.presupuesto;";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            $registros2 = mysqli_num_rows($resultado2);
+            if ($registros2>0){
+                return $resultado2;
+            } else {
+                echo "<strong>No hay solicitudes en estado terminado 2</strong>";
             }
         }
 
-    }
+        public static function descarga2 ($fechaInicial, $fechaFinal, $historico, $proyecto) {
+            require('../Core/connection.php');
+            if ($fechaInicial != null || $fechaFinal != null) {
+                if ($fechaInicial != null && $fechaFinal == null) {
+                    echo "<script>alert('Por favor seleccione la fecha final para generar el informe');</script>";
+                } else if ($fechaInicial == null && $fechaFinal != null) {
+                    echo "<script>alert('Por favor seleccione la fecha inicial para generar el informe');</script>";
+                }
+            }
+            
+            /** Consulta proyectos que tienen solicitudes en estado terminado de acuerdo con la selección realizada */
+            if ($fechaInicial == null && $fechaFinal == null && $historico == null && $proyecto == null) {
+                /** Proyectos con solicitudes a partir de 2019 */
+                $consulta = "SELECT pys_cursosmodulos.idProy
+                    FROM pys_actsolicitudes
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                    AND pys_actualizacionproy.est = '1'
+                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    AND pys_solicitudes.fechSol >= '2019/01/01'
+                    GROUP BY pys_actualizacionproy.codProy;";
+            } else if ($fechaInicial == null && $fechaFinal == null && $historico != null && $proyecto == null) {
+                /** Todos los proyectos */
+                $consulta = "SELECT pys_cursosmodulos.idProy
+                    FROM pys_actsolicitudes
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                    AND pys_actualizacionproy.est = '1'
+                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    GROUP BY pys_actualizacionproy.codProy;";
+            } else if ($fechaInicial != null && $fechaFinal != null && $historico == null && $proyecto == null) {
+                /** Proyectos con solicitudes en un fecha específica */
+                $consulta = "SELECT pys_cursosmodulos.idProy
+                    FROM pys_actsolicitudes
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                    AND pys_actualizacionproy.est = '1'
+                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
+                    GROUP BY pys_actualizacionproy.codProy;";
+            } else if ($fechaInicial == null && $fechaFinal == null && $historico == null && $proyecto != null) {
+                $consulta = "SELECT pys_cursosmodulos.idProy 
+                    FROM pys_actsolicitudes 
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol 
+                    WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                    AND pys_actualizacionproy.est = '1'
+                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                    AND (pys_solicitudes.fechSol >= '2019/01/01') 
+                    AND pys_cursosmodulos.estProy = '1'
+                    AND pys_cursosmodulos.idProy = '$proyecto'
+                    GROUP BY pys_actualizacionproy.codProy;";
+            } else if ($fechaInicial == null && $fechaFinal == null && $historico != null && $proyecto != null) {
+                $consulta = "SELECT pys_cursosmodulos.idProy 
+                    FROM pys_actsolicitudes 
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol 
+                    WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                    AND pys_actualizacionproy.est = '1'
+                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                    AND pys_cursosmodulos.estProy = '1'
+                    AND pys_cursosmodulos.idProy = '$proyecto'
+                    GROUP BY pys_actualizacionproy.codProy;";
+            } else if ($fechaInicial != null && $fechaFinal != null && $historico == null && $proyecto != null) {
+                $consulta = "SELECT pys_cursosmodulos.idProy
+                    FROM pys_actsolicitudes
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                    AND pys_actualizacionproy.est = '1'
+                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
+                    AND pys_cursosmodulos.idProy = '$proyecto'
+                    GROUP BY pys_actualizacionproy.codProy;";
+            }
+            $resultado = mysqli_query($connection, $consulta);
+            $registros = mysqli_num_rows($resultado);
+            if($registros > 0){
+                $spreadsheet = new Spreadsheet();
+                $spreadsheet->getProperties()->setCreator('Conecta-TE')
+                    ->setLastModifiedBy('Conecta-TE')
+                    ->setTitle('Informe de Tiempos - Productos/Servicios')
+                    ->setSubject('Informe de Tiempos - Productos/Servicios')
+                    ->setDescription('Informe de Tiempos - Productos/Servicios')
+                    ->setKeywords('Informe de Tiempos - Productos/Servicios')
+                    ->setCategory('Test result file');
+                    /**Arreglo titulos */
+                    /**Aplicación de estilos */
+                $spreadsheet->getActiveSheet()->getStyle('A1:I1')->applyFromArray(STYLETABLETI);
+                /**Dimensión columnas */
+                $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(36);
+                $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(19);
+                $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(42);
+                $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+                $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+                $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+                $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(11);
+                $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+                $sheet = $spreadsheet->getActiveSheet();
+                $sheet->setCellValue('A1', 'Informe de Ejecuciones - Productos/Servicios');
+                $sheet->mergeCells("A1:I1"); 
+                $fila = 3;  
+                $datos = mysqli_fetch_all($resultado,MYSQLI_ASSOC);
+                foreach ($datos as $item) {
+                    //Titulos tabla 
+                    $sheet->setCellValue('A'.$fila, 'Proyecto');
+                    $sheet->setCellValue('B'.$fila, 'Solicitudes');
+                    $sheet->mergeCells("B".$fila.":I".$fila); 
+                    $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':I'.$fila)->applyFromArray(STYLETABLETITLE)->getBorders();
+                    
+                    $titulos = ['Cód. Producto/Servicio', 'Estado Producto/Servicio', 'Descripción Producto/Servicio', 'Fecha Creación', 'Fecha Actualización', 'Presupuesto', 'Ejecutado', 'Diferencia'];
+                    $fila += 1;
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$fila.':I'.$fila)->applyFromArray(STYLETABLETITLESUB);
+                    $spreadsheet->getActiveSheet()->fromArray($titulos,null,'B'.$fila);
+                    
+                    $acumuladoTotalPS = 0;
+                    $acumuladoTotalPresupuesto = 0;
+                    $diferenciaTotal = 0;
+                    $idProy = $item['idProy'];
+                    $nombreProyecto = InformeProductoServicio::obtenerNombreProyecto($idProy);
+                    $sheet->setCellValue('A'.$fila, $idProy.'-'.$nombreProyecto);
+                    $filaPro = $fila;
+                    $fila += 1;
+                    if ($fechaInicial != null && $fechaFinal != null) {
+                        $fecha = "AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')";
+                    } else if ($historico != null) {
+                        $fecha = "";
+                    } else if ($fechaInicial == null && $fechaFinal == null && $historico == null) {
+                        $fecha = "AND (pys_solicitudes.fechSol >= '2019/01/01')";
+                    }
+                    $consulta2 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.presupuesto, pys_estadosol.nombreEstSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct
+                        FROM pys_actualizacionproy 
+                        INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idProy = pys_actualizacionproy.idProy 
+                        INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM 
+                        INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
+                        INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                        WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
+                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
+                        .$fecha.
+                        " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') AND pys_actsolicitudes.presupuesto <> '0'
+                        ORDER BY pys_actsolicitudes.idSol, pys_actsolicitudes.presupuesto;";
+                    $resultado2 = mysqli_query($connection, $consulta2);
+                    $registros2 = mysqli_num_rows($resultado2);
+                    $consulta3 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.presupuesto, pys_estadosol.nombreEstSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct
+                        FROM pys_actualizacionproy 
+                        INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idProy = pys_actualizacionproy.idProy 
+                        INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM 
+                        INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
+                        INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                        WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
+                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
+                        .$fecha.
+                        " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                        AND pys_actsolicitudes.presupuesto = '0'
+                        ORDER BY pys_actsolicitudes.idSol;";
+                    $resultado3 = mysqli_query($connection, $consulta3);
+                    $registros3 = mysqli_num_rows($resultado3);
+                    if ($registros2>0){
+                        $datos2 = mysqli_fetch_all($resultado2, MYSQLI_ASSOC);
+                        foreach($datos2 as $item2){
+                            $valorPS = 0;
+                            $salarioHor = 0;
+                            $salarioMin = 0;
+                            $idSol = $item2['idSol'];
+                            echo $consulta3 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_asignados.idSol, pys_salarios.salario
+                                        FROM pys_tiempos 
+                                        INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
+                                        INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
+                                        WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
+                                        AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1'
+                                        ORDER BY pys_asignados.idSol;";
+                            $resultado3 = mysqli_query($connection, $consulta3);
+                            $datos3 = mysqli_fetch_all($resultado3, MYSQLI_ASSOC);
+                            while ($datos3 = mysqli_fetch_array($resultado3)) {
+                                $salarioHor = $datos3['salario'];
+                                $salarioMin = $salarioHor / 60;
+                                $valorPS += (($datos3['horas'] * 60) + $datos3['minutos']) * $salarioMin;
+                            }
+                                
+                                    
+                            $acumuladoTotalPS += $valorPS;
+                            $acumuladoTotalPresupuesto += $item2['presupuesto'];
+                            $diferencia = $item2['presupuesto'] - $valorPS;
+                            if ($item2['presupuesto'] == 0 && $valorPS == 0) {
+                                # code...
+                            } else {
+                                $nombreEstSol = $item2['nombreEstSol'];
+                                $ObservacionAct = $item2['ObservacionAct'];
+                                $fechSol = $item2['fechSol'];
+                                $fechAct = $item2['fechAct'];
+                                $presupuesto = number_format($item2['presupuesto'], 2);
+                                $valor = number_format($valorPS, 2);
+                                $dif = number_format($diferencia, 2);
+                                $datos = [$idSol, $nombreEstSol, $ObservacionAct, $fechSol, $fechAct, $presupuesto, $valor, $dif ];
+                                var_dump($datos);
+                                $spreadsheet->getActiveSheet()->fromArray($datos,null,'B'.$datos); 
+                            }    
 
-?>
+                            $sheet->setCellValue('B'.$fila,'P'.$idSol);
+                            $fila +=1;
+                            $spreadsheet->getActiveSheet()->getStyle('B'.$fila.':I'.$fila)->applyFromArray(STYLEBODY);
+                            $spreadsheet->getActiveSheet()->getStyle('A'.$fila);
+                            $spreadsheet->getActiveSheet()->getStyle('I'.$fila);
+                        }
+                        $sheet->mergeCells("A".$filaPro.":A".($fila-1)); 
+                        $spreadsheet->getActiveSheet()->getStyle('A3:I'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                    } 
+                    if ($registros3>0){
+                        $datos2 = mysqli_fetch_all($resultado3, MYSQLI_ASSOC);
+                        foreach($datos2 as $item2){
+                            $valorPS = 0;
+                            $salarioHor = 0;
+                            $salarioMin = 0;
+                            $idSol = $item2['idSol'];
+                            echo $consulta3 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_asignados.idSol, pys_salarios.salario
+                                        FROM pys_tiempos 
+                                        INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
+                                        INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
+                                        WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
+                                        AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1'
+                                        ORDER BY pys_asignados.idSol;";
+                            $resultado3 = mysqli_query($connection, $consulta3);
+                            $datos3 = mysqli_fetch_all($resultado3, MYSQLI_ASSOC);
+                            while ($datos3 = mysqli_fetch_array($resultado3)) {
+                                $salarioHor = $datos3['salario'];
+                                $salarioMin = $salarioHor / 60;
+                                $valorPS += (($datos3['horas'] * 60) + $datos3['minutos']) * $salarioMin;
+                            }
+                                
+                                    
+                            $acumuladoTotalPS += $valorPS;
+                            $acumuladoTotalPresupuesto += $item2['presupuesto'];
+                            $diferencia = $item2['presupuesto'] - $valorPS;
+                            if ($item2['presupuesto'] == 0 && $valorPS == 0) {
+                                # code...
+                            } else {
+                                $nombreEstSol = $item2['nombreEstSol'];
+                                $ObservacionAct = $item2['ObservacionAct'];
+                                $fechSol = $item2['fechSol'];
+                                $fechAct = $item2['fechAct'];
+                                $presupuesto = number_format($item2['presupuesto'], 2);
+                                $valor = number_format($valorPS, 2);
+                                $dif = number_format($diferencia, 2);
+                                $sheet->setCellValue('B'.$fila, $idSol);
+                                $sheet->setCellValue('C'.$fila, $nombreEstSol);
+                                $sheet->setCellValue('D'.$fila, $ObservacionAct);
+                                $sheet->setCellValue('E'.$fila, $fechSol);
+                                $sheet->setCellValue('F'.$fila, $fechAct);
+                                $sheet->setCellValue('G'.$fila, $presupuesto);
+                                $sheet->setCellValue('H'.$fila, $valor);
+                                $sheet->setCellValue('I'.$fila, $dif);  
+                            }    
+
+                            $sheet->setCellValue('B'.$fila,'P'.$idSol);
+                            $fila +=1;
+                            $spreadsheet->getActiveSheet()->getStyle('B'.$fila.':I'.$fila)->applyFromArray(STYLEBODY);
+                            $spreadsheet->getActiveSheet()->getStyle('A'.$fila);
+                            $spreadsheet->getActiveSheet()->getStyle('I'.$fila);
+                        }
+                        $sheet->mergeCells("A".$filaPro.":A".($fila-1)); 
+                        $spreadsheet->getActiveSheet()->getStyle('A3:I'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                    } 
+
+                } 
+                
+                
+
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="InformeEjecucion-ProductosServicios.xlsx"');
+                header('Cache-Control: max-age=0');
+                header('Cache-Control: max-age=1');
+
+                header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+                header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header('Pragma: public'); // HTTP/1.0
+
+                $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit;
+            } else {
+            }
+            
+    }
+}
+    
+    ?>

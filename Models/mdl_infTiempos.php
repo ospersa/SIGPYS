@@ -1,6 +1,7 @@
 <?php
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
     Class InformeTiemposProductoServicio {
         
@@ -24,11 +25,15 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
-                return $datos = mysqli_fetch_array($resultado);
-            }
+                return $resultado;
+            } else 
+                return "<h5 class='red-text'>No se registra tiempos</h5>";
+
         }
         public static function busqueda ($fechaInicial, $fechaFinal) {
-            $datos = InformeTiemposProductoServicio::consulta($fechaInicial, $fechaFinal);
+            require('../Core/connection.php');
+            $resultado = InformeTiemposProductoServicio::consulta($fechaInicial, $fechaFinal);
+
             $tabla = '  <table class="responsive-table" border="1">
                         <thead>
                             <tr class="row-teal3">
@@ -49,7 +54,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                             </tr>
                         </thead>
                         <tbody>';
-            while($datos){
+            while($datos = mysqli_fetch_array($resultado)){
                 $equipo = $datos['nombreEqu'];
                 $servicio = $datos['nombreSer'];
                 $nombreEstado = $datos['nombreEstSol'];
@@ -123,43 +128,82 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
         }
 
         public static function descarga ($fechaInicial, $fechaFinal) {
+            require('../Core/connection.php');
             require '../php_libraries/vendor/autoload.php';
             $spreadsheet = new Spreadsheet();
+            $spreadsheet->getProperties()->setCreator('Conecta-TE')
+                ->setLastModifiedBy('Conecta-TE')
+                ->setTitle('Informe de Tiempos - Productos/Servicios')
+                ->setSubject('Informe de Tiempos - Productos/Servicios')
+                ->setDescription('Informe de Tiempos - Productos/Servicios')
+                ->setKeywords('Informe de Tiempos - Productos/Servicios')
+                ->setCategory('Test result file');
             $styleArrayTableTitle = [
-                        'font' => [
-                            'bold' => true
-                        ],
-                        'alignment' => [
-                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
-                            'textRotation' => 0, 
-                            'wrapText' => TRUE  
-                        ],
-                        'fill' => [
-                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                        'startColor' => [
-                            'argb' => '80cbc4',
-                            ]
-                        ]
-                    ];
+                'font' => [
+                    'bold' => true
+                ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+                    'textRotation' => 0, 
+                    'wrapText' => TRUE  
+                ],
+                'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => '80cbc4',
+                    ]
+                ]
+            ];
             $styleArrayTable = ['font' => [
-                        'bold' => true,
-                        'size' => '24'
-                        ],
-                        'alignment' => [
-                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                        ]
-                    ];
+                'bold' => true,
+                'size' => '24'
+                ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+                    'textRotation' => 0, 
+                    'wrapText' => TRUE  
+                ]
+            ];
             $styleArrayBorderTitle= ['allBorders'=>[
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
-                        'color' => ['rgb' => '000000' ]
-                        ]
-                    ];
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                'color' => ['rgb' => '000000' ]
+                ]
+            ];
+            $styleArrayBody= [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+                    'textRotation' => 0, 
+                    'wrapText' => TRUE  
+                ]
+            ];
+            $styleArrayBorderBody= ['allBorders'=>[
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['rgb' => '000000' ]
+                ],
+            ];
+            $styleArrayBorderBodyBottom= ['bottom'=>[
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                'color' => ['rgb' => '000000' ]
+                ]
+            ];
+            $styleArrayBorderBodyLeft= ['left'=>[
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                'color' => ['rgb' => '000000' ]
+                ]
+            ];
+            $styleArrayBorderBodyRight= ['right'=>[
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                'color' => ['rgb' => '000000' ]
+                ]
+            ];   
             /**Dimensión columnas */
-            $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(6);
+            $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(7);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(13);
             $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(45);
-            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(8);
+            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(12);
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(18);
             $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(13);
@@ -171,9 +215,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
             $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(12);
             $spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(11);
             $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setCellValue('A1', 'Informe de Tiempos - Productos/Servicios');
             $sheet->mergeCells("A1:N1"); 
             /**Titulos tabla */
-            $sheet->setCellValue('A1', 'Informe de Tiempos - Productos/Servicios');
             $sheet->setCellValue('A5', 'Frente');
             $sheet->setCellValue('B5', 'Cod. Proyecto');
             $sheet->setCellValue('C5', 'Nombre Proyecto');
@@ -190,23 +234,24 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
             $sheet->setCellValue('N5', 'Tiempo Total Invertido P/S');
             /**Aplicación de estilos */
             $spreadsheet->getActiveSheet()->getStyle('A5:N5')->applyFromArray($styleArrayTableTitle)->getBorders()->applyFromArray($styleArrayBorderTitle);
-            $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray($styleArrayTable);
-            /**Ingreso de datos tabla */
-
-            $datos = InformeTiemposProductoServicio::consulta($fechaInicial, $fechaFinal);
-            while($datos){
-                $equipo = $datos['nombreEqu'];
-                $servicio = $datos['nombreSer'];
-                $nombreEstado = $datos['nombreEstSol'];
-                $idCelula = $datos['idCelula'];
-                $idSol = $datos['idSol'];
-                $codProy = $datos['codProy'];
+            $spreadsheet->getActiveSheet()->getStyle('A1:N1')->applyFromArray($styleArrayTable);
+            $resultado = InformeTiemposProductoServicio::consulta($fechaInicial, $fechaFinal);
+            $datos = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+            $fila = 5;        
+            foreach ($datos as $item){
+                $fila += 1;
+                $equipo = $item['nombreEqu'];
+                $servicio = $item['nombreSer'];
+                $nombreEstado = $item['nombreEstSol'];
+                $idCelula = $item['idCelula'];
+                $idSol = $item['idSol'];
+                $codProy = $item['codProy'];
                 $frente = substr($codProy, 0, 2);
-                $nombreProy = $datos['nombreProy'];
-                $observacion = $datos['ObservacionAct'];
-                $fecha = date_create($datos['fechSol']);
+                $nombreProy = $item['nombreProy'];
+                $observacion = $item['ObservacionAct'];
+                $fecha = date_create($item['fechSol']);
                 $fechaCreacion = date_format($fecha, 'Y-m-d');
-                $fechaEsperada = $datos['fechPrev'];
+                $fechaEsperada = $item['fechPrev'];
                 $consulta2 = "SELECT SUM(pys_asignados.maxhora), SUM(pys_asignados.maxmin)
                     FROM pys_asignados
                     WHERE (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_asignados.idSol = '$idSol';";
@@ -245,31 +290,42 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $minutosTotalesPS = $datos5[1];
                 $totalPS = ($horasTotalesPS * 60) + $minutosTotalesPS;
                 $codProd = 'P'.$idSol;
-                $tiempoInPer = number_format(($totalInvertido / 60), 2, ",", ".");
-                $tiempoTotalDed = number_format(($totalDedicar / 60), 2, ",", ".");
-                $tiempoTotalInve = number_format(($totalPS / 60), 2, ",", ".");
-                $sheet->setCellValue('A4', 'P');
-                $sheet->setCellValue('A6', $frente);
-                $sheet->setCellValue('B6', $codProy);
-                $sheet->setCellValue('C6', $nombreProy);
-                $sheet->setCellValue('D6', $nombreCelula);
-                $sheet->setCellValue('E6', $codProd);
-                $sheet->setCellValue('F6', $nombreEstado);
-                $sheet->setCellValue('G6', $equipo);
-                $sheet->setCellValue('H6', $servicio);
-                $sheet->setCellValue('I6', $observacion);
-                $sheet->setCellValue('J6', $fechaCreacion);
-                $sheet->setCellValue('K6', $fechaEsperada);
-                $sheet->setCellValue('L6', $tiempoInPer);
-                $sheet->setCellValue('M6', $tiempoTotalDed);
-                $sheet->setCellValue('N6', $tiempoTotalInve);
+                $tiempoInPer = number_format(($totalInvertido / 60),2);
+                $tiempoTotalDed = number_format(($totalDedicar / 60),2);
+                $tiempoTotalInve = number_format(($totalPS / 60),2);
+                $sheet->setCellValue('A'.$fila, $frente);
+                $sheet->setCellValue('B'.$fila, $codProy);
+                $sheet->setCellValue('C'.$fila, $nombreProy);
+                $sheet->setCellValue('D'.$fila, $nombreCelula);
+                $sheet->setCellValue('E'.$fila, $codProd);
+                $sheet->setCellValue('F'.$fila, $nombreEstado);
+                $sheet->setCellValue('G'.$fila, $equipo);
+                $sheet->setCellValue('H'.$fila, $servicio);
+                $sheet->setCellValue('I'.$fila, $observacion);
+                $sheet->setCellValue('J'.$fila, $fechaCreacion);
+                $sheet->setCellValue('K'.$fila, $fechaEsperada);
+                $sheet->setCellValue('L'.$fila, $tiempoInPer);
+                $sheet->setCellValue('M'.$fila, $tiempoTotalDed);
+                $sheet->setCellValue('N'.$fila, $tiempoTotalInve);
+                $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->applyFromArray($styleArrayBody)->getBorders()->applyFromArray($styleArrayBorderBody);
+                $spreadsheet->getActiveSheet()->getStyle('A'.$fila)->getBorders()->applyFromArray($styleArrayBorderBodyLeft);
+                $spreadsheet->getActiveSheet()->getStyle('N'.$fila)->getBorders()->applyFromArray($styleArrayBorderBodyRight);
+            } 
+
+            $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->getBorders()->applyFromArray($styleArrayBorderBodyBottom);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="InformeTiempos-ProductosServicios.xlsx"');
+            header('Cache-Control: max-age=0');
+            header('Cache-Control: max-age=1');
+
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+            header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header('Pragma: public'); // HTTP/1.0
+
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit;
             }
-            
-            $writer = new Xlsx($spreadsheet);
-            $writer->save('hello world.xlsx');
-
         }
-
-
-    }
 ?>

@@ -23,7 +23,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 /* Verificación de envío de formulario para descarga del informe */
 if (isset($_POST['btnDescargar'])) {
     //InformeProductoServicio::informeConSaldo($idProy);
-    InformeProductoServicio::descarga($fechIni, $fechFin, $check, $proyecto);
+    InformeProductoServicio::descarga2($fechIni, $fechFin, $check, $proyecto);
 }
 
 ?>
