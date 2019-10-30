@@ -18,7 +18,7 @@ if (isset($_POST['sltAnio']) && !isset($_POST['sltMes'])) {
 if (isset($_POST['sltAnio']) && isset($_POST['sltMes']) && isset($_POST['consultar'])) {
     $anio = $_POST['sltAnio'];
     $mes = $_POST['sltMes'];
-    $selectMes = InformeNomima::descargarExcel($anio, $mes);
+    $selectMes = InformeNomima::descarga($anio, $mes);
 }
 
 if (isset($_POST['sltMes']) && !isset($_POST['sltAnio'])) {

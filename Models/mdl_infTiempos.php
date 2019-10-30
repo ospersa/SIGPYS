@@ -1,8 +1,70 @@
 <?php
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-
+require '../php_libraries/vendor/autoload.php';
+const STYLETABLETITLE = [
+    'font' => [
+        'bold' => true
+    ],
+    'alignment' => [
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+        'textRotation' => 0, 
+        'wrapText' => TRUE  
+    ],
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => '80cbc4',
+        ]
+    ]
+];
+const STYLETABLETABLE = ['font' => [
+    'bold' => true,
+    'size' => '24'
+    ],
+    'alignment' => [
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+        'textRotation' => 0, 
+        'wrapText' => TRUE  
+    ]
+];
+const STYLETABLETABLEBORDER= ['allBorders'=>[
+    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+    'color' => ['rgb' => '000000' ]
+    ]
+];
+const STYLEBODY= [
+    'alignment' => [
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+        'textRotation' => 0, 
+        'wrapText' => TRUE  
+    ]
+];
+const STYLEBODYBORDER= ['allBorders'=>[
+    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+    'color' => ['rgb' => '000000' ]
+    ],
+];
+const STYLEBODYBORDERBOTTOM= ['bottom'=>[
+    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+    'color' => ['rgb' => '000000' ]
+    ]
+];
+const STYLEBODYBORDERLEFT= ['left'=>[
+    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+    'color' => ['rgb' => '000000' ]
+    ]
+];
+const STYLEBODYBORDERRIGHT= ['right'=>[
+    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+    'color' => ['rgb' => '000000' ]
+    ]
+];
     Class InformeTiemposProductoServicio {
         
         public static function consulta($fechaInicial, $fechaFinal){
@@ -129,7 +191,6 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
         public static function descarga ($fechaInicial, $fechaFinal) {
             require('../Core/connection.php');
-            require '../php_libraries/vendor/autoload.php';
             $spreadsheet = new Spreadsheet();
             $spreadsheet->getProperties()->setCreator('Conecta-TE')
                 ->setLastModifiedBy('Conecta-TE')
@@ -138,67 +199,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
                 ->setDescription('Informe de Tiempos - Productos/Servicios')
                 ->setKeywords('Informe de Tiempos - Productos/Servicios')
                 ->setCategory('Test result file');
-            $styleArrayTableTitle = [
-                'font' => [
-                    'bold' => true
-                ],
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
-                    'textRotation' => 0, 
-                    'wrapText' => TRUE  
-                ],
-                'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => [
-                    'argb' => '80cbc4',
-                    ]
-                ]
-            ];
-            $styleArrayTable = ['font' => [
-                'bold' => true,
-                'size' => '24'
-                ],
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
-                    'textRotation' => 0, 
-                    'wrapText' => TRUE  
-                ]
-            ];
-            $styleArrayBorderTitle= ['allBorders'=>[
-                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
-                'color' => ['rgb' => '000000' ]
-                ]
-            ];
-            $styleArrayBody= [
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
-                    'textRotation' => 0, 
-                    'wrapText' => TRUE  
-                ]
-            ];
-            $styleArrayBorderBody= ['allBorders'=>[
-                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                'color' => ['rgb' => '000000' ]
-                ],
-            ];
-            $styleArrayBorderBodyBottom= ['bottom'=>[
-                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
-                'color' => ['rgb' => '000000' ]
-                ]
-            ];
-            $styleArrayBorderBodyLeft= ['left'=>[
-                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
-                'color' => ['rgb' => '000000' ]
-                ]
-            ];
-            $styleArrayBorderBodyRight= ['right'=>[
-                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
-                'color' => ['rgb' => '000000' ]
-                ]
-            ];   
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-tiempos-productos-servicios');
+            $spreadsheet->addSheet($myWorkSheet, 0);
+            $sheetIndex = $spreadsheet->getIndex($spreadsheet->getSheetByName('Worksheet'));
+            $spreadsheet->removeSheetByIndex($sheetIndex);
+            $spreadsheet->getActiveSheet()->setShowGridlines(false); 
             /**Dimensión columnas */
             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(7);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(13);
@@ -218,23 +223,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
             $sheet->setCellValue('A1', 'Informe de Tiempos - Productos/Servicios');
             $sheet->mergeCells("A1:N1"); 
             /**Titulos tabla */
-            $sheet->setCellValue('A5', 'Frente');
-            $sheet->setCellValue('B5', 'Cod. Proyecto');
-            $sheet->setCellValue('C5', 'Nombre Proyecto');
-            $sheet->setCellValue('D5', 'Célula');
-            $sheet->setCellValue('E5', 'Cod. Producto/Servicio');
-            $sheet->setCellValue('F5', 'Estado Producto/Servicio');
-            $sheet->setCellValue('G5', 'Equipo');
-            $sheet->setCellValue('H5', 'Servicio');
-            $sheet->setCellValue('I5', 'Descripción Producto/servicio');
-            $sheet->setCellValue('J5', 'Fecha Creación');
-            $sheet->setCellValue('K5', 'Fecha Estimada entrega');
-            $sheet->setCellValue('L5', 'Tiempo Invertido en el Periodo');
-            $sheet->setCellValue('M5', 'Tiempo Total a Dedicar P/S');
-            $sheet->setCellValue('N5', 'Tiempo Total Invertido P/S');
+            $titulos = ['Frente', 'Cod. Proyecto', 'Nombre Proyecto', 'Célula', 'Cod. Producto/Servicio', 'Estado Producto/Servicio', 'Equipo', 'Servicio', 'Descripción Producto/servicio', 'Fecha Creación', 'Fecha Estimada entrega', 'Tiempo Invertido en el Periodo', 'Tiempo Total a Dedicar P/S', 'Tiempo Total Invertido P/S'];
+            $spreadsheet->getActiveSheet()->fromArray($titulos,null,'A5');
             /**Aplicación de estilos */
-            $spreadsheet->getActiveSheet()->getStyle('A5:N5')->applyFromArray($styleArrayTableTitle)->getBorders()->applyFromArray($styleArrayBorderTitle);
-            $spreadsheet->getActiveSheet()->getStyle('A1:N1')->applyFromArray($styleArrayTable);
+            $spreadsheet->getActiveSheet()->getStyle('A5:N5')->applyFromArray(STYLETABLETITLE)->getBorders()->applyFromArray(STYLETABLETABLEBORDER);
+            $spreadsheet->getActiveSheet()->getStyle('A1:N1')->applyFromArray(STYLETABLETABLE);
             $resultado = InformeTiemposProductoServicio::consulta($fechaInicial, $fechaFinal);
             $datos = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
             $fila = 5;        
@@ -264,28 +257,22 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
                     AND (pys_tiempos.fechTiempo >= '$fechaInicial' AND pys_tiempos.fechTiempo <= '$fechaFinal');";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
-
                 $consulta4 = "SELECT nombreCelula FROM pys_celulas WHERE idCelula = '$idCelula';";
                 $resultado4 = mysqli_query($connection, $consulta4);
                 $datos4 = mysqli_fetch_array($resultado4);
                 $nombreCelula = $datos4['nombreCelula'];
-
                 $consulta5 = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo)
                     FROM pys_asignados
                     RIGHT JOIN pys_tiempos ON pys_tiempos.idAsig = pys_asignados.idAsig
                     WHERE (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_asignados.idSol = '$idSol' AND pys_tiempos.estTiempo = '1';";
                 $resultado5 = mysqli_query($connection, $consulta5);
                 $datos5 = mysqli_fetch_array($resultado5);
-
                 $horasDedicar = $datos2[0];
                 $minutosDedicar = $datos2[1];
                 $totalDedicar = ($horasDedicar * 60) + $minutosDedicar;
-
-
                 $horasInvertidas = $datos3[0];
                 $minutosInvertidos = $datos3[1];
                 $totalInvertido = ($horasInvertidas * 60) + $minutosInvertidos;
-
                 $horasTotalesPS = $datos5[0];
                 $minutosTotalesPS = $datos5[1];
                 $totalPS = ($horasTotalesPS * 60) + $minutosTotalesPS;
@@ -293,36 +280,21 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
                 $tiempoInPer = number_format(($totalInvertido / 60),2);
                 $tiempoTotalDed = number_format(($totalDedicar / 60),2);
                 $tiempoTotalInve = number_format(($totalPS / 60),2);
-                $sheet->setCellValue('A'.$fila, $frente);
-                $sheet->setCellValue('B'.$fila, $codProy);
-                $sheet->setCellValue('C'.$fila, $nombreProy);
-                $sheet->setCellValue('D'.$fila, $nombreCelula);
-                $sheet->setCellValue('E'.$fila, $codProd);
-                $sheet->setCellValue('F'.$fila, $nombreEstado);
-                $sheet->setCellValue('G'.$fila, $equipo);
-                $sheet->setCellValue('H'.$fila, $servicio);
-                $sheet->setCellValue('I'.$fila, $observacion);
-                $sheet->setCellValue('J'.$fila, $fechaCreacion);
-                $sheet->setCellValue('K'.$fila, $fechaEsperada);
-                $sheet->setCellValue('L'.$fila, $tiempoInPer);
-                $sheet->setCellValue('M'.$fila, $tiempoTotalDed);
-                $sheet->setCellValue('N'.$fila, $tiempoTotalInve);
-                $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->applyFromArray($styleArrayBody)->getBorders()->applyFromArray($styleArrayBorderBody);
-                $spreadsheet->getActiveSheet()->getStyle('A'.$fila)->getBorders()->applyFromArray($styleArrayBorderBodyLeft);
-                $spreadsheet->getActiveSheet()->getStyle('N'.$fila)->getBorders()->applyFromArray($styleArrayBorderBodyRight);
-            } 
-
-            $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->getBorders()->applyFromArray($styleArrayBorderBodyBottom);
+                $datos = [$frente, $codProy, $nombreProy, $nombreCelula, $codProd, $nombreEstado, $equipo, $servicio, $observacion, $fechaCreacion, $fechaEsperada, $tiempoInPer, $tiempoTotalDed, $tiempoTotalInve];
+                $spreadsheet->getActiveSheet()->fromArray($datos,null,'A'.$fila);
+                $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->applyFromArray(STYLEBODY)->getBorders()->applyFromArray(STYLEBODYBORDER);
+                $spreadsheet->getActiveSheet()->getStyle('A'.$fila)->getBorders()->applyFromArray(STYLEBODYBORDERLEFT);
+                $spreadsheet->getActiveSheet()->getStyle('N'.$fila)->getBorders()->applyFromArray(STYLEBODYBORDERRIGHT);
+            }
+            $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->getBorders()->applyFromArray(STYLEBODYBORDERBOTTOM);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="InformeTiempos-ProductosServicios.xlsx"');
             header('Cache-Control: max-age=0');
             header('Cache-Control: max-age=1');
-
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
             header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
             header('Pragma: public'); // HTTP/1.0
-
             $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->save('php://output');
             exit;
