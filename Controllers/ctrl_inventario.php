@@ -8,15 +8,15 @@ if(!isset($_SESSION)){
 /* Inicialización variables*/
 $usuario    = $_SESSION['usuario'];
 $perfil = $_SESSION['perfil'];
-$infoUser = Inventario::nombrePersona($usuario);
+$infoUser = Inventario::nombrePersona($usuario, "US");
 $nombreUser = $infoUser['apellido1']." ".$infoUser['apellido2']." ".$infoUser['nombres'];
 $idUser = $infoUser['idPersona']; 
 
-$persona        =(isset($_POST['sltPersona'])) ? $_POST['sltPersona'] : null;
-$proyecto       =(isset($_POST['sltProyecto'])) ? $_POST['sltProyecto'] : null;
-$equipo         =(isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
-$idSol          =(isset($_POST['sltProducto'])) ? $_POST['sltProducto'] : null; 
-$descrip        =(isset($_POST['txtDescrip'])) ? $_POST['txtDescrip'] : null;
+$persona        = (isset($_POST['sltPersona'])) ? $_POST['sltPersona'] : null;
+$proyecto       = (isset($_POST['sltProyecto'])) ? $_POST['sltProyecto'] : null;
+$equipo         = (isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
+$idSol          = (isset($_POST['sltProducto'])) ? $_POST['sltProducto'] : null; 
+$descrip        = (isset($_POST['txtDescrip'])) ? $_POST['txtDescrip'] : null;
 $id             = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $prep           = "";
 $crudosCarp     = (isset($_POST['txtCrudosCarp'])) ? $_POST['txtCrudosCarp'] : null;
@@ -36,7 +36,7 @@ $sopCarp        = (isset($_POST['txtSopCarp'])) ? $_POST['txtSopCarp'] : null;
 $sopPeso        = (isset($_POST['txtSopPeso'])) ? $_POST['txtSopPeso'] : null;
 $obs            = (isset($_POST['txtObs'])) ? $_POST['txtObs'] : null;
 $idPerEnt       = (isset($_POST['sltPerEnt'])) ? $_POST['sltPerEnt'] : null;
-$idPerRec       = (isset($_POST['sltPerRec'])) ? $_POST['sltPerRec'] : null;
+$idPerRec       = (isset($_POST['sltPerEnt'])) ? $_POST['sltPerEnt'] : null;
 $estadoInv      = (isset($_POST['sltEstadoInv'])) ? $_POST['sltEstadoInv'] : null;
 $cod            = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
 
@@ -52,9 +52,9 @@ if (isset($_POST['persona'])) {
 } else if (isset($_POST['proyecto'])) {
     $busqueda = $_POST['proyecto'];
     Inventario::selectProyecto($busqueda);
-} 
+} else 
 
-if ($id != null){
+if ($id != null && (! isset($_POST['persona']))){
     $prep  = substr($id, 0, 3);
     $id    = substr($id, 3);
     $infoAsig = Inventario::OnLoadAsignados($id); 

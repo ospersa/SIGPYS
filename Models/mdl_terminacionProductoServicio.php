@@ -183,7 +183,6 @@
                     $tipo       = (empty($datos1['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreTProd'].' </p>' ;
                     $url        = (empty($datos1['urlservidor'])) ? $vacio : '<p class="left-align">'.$datos1['urlservidor'].' </p>' ;
                     $labor      = (empty($datos1['observacionesProd'])) ? $vacio : '<p class="left-align">'.$datos1['observacionesProd'].' </p>' ;
-                    $urlY       = (empty($datos1['urlyoutubeOficial'])) ? $vacio : '<p class="left-align">'.$datos1['urlyoutubeOficial'].' </p>' ;
                     $urlVimeo   = (empty($datos1['urlVimeo'])) ? $vacio : '<p class="left-align">'.$datos1['urlVimeo'].' </p>' ;
                     $minDura    = (empty($datos1['duracionmin']) && empty($datos1['duracionseg']) ) ? $vacio : '<p class="left-align">'.$datos1['duracionmin'].' m '.$datos1['duracionseg'].' s </p>' ;
                     $sinopsis   = (empty($datos1['sinopsis'])) ? $vacio : '<p class="left-align">'.$datos1['sinopsis'].' </p>' ;

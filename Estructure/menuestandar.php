@@ -70,13 +70,13 @@
         <div class="divider"></div>
     </li>
     
+    <!--
     <li>
         <a href="inventario.php" >Inventario</a>
     </li>
     <li>
         <div class="divider"></div>
     </li>
-        <!--
     <li>
         <a class="dropdown-trigger" href="#!" data-target="nuevo">Nuevo
             <i class="material-icons right">arrow_drop_down</i>

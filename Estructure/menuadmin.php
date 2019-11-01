@@ -184,6 +184,9 @@
         <a href="infPlaneacion.php">Planeación</a>
     </li>
     <li>
+        <a href="infInventario.php">Inventario</a>
+    </li>
+    <li>
         <a href="infProductosConSaldo.php">Productos/Servicios - Ejecución</a>
     </li>
     <li>

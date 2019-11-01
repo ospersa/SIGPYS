@@ -392,15 +392,15 @@ Class InformeNomima {
                     while ($datos2 = mysqli_fetch_array($resultado2)) {
                         $totalMinutos = ($datos2[0] * 60) + $datos2[1]; // Total de minutos registrados en el periodo correspondiente
                         $minutosPeriodo = $hrsPeriodo * 60; // Total de minutos a trabajar en un periodo (160 horas)
-                        $porcentaje = ($totalMinutos / $minutosPeriodo) * 100;
+                        $porcentaje = ($totalMinutos / $minutosPeriodo);
                         $porcentajeAcum += $porcentaje;
-                        array_push($informacion,round($porcentaje, 0));
+                        array_push($informacion, $porcentaje);
                     }
                     //
                 }
                 $promedio = ($porcentajeAcum/$mes);
                 $totalHoras = $totalMinutos / 60;
-                array_push($informacion,round($promedio, 0));
+                array_push($informacion,$promedio);
                 array_push($informacion,number_format($totalHoras, 2));
                 $spreadsheet->getActiveSheet()->fromArray($informacion,null,'A'.$fila);
                 $fila += 1;
@@ -413,22 +413,29 @@ Class InformeNomima {
             $spreadsheet->getActiveSheet()->getStyle('A3:'.chr($col).'3')->applyFromArray(STYLETABLETITLE);    
             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(4);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(7);
-            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(10);
-            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(70);
+            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(67);
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(14);
             $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(7);
             $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(33);
             $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(10);
-            $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(13);
+            $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(10);
             $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(9);
             $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(19);
-            $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+            $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(33);
             $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(7);
+            for ($i = 13; $i< count($informacion)-2; $i++ ){
+                $spreadsheet->getActiveSheet()->getColumnDimension(chr($i+65))->setWidth(6);
+            }
+            $spreadsheet->getActiveSheet()->getColumnDimension(chr($col-1))->setWidth(13);
+            $spreadsheet->getActiveSheet()->getColumnDimension(chr($col))->setWidth(13);
             $spreadsheet->getActiveSheet()->getStyle('A3:'.chr($col).($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+            $spreadsheet->getActiveSheet()->getStyle('N2:'.chr($col-1).$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE);
+                                
         }
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="InformeNomina.xlsx"');
+        header('Content-Disposition: attachment;filename="InformeNomina '.gmdate(' d M Y ').'.xlsx"');
         header('Cache-Control: max-age=0');
         header('Cache-Control: max-age=1');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

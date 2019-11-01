@@ -97,6 +97,7 @@ const STYLEBODY = ['font' => [
         'wrapText' => TRUE  
     ]
 ];
+
 Class InformeProductosCelulas {
 
     public static function busqueda ($celula, $proyecto) {
@@ -487,7 +488,7 @@ Class InformeProductosCelulas {
             $spreadsheet->getActiveSheet()->getStyle('A3:I'.($filas-1))->getBorders()->applyFromArray(STYLEBORDER);
         }
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="InformeProductosServicios-Celulas.xlsx"');
+        header('Content-Disposition: attachment;filename="InformeProductosServicios-Celulas '.gmdate(' d M Y ').'.xlsx"');
         header('Cache-Control: max-age=0');
         header('Cache-Control: max-age=1');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

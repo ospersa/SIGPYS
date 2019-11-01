@@ -352,10 +352,11 @@
                     $idPerRec    = $datos['idPersonaRecibe'];
                     $estadoInv   = $datos['estadoInv'];
                     $fechaACt    = $datos['fechaActInventario'];
-                    
+                    $personaEnt = Inventario::nombrePersona($idPerEnt,'ID');
+                    $personaRec = Inventario::nombrePersona($idPerRec,'ID');
                     $string .='<td>'.$estadoInv.'</td>  
-                    <td>'.$idPerEnt.'</td>  
-                    <td>'.$idPerRec.'</td>  
+                    <td>'.$personaEnt['apellido1']." ".$personaEnt['apellido2']." ".$personaEnt['nombres'].'</td>  
+                    <td>'.$personaRec['apellido1']." ".$personaRec['apellido2']." ".$personaRec['nombres'].'</td>  
                     <td>'.$obs.'</td>
                     <td>'.$rutSer.'</td>  
                     <td>'.$fechaACt.'</td>  
@@ -407,13 +408,19 @@
         }
 
 
-        public static function nombrePersona($user){
+        public static function nombrePersona($user,$tipo){
             require('../Core/connection.php');
             $string ='';
             $consulta = "SELECT pys_personas.idPersona, apellido1, apellido2, nombres
             FROM pys_personas
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
-            WHERE pys_personas.est = '1' AND pys_login.est = '1' AND pys_login.usrLogin = '$user' ";
+            WHERE pys_personas.est = '1' AND pys_login.est = '1' ";
+            if ($tipo == "US") {
+                $where = "AND pys_login.usrLogin = '$user' ";
+            } else if ($tipo == "ID"){
+                $where = "AND pys_personas.idPersona = '$user' ";
+            }
+            $consulta .=$where;
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             return $datos;
