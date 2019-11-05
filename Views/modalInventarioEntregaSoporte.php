@@ -84,9 +84,12 @@
                 <label for="txtObs" class="active">Observaciones</label>
             </div>
                         
-        <div class="input-field col l6 m12 s12 offset-l3 ">
-            <button class="btn waves-effect waves-light" type="submit" name="btnGuaInv">Guardar</button>
-        </div>
+            <?php if ($perfil == 'PERF01' || $perfil == 'PERF02'){
+                    echo'<div class="input-field col l6 m12 s12 offset-l3 ">
+                    <button class="btn waves-effect waves-light" type="submit" name="btnGuaInv">Guardar</button>
+                </div>';
+                } 
+            ?>
     </form>
     </div>
     <div id="test2" class="col s12 tab-container">

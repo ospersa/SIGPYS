@@ -42,6 +42,7 @@
                                         <th>Proyecto</th>
                                         <th>Equipo -- Servicio</th>
                                         <th>Descripción Producto</th>
+                                        <th>Nombre Producto</th>
                                         <th>Asignados</th>
                                         <th>Estado inventario</th>
                                         <th>Completar inventario</th>
@@ -68,6 +69,17 @@
                     } else {
                         $estado = 'Sin inventario';
                     }
+                    if ($estado == "Terminado"){
+                        $color = "teal";
+                    } else {
+                        $color = "red";
+                    }
+                    $consultaProd = "SELECT pys_actproductos.nombreProd FROM pys_actproductos 
+                    INNER JOIN pys_productos ON pys_actproductos.idProd = pys_productos.idProd
+                    INNER JOIN pys_actsolicitudes ON pys_productos.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est = 1 AND pys_actproductos.est =1 AND pys_productos.est =1 AND pys_actsolicitudes.idSol = '$idSol'";
+                    $resultadoProd = mysqli_query($connection, $consultaProd);
+                    $datosP = mysqli_fetch_array($resultadoProd);
                     $string .= '    <tr>
                                         <td>'.$datos['idSolIni'].'</td>
                                         <td>P'.$datos['idSol'].'</td>
@@ -75,14 +87,16 @@
                                         <td>'.$datos['nombreProy'].'</td>
                                         <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
+                                        <td>'.$datosP['nombreProd'].'</td>
                                         <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Personas Asignadas" onclick="envioData(\'ASI'.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">group</i></a></td>
                                         <td>'.$estado.'</td>
-                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Entrega de inventario" onclick="envioData(\''.$modal.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">description</i></a></td>
+                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Entrega de inventario" onclick="envioData(\''.$modal.$idSol.'\',\'modalInventario.php\');"><i class="material-icons '.$color.'-text">description</i></a></td>
                                     </tr>';
                 }
                 $string .= '    </tbody>
                             </table>';
-            }
+            } 
+
             echo $string;
             mysqli_close($connection);
         }
@@ -91,6 +105,7 @@
             require('../Core/connection.php');
             $modal = "";
             $string = "";
+            $color = "";
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct 
             FROM pys_actsolicitudes
             INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
@@ -101,7 +116,7 @@
             INNER JOIN pys_asignados on pys_actsolicitudes.idSol = pys_asignados.idSol
             INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
-            WHERE pys_solicitudes.est = 1 AND pys_actualizacionproy.est = 1 AND pys_servicios.est = 1 AND pys_servicios.productoOservicio = 'SI' AND pys_equipos.est = 1 AND pys_actsolicitudes.est = 1 AND pys_actsolicitudes.idEstSol = 'ESS006' AND pys_asignados.est = 2 AND pys_personas.est = 1 AND pys_login.est = 1 AND pys_login.usrLogin ='$usuario'";
+            WHERE pys_solicitudes.est = 1 AND pys_actualizacionproy.est = 1 AND pys_servicios.est = 1 AND pys_servicios.productoOservicio = 'SI' AND pys_equipos.est = 1 AND pys_actsolicitudes.est = 1 AND pys_actsolicitudes.idEstSol = 'ESS006' AND pys_personas.est = 1  AND pys_asignados.est = 2 AND pys_login.est = 1 AND pys_login.usrLogin ='$usuario'";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
@@ -109,11 +124,12 @@
                                 <thead>
                                     <tr>
                                         <th>Código solicitud</th>
-                                        <th>Producto/Servicio</th>
+                                        <th>Producto</th>
                                         <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
                                         <th>Equipo -- Servicio</th>
-                                        <th>Descripción Producto/Servicio</th>
+                                        <th>Descripción Producto</th>
+                                        <th>Nombre Producto</th>
                                         <th>Asignados</th>
                                         <th>Estado inventario</th>
                                         <th>Completar inventario</th>
@@ -123,7 +139,8 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
                     require('../Core/connection.php');
-                    $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
+                    $consultaE = "SELECT idEqu FROM pys_actsolicitudes 
+                    INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer WHERE idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
                     $resultadoE = mysqli_query($connection, $consultaE);
                     $datosE = mysqli_fetch_array($resultadoE);
                     $equipo = $datosE['idEqu'];
@@ -140,6 +157,17 @@
                     } else {
                         $estado = 'Sin inventario';
                     }
+                    if ($estado == "Terminado"){
+                        $color = "teal";
+                    } else {
+                        $color = "red";
+                    }
+                    $consultaProd = "SELECT pys_actproductos.nombreProd FROM `pys_actproductos` 
+                    INNER JOIN pys_productos ON pys_actproductos.idProd = pys_productos.idProd
+                    INNER JOIN pys_actsolicitudes ON pys_productos.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est = 1 AND pys_actproductos.est =1 AND pys_productos.est =1 AND pys_actsolicitudes.idSol = '$idSol'";
+                    $resultadoProd = mysqli_query($connection, $consultaProd);
+                    $datosP = mysqli_fetch_array($resultadoProd);
                     $string .= '    <tr>
                                         <td>'.$datos['idSolIni'].'</td>
                                         <td>P'.$datos['idSol'].'</td>
@@ -147,9 +175,10 @@
                                         <td>'.$datos['nombreProy'].'</td>
                                         <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
+                                        <td>'.$datosP['nombreProd'].'</td>
                                         <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Personas Asignadas" onclick="envioData(\'ASI'.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">group</i></a></td>
                                         <td>'.$estado.'</td>
-                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Entrega de inventario" onclick="envioData(\''.$modal.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">description</i></a></td>
+                                        <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Entrega de inventario" onclick="envioData(\''.$modal.$idSol.'\',\'modalInventario.php\');"><i class="material-icons '.$color.'-text">description</i></a></td>
                                     </tr>';
                 }
                 $string .= '    </tbody>
@@ -218,6 +247,7 @@
 
         public static function ingresarInventario ($id,$crudoCarp, $crudoPeso, $proyectoCarp, $proyectoPeso, $finalCarp, $finalPeso, $recursoCarp, $recursoPeso, $documCarp, $documPeso, $rutaServidor, $diseñoCarp, $diseñoPeso,$soporteCarp, $soportePeso, $bservaciones, $idPerEnt, $idPerRec, $estadoInv){
             require('../Core/connection.php');
+            $validacion = 0;
             $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$id."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
             $resultadoE = mysqli_query($connection, $consultaE);
             $datos2 = mysqli_fetch_array($resultadoE);
@@ -239,16 +269,34 @@
             }
             $consulta = "";
             $consulta2 = "";
+            if($estadoInv != "Terminado"){
+                $validacion = 1;
+            } else if ($idPerRec != null && $idPerEnt != null && $bservaciones != null && $rutaServidor != null && $idProd!= null){
 
-            if ($equipo == 'EQU001'){//realizar
+                if ($equipo == 'EQU001' && $crudoCarp != null && $crudoPeso != null && $proyectoCarp != null && $proyectoPeso != null && $finalCarp != null && $finalPeso != null && $recursoCarp != null && $recursoPeso != null && $documCarp != null && $documPeso !=null ){//realizar
+                    $validacion =1;
+                }else if($equipo == 'EQU002' && $diseñoCarp!= null && $diseñoPeso != null ){//diseño
+                    $validacion =1;
+                    
+                }else if($equipo == 'EQU003'&& $soporteCarp != null && $soportePeso != null){//Soporte
+                    $validacion = 1;
+                }
+            } else {
+                $validacion = 0;
+            }
+
+            if ($equipo == 'EQU001' && $validacion == 1){//realizar
                 $consulta = "INSERT INTO pys_inventario VALUES ($idInv,'$idProd','$estadoInv', '$crudoCarp', '$crudoPeso', '$proyectoCarp', '$proyectoPeso', '$finalCarp', '$finalPeso', '$recursoCarp', '$recursoPeso', '$documCarp', '$documPeso','', '','', '','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
                 $consulta2 = "INSERT INTO pys_actinventario VALUES (null, '$idInv','$idProd','$estadoInv', '$crudoCarp', '$crudoPeso', '$proyectoCarp', '$proyectoPeso', '$finalCarp', '$finalPeso', '$recursoCarp', '$recursoPeso', '$documCarp', '$documPeso','', '','', '','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
-            }else if($equipo == 'EQU002'){//diseño
+            }else if($equipo == 'EQU002' && $validacion == 1){//diseño
                 $consulta = "INSERT INTO pys_inventario VALUES ($idInv,'$idProd','$estadoInv', '', '', '', '', '', '', '', '', '', '','$diseñoCarp', '$diseñoPeso','', '','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)"; 
                 $consulta2 = "INSERT INTO pys_actinventario VALUES (null,$idInv,'$idProd','$estadoInv', '', '', '', '', '', '', '', '', '', '','$diseñoCarp', '$diseñoPeso','', '','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
-            }else if($equipo == 'EQU003'){//Soporte
+            }else if($equipo == 'EQU003' && $validacion == 1){//Soporte
                 $consulta = "INSERT INTO pys_inventario VALUES ('$idInv','$idProd','$estadoInv', '', '', '', '', '', '', '', '', '', '','', '','$soporteCarp', '$soportePeso','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
-                $consulta2 = "INSERT INTO pys_actinventario VALUES (null,$idInv','$idProd','$estadoInv', '', '', '', '', '', '', '', '', '', '','', '','$soporteCarp', '$soportePeso','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
+                $consulta2 = "INSERT INTO pys_actinventario VALUES (null,$idInv','$idProd','$estadoInv', '', '', '', '', '', '', '', '', '', '','', '','$soporteCarp', '$soportePeso','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";   
+            } else if($validacion == 0) {
+                echo '<script>alert("Se presentó un error y el registro inventario no puede ser guardado con estado terminado.")</script>';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
                 
             }
             $consulta. $consulta2;
@@ -292,17 +340,43 @@
             $datosI = mysqli_fetch_array($resultadoI);
             $idInv =  $datosI['idInventario'];
             $idProd = $datosI['idProd'];
-            $consulta = "UPDATE pys_actinventario SET est = 2 WHERE idInventario = $idInv AND est=1;";
-            $consulta1 = "INSERT INTO pys_actinventario VALUES (null,$idInv,'$idProd','$estadoInv', '$crudoCarp', '$crudoPeso', '$proyectoCarp', '$proyectoPeso', '$finalCarp', '$finalPeso', '$recursoCarp', '$recursoPeso', '$documCarp', '$documPeso','$diseñoCarp', '$diseñoPeso','$soporteCarp', '$soportePeso','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
-            $resultado = mysqli_query($connection, $consulta);
-            $resultado1 = mysqli_query($connection, $consulta1);
-            if ($resultado && $resultado1){
-                echo '<script>alert("Se actualizó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+            $validacion = 0;
+            $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$id."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
+            $resultadoE = mysqli_query($connection, $consultaE);
+            $datos2 = mysqli_fetch_array($resultadoE);
+            $equipo = $datos2['idEqu'];
+            if($estadoInv != "Terminado"){
+                $validacion = 1;
+            } else if ($idPerRec != null && $idPerEnt != null && $bservaciones != null && $rutaServidor != null && $idProd!= null){
+
+                if ($equipo == 'EQU001' && $crudoCarp != null && $crudoPeso != null && $proyectoCarp != null && $proyectoPeso != null && $finalCarp != null && $finalPeso != null && $recursoCarp != null && $recursoPeso != null && $documCarp != null && $documPeso !=null ){//realizar
+                    $validacion =1;
+                }else if($equipo == 'EQU002' && $diseñoCarp!= null && $diseñoPeso != null ){//diseño
+                    $validacion =1;
+                    
+                }else if($equipo == 'EQU003'&& $soporteCarp != null && $soportePeso != null){//Soporte
+                    $validacion = 1;
+                }
             } else {
-                echo '<script>alert("Se actualizó un error y el registro no pudo ser guardado.")</script>';
+                $validacion = 0;
+            }
+            if ($validacion == 1){
+                $consulta = "UPDATE pys_actinventario SET est = 2 WHERE idInventario = $idInv AND est=1;";
+                $consulta1 = "INSERT INTO pys_actinventario VALUES (null,$idInv,'$idProd','$estadoInv', '$crudoCarp', '$crudoPeso', '$proyectoCarp', '$proyectoPeso', '$finalCarp', '$finalPeso', '$recursoCarp', '$recursoPeso', '$documCarp', '$documPeso','$diseñoCarp', '$diseñoPeso','$soporteCarp', '$soportePeso','$idPerRec','$idPerEnt', '$bservaciones', '$rutaServidor',now(),1)";
+                $resultado = mysqli_query($connection, $consulta);
+                $resultado1 = mysqli_query($connection, $consulta1);
+                if ($resultado && $resultado1){
+                    echo '<script>alert("Se actualizó correctamente la información.")</script>';
+                    echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+                } else {
+                    echo '<script>alert("Ha ocurrido un error y el registro no pudo ser guardado.")</script>';
+                    echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+                }
+            } else {
+                echo '<script>alert("Se presentó un error y el registro inventario no puede ser guardado con estado terminado. Verifique que todos los campos esten dijilenciados")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
+
         }
         
         public static function tablaActualizaciones($idSol){

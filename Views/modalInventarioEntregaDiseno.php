@@ -82,10 +82,15 @@
                     <textarea id="txtObs" name="txtObs" class="materialize-textarea"><?php echo $obs;?></textarea>
                     <label for="txtObs" class="active">Observaciones</label>
                 </div>
-
-                <div class="input-field col l6 m12 s12 offset-l3 ">
+                <?php if ($perfil == 'PERF01' || $perfil == 'PERF02'){
+                    echo' 
+                    <div class="input-field col l6 m12 s12 offset-l3 ">
                     <button class="btn waves-effect waves-light" type="submit" name="btnGuaInv">Guardar</button>
-                </div>
+                </div>';
+                }
+                
+                ?>
+
         </form>
     </div>
     <div id="test2" class="col s12 tab-container">

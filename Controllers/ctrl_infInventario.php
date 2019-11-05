@@ -14,7 +14,7 @@ if (isset($_POST['proyecto'])) {
     $busqueda = $_POST['proyecto'];
     Inventario::selectProyecto($busqueda);
 } 
- if (($proyecto || $fechIni || $fechFin || $persona || $sltEstadoInv) != null) {
+ if (isset($_POST['sltProyecto']) ||isset($_POST['fechIni']) || isset($_POST['fechFin']) || isset($_POST['sltPersona']) || isset($_POST['sltEstadoInv']))  {
     echo InformeInventario::busqueda($persona, $proyecto, $fechIni,$fechFin, $sltEstadoInv);
 
 } else if (isset($_POST['btnDescargar'])) {

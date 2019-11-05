@@ -124,7 +124,7 @@ const STYLEBODY = ['font' => [
             } if ($estado != null){
                 $where .= "AND pys_actinventario.estadoInv = '$estado' ";
             }   
-            $consulta .= $where;
+            echo $consulta .= $where;
             $resultado = mysqli_query($connection, $consulta);
             mysqli_close($connection);
             return $resultado;            
@@ -132,8 +132,9 @@ const STYLEBODY = ['font' => [
         
         public static function busqueda ($persona, $proyecto, $fechaini, $fechafin, $estado) {
             require('../Core/connection.php');
+            $string = "";
             $resultado = InformeInventario::consulta($persona, $proyecto, $fechaini, $fechafin, $estado); 
-            $registros = mysqli_num_rows($resultado);
+            echo $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
             
                 $string = '     <table class="responsive-table" border="1">
@@ -173,6 +174,9 @@ const STYLEBODY = ['font' => [
                     }
                     $string .= '    </tbody>
                                 </table>';
+            }
+            else {
+                $string = "<h4>No hay resultados</h4>";
             }
             return $string;
             mysqli_close($connection);
