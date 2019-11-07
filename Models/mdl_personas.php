@@ -161,6 +161,25 @@ class Personas {
         mysqli_close($connection);
     }
 
+    public static function selectPersonas2($idPeriodo){
+        require('../Core/connection.php');
+        $consulta = "SELECT idPersona, apellido1, apellido2, nombres
+            FROM (dbpys.pys_dedicaciones 
+            INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            WHERE periodo_IdPeriodo = '$idPeriodo' AND estadoDedicacion = '1' AND totalHoras != '0';";
+        $resultado = mysqli_query($connection, $consulta);
+        $string ='  <select name="sltPersona" class="inactivate" searchable="Ingrese un término de búsqueda" id="sltPersona">
+                    <option value="">Seleccionar</option>
+        ';
+        while ($datos = mysqli_fetch_array($resultado)) {
+            $string .= '  <option value="'.$datos['idPersona'].'">'.$datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'].'</option>';
+        }
+        $string .= '  </select>
+                <label for="sltPersona">Persona</label>';
+        return $string;
+        mysqli_close($connection);
+    }
+
     public static function selectPersonasPlaneacion($idPeriodo){
         require('../Core/connection.php');
         $consulta = "SELECT idPersona, apellido1, apellido2, nombres

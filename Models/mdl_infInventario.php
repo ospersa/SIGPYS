@@ -124,7 +124,7 @@ const STYLEBODY = ['font' => [
             } if ($estado != null){
                 $where .= "AND pys_actinventario.estadoInv = '$estado' ";
             }   
-            echo $consulta .= $where;
+            $consulta .= $where;
             $resultado = mysqli_query($connection, $consulta);
             mysqli_close($connection);
             return $resultado;            
@@ -134,7 +134,7 @@ const STYLEBODY = ['font' => [
             require('../Core/connection.php');
             $string = "";
             $resultado = InformeInventario::consulta($persona, $proyecto, $fechaini, $fechafin, $estado); 
-            echo $registros = mysqli_num_rows($resultado);
+            $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
             
                 $string = '     <table class="responsive-table" border="1">
@@ -225,7 +225,6 @@ const STYLEBODY = ['font' => [
                 $fila = 4;
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
-                    require('../Core/connection.php');
                     $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
                     $resultadoE = mysqli_query($connection, $consultaE);
                     $datosE = mysqli_fetch_array($resultadoE);
@@ -241,7 +240,7 @@ const STYLEBODY = ['font' => [
                 $spreadsheet->getActiveSheet()->getStyle('A3:J'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Informe de Inventario '.gmdate(' d M Y ').'.xlsx"');
+                header('Content-Disposition: attachment;filename="Informe de Inventario.xlsx"');
                 header('Cache-Control: max-age=0');
                 header('Cache-Control: max-age=1');
                 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

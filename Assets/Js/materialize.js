@@ -11785,6 +11785,32 @@ $jscomp.polyfill = function (e, r, p, m) {
         this.dropdownOptions.id = "select-options-" + M.guid();
         $(this.dropdownOptions).addClass('dropdown-content select-dropdown ' + (this.isMultiple ? 'multiple-select-dropdown' : ''));
 
+        //Added to search
+        var searchable = this.el.getAttribute('searchable') ? true : false;
+        if (searchable) {
+          this.options.dropdownOptions.autoFocus = false; 
+          var placeholder = this.el.getAttribute('searchable');
+          //var element = $('<span><input type="text" class="dropDownsearch" style="margin: 5px 0px 16px 15px; width: 90%;" placeholder="' + placeholder + '"></span>');
+          var element = $('<span class="col s12"><i class="material-icons prefix teal-text">search</i><input id="icon_prefix" type="text" placeholder="'+placeholder+'" class="dropDownsearch"></span>')
+          $(this.dropdownOptions).append(element);
+          element.on('keyup', function(event){
+            applySeachInList();
+          }); 
+          var applySeachInList = () => {
+            var searchVlaue= event.target.value.toLowerCase();
+            $(this.dropdownOptions).find('li').each((item) =>{
+                var current = $(item);
+                var liValue = current.text().toLowerCase();
+                if (liValue.indexOf(searchVlaue) === -1) {
+                  current.css({ display: 'none' });
+                } else {
+                  current.css({ display: 'block' });
+                }
+            });
+            this.dropdown.recalculateDimensions();
+          }
+        }
+
         // Create dropdown structure.
         if (this.$selectOptions.length) {
           this.$selectOptions.each(function (el) {

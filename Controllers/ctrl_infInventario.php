@@ -17,7 +17,8 @@ if (isset($_POST['proyecto'])) {
  if (isset($_POST['sltProyecto']) ||isset($_POST['fechIni']) || isset($_POST['fechFin']) || isset($_POST['sltPersona']) || isset($_POST['sltEstadoInv']))  {
     echo InformeInventario::busqueda($persona, $proyecto, $fechIni,$fechFin, $sltEstadoInv);
 
-} else if (isset($_POST['btnDescargar'])) {
+}
+if (isset($_POST['btnDescargar'])) {
     echo InformeInventario::descarga($persona, $proyecto, $fechIni,$fechFin, $sltEstadoInv);
 
 }

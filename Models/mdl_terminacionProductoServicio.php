@@ -403,7 +403,7 @@
             $est= $datos ['est'];
             echo $consulta1 = "UPDATE pys_actsolicitudes SET est=2 WHERE idSol='$idSol' AND est=1; ";
             $resultado1 = mysqli_query($connection, $consulta1);
-            echo $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL,'ESS006', '$idSol','$idCM', '$idSer', '$idPersona', '$idSolicitante', '$fechPrev', '$fechAct', '$ObservacionAct', $presupuesto, '$horas', '$est')";
+            echo $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL,'ESS006', '$idSol','$idCM', '$idSer', '$idPersona', '$idSolicitante', '$fechPrev', now(), '$ObservacionAct', $presupuesto, '$horas', '$est')";
             $resultado2 = mysqli_query($connection, $consulta2);
             mysqli_close($connection);
             if ($resultado && $resultado1 && $resultado2){

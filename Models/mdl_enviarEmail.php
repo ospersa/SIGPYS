@@ -101,15 +101,15 @@ use PHPMailer\PHPMailer\Exception;
                 //Server settings
                 $mail->SMTPDebug = 2;                      
                 $mail->isSMTP();                                            
-                $mail->Host       = 'smtp.office365.com';                    
+                $mail->Host       = 'smtp.office';                    
                 $mail->SMTPAuth   = true;                                   
-                $mail->Username   = 'apoyoconectate@uniandes.edu.co';       
+                $mail->Username   = 'apoyoconectedu.co';       
                 $mail->Password   = 'ceintic13';                            
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
                 $mail->Port       = 587;                                    
 
                 //Recipients
-                $mail->setFrom('apoyoconectate@uniandes.edu.co', 'Conecta-Te');
+                $mail->setFrom('apoyoconecto', 'Conecta-Te');
                 $mail->addAddress($solicitante, ''); 
                 $mail->addCC('apoyoconectate@uniandes.edu.co');
                 foreach($arrayccEmail as $item) {
