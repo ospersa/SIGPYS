@@ -478,3 +478,11 @@ td {
     }
         
 }
+.btnmas{
+    display: flex;
+    justify-content: space-between !important;
+
+    span{
+        align-self: flex-end;
+    }
+}

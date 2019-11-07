@@ -35,54 +35,8 @@ include_once('../Controllers/ctrl_agenda.php');
                 </div>
             </div>
         </div>
-
         <div class="col l5 m5 s12 offset-l1 offset-m1">
-            <div class="card">
-                <div class="card-content">
-                    <div class="row">
-                        <ul class="collapsible">
-                            <li>
-                                <div class="collapsible-header">Registrar Planeación</div>
-                                <div class="collapsible-body">
-                                    <div class="row">
-                                        <form action="../Controllers/ctrl_agenda.php" method="post"
-                                            class="col l12 m12 s12">
-                                            <div class="input-field">               
-                                                <?php echo $selectProyecto;?>
-                                                <div id="div_produc" class="col l10 m10 s12 ">
-                                                <?php
-                                                include_once('../Controllers/ctrl_agenda.php');
-                                                ?>
-                                        </div>
-                                            </div>
-
-                                            <button id="btn-pass" class="btn waves-effect waves-light" type="submit"
-                                                name="btnGuardar">Guardar</button>
-
-                                        </form>
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li>
-                                <div class="collapsible-header">Planeación Registrada</div>
-                                <div class="collapsible-body">
-                                        <div id="div_dinamico" class="col l10 m10 s12 ">
-                                            <h6><strong> Nombre del Proyecto:</strong></h6>
-                                            <hr>
-                                            <?php
-                        //include_once('../Controllers/ctrl_agenda.php');
-                        ?>
-                                        </div>
-                                </div>
-                            </li>
-                        </ul>
-
-
-                    </div>
-
-                </div>
-            </div>
+            <div class="row" id="div_dinamico" ></div>
         </div>
     </div>
 </div>

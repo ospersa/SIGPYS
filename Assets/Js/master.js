@@ -585,8 +585,11 @@ function pruebas(url) {
     });
 }
 
-function periodo(fecha, url) {
-    var idper =$('#sltPersona').val()
+$('.fechPer').click(function(e){
+    let elem = $(this)
+    let fecha = elem.find('h6').text();
+    let url = '../Controllers/ctrl_agenda.php';
+    let idper =$('#sltPersona').val()
     $.ajax({
         type: "POST",
         url: url,
@@ -596,12 +599,35 @@ function periodo(fecha, url) {
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
+            $.each($('.fechPer'), function(){
+                $(this).removeClass('red').addClass('teal');
+            });
+            elem.removeClass('teal').addClass('red');
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
+            inicializarCampos();
         }
     });
-    return false;
-}
+});
+
+function duplicarDiv(){
+    let elem = $(this);
+    let form =$('#proyAgend');
+    let cont =form.find('.conteo').length +1;
+    let url = '../Controllers/ctrl_agenda.php';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            cantidad : cont
+        },
+        success: function (data) {
+            console.log(data);
+            form.append(data);
+            inicializarCampos();
+        }
+    });
+}; 
 
 function cargaSolicitudesProy(elem1, dir, destino) {
     $.ajax({
