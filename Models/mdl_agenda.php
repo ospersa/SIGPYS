@@ -138,7 +138,7 @@ class  PlaneacionAse{
         mysqli_close($connection);
     }
 
-    public static function selectSolUsuario ($user, $proyecto){
+    public static function selectSolUsuario ($user, $proyecto,$periodo){
         require('../Core/connection.php');
         $string = "";
         $consulta = "SELECT pys_actsolicitudes.idSol, pys_solicitudes.descripcionSol FROM pys_solicitudes 
@@ -147,14 +147,19 @@ class  PlaneacionAse{
         INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
         INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
         INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
-        INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-        WHERE pys_solicitudes.idTSol = 'TSOL02' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005') AND pys_solicitudes.est = 1 AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto'";
+        INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
+        WHERE pys_solicitudes.idTSol = 'TSOL02' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005') AND pys_solicitudes.est = 1 AND pys_asignados.est = 1 AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto' ";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             while ($datos = mysqli_fetch_array($resultado)) {
                 $idSol = $datos['idSol'];
+                $descripcionSol = $datos['descripcionSol'];
+                $hDispo =PlaneacionAse::horasDisponibles($idSol, $user, $periodo);
+                if ($hDispo ==0){
+                    $hDispo ='0';
+                }
             $string .= '
-            <div class="input-field col l3 m3 s12 ">
+            <div class="input-field col l2 m2 s12 ">
                 <p>
                 <label>
                     <input type="checkbox" class="filled-in" name ="idSol[]" value ='.$idSol.'>
@@ -162,13 +167,25 @@ class  PlaneacionAse{
                 </label>
                 <p>
             </div>
-            <div class="input-field col l2 m2 s12 offset-l1 offset-m1">
-                <input type="number" class="validate" name ="horas[]">
-                <label for="horas" class="active">Número de días</label>
+            <div class="input-field col l1 m1 s12">
+                <label class="active">Horas disponibles: '.$hDispo.' h</label>
             </div>
-            <div class="input-field col l5 m5 s12 offset-l1 offset-m1">
-                <textarea name="obser[]" class="materialize-textarea" ></textarea>
-                <label for="horas" class="active">Actividad</label>
+            <div class="input-field col l1 m1 s12 offset-l1 offset-m1">
+                <input type="number" class="validate" name ="horas[]">
+                <label for="horas" class="active">Horas</label>
+            </div>
+            </div>
+            <div class="input-field col l1 m1 s12">
+                <input type="number" class="validate" name ="min[]">
+                <label for="min" class="active">Minutos</label>
+            </div>
+            <div class="input-field col l4 m4 s12 offset-l1 offset-m1">
+                <textarea name="obser[]" class="materialize-textarea"></textarea>
+                <label for="obser" class="active">Actividad</label>
+            </div>
+            </div>
+            <div class="input-field col l1 m1 s12">
+                <a class="teal-text text-accent-4 tooltipped" data-position="left" data-tooltip="'.$descripcionSol.'"><i class="material-icons small">info_outline</i></a>
             </div>';
             }
         }
@@ -185,8 +202,9 @@ class  PlaneacionAse{
                     <div class="row">
                     <form id="proyAgend" action="../Controllers/ctrl_agenda.php" method="post">
                     <div class="row btnmas ">
+                    <input type="text" class="validate" name ="fecha" hidden value="'.$fecha.'">
                         
-                    <span class="sumarDiv btn right-align tooltipped" data-position="top" data-tooltip="Añadir Actividad" onclick="duplicarDiv()"><i class="material-icons" >add</i></span>
+                    <a class="sumarDiv btn btn-floating waves-effect waves-light teal tooltipped" data-position="top" data-tooltip="Añadir Actividad" onclick="duplicarDiv()"><i class="material-icons" >add</i></a>
                     <button id="btn-pass" class="btn waves-effect waves-light" type="submit"
                     name="btnGuardar">Guardar</button>
                         </div>
@@ -213,10 +231,13 @@ class  PlaneacionAse{
     public static function crearDivP($long, $usuario){
         $divProy = PlaneacionAse::selectProyectoUsuario($usuario,$long);
         return '
-        <div class="row">
+        <div class="row" id="cardPro'.$long.'">
             <div class="col s12 m12 l12">
-                <div class="card">
+                <div class="card" >
                 <div class="card-content ">
+                <div class="row ">
+            <a class=" btn btn-floating right waves-effect waves-light red" onclick="eliminarDiv('.$long.')"><i class="material-icons" >close</i></a>
+                    </div>
                     <div class ="conteo row" id=" proy'.$long.'">       
                         <div class="input-field">'.$divProy.'</div>
                         <div id="div_produc'.$long.'" class="col l10 m10 s12 "></div>
@@ -227,10 +248,106 @@ class  PlaneacionAse{
         </div>';
     } 
 
-    public static function guardarPlaneacion($productos, $horas, $obs, $usuario){
+
+    public static function guardarPlaneacion($productos, $horas, $min, $obs, $usuario, $fecha,$periodo){
+        require('../Core/connection.php');
+        $newFecha = date("Y/m/d", strtotime($fecha));
+        var_dump($productos);
         $cant = count($productos);
         for($i=0;$i<$cant ;$i++){
-            echo 'producto'.$productos[$i].'horas'.$horas[$i].'obs'.$obs[$i] ;
+            if($productos[$i] != null){
+                echo $consulta = PlaneacionAse::consultaAsig($productos[$i], $usuario);
+                $resultado = mysqli_query($connection, $consulta);
+                if (mysqli_num_rows($resultado) > 0 ) {
+                    echo 'producto'.$productos[$i].'horas'.$horas[$i].'obs'.$obs[$i] ;
+
+                    while ($datos = mysqli_fetch_array($resultado)){
+                        $idAsig = $datos['idAsig'];
+                        echo $consultaInsert = 'INSERT INTO pys_agenda  VALUES (null, '.$idAsig.', "'.$newFecha.'", "'.$obs[$i].'", '.$horas[$i].', '.$min[$i].', now(), 1);';
+                        $resultadoInsert = mysqli_query($connection, $consultaInsert);
+                        PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obs[$i], $usuario, $fecha, $periodo);
+                    }
+                }
+            }    
+        }
+        
+    }
+
+    public static function guardarEnPlaneacion($idAsig, $hora, $min, $obser, $usuario, $fecha, $periodo){
+        require('../Core/connection.php');
+        $horaTotal = 0;
+        $minTotal = 0;
+        $obs = "";
+        echo$consulta = "SELECT idDedicacion FROM pys_dedicaciones
+        INNER JOIN pys_login ON pys_login.idPersona = pys_dedicaciones.persona_IdPersona
+        WHERE pys_dedicaciones.estadoDedicacion=1 AND pys_login.est=1 AND periodo_IdPeriodo = ".$periodo." AND pys_login.usrLogin = '".$usuario."'";
+        $resultado = mysqli_query($connection, $consulta);
+        $datos = mysqli_fetch_array($resultado);
+        $idDedicacion = $datos['idDedicacion'];
+        echo $consultaAsig = "SELECT idAsignacion, horasInvertir, minutosInvertir, observacion FROM pys_asignaciones WHERE idDedicacion = $idDedicacion AND idAsignado = $idAsig AND estadoAsignacion = 1";
+        $resultadoAsig = mysqli_query($connection, $consultaAsig);
+        if($resultadoAsig && mysqli_num_rows($resultadoAsig) == 1){
+            $datosAsig = mysqli_fetch_array($resultadoAsig);
+            $idAsignacion = $datosAsig['idAsignacion'];
+            $horasInvertir = $datosAsig['horasInvertir'];
+            $minutosInvertir = $datosAsig['minutosInvertir'];
+            $observacion = $datosAsig['observacion'];
+            $horaTotal = $horasInvertir + $hora;
+            $minTotal = $minutosInvertir + $min;
+            if ($minTotal >= 60){
+                $horaTotal = intval(( $minTotal/60 )+$horaTotal);
+                $minTotal = intval( $minTotal%60);
+            } 
+            $obs = $observacion.'; '.$obser. 'fecha: '.$fecha;
+            echo $consultaUpdate = "UPDATE pys_asignaciones SET horasInvertir=".$horaTotal.", minutosInvertir =".$minTotal.",observacion ='".$obs."' WHERE idAsignacion=".$idAsignacion;
+            $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+
+        } else {
+            echo $consultaInsert = "INSERT INTO pys_asignaciones VALUES(null, '".$idDedicacion."','.$idAsig.', '.$hora.', '.$min.', '".$obser." fecha: ".$fecha."', 1) ";
+            $resultadoInsert = mysqli_query($connection, $consultaInsert);
+        }
+    }
+
+    public static function consultaAsig($idSol, $usuario){
+        return $consulta ="SELECT pys_asignados.maxhora, pys_asignados.maxmin, pys_asignados.idAsig
+        FROM pys_asignados
+        INNER JOIN pys_login ON pys_login.idPersona =pys_asignados.idPersona
+        WHERE pys_asignados.est = 1 AND pys_asignados.idSol ='$idSol' AND pys_login.usrLogin='$usuario' ";
+         
+    }
+    public static function horasDisponibles($idSol, $usuario, $periodo){
+        require('../Core/connection.php');
+        $horaAge = 0;
+        $minutosAge = 0;
+        $horaReg = 0;
+        $minutosReg = 0;
+        $horaTotal = 0;
+        $minTotal = 0;
+        $consulta = PlaneacionAse::consultaAsig($idSol, $usuario);
+        $resultado = mysqli_query($connection, $consulta);
+        if (mysqli_num_rows($resultado) > 0 ) {
+            $datos = mysqli_fetch_array($resultado);
+            $maxhora = $datos['maxhora'];
+            $maxmin = $datos['maxmin'];
+            $maxmin = ($maxhora*60)+$maxmin;
+            $idAsig = $datos['idAsig'];
+            $consultaReg = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos  WHERE idAsig =$idAsig AND estTiempo = 1";
+            $resultadoReg = mysqli_query($connection, $consultaReg);
+            $datosReg = mysqli_fetch_array($resultadoReg);
+            $horaReg = $datosReg['SUM(horaTiempo)'];
+            $minutosReg = $datosReg['SUM(minTiempo)'];
+            $minutosReg = ($horaReg*60)+$minutosReg;
+            $consultaAge = "SELECT SUM(horaAgenda), SUM(minAgenda) FROM pys_agenda  WHERE idAsig =$idAsig AND est = 1";
+            $resultadoAge = mysqli_query($connection, $consultaAge);
+            if ($resultadoAge) {
+                $datosAge = mysqli_fetch_array($resultadoAge);
+                $horaAge = $datosAge['SUM(horaAgenda)'];
+                $minutosAge = $datosAge['SUM(minAgenda)'];
+                $minutosAge = ($horaAge*60)+$minutosAge;
+            }
+            $minTotal =$maxmin - $minutosReg -$minutosAge;
+            $horaTotal = round($minTotal/60, 2);
+            return $horaTotal;
         }
     }
 }

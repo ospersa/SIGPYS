@@ -629,6 +629,12 @@ function duplicarDiv(){
     });
 }; 
 
+function eliminarDiv(cont){
+    let div ="#cardPro"+cont;
+    $(div).remove();
+    inicializarCampos();
+}; 
+
 function cargaSolicitudesProy(elem1, dir, destino) {
     $.ajax({
         type: "POST",
@@ -642,6 +648,7 @@ function cargaSolicitudesProy(elem1, dir, destino) {
         success: function (data) {
             $(destino).html(data);
             $("select").formSelect();
+            inicializarCampos();
         }
     })
 }
@@ -865,5 +872,6 @@ function inicializarCampos() {
     if (tooltips.length != 0) {
         $('.tooltipped').tooltip();
     }
+    console.log(tooltips);
 
 }
