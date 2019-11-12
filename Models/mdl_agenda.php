@@ -216,7 +216,7 @@ class  PlaneacionAse{
             <li>
                 <div class="collapsible-header">Planeación Registrada</div>
                 <div class="collapsible-body">
-                <div class="col l10 m10 s12 ">
+                <div class="row">
                     '.PlaneacionAse::mostrarAgenda ($fecha, $usuario).'
                 </div>
                 </div>
@@ -372,16 +372,18 @@ class  PlaneacionAse{
 
     public static function mostrarAgenda ($fecha, $user){
         require('../Core/connection.php');
+        include_once('mdl_tiempos.php');
         $string = "";
         $newFecha = date("Y-m-d", strtotime($fecha));
-        $consulta ="SELECT pys_agenda.idAsig, pys_agenda.fechAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda  FROM pys_agenda 
+        $cont = 1;
+        $consulta ="SELECT pys_agenda.idAsig, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda  FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
         WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est = 1 AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha'";
         $resultado = mysqli_query($connection, $consulta);
         while ($datos = mysqli_fetch_array($resultado)){
             $idAsig = $datos['idAsig'];
-            $fechaAgenda = $datos['fechAgenda'];
+            $notaAgenda = $datos['notaAgenda'];
             $horaAgenda = $datos['horaAgenda'];
             $minAgenda = $datos['minAgenda'];
             echo $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy FROM pys_asignados
@@ -398,17 +400,75 @@ class  PlaneacionAse{
                 $descripcionSol = $datos2['descripcionSol'];
                 $nombreProy = $datos2['nombreProy'];
                 $codProy = $datos2['codProy'];
-                $string .='<div class =" row" >       
-                <label >'.$codProy.' -- '.$nombreProy.'</label>
+                $string .='<div class =" row" >
+                <form id="formAgenda'.$cont.'" action="../Controllers/ctrl_agenda.php" method="post">  
+                <input id="idSol" name="idSol" value="'.$idSol.'" type="hidden">
+                <input id="idSol" name="fecha" value="'.$fecha.'" type="hidden">
+                <div class="input-field col l12 m12 s12  offset-l1 offset-m1">
+                <p class="left-center teal-text"><h6>'.$codProy.' -- '.$nombreProy.'</h6></p>
+                <p class="left-align">P'.$idSol.' '.$descripcionSol.'</p>
+                <p class="left-align">Tiempo:</p>
+                </div>
+                <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                <input type="number" class="validate" name ="horas" value="'.$horaAgenda.'">
+                <label for="horas" class="active">Horas</label>
                 
+                </div>
+                <div class="input-field col l1 m1 s12">
+                <input type="number" class="validate" name ="min" value="'.$minAgenda.'">
+                <label for="min" class="active">Minutos</label>
+                </div>
+                <div class="input-field col l10 m10 s12  offset-l1 offset-m1"><p class="left-align">Actividad:</p>
+                </div>
+
+            <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
+                <textarea name="obser" class="materialize-textarea">'.$notaAgenda.'</textarea>
+                <label for="obs" class="active">Actividad</label>
+            </div>
+            <div class="input-field col s12 m5 l5 offset-m1 offset-l1">'.Tiempos::selectFase(null).'
+                            </div>
+            <div class="input-field col l5 m5 s12  offset-l2 offset-m2">
+            <button class="btn btn-floating  waves-effect transparent  tooltipped"  name="btnGuardarTiempo" data-position="right" onclick="registrarTiempo('.$cont.')" data-tooltip="Registrar tiempos"><i class="material-icons teal-text">done</i></button>
+            </div>
+            <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
+            <button class="btn btn-floating  waves-effect transparent  tooltipped" type="submit" name="btnActAgenda" data-position="right" data-tooltip="Actualizar Actividad"><i class="material-icons teal-text">update</i></button>
+                
+            
+                </div>
+                </form>
             </div> 
-                
                 
                 ';
             }
             $string .= '</div></div></div></div>';
         }
         return $string;
+    }
+
+    public static function cambiarEstadoAgenda($fecha, $usuario, $hora, $min, $obs, $estado){
+        require('../Core/connection.php');
+        echo $consulta ="SELECT idAgenda, pys_agenda.idAsig FROM pys_agenda 
+        INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
+        INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+        WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est=1 AND pys_agenda.fechAgenda ='$fecha' AND pys_login.usrLogin='$usuario'";
+        $resultado = mysqli_query($connection, $consulta);
+        if($resultado){
+            $datos = mysqli_fetch_array($resultado);
+            $idAgenda = $datos['idAgenda'];
+            $idAsig = $datos['idAsig'];
+            if($estado == 2){
+                echo $consultaTiempo ="SELECT idAsig FROM pys_tiempos where idAsig = $idAsig AND fechTiempo='$fecha'";
+                $resultadoTiempo = mysqli_query($connection, $consultaTiempo);
+                if (mysqli_num_rows($resultadoTiempo)>0){
+                    $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
+                    $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+                }
+            } else {
+                $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
+                $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+            }        
+        
+        }
     }
 }
 ?>

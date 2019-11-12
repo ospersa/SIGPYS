@@ -150,6 +150,7 @@
         public static function registrarTiempos($idsol, $user, $fecha, $nota, $horas, $minutos, $fase){
             require('../Core/connection.php');
             $fechaAct = date("Y-m-d");
+            $fechaAct = '2019-09-13';
              $consulta = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
@@ -181,18 +182,18 @@
                     $resultado2 = mysqli_query($connection, $consulta2);
                     if ($resultado1 && $resultado2) {                    
                         echo "<script> alert ('Se guardó correctamente la información');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
                     } else { 
                         echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
                     }
                 } else{
                     echo "<script> alert ('El tiempo no puede ser guardado. Verifique que no esté excediendo 12 horas diarias.');</script>";
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
                 }
             } else {
                 echo "<script> alert ('El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente.');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+                echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
             }
             
             

@@ -622,7 +622,6 @@ function duplicarDiv(){
             cantidad : cont
         },
         success: function (data) {
-            console.log(data);
             form.append(data);
             inicializarCampos();
         }
@@ -837,6 +836,25 @@ function buscar(url) {
     });
 }
 
+function registrarTiempo(id) {
+    let mensaje = confirm("¿Esta seguro de registrar el tiempo?");
+    let form ="#formAgenda"+id;
+    $(form).preventDefault();
+    //Detectamos si el usuario acepto el mensaje
+    if (mensaje) {
+        $.ajax({
+            type: "POST",
+            url: '../Controllers/ctrl_agenda.php',
+            data: $(form).serialize(),
+            success: function (data) {
+                data;
+                location.reload();
+            }
+        });
+    }
+
+}
+
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {
 
@@ -872,6 +890,5 @@ function inicializarCampos() {
     if (tooltips.length != 0) {
         $('.tooltipped').tooltip();
     }
-    console.log(tooltips);
 
 }
