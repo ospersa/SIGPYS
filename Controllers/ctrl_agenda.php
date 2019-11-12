@@ -18,8 +18,6 @@ $obser     = (isset($_POST['obser'])) ? $_POST['obser'] : null;
 $idSol     = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
 $fecha     = (isset($_POST['fecha'])) ? $_POST['fecha'] : null;
 
-
-//var_dump($horas);
 $check ="";
 $selectProyecto = "";
 /* Procesamiento peticiones al controlador */

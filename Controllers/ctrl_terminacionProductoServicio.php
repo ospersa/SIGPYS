@@ -30,10 +30,10 @@ if (isset($_POST['btnTerEnvi'])){
     $cuerpoTotal .='<strong>Observaciones: </strong>'.$observaciones.'<br><br>';
     }
     $cuerpoTotal .= $nota. $datosEnvio;
-    //$sendEmail = EnviarCorreo::enviarCorreoTerminar($correo, $asesor, $ccemail, $asunto, $cuerpoTotal);
-    //if($sendEmail == true){
+    $sendEmail = EnviarCorreo::enviarCorreoTerminar($correo, $asesor, $ccemail, $asunto, $cuerpoTotal);
+    if($sendEmail == true){
         Terminar::terminarProducto($id2);
-    //}    
+    }    
 }else if (isset($_POST['b']) ) {
     $busqueda = $_POST['b'];
     Terminar::selectProyectoUsuario($busqueda, $usuario);

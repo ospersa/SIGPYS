@@ -217,8 +217,7 @@ class  PlaneacionAse{
                 <div class="collapsible-header">Planeación Registrada</div>
                 <div class="collapsible-body">
                 <div class="col l10 m10 s12 ">
-                    <h6><strong> Nombre del Proyecto:</strong></h6>
-                    <hr>
+                    '.PlaneacionAse::mostrarAgenda ($fecha, $usuario).'
                 </div>
                 </div>
             </li>
@@ -252,23 +251,34 @@ class  PlaneacionAse{
     public static function guardarPlaneacion($productos, $horas, $min, $obs, $usuario, $fecha,$periodo){
         require('../Core/connection.php');
         $newFecha = date("Y/m/d", strtotime($fecha));
+        $count =0;
+        $countSi =0;
         var_dump($productos);
         $cant = count($productos);
         for($i=0;$i<$cant ;$i++){
             if($productos[$i] != null){
-                echo $consulta = PlaneacionAse::consultaAsig($productos[$i], $usuario);
+                $consulta = PlaneacionAse::consultaAsig($productos[$i], $usuario);
                 $resultado = mysqli_query($connection, $consulta);
                 if (mysqli_num_rows($resultado) > 0 ) {
-                    echo 'producto'.$productos[$i].'horas'.$horas[$i].'obs'.$obs[$i] ;
-
+                    $count += 1;
                     while ($datos = mysqli_fetch_array($resultado)){
                         $idAsig = $datos['idAsig'];
-                        echo $consultaInsert = 'INSERT INTO pys_agenda  VALUES (null, '.$idAsig.', "'.$newFecha.'", "'.$obs[$i].'", '.$horas[$i].', '.$min[$i].', now(), 1);';
+                        $consultaInsert = 'INSERT INTO pys_agenda  VALUES (null, '.$idAsig.', "'.$newFecha.'", "'.$obs[$i].'", '.$horas[$i].', '.$min[$i].', now(), 1);';
                         $resultadoInsert = mysqli_query($connection, $consultaInsert);
-                        PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obs[$i], $usuario, $fecha, $periodo);
+                        $consultaplan = PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obs[$i], $usuario, $newFecha, $periodo);
+                        if($resultadoInsert && $consultaplan){
+                            $countSi += 1;
+                        }
                     }
                 }
             }    
+        }
+        if ($count == $countSi){
+            echo "<script> alert ('Se guardó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
+        } else {
+            echo "<script> alert ('No se guardó correctamente la información');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
         }
         
     }
@@ -278,14 +288,23 @@ class  PlaneacionAse{
         $horaTotal = 0;
         $minTotal = 0;
         $obs = "";
-        echo$consulta = "SELECT idDedicacion FROM pys_dedicaciones
+        $idAsignacionNew = 0;
+        $consulta = "SELECT idDedicacion FROM pys_dedicaciones
         INNER JOIN pys_login ON pys_login.idPersona = pys_dedicaciones.persona_IdPersona
         WHERE pys_dedicaciones.estadoDedicacion=1 AND pys_login.est=1 AND periodo_IdPeriodo = ".$periodo." AND pys_login.usrLogin = '".$usuario."'";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
         $idDedicacion = $datos['idDedicacion'];
-        echo $consultaAsig = "SELECT idAsignacion, horasInvertir, minutosInvertir, observacion FROM pys_asignaciones WHERE idDedicacion = $idDedicacion AND idAsignado = $idAsig AND estadoAsignacion = 1";
+        $consultaAsig = "SELECT idAsignacion, horasInvertir, minutosInvertir, observacion FROM pys_asignaciones WHERE idDedicacion = $idDedicacion AND idAsignado = $idAsig AND estadoAsignacion = 1";
         $resultadoAsig = mysqli_query($connection, $consultaAsig);
+        $con1 = "SELECT * FROM pys_asignaciones;";
+        $registros = mysqli_query($connection, $con1);
+        $count = mysqli_num_rows($registros);
+        if ($count == 0) {
+            $idAsignacionNew = 1;
+        } else if ($count > 0) {
+            $idAsignacionNew = $count + 1;
+        }
         if($resultadoAsig && mysqli_num_rows($resultadoAsig) == 1){
             $datosAsig = mysqli_fetch_array($resultadoAsig);
             $idAsignacion = $datosAsig['idAsignacion'];
@@ -299,13 +318,13 @@ class  PlaneacionAse{
                 $minTotal = intval( $minTotal%60);
             } 
             $obs = $observacion.'; '.$obser. 'fecha: '.$fecha;
-            echo $consultaUpdate = "UPDATE pys_asignaciones SET horasInvertir=".$horaTotal.", minutosInvertir =".$minTotal.",observacion ='".$obs."' WHERE idAsignacion=".$idAsignacion;
-            $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
-
+            $consultaUpdate = "UPDATE pys_asignaciones SET horasInvertir=".$horaTotal.", minutosInvertir =".$minTotal.",observacion ='".$obs."' WHERE idAsignacion=".$idAsignacion;
+            return mysqli_query($connection, $consultaUpdate);
         } else {
-            echo $consultaInsert = "INSERT INTO pys_asignaciones VALUES(null, '".$idDedicacion."','.$idAsig.', '.$hora.', '.$min.', '".$obser." fecha: ".$fecha."', 1) ";
-            $resultadoInsert = mysqli_query($connection, $consultaInsert);
+            $consultaInsert = "INSERT INTO pys_asignaciones VALUES($idAsignacionNew, $idDedicacion, $idAsig, $hora, $min, '$obser -fecha: $fecha', 1) ";
+            return mysqli_query($connection, $consultaInsert);
         }
+        
     }
 
     public static function consultaAsig($idSol, $usuario){
@@ -349,6 +368,47 @@ class  PlaneacionAse{
             $horaTotal = round($minTotal/60, 2);
             return $horaTotal;
         }
+    }
+
+    public static function mostrarAgenda ($fecha, $user){
+        require('../Core/connection.php');
+        $string = "";
+        $newFecha = date("Y-m-d", strtotime($fecha));
+        $consulta ="SELECT pys_agenda.idAsig, pys_agenda.fechAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda  FROM pys_agenda 
+        INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
+        INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+        WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est = 1 AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha'";
+        $resultado = mysqli_query($connection, $consulta);
+        while ($datos = mysqli_fetch_array($resultado)){
+            $idAsig = $datos['idAsig'];
+            $fechaAgenda = $datos['fechAgenda'];
+            $horaAgenda = $datos['horaAgenda'];
+            $minAgenda = $datos['minAgenda'];
+            echo $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy FROM pys_asignados
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
+            INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_asignados.idSol
+            WHERE pys_asignados.est = 1 AND pys_actualizacionproy.est = 1 AND pys_solicitudes.est = 1 AND pys_asignados.idAsig = $idAsig";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            $string .= '<div class="row" >
+            <div class="col s12 m12 l12">
+                <div class="card" >
+                <div class="card-content ">';
+            while ($datos2 = mysqli_fetch_array($resultado2)){
+                $idSol = $datos2['idSol'];
+                $descripcionSol = $datos2['descripcionSol'];
+                $nombreProy = $datos2['nombreProy'];
+                $codProy = $datos2['codProy'];
+                $string .='<div class =" row" >       
+                <label >'.$codProy.' -- '.$nombreProy.'</label>
+                
+            </div> 
+                
+                
+                ';
+            }
+            $string .= '</div></div></div></div>';
+        }
+        return $string;
     }
 }
 ?>
