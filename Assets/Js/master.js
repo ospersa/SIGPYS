@@ -539,7 +539,7 @@ function busquedaMultiple(url) {
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
             var tooltips = $('.tooltipped');
-                if (tooltips.length != 0) {
+            if (tooltips.length != 0) {
                 $('.tooltipped').tooltip();
             };
         }
@@ -585,24 +585,40 @@ function pruebas(url) {
     });
 }
 
-$('.fechPer').click(function(e){
+$('.fechPer').click(function (e) {
     let elem = $(this)
+    let letra = elem.find('h6');
     let fecha = elem.find('h6').text();
     let url = '../Controllers/ctrl_agenda.php';
-    let idper =$('#sltPersona').val()
+    let idper = $('#sltPersona').val()
     $.ajax({
         type: "POST",
         url: url,
-        data: {fech:fecha,
-            idper:idper},
+        data: {
+            fech: fecha,
+            idper: idper
+        },
         beforeSend: function () {
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
-            $.each($('.fechPer'), function(){
-                $(this).removeClass('red').addClass('teal');
+            $.each($('.fechPer'), function () {
+                let color2 = $(this).hasClass('w');
+                if (color2) {
+                    $(this).removeClass(' blue  darken-4').addClass('teal lighten-5');
+                    $(this).find('h6').removeClass('white-text').addClass('black-text');
+                } else {
+                    $(this).removeClass(' blue  darken-4').addClass('teal');
+                }
+
             });
-            elem.removeClass('teal').addClass('red');
+            let color = elem.hasClass('lighten-5');
+            if (color) {
+                elem.removeClass('teal lighten-5').addClass(' blue  darken-4 w');
+                letra.removeClass('black-text').addClass('white-text');
+            } else {
+                elem.removeClass('teal').addClass(' blue  darken-4 ');
+            }
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
             inicializarCampos();
@@ -610,36 +626,40 @@ $('.fechPer').click(function(e){
     });
 });
 
-function duplicarDiv(){
+/*------- Duplicar div de proyecto en Agenda -------*/
+
+function duplicarDiv() {
     let elem = $(this);
-    let form =$('#proyAgend');
-    let cont =form.find('.conteo').length +1;
+    let form = $('#proyAgend');
+    let cont = form.find('.conteo').length + 1;
     let url = '../Controllers/ctrl_agenda.php';
     $.ajax({
         type: "POST",
         url: url,
         data: {
-            cantidad : cont
+            cantidad: cont
         },
         success: function (data) {
             form.append(data);
             inicializarCampos();
         }
     });
-}; 
+};
 
-function eliminarDiv(cont){
-    let div ="#cardPro"+cont;
+/*------- Eliminar div de proyecto en Agenda -------*/
+function eliminarDiv(cont) {
+    let div = "#cardPro" + cont;
     $(div).remove();
     inicializarCampos();
-}; 
+};
 
-function cargaSolicitudesProy(elem1, dir, destino) {
+function cargaSolicitudesProy(elem1, dir, destino,long) {
     $.ajax({
         type: "POST",
         url: dir,
         data: {
-            proyecto: $(elem1).val()
+            proyecto: $(elem1).val(),
+            long: long,
         },
         beforeSend: function () {
             $(destino).html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
@@ -837,20 +857,69 @@ function buscar(url) {
 }
 
 function registrarTiempo(id) {
-    let mensaje = confirm("¿Esta seguro de registrar el tiempo?");
-    let form ="#formAgenda"+id;
-    $(form).preventDefault();
+    var mensaje = confirm("¿Esta seguro de registrar el tiempo?");
+    var formT = "formAgenda" + id;
+    var newformT = new FormData(document.getElementById(formT));
+    newformT.append("cod", "1");
+
     //Detectamos si el usuario acepto el mensaje
     if (mensaje) {
         $.ajax({
             type: "POST",
             url: '../Controllers/ctrl_agenda.php',
-            data: $(form).serialize(),
+            data: newformT,
+            contentType: false,
+            processData: false,
             success: function (data) {
-                data;
+                alert(data);
                 location.reload();
             }
         });
+    }
+
+}
+
+function cancelarAgenda(id) {
+    var mensaje = confirm("¿Esta seguro de cancelar la actividad?");
+    var form2 = "formAgenda" + id;
+    var newform2 = new FormData(document.getElementById(form2));
+    newform2.append("cod", "2");
+    //Detectamos si el usuario acepto el mensaje
+    if (mensaje) {
+        $.ajax({
+            type: "POST",
+            url: '../Controllers/ctrl_agenda.php',
+            data: newform2,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                alert(data);
+                location.reload();
+            }
+        });
+    }
+
+}
+
+function checkProd(check,num,long) {
+    var checkActive = $(check);
+    var checked = $(check).attr('data-checked');
+    var min = "min"+long+"--"+num;
+    var horas = "horas"+long+"--"+num;
+    var obser = "obser"+long+"--"+num;
+
+    if (checked == 'false') {
+        $(checkActive).attr('checked', 'checked');
+        document.getElementById(horas).disabled = false;
+        document.getElementById(min).disabled = false;
+        document.getElementById(obser).disabled = false;
+        $(checkActive).attr('data-checked', 'true');
+    } else if (checked == 'true') {
+        $(checkActive).removeAttr('checked');
+        document.getElementById(horas).disabled = true;
+        document.getElementById(min).disabled = true;
+        document.getElementById(obser).disabled = true;
+        $(checkActive).attr('data-checked', 'false');
     }
 
 }

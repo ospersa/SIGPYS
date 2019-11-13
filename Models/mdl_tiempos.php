@@ -147,16 +147,16 @@
 
         }
 
-        public static function registrarTiempos($idsol, $user, $fecha, $nota, $horas, $minutos, $fase){
+        public static function registrarTiempos($idsol, $user, $fecha, $nota, $horas, $minutos, $fase, $cod){
             require('../Core/connection.php');
             $fechaAct = date("Y-m-d");
-            $fechaAct = '2019-09-13';
-             $consulta = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
+            $string = "";
+            $stringF = "";
+            $consulta = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             $inicioPer = $datos['inicioPeriodo'];
             $finPer = $datos['finPeriodo'];
-            $fecha;
             $consulta3 = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos
             INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
             INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
@@ -169,6 +169,10 @@
             $tiempoRegistrado = (($horasDB * 60) + $minutosDB) / 60;
             $tiempoARegistrar = (($horas * 60) + $minutos) / 60;
              $totalDia = $tiempoRegistrado + $tiempoARegistrar;
+             if($cod != 1){
+                $string ='<script> alert("';
+                $stringF ='")</script> <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+            }
             if ($inicioPer <= $fecha && $finPer >= $fecha){
                 if ($totalDia <= 12){
                     $consulta1 = "SELECT idAsig FROM pys_asignados
@@ -180,25 +184,19 @@
                     $idAsig = $datos['idAsig']; 
                     $consulta2 = "INSERT INTO pys_tiempos VALUES (DEFAULT, '$idAsig', '$fecha', '$nota', '$horas', '$minutos', now() , '$fase', '1')";
                     $resultado2 = mysqli_query($connection, $consulta2);
+                    
                     if ($resultado1 && $resultado2) {                    
-                        echo "<script> alert ('Se guardó correctamente la información');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                        $string .= 'Se guardó correctamente la información. ';
                     } else { 
-                        echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                        $string .= "Ocurrió un error al intentar guardar el registro. ";
                     }
                 } else{
-                    echo "<script> alert ('El tiempo no puede ser guardado. Verifique que no esté excediendo 12 horas diarias.');</script>";
-                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                    $string .="El tiempo no puede ser guardado. Verifique que no esté excediendo 12 horas diarias. ";
                 }
             } else {
-                echo "<script> alert ('El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente.');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
-            }
-            
-            
-
-            
+               $string .='El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente. ';
+            } 
+            echo $string.$stringF;         
             mysqli_close($connection);   
         }
 
@@ -276,11 +274,11 @@
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
                 if($cod == null){
-                    $string = '  <select name="sltFase" id="sltFase" class="asignacion">
+                    $string = '  <select name="sltFase" id="sltFase" class="asignacion" >
                                 <option value="" selected disabled>Seleccione</option>';
 
                 } else {
-                    $string = '  <select name="sltFaseEdit" id="sltFaseEdit" class="asignacion">
+                    $string = '  <select name="sltFaseEdit" id="sltFaseEdit" class="asignacion" required>
                                 <option value="" selected disabled>Seleccione</option>';
                 }
                 while ($datos = mysqli_fetch_array($resultado)) {

@@ -29,6 +29,12 @@
         <div class="divider"></div>
     </li>
     <li>
+        <a href="agenda.php">Mi Agenda</a>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li>
         <a class="dropdown-trigger" href="#!" data-target="gestores">Gestor/Asesor RED
             <i class="material-icons right">arrow_drop_down</i>
         </a>
@@ -86,15 +92,15 @@
         <div class="divider"></div>
     </li>
     -->
-    <li>
+   <!--  <li>
         <a class="dropdown-trigger" href="#!" data-target="planeacion">Planeación
             <i class="material-icons right">arrow_drop_down</i>
         </a>
-    </li>
+    </li> 
     
     <li>
         <div class="divider"></div>
-    </li>
+    </li>-->
     <li>
         <a class="dropdown-trigger" href="#!" data-target="productos">Productos
             <i class="material-icons right">arrow_drop_down</i>
@@ -291,14 +297,14 @@
     </li>
 </ul>
 
-<ul id="planeacion" class="dropdown-content teal darken-1">
-    <!--<li>
+<!-- <ul id="planeacion" class="dropdown-content teal darken-1">
+    <li>
         <a href="periodo.php">Periodos</a>
     </li>
     <li>
         <a href="dedicacion.php">Dedicaciones</a>
-    </li>-->
+    </li>
     <li>
         <a href="planeacion.php">Planear Tiempos</a>
     </li>
-</ul>
+</ul> -->

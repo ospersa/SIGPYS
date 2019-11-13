@@ -26,6 +26,12 @@
     <li>
         <div class="divider"></div>
     </li>
+    <li>
+        <a href="agenda.php">Mi Agenda</a>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
    
     <li>
         <a class="dropdown-trigger" href="#!" data-target="gestores">Gestor/Asesor RED
