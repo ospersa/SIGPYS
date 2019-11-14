@@ -1,3 +1,6 @@
+<?php 
+require('../Controllers/ctrl_restriccionMenu.php');
+?>
 <a href="#" data-target="slide-out" class="teal white-text sidenav-trigger show-on-large menu">
     <i class="material-icons">menu</i>
 </a>
@@ -34,6 +37,9 @@
     <li>
         <div class="divider"></div>
     </li>
+    <?php 
+    if($validar == true){
+        echo '
     <li>
         <a class="dropdown-trigger" href="#!" data-target="gestores">Gestor/Asesor RED
             <i class="material-icons right">arrow_drop_down</i>
@@ -41,7 +47,10 @@
     </li>
     <li>
         <div class="divider"></div>
-    </li>
+    </li>';
+    }
+    ?>
+    
     <!--
     <li>
         <a class="dropdown-trigger" href="#!" data-target="colciencias">Colciencias
@@ -136,11 +145,19 @@
     </li>
 </ul>
 -->
-<ul id="gestores" class="dropdown-content teal darken-1">
-    <li>
-        <a href="terminacionServiciosProductos.php">Terminación P/S</a>
-    </li>
-</ul>
+<?php 
+    if($validar == true){
+        echo '<ul id="gestores" class="dropdown-content teal darken-1">
+        <li>
+            <a href="terminacionServiciosProductos.php">Terminación P/S</a>
+        </li>
+        <li>
+            <a href="agendaAdmin.php">Todas las Agendas</a>
+        </li>
+    </ul>';
+    }
+    ?>
+
 <ul id="colciencias" class="dropdown-content teal darken-1">
     <li>
         <a href="#!">Productos en colciencias</a>

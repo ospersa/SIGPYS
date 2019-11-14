@@ -332,6 +332,9 @@
     <li>
         <a href="planeacion.php">Planear Tiempos</a>
     </li>
+    <li>
+        <a href="agendaAdmin.php">Todas las Agendas</a>
+    </li>
 </ul>
 
 <ul id="cotizador" class="dropdown-content teal darken-1">

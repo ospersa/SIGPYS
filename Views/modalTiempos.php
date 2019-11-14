@@ -40,8 +40,8 @@
                                 <label for="notaT">Nota:</label>
                             </div>
                             <div class="input-field col s12">
-                                <input type="submit" class="waves-effect waves-light btn" name="btnRegTiempo"
-                                    value="Guardar">
+                                <button type="submit" class="waves-effect waves-light btn" id="btnRegTiempo" name="btnRegTiempo"
+                                    >Guardar</button>
                             </div>
                         </form>
                     </div>

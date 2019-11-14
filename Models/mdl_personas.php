@@ -168,7 +168,7 @@ class Personas {
             INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
             WHERE periodo_IdPeriodo = '$idPeriodo' AND estadoDedicacion = '1' AND totalHoras != '0';";
         $resultado = mysqli_query($connection, $consulta);
-        $string ='  <select name="sltPersona" class="inactivate" searchable="Ingrese un término de búsqueda" id="sltPersona">
+        $string ='  <select name="sltPersona" class="inactivate" searchable="Ingrese un término de búsqueda" id="sltPersona" >
                     <option value="">Seleccionar</option>
         ';
         while ($datos = mysqli_fetch_array($resultado)) {

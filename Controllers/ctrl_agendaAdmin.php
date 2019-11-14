@@ -26,14 +26,15 @@ cod = 1 si se va ha realizar el registro de tiempo
 cod = 2 si se va ha cancelar la actividad en la agenda
 */
 $cod     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-
 $check ="";
 $selectProyecto = "";
 /* Procesamiento peticiones al controlador */
-$usuario  = $_SESSION['usuario'];
+$usuario  = PlaneacionAse::UsuarioPersona($idper);
 $idPeriodo = PlaneacionAse::onPeriodoActual();
-$panel = PlaneacionAse::onPeriodo($idPeriodo, $usuario);
 $personas = Personas::selectPersonas2($idPeriodo);
+if ($cod == 3){
+    echo $panel = PlaneacionAse::onPeriodo($idPeriodo, $usuario);
+}
 if(isset($_POST['fech'])){
  PlaneacionAse::crearDiv(1, $usuario, $fech);
 }

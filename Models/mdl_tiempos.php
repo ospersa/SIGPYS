@@ -93,7 +93,7 @@
 
         public static function OnloadTiempoRegistrado($codsol,$idPer){
             require('../Core/connection.php');
-            $consulta = "SELECT pys_tiempos.idTiempo, pys_tiempos.fechTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.notaTiempo, pys_fases.nombreFase 
+            echo $consulta = "SELECT pys_tiempos.idTiempo, pys_tiempos.fechTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.notaTiempo, pys_fases.nombreFase 
                 FROM `pys_asignados` 
                 INNER JOIN pys_personas on pys_asignados.idPersona=pys_personas.idPersona 
                 INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
@@ -149,54 +149,67 @@
 
         public static function registrarTiempos($idsol, $user, $fecha, $nota, $horas, $minutos, $fase, $cod){
             require('../Core/connection.php');
-            $fechaAct = date("Y-m-d");
             $string = "";
             $stringF = "";
-            $consulta = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
-            $resultado = mysqli_query($connection, $consulta);
-            $datos = mysqli_fetch_array($resultado);
-            $inicioPer = $datos['inicioPeriodo'];
-            $finPer = $datos['finPeriodo'];
-            $consulta3 = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos
-            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-            INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
-            INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
-            WHERE pys_tiempos.fechTiempo = '$fecha' AND pys_login.usrLogin = '$user' AND pys_tiempos.estTiempo = '1';";
-            $resultado3 = mysqli_query($connection, $consulta3);
-            $datos3 = mysqli_fetch_array($resultado3);
-            $horasDB = $datos3[0];
-            $minutosDB = $datos3[1];
-            $tiempoRegistrado = (($horasDB * 60) + $minutosDB) / 60;
-            $tiempoARegistrar = (($horas * 60) + $minutos) / 60;
-             $totalDia = $tiempoRegistrado + $tiempoARegistrar;
-             if($cod != 1){
-                $string ='<script> alert("';
-                $stringF ='")</script> <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
-            }
-            if ($inicioPer <= $fecha && $finPer >= $fecha){
-                if ($totalDia <= 12){
-                    $consulta1 = "SELECT idAsig FROM pys_asignados
-                    INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
-                    INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
-                    WHERE pys_login.usrLogin= '$user' AND pys_asignados.idSol ='$idsol' AND pys_asignados.est = 1 AND pys_personas.est = 1 AND pys_login.est = 1 ";
-                    $resultado1 = mysqli_query($connection, $consulta1);
-                    $datos = mysqli_fetch_array($resultado1);
-                    $idAsig = $datos['idAsig']; 
-                    $consulta2 = "INSERT INTO pys_tiempos VALUES (DEFAULT, '$idAsig', '$fecha', '$nota', '$horas', '$minutos', now() , '$fase', '1')";
-                    $resultado2 = mysqli_query($connection, $consulta2);
-                    
-                    if ($resultado1 && $resultado2) {                    
-                        $string .= 'Se guardó correctamente la información. ';
-                    } else { 
-                        $string .= "Ocurrió un error al intentar guardar el registro. ";
-                    }
-                } else{
-                    $string .="El tiempo no puede ser guardado. Verifique que no esté excediendo 12 horas diarias. ";
+            $resultado2 = false;
+            if ($fecha != null && $nota != null && $horas != null && $minutos != null && $fase != null){
+                $fechaAct = date("Y-m-d");
+                $consulta = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
+                $resultado = mysqli_query($connection, $consulta);
+                $datos = mysqli_fetch_array($resultado);
+                $inicioPer = $datos['inicioPeriodo'];
+                $finPer = $datos['finPeriodo'];
+                $consulta3 = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos
+                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+                INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
+                INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
+                WHERE pys_tiempos.fechTiempo = '$fecha' AND pys_login.usrLogin = '$user' AND pys_tiempos.estTiempo = '1';";
+                $resultado3 = mysqli_query($connection, $consulta3);
+                $datos3 = mysqli_fetch_array($resultado3);
+                $horasDB = $datos3[0];
+                $minutosDB = $datos3[1];
+                $tiempoRegistrado = (($horasDB * 60) + $minutosDB) / 60;
+                $tiempoARegistrar = (($horas * 60) + $minutos) / 60;
+                $totalDia = $tiempoRegistrado + $tiempoARegistrar;
+                if($cod != 1){
+                    $string ='<script> alert("';
+                    $stringF ='")</script> <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
                 }
+                if ($inicioPer <= $fecha && $finPer >= $fecha){
+                    if ($totalDia <= 12){
+                        $consulta1 = "SELECT idAsig FROM pys_asignados
+                        INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
+                        INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
+                        WHERE pys_login.usrLogin= '$user' AND pys_asignados.idSol ='$idsol' AND pys_asignados.est = 1 AND pys_personas.est = 1 AND pys_login.est = 1 ";
+                        $resultado1 = mysqli_query($connection, $consulta1);
+                        $datos = mysqli_fetch_array($resultado1);
+                        $idAsig = $datos['idAsig']; 
+                        $consulta2 = "INSERT INTO pys_tiempos VALUES (DEFAULT, '$idAsig', '$fecha', '$nota', '$horas', '$minutos', now() , '$fase', '1')";
+                        $resultado2 = mysqli_query($connection, $consulta2);
+                        
+                        if ($resultado1 && $resultado2) {                    
+                            $string .= 'Se guardó correctamente la información. ';
+                        } else { 
+                            $string .= "Ocurrió un error al intentar guardar el registro. ";
+                        }
+                    } else{
+                        $string .="El tiempo no puede ser guardado. Verifique que no esté excediendo 12 horas diarias. ";
+                    }
+                } else {
+                $string .='El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente. ';
+                } 
+                
             } else {
-               $string .='El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente. ';
-            } 
-            echo $string.$stringF;         
+                if($cod != 1){
+                    $string ='<script> alert("';
+                    $stringF ='")</script> <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                }
+                $string .='Existe algún campo vacio. ';
+            }
+            if($cod == 1){
+                return [$resultado2, $string];
+            }
+            echo $string.$stringF;   
             mysqli_close($connection);   
         }
 
@@ -274,11 +287,11 @@
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
                 if($cod == null){
-                    $string = '  <select name="sltFase" id="sltFase" class="asignacion" >
+                    $string = '  <select name="sltFase" id="sltFase" class="asignacion"  >
                                 <option value="" selected disabled>Seleccione</option>';
 
                 } else {
-                    $string = '  <select name="sltFaseEdit" id="sltFaseEdit" class="asignacion" required>
+                    $string = '  <select name="sltFaseEdit" id="sltFaseEdit" class="asignacion"  >
                                 <option value="" selected disabled>Seleccione</option>';
                 }
                 while ($datos = mysqli_fetch_array($resultado)) {

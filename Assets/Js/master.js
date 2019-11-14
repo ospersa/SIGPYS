@@ -406,6 +406,7 @@ $(document).ready(function () {
         });
     })
 
+
     /** Busqueda de solicitudes específicas */
     $('#txt-search').keypress(function (e) {
         var tecla = (e.keyCode ? e.keyCode : e.wich);
@@ -585,12 +586,17 @@ function pruebas(url) {
     });
 }
 
-$('.fechPer').click(function (e) {
-    let elem = $(this)
-    let letra = elem.find('h6');
-    let fecha = elem.find('h6').text();
-    let url = '../Controllers/ctrl_agenda.php';
-    let idper = $('#sltPersona').val()
+function cargarResAgenda(fecha,elem){
+    debugger;
+    let letra = elem.find("h6");
+    let path = window.location.pathname;
+    let url = "";
+    if (path == '/sigpys/Views/agenda.php'){
+        url = '../Controllers/ctrl_agenda.php';
+    } else  if (path == '/sigpys/Views/agendaAdmin.php'){
+        url = '../Controllers/ctrl_agendaAdmin.php';
+    } 
+    let idper = $('#sltPersona').val();
     $.ajax({
         type: "POST",
         url: url,
@@ -599,10 +605,12 @@ $('.fechPer').click(function (e) {
             idper: idper
         },
         beforeSend: function () {
+            debugger;
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
             $.each($('.fechPer'), function () {
+                debugger;
                 let color2 = $(this).hasClass('w');
                 if (color2) {
                     $(this).removeClass(' blue  darken-4').addClass('teal lighten-5');
@@ -610,7 +618,6 @@ $('.fechPer').click(function (e) {
                 } else {
                     $(this).removeClass(' blue  darken-4').addClass('teal');
                 }
-
             });
             let color = elem.hasClass('lighten-5');
             if (color) {
@@ -624,12 +631,11 @@ $('.fechPer').click(function (e) {
             inicializarCampos();
         }
     });
-});
+};
 
 /*------- Duplicar div de proyecto en Agenda -------*/
 
 function duplicarDiv() {
-    let elem = $(this);
     let form = $('#proyAgend');
     let cont = form.find('.conteo').length + 1;
     let url = '../Controllers/ctrl_agenda.php';
@@ -671,7 +677,26 @@ function cargaSolicitudesProy(elem1, dir, destino,long) {
         }
     })
 }
+$("select[name='sltPersona']").on("change", () => {
+    cargaPanelUsu();
+  });
 
+function cargaPanelUsu() {
+    let elem = $('#sltPersona');
+    let persona = elem.val();
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_agendaAdmin.php',
+        data: {
+            idper: persona,
+            cod :3,
+        },
+        success: function (data) {
+        $("#div_dinaPanel").html(data);
+        inicializarCampos();
+        }
+    })
+}
 
 /*------- Inicio JS para boton actualizar -------*/
 function actualiza(val, url) {

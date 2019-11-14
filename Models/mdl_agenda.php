@@ -48,7 +48,7 @@ class  PlaneacionAse{
             $string .= '
             <div class="col s2 m2 l2">
                 <div class="card">
-                    <div class="fechPer card-content '.$color.' '.$letra.'-text" type="button" >
+                    <div class="fechPer card-content '.$color.' '.$letra.'-text" type="button" onclick ="cargarResAgenda(\''.$fechaDia.'\',$(this))">
                     <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
                     </div>
                 </div>
@@ -198,7 +198,7 @@ class  PlaneacionAse{
             $countSi = 0;
             $horasSum= array_sum($horas);
             $minutosSum = array_sum($min);
-            $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $horasSum, $minutosSum);
+            $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $horasSum, $minutosSum,'null');
             $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
             if ($totalTiempo > 720){
                 echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
@@ -334,12 +334,14 @@ class  PlaneacionAse{
         $string = "";
         $newFecha = date("Y-m-d", strtotime($fecha));
         $cont = 1;
-        $consulta ="SELECT pys_agenda.idAsig, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda  FROM pys_agenda 
+        $consulta ="SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda 
+        FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
         WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est = 1 AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha'";
         $resultado = mysqli_query($connection, $consulta);
         while ($datos = mysqli_fetch_array($resultado)){
+            $idAgenda = $datos['idAgenda'];
             $idAsig = $datos['idAsig'];
             $notaAgenda = $datos['notaAgenda'];
             $horaAgenda = $datos['horaAgenda'];
@@ -373,6 +375,7 @@ class  PlaneacionAse{
             <div class="card-content ">
                 <div class="row">
                     <form id="formAgenda'.$cont.'" action="../Controllers/ctrl_agenda.php" method="post">
+                        <input id="idSol" name="idAgenda" value="'.$idAgenda.'" type="hidden">
                         <input id="idSol" name="idSol" value="'.$idSol.'" type="hidden">
                         <input id="idSol" name="fecha" value="'.$fecha.'" type="hidden">
                         <div class="row">
@@ -415,12 +418,12 @@ class  PlaneacionAse{
                                 <div class="row">
                             <div class="input-field col l4 m4 s12  offset-l1 offset-m1">
                                 <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
-                                    name="btnGuardarTiempo" data-position="right" onclick="cancelarAgenda('.$cont.')"
+                                    name="btnCancelarAgen" data-position="right" onclick="cancelarAgenda('.$cont.')"
                                     data-tooltip="Cancelar de Agenda"><i class="material-icons red-text">clear</i></button>
                             </div>
                             <div class="input-field col l4 m4 s12  ">
                                 <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
-                                    name="btnGuardarTiempo" data-position="right" onclick="registrarTiempo('.$cont.')"
+                                    name="btnRegTiempo" id="btnRegTiempo" data-position="right" onclick="registrarTiempo('.$cont.')"
                                     data-tooltip="Registrar tiempo"><i class="material-icons teal-text">done</i></button>
                             </div>
                             <div class="input-field col l2 m2 s12  ">
@@ -452,15 +455,16 @@ class  PlaneacionAse{
     Estado 3 son las actividades Canceladas y no registradas en tiempos
     */
 
-    public static function cambiarEstadoAgenda($fecha, $usuario, $idSol, $hora, $min, $obs, $estado){
+    public static function cambiarEstadoAgenda($fecha, $usuario, $idSol, $idAgenda, $hora, $min, $obs, $estado, $sltFase){
         require('../Core/connection.php');
         $resultadoUpdate = false;
+        $regTiempo = [];
         $consulta ="SELECT idAgenda, pys_agenda.idAsig FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
         WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est=1 AND pys_agenda.fechAgenda ='$fecha' AND pys_login.usrLogin='$usuario'  AND pys_asignados.idSol ='$idSol'";
         $resultado = mysqli_query($connection, $consulta);
-        $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min);
+        $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min, $idAgenda);
         $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
         if ($totalTiempo > 720 && $estado == 1 ){
             echo "<script> alert ('$totalTiempo...Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
@@ -471,11 +475,11 @@ class  PlaneacionAse{
                 $idAgenda = $datos['idAgenda'];
                 $idAsig = $datos['idAsig'];
                 if($estado == 2){
-                    $consultaTiempo ="SELECT idAsig FROM pys_tiempos where idAsig = $idAsig AND fechTiempo='$fecha'";
-                    $resultadoTiempo = mysqli_query($connection, $consultaTiempo);
-                    if (mysqli_num_rows($resultadoTiempo)>0){
+                    $regTiempo = Tiempos::registrarTiempos($idSol, $usuario,  date("Y-m-d", strtotime($fecha)), $obs, $hora, $min, $sltFase,1);
+                    if ($regTiempo[0] == true){
                         $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
                         $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+                        
                     }
                 } else if ($estado == 1){
                     $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
@@ -489,7 +493,7 @@ class  PlaneacionAse{
                         echo ' <script> alert("Se actualizo el registro")</script>
                         <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
                     } else if ($estado == 2) {
-                        echo 'Se ha cambiado el estado en agenda';
+                        echo $regTiempo[1].' Se ha cambiado el estado en agenda';
 
                     } else if ($estado == 3) {
                         echo 'Se ha cancelado la asigancion en la agenda';
@@ -500,7 +504,7 @@ class  PlaneacionAse{
                         echo ' <script> alert("No es posible actualizar el registro")</script>
                         <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">'; 
                     } else if ($estado == 2) {
-                        echo 'No se ha cambiado el estado en agenda';
+                        echo $regTiempo[1].' No se ha cambiado el estado en agenda';
 
                     } else if ($estado == 3) {
                         echo 'No se ha cancelado la asigancion en la agenda';
@@ -525,7 +529,7 @@ class  PlaneacionAse{
         
     }
 
-    public static function validarHorasDia($fecha, $usuario, $horaAct, $minAct){
+    public static function validarHorasDia($fecha, $usuario, $horaAct, $minAct, $idAgenda){
         require('../Core/connection.php');
         $horasA = $horaAct;
         $minA = $minAct;
@@ -533,7 +537,7 @@ class  PlaneacionAse{
         $consulta ="SELECT horaAgenda, minAgenda FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
-        WHERE pys_agenda.estAgenda = 1 AND pys_asignados.est = 1 AND pys_login.est=1 AND pys_agenda.fechAgenda ='$newFecha' AND pys_login.usrLogin='$usuario'";
+        WHERE pys_agenda.estAgenda = 1 AND pys_asignados.est = 1 AND pys_login.est=1 AND pys_agenda.fechAgenda ='$newFecha' AND pys_login.usrLogin='$usuario' AND pys_agenda.idAgenda <> $idAgenda";
         $resultado = mysqli_query($connection, $consulta);
         while( $datos = mysqli_fetch_array($resultado)){
             $horaAgenda = $datos['horaAgenda'];
@@ -587,6 +591,17 @@ class  PlaneacionAse{
                     <label for="sltProy">Seleccione un proyecto</label>';
         }
         return $string;
+        mysqli_close($connection);
+    }
+
+    public static function UsuarioPersona($idPersona){
+        require('../Core/connection.php');
+        $consulta = "SELECT pys_login.usrLogin FROM  pys_personas 
+        INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+        WHERE pys_personas.est = 1 AND pys_login.est = 1 AND pys_personas.idPersona ='$idPersona'";
+        $resultado = mysqli_query($connection, $consulta);
+        $datos = mysqli_fetch_array($resultado);
+        return $datos['usrLogin'];
         mysqli_close($connection);
     }
 }

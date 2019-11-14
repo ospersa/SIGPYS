@@ -1,6 +1,6 @@
 <?php
 require('../Estructure/header.php');
-include_once('../Controllers/ctrl_agenda.php');
+include_once('../Controllers/ctrl_agendaAdmin.php');
 ?>
 <div id="content" class="center-align">
     <h4>Ver planeación</h4>
@@ -8,6 +8,10 @@ include_once('../Controllers/ctrl_agenda.php');
         <div class="col l6 m6 s12">
             <div class="card">
                 <div class="card-content">
+                    <div class="row">
+                        <div class="input-field col s6 m6 l6"><?php echo $personas;?></div>
+                    </div>
+                    
                     <div id="card-stats" class="row">
                         <div class="dia col s2 m2 l2">
                             <h6>Lunes</h6>
@@ -27,7 +31,7 @@ include_once('../Controllers/ctrl_agenda.php');
                         <div class="dia col s2 m2 l2">
                             <h6>Sabado</h6>
                         </div>
-                        <?php echo $panel;?>
+                        <div  id="div_dinaPanel" ></div>
                     </div>
                 </div>
             </div>
