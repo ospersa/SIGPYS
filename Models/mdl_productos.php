@@ -248,9 +248,9 @@ Class Producto {
                 $idCosto = ($datos3[0] == 0) ? "C00001" : "C".substr((substr($datos3[1], 1) + 100001), 1);
                 /** Insert de la información en las tablas */
                 $consulta4 = "INSERT INTO pys_claseproductos VALUES ('$idClase', '$servicio', '$nombre', '$nombreCorto', '$descripcion', '1');";
-                $resultado4 = mysqli_query($connection, $consulta4);
+                //$resultado4 = mysqli_query($connection, $consulta4);
                 $consulta5 = "INSERT INTO pys_costos VALUES ('$idCosto', '$servicio', '$idClase', '', '$costo', '1');";
-                $resultado5 = mysqli_query($connection, $consulta5);
+               // $resultado5 = mysqli_query($connection, $consulta5);
                 if ($resultado4 && $resultado5) {
                     /** Se realiza COMMIT de la información en la base de datos */
                     mysqli_query($connection, "COMMIT;");

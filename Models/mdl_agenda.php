@@ -447,7 +447,106 @@ class  PlaneacionAse{
         return $string;
         mysqli_close($connection);
     }
-
+    public static function mostrarAgendaAdmin ($fecha, $user){
+        require('../Core/connection.php');
+        $string = '<ul class="collapsible">
+        <li class="active">
+        <div class="collapsible-header teal"><h6 class ="white-text">Planeación Registrada '.$fecha.'</h6></div>
+                <div class="collapsible-body">
+                    <div class="row">
+                        
+            ';
+        $newFecha = date("Y-m-d", strtotime($fecha));
+        $cont = 1;
+        $consulta ="SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda 
+        FROM pys_agenda 
+        INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
+        INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+        WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est = 1 AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha'";
+        $resultado = mysqli_query($connection, $consulta);
+        while ($datos = mysqli_fetch_array($resultado)){
+            $idAgenda = $datos['idAgenda'];
+            $idAsig = $datos['idAsig'];
+            $notaAgenda = $datos['notaAgenda'];
+            $horaAgenda = $datos['horaAgenda'];
+            $minAgenda = $datos['minAgenda'];
+            $estAgenda = $datos['estAgenda'];
+            $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy FROM pys_asignados
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
+            INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_asignados.idSol
+            WHERE pys_asignados.est = 1 AND pys_actualizacionproy.est = 1 AND pys_solicitudes.est = 1 AND pys_asignados.idAsig = $idAsig";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            $datos2 = mysqli_fetch_array($resultado2);
+            $idSol = $datos2['idSol'];
+            $descripcionSol = $datos2['descripcionSol'];
+            $nombreProy = $datos2['nombreProy'];
+            $codProy = $datos2['codProy'];
+            if ($estAgenda == 1) {
+                $type = "";
+                $text = "";
+            } else if ($estAgenda == 2) {
+                $type = 'disabled';
+                $text = '<div class="input-field col l10 m10 s12  offset-l1 offset-m1">
+                <p class="left-align teal-text text-darken-1">*Esta actividad ya ha sido registrada en Tiempo*</p>
+                </div>';
+            } else if ($estAgenda == 3) {
+                $type = 'disabled';
+                $text = '<div class="input-field col l10 m10 s12  offset-l1 offset-m1">
+                <p class="left-align teal-text text-darken-1">*Esta actividad ha sido cancelada*</p>
+                </div>';
+            }
+            $string .='
+        <div class="card">
+            <div class="card-content ">
+                <div class="row">
+                    <div class="row">
+                        <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
+                            <p class="left-center teal-text">
+                                <h6>'.$codProy.' -- '.$nombreProy.'</h6>
+                            </p>
+                            <p class="left-align">P'.$idSol.' '.$descripcionSol.'</p>
+                        </div>
+                        <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                            <p class="left-align">Tiempo:</p>
+                        </div>
+                        <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                            <input type="number" class="validate" name="horas" value="'.$horaAgenda.'" '.$type.'>
+                            <label for="horas" class="active">Horas</label>
+                        </div>
+                        <div class="input-field col l1 m1 s12">
+                            <input type="number" class="validate" name="min" value="'.$minAgenda.'" '.$type.'>
+                            <label for="min" class="active">Minutos</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
+                            <p class="left-align">Actividad:</p>
+                        </div>
+                        <div class="input-field col l7 m7 s12">
+                            <textarea name="obser" class="materialize-textarea" '.$type.'>'.$notaAgenda.'</textarea>
+                            <label for="obser" class="active">Actividad</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
+                            <p class="left-align">Fase:</p>
+                        </div>
+                        <div class="input-field col s12 m5 l5">'.Tiempos::selectFase(null).'</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                ';
+                $cont += 1;
+            
+        }
+        $string .= ' </div>
+        </div>
+    </li>
+    </ul>';
+        return $string;
+        mysqli_close($connection);
+    }
     /* Estados de la Agenda 
     Estado 0 son las eliminadas.
     Estado 1 son las actividades unicamente registradas en la agenda
@@ -567,14 +666,21 @@ class  PlaneacionAse{
     public static function selectProyectoUsuario ($user,$long){
         require('../Core/connection.php');
         $string = "";
-        $consulta = "SELECT * FROM pys_actualizacionproy 
-        INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
-        INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
-        INNER JOIN pys_solicitudes  ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
-        INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
-        INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
-        INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-        WHERE pys_solicitudes.idTSol = 'TSOL02' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005') AND pys_solicitudes.est = 1 AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' GROUP BY pys_actualizacionproy.codProy ORDER BY pys_actualizacionproy.codProy ASC ";
+        $consultaPer = "SELECT idPersona FROM pys_login WHERE pys_login.usrLogin = '$user' AND est = 1 ";
+        $resultadoPer= mysqli_query($connection, $consultaPer);
+        $datosPer = mysqli_fetch_array($resultadoPer);
+        $idPer = $datosPer['idPersona'];
+        $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy
+        FROM pys_asignados 
+        INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy 
+        INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
+        INNER JOIN pys_solicitudes AS solicitudEspecifica ON solicitudEspecifica.idSol = pys_asignados.idSol 
+        INNER JOIN pys_solicitudes AS solicitudInicial ON solicitudInicial.idSol = solicitudEspecifica.idSolIni 
+        INNER JOIN pys_personas ON pys_personas.idPersona = solicitudInicial.idSolicitante 
+        INNER JOIN pys_roles ON pys_roles.idRol = pys_asignados.idRol 
+        WHERE pys_asignados.idPersona = '$idPer' AND pys_actsolicitudes.idSolicitante = '' AND pys_asignados.est = '1' AND pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND solicitudInicial.est = '1' AND solicitudEspecifica.est = '1' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005')  GROUP BY pys_actualizacionproy.codProy
+        ORDER BY `pys_actsolicitudes`.`idSol` ASC
+        ";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             $string .= '  <select name="sltProy'.$long.'" id="sltProy'.$long.'" onchange="cargaSolicitudesProy(\'#sltProy'.$long.'\',\'../Controllers/ctrl_agenda.php\',\'#div_produc'.$long.'\','.$long.')" required><option value="" disabled selected>Seleccione</option>';

@@ -55,15 +55,15 @@
 
         public static function actualizarDedicacion ($idDedicacion, $porcentaje1, $porcentaje2, $horasDedica){
             require ('../Core/connection.php');
-            $consulta = "UPDATE pys_dedicaciones SET porcentajeDedicacion1 = '$porcentaje1', porcentajeDedicacion2 = '$porcentaje2', totalHoras = '$horasDedica' WHERE idDedicacion = '$idDedicacion';";
-            $resultado = mysqli_query($connection, $consulta);
+            echo$consulta = "UPDATE pys_dedicaciones SET porcentajeDedicacion1 = '$porcentaje1', porcentajeDedicacion2 = '$porcentaje2', totalHoras = '$horasDedica' WHERE idDedicacion = '$idDedicacion';";
+            /* $resultado = mysqli_query($connection, $consulta);
             if ($resultado){
                 echo "<script> alert ('Se actualizó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/dedicacion.php">';
             }else{
                 echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/dedicacion.php">';
-            }
+            } */
             mysqli_close($connection);
         }
 

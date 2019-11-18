@@ -11,29 +11,29 @@ include_once "../Models/mdl_tiempos.php";
 /* Inicialización variables*/
 $proyecto     = (isset($_POST['proyecto'])) ? $_POST['proyecto'] : null;
 $fech         = (isset($_POST['fech'])) ? $_POST['fech'] : null;
-$idper        = (isset($_POST['idper'])) ? $_POST['idper'] : null;
 $cantidad     = (isset($_POST['cantidad'])) ? $_POST['cantidad'] : null;
 $horas        = (isset($_POST['horas'])) ? $_POST['horas'] : null;
-$min        = (isset($_POST['min'])) ? $_POST['min'] : null;
-$obser     = (isset($_POST['obser'])) ? $_POST['obser'] : null;
-$idSol     = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
+$min          = (isset($_POST['min'])) ? $_POST['min'] : null;
+$obser        = (isset($_POST['obser'])) ? $_POST['obser'] : null;
+$idSol        = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
 $idAgenda     = (isset($_POST['idAgenda'])) ? $_POST['idAgenda'] : null;
-$fecha     = (isset($_POST['fecha'])) ? $_POST['fecha'] : null;
-$sltFase     = (isset($_POST['sltFase'])) ? $_POST['sltFase'] : null;
-$long     = (isset($_POST['long'])) ? $_POST['long'] : null;
+$fecha        = (isset($_POST['fecha'])) ? $_POST['fecha'] : null;
+$sltFase      = (isset($_POST['sltFase'])) ? $_POST['sltFase'] : null;
+$long         = (isset($_POST['long'])) ? $_POST['long'] : null;
+$cod          = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$check ="";
+$selectProyecto = "";
+$usuario    = $_SESSION['usuario'];
 /*
 cod = 1 si se va ha realizar el registro de tiempo
 cod = 2 si se va ha cancelar la actividad en la agenda
 */
-$cod     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 
-$check ="";
-$selectProyecto = "";
+
 /* Procesamiento peticiones al controlador */
-$usuario  = $_SESSION['usuario'];
-$idPeriodo = PlaneacionAse::onPeriodoActual();
-$panel = PlaneacionAse::onPeriodo($idPeriodo, $usuario);
-$personas = Personas::selectPersonas2($idPeriodo);
+$idPeriodo  = PlaneacionAse::onPeriodoActual();
+$panel      = PlaneacionAse::onPeriodo($idPeriodo, $usuario);
+$personas   = Personas::selectPersonas2($idPeriodo);
 if(isset($_POST['fech'])){
  PlaneacionAse::crearDiv(1, $usuario, $fech);
 }

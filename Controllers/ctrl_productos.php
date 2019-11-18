@@ -39,6 +39,10 @@ if (isset($_POST['btnRegistrarTip'])) {
 } else if (isset($_POST['btnActClaPro'])) {
     Producto::actualizarClaseProducto($cod, $idServicio, $nombreClase, $nombreCortoClase, $descripcionClase, $costoClase);
 }
+if (isset($_POST['txt-search'])) {
+    Producto::busquedaTipoProductos($search);
+}
+
 
 /** Carga de información en el Modal */
 if ($id) {

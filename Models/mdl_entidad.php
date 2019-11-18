@@ -108,14 +108,14 @@
             $sql="INSERT INTO pys_entidades VALUES ('$codEntidad', '$nomEnti', '$nomCortoEnti', '$descEnti', 'PR0042', 'CAR032', '1');";
             $resultado = mysqli_query($connection, $sql);
             //insert tabla FacDEpto
-            $sql2="INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$codEntidad', '', '', '', '', '1', '1', '1')";
+            $sql2="INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$codEntidad',  'FAC014', 'DP0027', '', '', '1', '1', '1')";
             $resultado2 = mysqli_query($connection, $sql2);
-            if ($resultado1 && $resultado2){
+            if ($resultado && $resultado2){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';
             }else{
                 echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';
+                 echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';
             }
             mysqli_close($connection);
         }

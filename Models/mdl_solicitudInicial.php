@@ -304,7 +304,7 @@ Class SolicitudInicial {
             } else {
                 /** Obtención del id de la tabla cursosModulos con respecto al proyecto seleccionado */
                 $begin = mysqli_query($connection, "BEGIN;"); // Preparamos los datos en caso de que falle la conexión con el servidor o se presente algún error en el proceso de guardado de los datos, para no afectar la información existente en la DB
-                $consulta2 = "SELECT idCM FROM pys_cursosmodulos WHERE estProy = '1' AND idCurso = '' AND nombreCursoCM = '' AND idProy = '$proyecto';";
+                $consulta2 = "SELECT idCM FROM pys_cursosmodulos WHERE estProy = '1' AND idCurso = 'CR0051' AND nombreCursoCM = '' AND idProy = '$proyecto';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
                 $idCM = $datos2['idCM'];

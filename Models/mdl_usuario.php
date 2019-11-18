@@ -339,7 +339,7 @@
 
         public static function selectFacultades ($idEnt, $idPersona, $accion) {
             require('../Core/connection.php');
-            $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = '' AND idFac != '' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
+            $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac != 'FAC014' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($idPersona == null && $accion == null) {
@@ -393,7 +393,7 @@
 
         public static function selectDepartamentos ($idFac, $idPersona) {
             require('../Core/connection.php');
-            $consulta = "SELECT idFacDepto, facDeptoDepartamento, idDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND pys_facdepto.idFac != '' AND pys_facdepto.idDepto != '' AND idFac = '$idFac';";
+            $consulta = "SELECT idFacDepto, facDeptoDepartamento, idDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND pys_facdepto.idFac != 'FAC014' AND pys_facdepto.idDepto != 'DP0027' AND idFac = '$idFac';";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($idPersona == null) {
@@ -533,7 +533,7 @@
             } else { // Si el usuario no está creado en la tabla procedemos a realizar el registro de los datos
                 /** Consultamos el ID de la tabla pys_facdepto respecto a la facultad y el departamento*/
                 if ($departamento == null) {
-                    $consulta3 = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = '' AND idFac = '$facultad' AND idEnt = '$entidad';";
+                    $consulta3 = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac = '$facultad' AND idEnt = '$entidad';";
                     $resultado3 = mysqli_query($connection, $consulta3);
                     while ($datos3 = mysqli_fetch_array($resultado3)) {
                         $departamento = $datos3[0];
@@ -583,7 +583,7 @@
             $resultado = mysqli_query($connection, $consulta);
             if ($departamento == "") {
                 if ($facultad != null) {
-                    $consulta3 = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = '' AND idFac = '$facultad' AND idEnt = '$entidad';";
+                    $consulta3 = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac = '$facultad' AND idEnt = '$entidad';";
                     $resultado3 = mysqli_query($connection, $consulta3);
                 } else {
                     $consulta3 = "SELECT idFacDepto FROM pys_facdepto WHERE idEnt = '$entidad';";

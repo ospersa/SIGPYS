@@ -99,14 +99,14 @@
                         $codFase = 'FS'.substr((substr($max,2)+10001),1);	
                     }		
                     $consulta1 = "INSERT INTO pys_fases VALUES ('$codFase', '$nomFase',  '$descFase', '1');";
-                    $resultado1 = mysqli_query($connection, $consulta1);
+                    /* $resultado1 = mysqli_query($connection, $consulta1);
                     if ($resultado1) {
                         echo "<script> alert ('Se guardó correctamente la información');</script>";
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
                     } else {
                         echo "<script> alert('Ocurrió un error al intentar guardar el registro.');</script>";
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
-                    }
+                    } */
                 }
             }
             mysqli_close($connection);

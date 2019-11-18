@@ -37,11 +37,12 @@
                                 <thead>
                                     <tr>
                                         <th>Código solicitud</th>
-                                        <th>Producto/Servicio</th>
+                                        <th>Producto</th>
                                         <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
                                         <th>Equipo -- Servicio</th>
-                                        <th>Descripción Producto/Servicio</th>
+                                        <th>Descripción Producto</th>
+                                        <th>Nombre Producto</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
                                         <th>Información Producto</th>
@@ -51,6 +52,15 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
                     $comprobar = SolicitudEspecifica::validarResultadoProducto($idSol,$equipo);
+                    $consultaProd = "SELECT * FROM pys_productos
+                    INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
+                    WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
+                    $resultadoProd = mysqli_query($connection, $consultaProd);
+                    $nomProduc = "";
+                    if ($resultadoProd == TRUE ){
+                        $datosProd = mysqli_fetch_array($resultadoProd);
+                        $nomProduc = $datosProd['nombreProd'];
+                    }
                     if ($comprobar == 1){
                         $color = 'teal';
                         $modal = 'COM';
@@ -71,6 +81,7 @@
                                         <td>'.$datos['nombreProy'].'</td>
                                         <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
+                                        <td>'.$nomProduc.'</td>
                                         <td>'.$datos['fechPrev'].'</td>
                                         <td>'.$datos['fechSol'].'</td>
                                         <td><a href="#modalResulProTer" data-position="button" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto" onclick="envioData(\''.$modal.$idSol.'\',\'modalResulProTer.php\');"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
@@ -122,11 +133,12 @@
                                 <thead>
                                     <tr>
                                         <th>Código solicitud</th>
-                                        <th>Producto/Servicio</th>
+                                        <th>Producto</th>
                                         <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
                                         <th>Equipo -- Servicio</th>
-                                        <th>Descripción Producto/Servicio</th>
+                                        <th>Descripción Producto</th>
+                                        <th>Nombre Producto</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
                                         <th>Información Producto</th>
@@ -136,6 +148,15 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
                     $comprobar = SolicitudEspecifica::validarResultadoProducto($idSol,$equipo);
+                    $consultaProd = "SELECT * FROM pys_productos
+                    INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
+                    WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
+                    $resultadoProd = mysqli_query($connection, $consultaProd);
+                    $nomProduc = "";
+                    if ($resultadoProd == TRUE ){
+                        $datosProd = mysqli_fetch_array($resultadoProd);
+                        $nomProduc = $datosProd['nombreProd'];
+                    }
                     if ($comprobar == 1){
                         $color = 'teal';
                         $modal = 'COM';
@@ -149,6 +170,7 @@
                                         <td>'.$datos['nombreProy'].'</td>
                                         <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
+                                        <td>'.$nomProduc.'</td>
                                         <td>'.$datos['fechPrev'].'</td>
                                         <td>'.$datos['fechSol'].'</td>
                                         <td><a href="#modalResulProTer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto" onclick="envioData(\''.$modal.$idSol.'\',\'modalResulProTer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>

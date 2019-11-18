@@ -675,7 +675,7 @@ class Proyecto {
 
     public static function selectFacultad ($idEnt, $idProy) {
         require('../Core/connection.php');
-        $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = '' AND idFac != '' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
+        $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac != 'FAC014' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
         $resultado = mysqli_query($connection, $consulta);
         if ($idProy == null) {
             if (mysqli_num_rows($resultado) > 0) {
@@ -695,7 +695,7 @@ class Proyecto {
                     WHERE pys_actualizacionproy.est = '1' AND pys_actualizacionproy.idProy = '$idProy';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
-                if ($datos2['idFac'] != "") {
+                if ($datos2['idFac'] != "FAC014") {
                     echo '  <select name="sltFacul" id="sltFacul" onchange="cargaSelect(\'#sltFacul\',\'../Controllers/ctrl_proyecto.php\',\'#sltDeptoProy\');">';
                     while ($datos = mysqli_fetch_array($resultado)) {
                         if ($datos['idFac'] == $datos2['idFac']) {
@@ -711,10 +711,9 @@ class Proyecto {
         }
         mysqli_close($connection);
     }
-
     public static function selectDepartamento ($idFacul, $idProy) {
         require('../Core/connection.php');
-        $consulta = "SELECT idFacDepto, facDeptoDepartamento, idDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND pys_facdepto.idFac != '' AND pys_facdepto.idDepto != '' AND idFac = '$idFacul';";
+        $consulta = "SELECT idFacDepto, facDeptoDepartamento, idDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND pys_facdepto.idFac != 'FAC014' AND pys_facdepto.idDepto != 'DP0027' AND idFac = '$idFacul';";
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($idProy == null && $idFacul != null) {
@@ -733,7 +732,7 @@ class Proyecto {
                 WHERE idProy = '$idProy' AND pys_actualizacionproy.est = '1';";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
-            if ($datos2['idDepto'] != "") {
+            if ($datos2['idDepto'] != "DP0027") {
                 echo '  <select id="sltDepto" name="sltDepto">';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if ($datos['idDepto'] == $datos2['idDepto']) {
@@ -965,11 +964,11 @@ class Proyecto {
         $consulta = "SELECT pys_entidades.idEnt, pys_entidades.nombreEnt, pys_facdepto.idEnt, pys_facdepto.idFacDepto
             FROM pys_entidades
             INNER JOIN pys_facdepto ON pys_facdepto.idEnt = pys_entidades.idEnt
-            WHERE pys_entidades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.idFac = '' AND pys_facdepto.idDepto = ''
+            WHERE pys_entidades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.idFac = 'FAC014' AND pys_facdepto.idDepto = 'DP0027'
             ORDER BY nombreEnt;";
         $resultado = mysqli_query($connection, $consulta);
         $consulta2 = "SELECT idFacDepto, idFac, facDeptoFacultad, idDepto, facDeptoDepartamento FROM pys_facdepto
-            WHERE estFacdeptoFac = '1' AND estFacdeptoDepto = '1' AND idFac != ''
+            WHERE estFacdeptoFac = '1' AND estFacdeptoDepto = '1' AND idFac != 'FAC014'
             ORDER BY facDeptoFacultad";
         $resultado2 = mysqli_query($connection, $consulta2);
         if (($registros = mysqli_num_rows($resultado) > 0) || ($registros2 = mysqli_num_rows($resultado2) > 0)) {
@@ -1285,7 +1284,7 @@ class Proyecto {
                 } else {
                     /** Código para encontrar el ID de la tabla pys_facdepto con respecto a la facultad y el departamento */
                     if ($departamento == null) {
-                        $consulta5 = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = '' AND idFac = '$facultad' AND idEnt = '$entidad';";
+                        $consulta5 = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac = '$facultad' AND idEnt = '$entidad';";
                         $resultado5 = mysqli_query($connection, $consulta5);
                         $datos5 = mysqli_fetch_array($resultado5);
                         $facDepto = $datos5[0];
@@ -1303,11 +1302,11 @@ class Proyecto {
                     $idActProy = $datos7[0]+1;
                     
                     /** Código Insert tabla pys_actualizacionproy */
-                    $consulta8 = "INSERT INTO pys_actualizacionproy VALUES ('$idActProy', '$facDepto', '$codProy', '$tipoProy', '$proyectoIntExt', '$frente', '$estadoPry', '$etapaPry', '$codConectate', '$nombrePry', '$nombreCortoPry', '$contextoPry', $fechIni, $fechFin, NOW(), '$convocatoria', '$idPersona', '', '$presupuesto', '$financia', $fechaColciencias, '$semanas', '$fteFinancia', '$celula', '1');";
+                     $consulta8 = "INSERT INTO pys_actualizacionproy VALUES ('$idActProy', '$facDepto', '$codProy', '$tipoProy', '$proyectoIntExt', '$frente', '$estadoPry', '$etapaPry', '$codConectate', '$nombrePry', '$nombreCortoPry', '$contextoPry', $fechIni, $fechFin, NOW(), '$convocatoria', '$idPersona', '', '$presupuesto', '$financia', $fechaColciencias, '$semanas', '$fteFinancia', '$celula', '1');";
                     $resultado8 = mysqli_query($connection, $consulta8);
 
                     /** Código Insert tabla pys_cursosmodulos*/
-                    $consulta9 = "INSERT INTO pys_cursosmodulos VALUES ('$codCM', '$frente', '$codProy', '', '', '', '', '', '', '1', '1', '1');";
+                    $consulta9 = "INSERT INTO pys_cursosmodulos VALUES ('$codCM', '$frente', '$codProy', 'CR0051', 'MD0001', '', '', '', '', '1', '1', '1');";
                     $resultado9 = mysqli_query($connection, $consulta9);
 
                     /** Código Insert tabla pys_cruceproypep */
@@ -1390,13 +1389,13 @@ class Proyecto {
             $facDepto = $datos[0];
         } else if ($facultad != null) {
             /** Obtenemos ID de la tabla pys_facdepto respecto a la facultad */
-            $consulta = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = '' AND idFac = '$facultad' AND idEnt = '$entidad';";
+            $consulta = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac = '$facultad' AND idEnt = '$entidad';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             $facDepto = $datos[0];
         } else if ($entidad != null) {
             /** Obtenemos ID de la tabla pys_facdepto respecto a la entidad */
-            $consulta = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND idDepto = '' AND idFac = '' AND idEnt = '$entidad';";
+            $consulta = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoEnt = '1' AND idDepto = 'DP0027' AND idFac = 'FAC014' AND idEnt = '$entidad';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             $facDepto = $datos[0];

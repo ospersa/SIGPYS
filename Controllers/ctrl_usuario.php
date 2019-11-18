@@ -22,6 +22,7 @@ $celular            = (isset($_POST['txtCel'])) ? $_POST['txtCel'] : null;
 $categoriaCargo     = (isset($_POST['sltCategoriaCargo'])) ? $_POST['sltCategoriaCargo'] : null;
 $val                = (isset($_POST['val'])) ? $_POST['val'] : null;
 $cod                = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Iniciacion de variables Modal */
 $entidadM = (isset($_POST['sltEntidad2'])) ? $_POST['sltEntidad2'] : null;
@@ -40,6 +41,9 @@ if (isset($_POST['btnRegistrar'])) {
     Usuario::actualizarUsuario($cod, $identificacion, $nombres, $apellido1, $apellido2, $entidadM, $facultad, $departamento, $cargoM, $tipo, $equipoM, $ciudadM, $mail, $fijo, $extension, $celular, $categoriaCargo);
 }else if (isset($_POST['btnEliUsua'])) {
     Usuario::eliminarUsuario($cod);
+}
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Usuario::busquedaTotal() : Usuario::busqueda($search);
 }
 
 /* Carga de información en el Modal */

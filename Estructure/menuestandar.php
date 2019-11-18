@@ -208,7 +208,7 @@ require('../Controllers/ctrl_restriccionMenu.php');
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
 <li>
-        <a href="resultadoDiseño.php">Productos de diseño</a>
+        <a href="resultadoDiseno.php">Productos de diseño</a>
     </li>
     <li>
         <a href="resultadoRealizacion.php">Productos de realización</a>

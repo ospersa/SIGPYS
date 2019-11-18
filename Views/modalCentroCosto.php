@@ -8,12 +8,12 @@
                     require('../Controllers/ctrl_centroCosto.php');
                 ?>
                 <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                    <input id="txtCodCeco2" name="txtCodCeco2" type="text" class="validate" value="<?php echo $codCeco;?>" required>
-                    <label for="txtCodCeco2" class="active">Código Centro de Costos*</label>
+                    <input id="txtCodCeco" name="txtCodCeco" type="text" class="validate" value="<?php echo $codCeco;?>" required>
+                    <label for="txtCodCeco" class="active">Código Centro de Costos*</label>
                 </div>
                 <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                    <input id="txtNomCeco2" name="txtNomCeco2" type="text" class="validate" value="<?php echo $nomCeco;?>" required>
-                    <label for="txtNomCeco2" class="active">Nombre Centro de Costos*</label>
+                    <input id="txtNomCeco" name="txtNomCeco" type="text" class="validate" value="<?php echo $nomCeco;?>" required>
+                    <label for="txtNomCeco" class="active">Nombre Centro de Costos*</label>
                 </div>
             </div>
             <button class="btn waves-effect waves-light" type="submit" name="btn_act" >Actualizar</button>

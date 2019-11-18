@@ -4,7 +4,7 @@ class Departamento {
 
     public static function selectFacultad($idEntidad){
         require('../Core/connection.php');
-        $consulta = "SELECT idFac, facDeptoFacultad from pys_facdepto  where estFacdeptoFac = '1' and idFac != '' and idDepto= '' and idEnt = '$idEntidad'
+        $consulta = "SELECT idFac, facDeptoFacultad from pys_facdepto  where estFacdeptoFac = '1' and idFac != 'FAC014' and idEnt = '$idEntidad'
             GROUP BY idFac, facDeptoFacultad
             ORDER BY facDeptoFacultad;";
         $resultado = mysqli_query($connection, $consulta);
@@ -175,16 +175,16 @@ class Departamento {
            $nomFacultad = $datos2[0];
         }
         /*Código de inserción en la tabla pys_facdepto*/
-        $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
+        echo $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
         $resultado3 = mysqli_query($connection, $sql3);
 
-        if($resultado && $resultado2 && $resultado3){
+        /* if($resultado && $resultado2 && $resultado3){
             echo "<script> alert ('Se guardó correctamente la información');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
         }else{
             echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
-        }
+        } */
         mysqli_close($connection);
     }
 

@@ -82,6 +82,15 @@
                     $consulta2 = "SELECT est FROM pys_asignados WHERE idSol= '$idSol' and est !=0 ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     $data2 = mysqli_fetch_array($resultado2);
+                    $consultaProd = "SELECT * FROM pys_productos
+                    INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
+                    WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
+                    $resultadoProd = mysqli_query($connection, $consultaProd);
+                    $nomProduc = "";
+                    if ($resultadoProd == TRUE ){
+                        $datosProd = mysqli_fetch_array($resultadoProd);
+                        $nomProduc = $datosProd['nombreProd'];
+                    }
                     if ($data2['est'] == 1){
                         $color = "red";
                         $modal = "!";
@@ -100,6 +109,7 @@
                             <td>P'.$idSol.'</td>
                             <td>'.$nombreEqu.' -- '.$nombreSer.'</td>
                             <td><p class="truncate">'.$ObservacionAct.'</p></td>
+                            <td>aa'.$nomProduc.'</td>
                             <td>'.$fechPrev.'</td>
                             <td>'.$fechSol.'</td>
                             <td><a href="#modalTerminarProSer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
@@ -234,11 +244,6 @@
                     <div class="input-field col l11 m12 s12  left-align">
                         <label for="autores" class="active">Autores:</label>
                         '.$autores.'
-                    </div>
-                    <div class="input-field col l11 m12 s12 ">
-                        <label for="urlY" class="active">URL Lista de YouTube:</label>
-                        '.$urlY.'
-                    
                     </div>
                     <div class="input-field col l11 m12 s12 ">
                         <label for="urlVimeo" class="active">URL álbum de Vimeo:</label>

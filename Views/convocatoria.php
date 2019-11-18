@@ -3,7 +3,7 @@ require('../Estructure/header.php');
 ?>
 
 <div class="row search">
-    <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" data-url="../Controllers/ctrl_busConv.php">
+    <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" data-url="../Controllers/ctrl_convocatoria.php">
     <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_convocatoria.php')">
         <i class="material-icons">search</i>
     </button>

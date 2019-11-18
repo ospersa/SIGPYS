@@ -6,6 +6,7 @@ include_once('../Models/mdl_proyecto.php');
 $id         = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $val        = (isset($_POST['val'])) ? $_POST['val'] : null;
 $idProy     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /** Variables de formulario: etapa de proyectos */
 $nombreEta          = (isset($_POST['txtNomEta'])) ? $_POST['txtNomEta'] : null;
@@ -91,11 +92,11 @@ if ($id) {
 /** Procesamiento de peticiones para registro desde los formularios de proyectos */
 if (isset($_POST['btnRegistrarProy'])) {
     session_start();
-    $usserName = $_SESSION['usuario'];
-    $tipoProy = $_POST['sltTipoProy3'];
-    $celula = $_POST['sltCelula'];
-    $centroCosto = $_POST['sltCeco'];
-    $pep = $_POST['sltElementoPep'];
+    $usserName      = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
+    $tipoProy       = (isset($_POST['sltTipoProy3'])) ? $_POST['sltTipoProy3'] : null;
+    $celula         = (isset($_POST['sltCelula'])) ? $_POST['sltCelula'] : null;
+    $centroCosto    = (isset($_POST['sltCeco'])) ? $_POST['sltCeco'] : null;
+    $pep            = (isset($_POST['sltElementoPep'])) ? $_POST['sltElementoPep'] : null;
     Proyecto::registrarProyecto($siglaFrente, $anio, $siglaProy, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $nombreProy, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCorto, $contexto, $fechIni, $fechFin, $usserName, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep);
 } else if (isset($_POST['btnRegistrarEst'])) {
     Proyecto::registrarEstado ($nombreEst, $descripcionEst);
@@ -104,6 +105,11 @@ if (isset($_POST['btnRegistrarProy'])) {
 } else if (isset($_POST['btnRegistrarTip'])) {
     Proyecto::registrarTipo ($frente, $nombreTip);
 }
+/* Peticion de busqueda de proyectos  */
+if (isset($_POST['txt-search'])) {
+    $busqueda = ($search == null) ? Proyecto::busquedaTotalProyecto() : Proyecto::busqueda($search);
+}
+
 
 /** Procesamiento de peticiones para actualización de datos desde los formularios de proyectos */
 if ($val) {

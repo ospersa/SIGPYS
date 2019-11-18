@@ -515,6 +515,7 @@ function busqueda(url) {
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
+            inicializarCampos();
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
             $('table tbody').paginathing({
@@ -587,13 +588,13 @@ function pruebas(url) {
 }
 
 function cargarResAgenda(fecha,elem){
-    debugger;
     let letra = elem.find("h6");
     let path = window.location.pathname;
-    let url = "";
-    if (path == '/sigpys/Views/agenda.php'){
+    let comp = path.split("/")
+    let url ="";
+    if (comp[3] == 'agenda.php'){
         url = '../Controllers/ctrl_agenda.php';
-    } else  if (path == '/sigpys/Views/agendaAdmin.php'){
+    } else  if (comp[3] == 'agendaAdmin.php'){
         url = '../Controllers/ctrl_agendaAdmin.php';
     } 
     let idper = $('#sltPersona').val();
@@ -605,12 +606,10 @@ function cargarResAgenda(fecha,elem){
             idper: idper
         },
         beforeSend: function () {
-            debugger;
             $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
             $.each($('.fechPer'), function () {
-                debugger;
                 let color2 = $(this).hasClass('w');
                 if (color2) {
                     $(this).removeClass(' blue  darken-4').addClass('teal lighten-5');

@@ -93,7 +93,7 @@
 
         public static function OnloadTiempoRegistrado($codsol,$idPer){
             require('../Core/connection.php');
-            echo $consulta = "SELECT pys_tiempos.idTiempo, pys_tiempos.fechTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.notaTiempo, pys_fases.nombreFase 
+            $consulta = "SELECT pys_tiempos.idTiempo, pys_tiempos.fechTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.notaTiempo, pys_fases.nombreFase 
                 FROM `pys_asignados` 
                 INNER JOIN pys_personas on pys_asignados.idPersona=pys_personas.idPersona 
                 INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
@@ -101,7 +101,7 @@
                 INNER JOIN pys_fases ON pys_tiempos.idFase=pys_fases.idFase 
                 WHERE pys_asignados.idSol= '$codsol' AND pys_login.usrLogin ='$idPer' AND pys_tiempos.estTiempo=1 AND pys_asignados.est=1";
             $resultado = mysqli_query($connection, $consulta);
-            $dat= mysqli_num_rows($resultado);
+            $dat = mysqli_num_rows($resultado);
             if( $dat > 0){                
                 $string = '
                 <table class="left responsive-table">

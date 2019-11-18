@@ -73,11 +73,11 @@
 
         public static function registrarEquipo($nomEquipo, $descEquipo){
             require('../Core/connection.php');
-            $consulta = "SELECT COUNT(idFase), MAX(idFase) FROM pys_fases;";
+            echo $consulta = "SELECT COUNT(idEqu), MAX(idEqu) FROM pys_equipos;";
             $resultado = mysqli_query($connection, $consulta);
             while ($datos =mysqli_fetch_array($resultado)){
-                $count=$datos[0];
-                $max=$datos[1];
+                $count=$datos['COUNT(idEqu)'];
+                $max=$datos['MAX(idEqu)'];
             }
             if ($count==0){
                 $codEquipo="EQU001";
@@ -85,11 +85,17 @@
             else {
                 $codEquipo='EQU'.substr((substr($max,3)+1001),1);
             }		
-            $sql="INSERT INTO pys_equipos VALUES ('$codEquipo', '$nomEquipo',  '$descEquipo', '1');";
+            echo $sql="INSERT INTO pys_equipos VALUES ('$codEquipo', '$nomEquipo',  '$descEquipo', '1');";
             $resultado = mysqli_query($connection, $sql);
+            if ($resultado){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            } else {
+                echo "<script> alert ('No se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            }
+            
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
         }
 
         public static function actualizarEquipo($idEquipo2, $nomEquipo, $descEquipo){

@@ -76,7 +76,7 @@
                     $idSolEsp = 'S'.substr((substr($max,1)+100001),1);
                 }
                 /** Consulta para traer el id de la tabla cursos_modulos con respecto al id del proyecto */
-                $consulta2 = "SELECT idCM FROM pys_cursosmodulos WHERE estProy = '1' AND idCurso = '' AND nombreCursoCM = '' AND idProy = '$idProy';";
+                $consulta2 = "SELECT idCM FROM pys_cursosmodulos WHERE estProy = '1' AND idCurso = 'CR0051' AND nombreCursoCM = '' AND idProy = '$idProy';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
                 $idCM = $datos2['idCM'];
@@ -570,8 +570,7 @@
                     } else {
                         return 0;
                     }                      
-                } else if ($equipo == "EQU001" ){
-                    $urlY = $datos['urlyoutubeOficial'];     
+                } else if ($equipo == "EQU001" ){   
                     $urlVimeo = $datos['urlVimeo']; 
                     $minDura = $datos['duracionmin'];  
                     $segDura = $datos['duracionseg'];  
@@ -751,17 +750,17 @@
             require('../Core/connection.php');
             $countProd = SolicitudEspecifica::generarCodigoProducto();
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            echo $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '', '', '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
+            $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '', '', '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
             $resultado = mysqli_query($connection, $consulta);
-             echo $consulta1 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(),'', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
+            $consulta1 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(),'', '', '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1')";
             $resultado1 = mysqli_query($connection, $consulta1);
-            /* if($resultado && $resultado1){
+            if($resultado && $resultado1){
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
-            } */
+            }
             mysqli_close($connection);
         }
 

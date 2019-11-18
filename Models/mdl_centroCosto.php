@@ -75,7 +75,7 @@
                 /** Verificación que la información no esté duplicada en la tabla */
                 $consulta = "SELECT idCeco FROM pys_centrocostos WHERE ceco = '$codigo';";
                 $resultado = mysqli_query($connection, $consulta);
-                if (mmysqli_num_rows($resultado) == 0) {
+                if (mysqli_num_rows($resultado) == 0) {
                     /** Generación del ID a registrar en la tabla */
                     $consulta2 = "SELECT COUNT(idCeco), MAX(idCeco) FROM pys_centrocostos;";
                     $resultado2 = mysqli_query($connection, $consulta2);
@@ -121,7 +121,7 @@
                 echo "<script> alert('La información ingresada es igual. Registro no actualizado');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/centroCosto.php">';
             } else {
-                $consulta2 = "UPDATE pys_centrocostos SET ceco = '$ceco', nombre = '$nombre' WHERE idCeco = '$idCeco' AND estado = '1';";
+                echo $consulta2 = "UPDATE pys_centrocostos SET ceco = '$ceco', nombre = '$nombre' WHERE idCeco = '$idCeco' AND estado = '1';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 if ($resultado2) {
                     mysqli_query($connection, "COMMIT;");

@@ -126,7 +126,7 @@
                     } else {
                         if ($rollback = mysqli_query($connection, "ROLLBACK;")) {
                             echo "<script> alert('Ocurrió un error al intentar guardar el registro.');</script>";
-                            echo '<meta http-equiv="Refresh" content="0;url=../Views/celula.php">';
+                           // echo '<meta http-equiv="Refresh" content="0;url=../Views/celula.php">';
                         }
                     }
                 } else {

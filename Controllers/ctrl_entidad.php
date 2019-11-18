@@ -9,6 +9,7 @@ $descEnti       = (isset($_POST["txtDescEnti"])) ? $_POST["txtDescEnti"] : null;
 $val            = (isset($_POST["val"])) ? $_POST["val"] : null;
 $idEnti         = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : null;
 $idEnti2        = (isset($_POST["cod"])) ? $_POST["cod"] : null;
+$search         = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 
 /* Carga de información en el Modal */
 if($idEnti){
@@ -19,6 +20,9 @@ if($idEnti){
 }
 
 /* Procesamiento peticiones al controlador */
+    if (isset($_POST['txt-search'])) {
+        $busqueda = ($search == null) ? Entidad::busquedaTotal() : Entidad::busqueda($search);
+    }
 if (isset($_POST['btnGuardarEnt'])) {
     $resultado = Entidad::registrarEntidad($nomEnti, $nomCortoEnti, $descEnti);
 } else if (isset($_POST['btnActEnti'])) {

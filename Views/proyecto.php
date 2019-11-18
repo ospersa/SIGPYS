@@ -5,8 +5,8 @@ include_once('../Models/mdl_usuario.php');
 ?>
 
 <div class="row search">
-    <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" data-url="../Controllers/ctrl_busProyecto.php">
-    <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_busProyecto.php')">
+    <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" data-url="../Controllers/ctrl_proyecto.php">
+    <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_proyecto.php')">
         <i class="material-icons">search</i>
     </button>
 </div>
