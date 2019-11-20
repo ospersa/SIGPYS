@@ -23,6 +23,7 @@ $busqueda      = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 if ($idAsig) {
     $id = substr($idAsig, 0, 2);
     if ($id == "C_") {
+        echo $idAsig;
         $detail = Cotizacion::onLoad2(substr($idAsig, 2));
         $valCot = $detail['valorPresupuesto'];
         $obsSol = $detail['obsSolicitante'];
@@ -56,18 +57,18 @@ if (isset($_POST['enviar'])){
     $solicitante    = $_POST['txtVal'];
     $usuario = $_SESSION['usuario'];
     $registra = Cotizacion::obtenerPersonaRegistra($usuario);
-    $rol            = (isset($_POST['sltRol'])) ? $_POST[''] : null;
-    $persona        = (isset($_POST['sltPersona'])) ? $_POST[''] : null;
-    $fase           = (isset($_POST['sltFase'])) ? $_POST[''] : null;
-    $proy           = (isset($_POST['txtIdProy'])) ? $_POST[''] : null;
-    $solEsp = substr($_POST['txtSolEsp'],1);
-    $horas          = (isset($_POST['txtHoras'])) ? $_POST[''] : null;
-    $minutos        = (isset($_POST['txtMinutos'])) ? $_POST[''] : null;
+    $rol            = (isset($_POST['sltRol'])) ? $_POST['sltRol'] : null;
+    $persona        = (isset($_POST['sltPersona'])) ? $_POST['sltPersona'] : null;
+    $fase           = (isset($_POST['sltFase'])) ? $_POST['sltFase'] : null;
+    $proy           = (isset($_POST['txtIdProy'])) ? $_POST['txtIdProy'] : null;
+    $horas          = (isset($_POST['txtHoras'])) ? $_POST['txtHoras'] : null;
+    $minutos        = (isset($_POST['txtMinutos'])) ? $_POST['txtMinutos'] : null;
+    $solEsp         = substr($_POST['txtSolEsp'],1);
     if ($rol != null && $persona != null && $fase != null && $horas != null && $minutos != null) {
-        $result = Asignados::registrarAsignacion($solEsp, $proy, $persona, $rol, $fase, $registra, $horas, $minutos, $solicitante);
+        $result = Asignados::registrarAsignacion($rol, $persona, $fase, $proy,'', $registra['idPersona'], $horas, $minutos,  $solEsp);
     } else {
         echo "<script>alert ('Existe algún campo VACÍO. Registro no válido');</script>";
-        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+     //   echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
     }
 } else if (isset($_POST['btnAprobar'])) {
     $nota       = (isset($_POST['txtObsAprobacion'])) ? $_POST['txtObsAprobacion'] : null;
@@ -146,12 +147,12 @@ if (isset($_REQUEST['cod'])) {
     }
 }
 
-/*if (isset($_POST['val'])) {
-    $val = $_POST['val'];
-    $idAsig = $_POST['cod'];
-    $maxhora = $_POST['txtHoras'];
-    $maxmin = $_POST['txtMinutos'];
-    $solEsp = $_POST['idSol'];
+if (isset($_POST['val'])) {
+    $val        = (isset($_POST['val'])) ? $_POST['val'] : null;
+    $solEsp     = (isset($_POST['idSol'])) ? $_POST['idSol'] :null;
+    $idAsig     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+    $maxhora    = (isset($_POST['txtHoras'])) ? $_POST['txtHoras'] : null;
+    $maxmin     = (isset($_POST['txtMinutos'])) ? $_POST['txtMinutos'] : null;
     if ($val == "1") {
         $resultado = Cotizacion::actualizarAsignacion($idAsig, $maxhora, $maxmin, $solEsp);
     } else if ($val == "2") {
@@ -164,7 +165,7 @@ if (isset($_REQUEST['cod'])) {
         $obsPro = $_POST['txtObsPro'];
         $resultado = Cotizacion::actualizarCotizacion($idCot, $valCot, $obsSol, $obsPys, $obsPro, $solicitante);
     } 
-}*/
+}
 if (isset($_POST['txt-search'])) {
     if ($busqueda == null) {
         echo $cotizaciones = Cotizacion::listarCotizaciones();

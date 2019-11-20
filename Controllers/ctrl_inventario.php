@@ -72,7 +72,6 @@ if ($id != null && (! isset($_POST['persona']))){
     $validarInv = Inventario::validarInventario($id);
     $tablaAct = Inventario::tablaActualizaciones($id);
     if($validarInv != null){
-        
         $crudosCarp     = $validarInv['crudoCarpeta'];
         $crudosPes      = $validarInv['crudoPeso'];
         $proyCarp       = $validarInv['proyectoCarpeta'];
@@ -94,7 +93,7 @@ if ($id != null && (! isset($_POST['persona']))){
         $estadoInv      = $validarInv['estadoInv'];
     }
     $selectEstado = Inventario::selectEstadoInv($estadoInv);
-    $stlPerEnt              = Inventario::selectPersona(2, $idPerEnt);
+    $stlPerEnt              = Inventario::selectPersona(3, $idPerEnt);
     $stlPerRec              = Inventario::selectPersona(3, $idPerRec);
 }else if (isset($_POST['btnGuaInv'])){
     $validarInv = Inventario::validarInventario($cod);

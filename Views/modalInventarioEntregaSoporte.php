@@ -54,9 +54,9 @@
                 <label for="sltPerEnt">Persona que entrega</label>
             </div>
             <div class="input-field col l5 m5 s12 offset-l1 offset-m1 ">
-            <label for="sltPerEnt" class="active">Persona que recibe</label>
+            <label for="sltPerRec" class="active">Persona que recibe</label>
                 <p class="left-align">'.$nombreUser.'</p>
-                <input type="text" name="sltPerEnt" id="sltPerEnt" value="'.$idUser.'" hidden >
+                <input type="text" name="sltPerRec" id="sltPerRec" value="'.$idUser.'" hidden >
             </div>';
             } else {
                 echo'

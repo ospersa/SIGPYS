@@ -3,7 +3,7 @@
     <div class="row">
         <form id="actForm" action="../Controllers/ctrl_proyecto.php" method="post" class="col l12 m12 s12">
             <input id="cod" name="cod" type="hidden">
-            <input id="val" name="val" type="hidden">
+            <input id="val" name="val" value = "1" type="hidden">
             <?php
                 require_once('../Controllers/ctrl_proyecto.php');
                 //include_once('../Models/mdl_proyecto.php');
@@ -26,7 +26,7 @@
                 <label for="txtDescEta" class="active">Descripción</label>
             </div>
             <div class="row">
-                <button class="btn waves-effect waves-light" type="submit" name="action" onclick="actualiza('1','Controllers/ctrl_proyecto.php')">Actualizar</button>
+                <button class="btn waves-effect waves-light" type="submit" name="action" >Actualizar</button>
             </div>
         </div>
         </form>

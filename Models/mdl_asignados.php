@@ -374,8 +374,9 @@
             require('../Core/connection.php');
             if ($maxHora == "") { $maxHora = 0;}
             if ($maxMin == "") { $maxMin = 0;}
+            echo $idSol;
             if (substr($idSol, 0, 1) == 'P') {
-                $idSol = substr($idSol, 1);
+               echo $idSol = substr($idSol, 1);
             }
             $consulta = "SELECT idPersona FROM pys_login WHERE usrLogin = '$registra' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
@@ -383,7 +384,7 @@
             $registra = $datos['idPersona'];
             if ($rol == null || $persona == null || $fase == null) {
                 echo "<script> alert('Existe algún campo VACÍO. Registro no válido');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+                //echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
             } else {
                 /** Validación de registros que existen en la tabla, para evitar duplicidad */
                 $consulta2 = "SELECT idAsig FROM pys_asignados WHERE idFase = '$fase' AND idRol = '$rol' AND idPersona = '$persona' AND idProy = '$idProy' AND idSol = '$idSol' AND (est = '1' OR est = '2');";
@@ -397,14 +398,14 @@
                     $resultado3 = mysqli_query($connection, $consulta3);
                     $datos3 = mysqli_fetch_array($resultado3);
                     $idAsig = $datos3[0] + 1;
-                    $consulta4 = "INSERT INTO pys_asignados VALUES ('$idAsig', '$idSol', '$idProy', '$idCurso', '$persona', '$rol', '$fase', '$registra', '0', '0', '$maxHora', '$maxMin', NOW(), '1');";
+                    echo $consulta4 = "INSERT INTO pys_asignados VALUES ('$idAsig', '$idSol', '$idProy', '$idCurso', '$persona', '$rol', '$fase', '$registra', '0', '0', '$maxHora', '$maxMin', NOW(), '1');";
                     $resultado4 = mysqli_query($connection, $consulta4);
                     if ($resultado4) {
                         echo "<script> alert('Se guardó correctamente el registro.');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+                        //echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
                     } else {
                         echo "<script> alert('Se presentó un error al intentar guardar la información, por favor intente nuevamente.');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+                       // echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
                     }
                 }
             }

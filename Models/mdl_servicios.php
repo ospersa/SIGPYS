@@ -180,7 +180,7 @@
 
         public static function suprimirServicio ($id){
             require('../Core/connection.php');
-            echo $consulta = "UPDATE pys_servicios SET est = '0' WHERE idSer = '$id' ";
+            $consulta = "UPDATE pys_servicios SET est = '0' WHERE idSer = '$id' ";
             $resultado = mysqli_query($connection, $consulta);
             if($resultado){
                 echo "<script> alert ('Se eliminó correctamente la información');</script>";

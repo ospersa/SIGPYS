@@ -22,7 +22,7 @@ Class Cotizacion {
 
     public static function onLoad2($idCot){
         require('../Core/connection.php');
-        $consulta="SELECT *
+echo$consulta="SELECT *
             FROM pys_cotizaciones 
             WHERE idCotizacion = '".$idCot."'
             AND pys_cotizaciones.estado = 1;";
@@ -306,9 +306,14 @@ Class Cotizacion {
         if ($datos['idCotizacion'] == $idCot && $datos['valorPresupuesto'] != $valCot) {
             $consulta2 = "UPDATE pys_cotizaciones SET estado = '2' WHERE idCotizacion = '$idCot';";
             $resultado2 = mysqli_query($connection, $consulta2);
-            $consulta3 = "INSERT INTO pys_cotizaciones (idSolEsp, valorPresupuesto, obsSolicitante, obsPyS, obsProducto, fechaRegistro, estado) VALUES ('".$datos['idSolEsp']."', '$valCot', '$obsSol', '$obsPys', '$obsProd', now(), '1');";
+            echo $consulta3 = "INSERT INTO pys_cotizaciones (idSolEsp, valorPresupuesto, obsSolicitante, obsPyS, obsProducto, fechaRegistro, estado) VALUES ('".$datos['idSolEsp']."', '$valCot', '$obsSol', '$obsPys', '$obsProd', now(), '1');";
             $resultado3 = mysqli_query($connection, $consulta3);
-            $consulta5 = "UPDATE pys_actsolicitudes SET presupuesto = '$valCot' WHERE idActSol = '$idAct'";
+            $idSol = $datos['idSolEsp'];
+            $consultaIdSol = "SELECT idActSol FROM pys_actsolicitudes WHERE idSol = '$idSol' AND est = 1";
+            $resultadoIdSol = mysqli_query($connection, $consultaIdSol);
+            $datosIdSol = mysqli_fetch_array($resultadoIdSol);
+            $idAct = $datosIdSol['idActSol'];
+            echo $consulta5 = "UPDATE pys_actsolicitudes SET presupuesto = '$valCot' WHERE idActSol = '$idAct'";
             $resultado5 = mysqli_query($connection, $consulta5);
             if ($resultado2 && $resultado3 && $resultado5) {
                 mysqli_query($connection, "COMMIT;");
