@@ -312,7 +312,7 @@ Class SolicitudInicial {
                 $consulta3 = "INSERT INTO pys_solicitudes VALUES ('$idSolicitud', '$idTipo', '', '', '$registra', '$solicita', '$descripcion', NOW(), '1');";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 /** Código para inserción de los datos en la tabla pys_actsolicitudes */
-                $consulta4 = "INSERT INTO pys_actsolicitudes (idEstSol, idSol, idCM, idPersona, idSolicitante, fechPrev, fechAct, ObservacionAct, presupuesto, horas, est) VALUES ('$idEstado', '$idSolicitud','$idCM', '$registra', '$solicita', '$fecha', NOW(), '$descripcion', '0', '0', '1');";
+                $consulta4 = "INSERT INTO pys_actsolicitudes (idEstSol, idSol, idCM, idSer, idPersona, idSolicitante, fechPrev, fechAct, ObservacionAct, presupuesto, horas, est) VALUES ('$idEstado', '$idSolicitud','$idCM', 'SER047', '$registra', '$solicita', '$fecha', NOW(), '$descripcion', '0', '0', '1');";
                 $resultado4 = mysqli_query($connection, $consulta4);
                 if ($resultado3 && $resultado4) {
                     /** Si ambas consultas son exitosas hacemos commit en la base de datos y guardamos los cambios */

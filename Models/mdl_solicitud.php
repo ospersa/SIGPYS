@@ -262,7 +262,7 @@
                     echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudInicial.php">';
                 } else {
                     /** Insert de la información en la tabla pys_actsolicitudes */
-                    $consulta2 = "INSERT INTO pys_actsolicitudes (idEstSol, idSol, idCM, idPersona, idSolicitante, fechPrev, fechAct, ObservacionAct, presupuesto, horas, est) VALUES ('$estSol', '$idSol', '$idCM', '$registra', '$solicita', $fechaPrevista, NOW(), '$obs', '0', '0', '1');";
+                    $consulta2 = "INSERT INTO pys_actsolicitudes (idEstSol, idSol, idCM, idSer, idPersona, idSolicitante, fechPrev, fechAct, ObservacionAct, presupuesto, horas, est) VALUES ('$estSol', '$idSol', '$idCM', 'SER047', '$registra', '$solicita', $fechaPrevista, NOW(), '$obs', '0', '0', '1');";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     /** Obtención de la última actualización en la tabla pys_actsolicitudes para realizar el cambio de estado a 2 */
                     $consulta3 = "SELECT MIN(pys_actsolicitudes.fechAct) FROM pys_actsolicitudes WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSol = '$idSol';";
@@ -284,7 +284,7 @@
                 }
             } else {
                 /** Insert de la información en la tabla pys_actsolicitudes */
-                $consulta2 = "INSERT INTO pys_actsolicitudes (idEstSol, idSol, idCM, idPersona, idSolicitante, fechPrev, fechAct, ObservacionAct, presupuesto, horas, est) VALUES ('$estSol', '$idSol', '$idCM', '$registra', '$solicita', $fechaPrevista, NOW(), '$obs', '0', '0', '1');";
+                $consulta2 = "INSERT INTO pys_actsolicitudes (idEstSol, idSol, idCM, idSer, idPersona, idSolicitante, fechPrev, fechAct, ObservacionAct, presupuesto, horas, est) VALUES ('$estSol', '$idSol', '$idCM', 'SER047', '$registra', '$solicita', $fechaPrevista, NOW(), '$obs', '0', '0', '1');";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 /** Obtención de la última actualización en la tabla pys_actsolicitudes para realizar el cambio de estado a 2 */
                 $consulta3 = "SELECT MIN(pys_actsolicitudes.fechAct) FROM pys_actsolicitudes WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSol = '$idSol';";
