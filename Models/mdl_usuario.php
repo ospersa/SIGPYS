@@ -633,7 +633,9 @@
             require('../Core/connection.php');
             $consulta = "UPDATE pys_personas SET est = '0' WHERE (`idPersona` = '$idPersona');";
             $resultado = mysqli_query($connection, $consulta);
-            if ($resultado) {
+            $consulta1 = "UPDATE pys_login SET est = 0 WHERE idLogin = '$idPersona';";
+            $resultado1 = mysqli_query($connection, $consulta1);
+            if ($resultado && $resultado1) {
                 echo "<script> alert ('Se eliminó correctamente el registro.');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/usuario.php">';
             } else {

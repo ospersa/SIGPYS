@@ -26,7 +26,9 @@ $(document).ready(function () {
     $('select').formSelect();
 
     if ($(".dropdown-trigger")) {
-        $(".dropdown-trigger").dropdown();
+        $(".dropdown-trigger").dropdown({
+            closeOnClick: false
+        });
     }
 
     $('.modal').modal({
@@ -948,6 +950,24 @@ function checkProd(check,num,long) {
 
 }
 
+function activar(id, url, nombre) {
+    var string = "¿Esta seguro de activar "+nombre+"?";
+    var mensaje = confirm(string);
+    //Detectamos si el usuario acepto el mensaje
+    if (mensaje) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                cod: id,
+            },
+            success: function (data) {
+                alert(data);
+                location.reload();
+            }
+        });
+    }
+}    
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {
 

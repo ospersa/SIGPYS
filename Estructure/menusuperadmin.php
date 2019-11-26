@@ -305,22 +305,48 @@
     </li>
 </ul>
 
-
 <ul id="eliminados" class="dropdown-content teal darken-1">
     <li>
-        <a href="#!">Convocatorias</a>
+        <a href="eliminadosConvocatoria.php">Convocatorias</a>
     </li>
     <li>
-        <a href="#!">Fases</a>
+        <a href="eliminadosFases.php" >Fases</a>
     </li>
     <li>
-        <a href="#!">Frentes</a>
+        <a href="eliminadosFrentes.php" >Frentes</a>
     </li>
     <li>
-        <a href="#!">Plataformas</a>
+        <a href="eliminadosPlataformas.php" >Plataformas</a>
     </li>
     <li>
-        <a href="#!">Roles</a>
+        <a href="eliminadosRoles.php" >Roles</a>
+    </li>
+    <li>
+        <a class="dropdown-trigger" href="#!" data-target="EntidadesEli">Entidades
+            <i class="material-icons right">arrow_drop_down</i>
+        </a>
+    </li>
+    
+    <li>
+        <a href="eliminadosCargos.php" >Cargos</a>
+    </li>
+    <li>
+        <a href="eliminadosEquipos.php" >Equipos</a>
+    </li>
+    <li>
+        <a href="eliminadosProyectos.php" >Proyectos</a>
+    </li>
+    <li>
+        <a href="eliminadosSalarios.php" >Salarios</a>
+    </li>
+    <li>
+        <a href="eliminadosServicios.php" >Servicios</a>
+    </li>
+    <li>
+        <a href="eliminadosUsuarios.php" >Personas</a>
+    </li>
+    <li>
+        <a href="eliminadosPassword.php" >Password</a>
     </li>
 </ul>
 
@@ -345,5 +371,16 @@
     </li>
     <li>
         <a href="cotizacion.php?cod=1">Nueva Cotización</a>
+    </li>
+</ul>
+<ul id="EntidadesEli" class="dropdown-content teal darken-1">
+    <li>
+        <a href="eliminadosEntidades.php">Entidades</a>
+    </li>
+    <li>
+        <a href="eliminadosFacultades.php">Facultades</a>
+    </li>
+    <li>
+        <a href="eliminadosDepartamentos.php">Departamentos</a>
     </li>
 </ul>

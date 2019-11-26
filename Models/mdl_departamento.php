@@ -178,13 +178,13 @@ class Departamento {
         echo $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
         $resultado3 = mysqli_query($connection, $sql3);
 
-        /* if($resultado && $resultado2 && $resultado3){
+        if($resultado && $resultado2 && $resultado3){
             echo "<script> alert ('Se guardó correctamente la información');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
         }else{
             echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/departamento.php">';
-        } */
+        }
         mysqli_close($connection);
     }
 
