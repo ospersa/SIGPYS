@@ -322,9 +322,13 @@
         <a href="eliminadosRoles.php" >Roles</a>
     </li>
     <li>
-        <a class="dropdown-trigger" href="#!" data-target="EntidadesEli">Entidades
-            <i class="material-icons right">arrow_drop_down</i>
-        </a>
+        <a href="eliminadosEntidades.php">Entidades</a>
+    </li>
+    <li>
+        <a href="eliminadosFacultades.php">Facultades</a>
+    </li>
+    <li>
+        <a href="eliminadosDepartamentos.php">Departamentos</a>
     </li>
     
     <li>
@@ -371,16 +375,5 @@
     </li>
     <li>
         <a href="cotizacion.php?cod=1">Nueva Cotización</a>
-    </li>
-</ul>
-<ul id="EntidadesEli" class="dropdown-content teal darken-1">
-    <li>
-        <a href="eliminadosEntidades.php">Entidades</a>
-    </li>
-    <li>
-        <a href="eliminadosFacultades.php">Facultades</a>
-    </li>
-    <li>
-        <a href="eliminadosDepartamentos.php">Departamentos</a>
     </li>
 </ul>

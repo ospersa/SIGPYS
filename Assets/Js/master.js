@@ -15,7 +15,7 @@ $('.modal').on('change', function () {
 $(document).ready(function () {
 
     inicializarCampos();
-
+    chartSolicitud();
 
     $('.tabs').tabs();
 
@@ -968,6 +968,55 @@ function activar(id, url, nombre) {
         });
     }
 }    
+
+/** Funciones para generar Graficos en el Home */
+
+function chartSolicitud() {
+    $.ajax({
+        url: '../Controllers/ctrl_home.php',
+        type: 'POST',
+        data: {
+            action: 'Sol'
+        },
+        success: function (response) {
+            let tasks = JSON.parse(response);
+            let template1 = [];
+            let template2 = [];
+            tasks.forEach(task => {
+                var labels = template1.push(`${task.estado}`);
+                var votes = template2.push(task.cantidad);
+            });
+            generarChart("doughnut", "chartSolicitud", template1, template2)
+        }
+    });
+}
+
+function generarChart(tipo, elem, template1, template2){
+    var config = {
+        type: tipo,
+        data: {
+            labels: template1,
+            datasets: [{
+                data: template2,
+                backgroundColor: [
+                    '#D941CF', '#A056BF', '#4988BF', '#E3F26D', '#B273D5', '#8CD7C1', '#4988BF', '#9084E1'
+                ]
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            }
+
+        }
+    };
+
+    var ctx = document.getElementById(elem);
+    var ctx = document.getElementById(elem).getContext('2d');
+    var chart = new Chart (ctx, config);
+
+}
+
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {
 
