@@ -340,7 +340,7 @@ select[required] {
     width: 185px;
 }
 
-td {
+td, .trunca {
     &:hover {
         .truncate {
             white-space: inherit;

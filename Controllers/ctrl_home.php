@@ -15,8 +15,17 @@ include_once("../Models/mdl_home.php");
       
 /* Procesamiento peticiones al controlador */
 $agenda = Home::agendaDia($usuario);
+$solicitudes = Home::solicitudesAsig($usuario);
 
 if ($chart == "Sol"){
     echo Home::solicitudes ($usuario);
+} else if ($chart == "Tiem"){
+    echo Home::tiempo($usuario);
+} else if ($chart == "SolIni"){
+    echo Home::solIniSinEsp();
+} else if ($chart == "Inve"){
+    echo Home::productosInventario();
+} else if ($chart == "Coti"){
+    echo Home::productoSinCotizacion();
 }
 ?>

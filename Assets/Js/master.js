@@ -14,9 +14,13 @@ $('.modal').on('change', function () {
 
 $(document).ready(function () {
 
-    inicializarCampos();
+    
     chartSolicitud();
-
+    chartSolicitudIni()
+    chartTiempo();
+    chartInventario();
+    chartCotizacion();
+    inicializarCampos();
     $('.tabs').tabs();
 
     $('.collapsible').collapsible();
@@ -986,36 +990,168 @@ function chartSolicitud() {
                 var labels = template1.push(`${task.estado}`);
                 var votes = template2.push(task.cantidad);
             });
-            generarChart("doughnut", "chartSolicitud", template1, template2)
+            generarChart( "chartSolicitud", "doughnut", "", template1, template2)
         }
     });
 }
 
-function generarChart(tipo, elem, template1, template2){
-    var config = {
-        type: tipo,
+function chartSolicitudIni() {
+    $.ajax({
+        url: '../Controllers/ctrl_home.php',
+        type: 'POST',
         data: {
-            labels: template1,
-            datasets: [{
+            action: 'SolIni'
+        },
+        success: function (response) {
+            let tasks = JSON.parse(response);
+            let template1 = [];
+            let template2 = [];
+            tasks.forEach(task => {
+                var labels = template1.push(`${task.label}`);
+                var votes = template2.push(task.cant);
+            });
+            generarChart( "chartSolIni", "doughnut", "", template1, template2)
+        }
+    });
+
+}
+
+function chartInventario() {
+    $.ajax({
+        url: '../Controllers/ctrl_home.php',
+        type: 'POST',
+        data: {
+            action: 'Inve'
+        },
+        success: function (response) {
+            let tasks = JSON.parse(response);
+            let template1 = [];
+            let template2 = [];
+            tasks.forEach(task => {
+                var labels = template1.push(`${task.label}`);
+                var votes = template2.push(task.cant);
+            });
+            generarChart( "chartInv", "doughnut", "", template1, template2)
+        }
+    });
+}
+
+function chartCotizacion() {
+    $.ajax({
+        url: '../Controllers/ctrl_home.php',
+        type: 'POST',
+        data: {
+            action: 'Coti'
+        },
+        success: function (response) {
+            let tasks = JSON.parse(response);
+            let template1 = [];
+            let template2 = [];
+            tasks.forEach(task => {
+                var labels = template1.push(`${task.label}`);
+                var votes = template2.push(task.cant);
+            });
+            generarChart( "chartCot", "doughnut", "", template1, template2)
+        }
+    });
+}
+
+function chartTiempo() {
+    $.ajax({
+        url: '../Controllers/ctrl_home.php',
+        type: 'POST',
+        data: {
+            action: 'Tiem'
+        },
+        success: function (response) {
+            let tasks = JSON.parse(response);
+            let template1 = [];
+            let template2 = [];
+            tasks.forEach(task => {
+                var labels = template1.push(`${task.label}`);
+                var votes = template2.push(task.cant);
+            });
+            generarChart("chartTiempo","horizontalBar", "Tiempo", template1, template2);
+        }
+    });
+}
+
+function generarChart(elem, tipo, label, template1, template2){
+    switch (tipo){
+        case 'doughnut':
+            var dat=  {
+                labels: template1,
+                datasets: [{
                 data: template2,
                 backgroundColor: [
-                    '#D941CF', '#A056BF', '#4988BF', '#E3F26D', '#B273D5', '#8CD7C1', '#4988BF', '#9084E1'
-                ]
-            }]
-        },
-        options: {
-            legend: {
+                    "#F7464A", "#46BFBD", "#FDB45C", "#665191", "#488f31", "#eac99a", "#d45087", "#ff7c43", "#ffa600", "#a05195", "#de425b", "#e2e9cc"
+                    ]
+                }]
+            }; 
+            var option ={legend: {
                 position: 'right'
-            }
-
-        }
+            }};
+            break;
+        case 'line':
+            var dat=  {
+                labels: template1,
+                datasets: [{
+                data: template2,
+                backgroundColor :"#6651918a",
+                borderColor: "#665191"
+                }]
+            }; 
+            var option ={legend: {
+                position: 'top'
+            }};
+            break;
+        case 'horizontalBar':
+            var dat = {
+                labels: [label],
+                datasets:  [{
+                label: template1[0],
+                data: [template2[0]],
+                stack: 'Stack 0',
+                backgroundColor: [
+                    "#4988FA"
+                ]
+            },
+            {
+                label: template1[1],
+                data:[ template2[1]],
+                stack: 'Stack 0',
+                backgroundColor: [
+                    "#AF29BF"
+                ]
+                }]
+            };
+            var option ={
+                
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            };
+            break;
+    }
+    var config = {
+        type: tipo,
+        data: dat,
+        options: option
     };
-
     var ctx = document.getElementById(elem);
     var ctx = document.getElementById(elem).getContext('2d');
     var chart = new Chart (ctx, config);
-
 }
+
 
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {

@@ -257,21 +257,21 @@ select[required] {
 .truncate {
   width: 185px; }
 
-td:hover .truncate {
+td:hover .truncate, .trunca:hover .truncate {
   white-space: inherit;
   overflow: auto;
   max-height: 150px;
   margin: 0; }
-  td:hover .truncate::-webkit-scrollbar-track {
+  td:hover .truncate::-webkit-scrollbar-track, .trunca:hover .truncate::-webkit-scrollbar-track {
     border-radius: 50px;
     border: 1px solid #00897b; }
-  td:hover .truncate::-webkit-scrollbar {
+  td:hover .truncate::-webkit-scrollbar, .trunca:hover .truncate::-webkit-scrollbar {
     width: 8px; }
-  td:hover .truncate::-webkit-scrollbar-thumb {
+  td:hover .truncate::-webkit-scrollbar-thumb, .trunca:hover .truncate::-webkit-scrollbar-thumb {
     background-color: #009688;
     border-radius: 50px; }
   @media only screen and (max-width: 768px) {
-    td:hover .truncate {
+    td:hover .truncate, .trunca:hover .truncate {
       text-overflow: inherit;
       overflow: auto; } }
 

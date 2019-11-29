@@ -22,7 +22,7 @@ Class Cotizacion {
 
     public static function onLoad2($idCot){
         require('../Core/connection.php');
-echo$consulta="SELECT *
+        $consulta="SELECT *
             FROM pys_cotizaciones 
             WHERE idCotizacion = '".$idCot."'
             AND pys_cotizaciones.estado = 1;";
