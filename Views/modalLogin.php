@@ -1,4 +1,5 @@
 <div class="modal-content center-align">
+    <a class="botonSalir modal-close waves-effect waves-green btn-flat" onclick="cerrar()"><i class="material-icons red-text">clear</i></a>
     <h4>Recuperar Contraseña</h4>
     <br>
     <div class="row">

@@ -4,11 +4,13 @@ if(!isset($_SESSION)) {
     session_start();
 }
 $usuario    = $_SESSION['usuario'];
-$chart      = (isset($_POST['action'])) ? $_POST['action'] : null;
+$perfil     = $_SESSION['perfil'];
 /* Inclusión del Modelo */
 include_once("../Models/mdl_home.php");
+include_once('../Models/mdl_menu.php');
 
 /* Inicialización de Variables */
+$chart      = (isset($_POST['action'])) ? $_POST['action'] : null;
 
 /* Carga de información en el Modal */
 
@@ -16,6 +18,8 @@ include_once("../Models/mdl_home.php");
 /* Procesamiento peticiones al controlador */
 $agenda = Home::agendaDia($usuario);
 $solicitudes = Home::solicitudesAsig($usuario);
+$validarAse = Menu:: validar ($usuario);
+
 
 if ($chart == "Sol"){
     echo Home::solicitudes ($usuario);
@@ -27,5 +31,11 @@ if ($chart == "Sol"){
     echo Home::productosInventario();
 } else if ($chart == "Coti"){
     echo Home::productoSinCotizacion();
+}  else if ($chart == "Proy"){
+    if($validarAse){
+        echo Home::presupuestoProyect($usuario, 2);
+    } else {
+        echo Home::presupuestoProyect($usuario, 1);
+    }
 }
 ?>

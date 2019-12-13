@@ -20,7 +20,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Host       = 'smtp.office365.com';                    
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'apoyoconectate@uniandes.edu.co';       
-                $mail->Password   = 'ceintic13';                            
+                $mail->Password   = 'Ceintic13';                            
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
                 $mail->Port       = 587;                                    
 
@@ -63,7 +63,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Host       = 'smtp.office365.com';                    
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'apoyoconectate@uniandes.edu.co';       
-                $mail->Password   = 'ceintic13';                            
+                $mail->Password   = 'Ceintic13';                            
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
                 $mail->Port       = 587;                                    
 
@@ -104,7 +104,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Host       = 'smtp.office';                    
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'apoyoconectedu.co';       
-                $mail->Password   = 'ceintic13';                            
+                $mail->Password   = 'Ceintic13';                            
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
                 $mail->Port       = 587;                                    
 
@@ -128,6 +128,43 @@ use PHPMailer\PHPMailer\Exception;
             } catch (Exception $e) {
                 echo '<script>alert("No se envio correctamente el correo. Error:'. $mail->ErrorInfo.'")</script>'; 
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php">';
+            } 
+        }
+        public static function enviarCorreoSolicitud($correos, $asunto, $cuerpo){
+            require '../php_libraries/phpMailer/Exception.php';
+            require '../php_libraries/phpMailer/PHPMailer.php';
+            require '../php_libraries/phpMailer/SMTP.php';
+            $arrayEmail = explode(';',$correos);
+            $mail = new PHPMailer(true);
+
+            try {
+                //Server settings
+                $mail->SMTPDebug = 2;                      
+                $mail->isSMTP();                                            
+                $mail->Host       = 'smtp.office';                    
+                $mail->SMTPAuth   = true;                                   
+                $mail->Username   = 'apoyoconectedu.co';       
+                $mail->Password   = 'Ceintic13';                            
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
+                $mail->Port       = 587;                                    
+
+                //Recipients
+                $mail->setFrom('apoyoconecto', 'Conecta-Te');
+                $mail->addCC('apoyoconectate@uniandes.edu.co');
+                foreach($arrayEmail as $item) {
+                    $mail->addAddress($item, '');
+                    }
+                
+                // Content
+                $mail->isHTML(true);                                  
+                $mail->Subject = $asunto;
+                $mail->Body    = $cuerpo;
+                $mail->CharSet = 'UTF-8';
+
+                $mail->send();
+                echo '<script>alert("Se envio correctamente el correo")</script>';
+            } catch (Exception $e) {
+                echo '<script>alert("No se envio correctamente el correo. Error:'. $mail->ErrorInfo.'")</script>'; 
             } 
         }
     } 

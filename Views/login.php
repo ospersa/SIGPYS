@@ -45,7 +45,7 @@ require('../Core/sessions.php');
                         </div>
                     </div>
                     <button id="btn-login" class="btn waves-effect waves-light right" type="submit" name="action">Log In</button>
-                    <a href="Views/visitante.php" class="waves-effect waves-light btn cyan darken-2 left">Invited</a>
+                    <a href="visitante.php" class="waves-effect waves-light btn cyan darken-2 left">Invited</a>
                 </form>
             </div>
             <div class="row">

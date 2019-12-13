@@ -4,7 +4,7 @@
         public static function agendaDia($user){
             require('../Core/connection.php');
             $string = "";
-            $fecha = '2019-11-28';/* date("Y-m-d"); */
+            $fecha = date("Y-m-d"); 
             $consulta ="SELECT pys_agenda.idAsig , pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda 
             FROM pys_agenda 
             INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
@@ -93,7 +93,7 @@
         public static function tiempo($user){
             require('../Core/connection.php');
             $json = array();
-            $fecha = '2019-1-22';/* date("Y-m-d"); */
+            $fecha = date("Y-m-d");
             $consultaPerAct ="SELECT idPeriodo, inicioPeriodo, finPeriodo FROM pys_periodos WHERE inicioPeriodo < '$fecha' AND finPeriodo > '$fecha'";
             $resultadoP = mysqli_query($connection, $consultaPerAct);
             $datosP = mysqli_fetch_array($resultadoP);
@@ -267,14 +267,128 @@
         public static function presupuestoProyect($user, $cod){
             require('../Core/connection.php');
             $json = array();
-            $consulta = "SELECT * FROM pys_actualizacionproy ";
-            $where = "WHERE idEstProy ='ESP001' OR idEstProy ='ESP003'";
-            if ($cod == 2){
-                $consulta .= "";
-                $where .="";
+            if ($cod == 1){
+                $consulta = "SELECT pys_cursosmodulos.idProy, pys_actualizacionproy.codProy
+                FROM pys_actsolicitudes
+                INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                AND pys_actualizacionproy.est = '1'
+                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                AND pys_solicitudes.fechSol >= '2019/01/01'
+                GROUP BY pys_actualizacionproy.codProy;";
+            } else if ($cod == 2){
+                $consulta = "SELECT pys_cursosmodulos.idProy, pys_actualizacionproy.codProy
+                FROM pys_actsolicitudes
+                INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+                WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
+                AND pys_actualizacionproy.est = '1'
+                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                AND pys_solicitudes.fechSol >= '2019/01/01'
+                AND (idRol= 'ROL024' OR idRol= 'ROL025')
+                AND pys_login.usrLogin = '$user'
+                GROUP BY pys_actualizacionproy.codProy;";
             }
-            $consulta1 ="SELECT SUM(pys_actsolicitudes.presupuesto) FROM `pys_actsolicitudes` INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy WHERE pys_actsolicitudes.est = 1 AND pys_actualizacionproy.est = 1 AND pys_actualizacionproy.idProy= '$idProy'";
-            
+            $resultado = mysqli_query($connection, $consulta);
+            $registros = mysqli_num_rows($resultado);
+            if ($registros > 0) {
+                while($datos = mysqli_fetch_array($resultado) ){
+                    $cod = 0;
+                    $acumuladoTotalPS = 0;
+                    $acumuladoTotalPresupuesto = 0;
+                    $idProy = $datos['idProy'];
+                    $codProy = $datos['codProy'];
+                    $consulta2 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.presupuesto, pys_estadosol.nombreEstSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct
+                    FROM pys_actualizacionproy 
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idProy = pys_actualizacionproy.idProy 
+                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM 
+                    INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
+                    AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' AND (pys_solicitudes.fechSol >= '2019/01/01') AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    AND pys_actsolicitudes.presupuesto <> '0'
+                    ORDER BY pys_actsolicitudes.idSol ;";
+                    $resultado2 = mysqli_query($connection, $consulta2);
+                    $registros2 = mysqli_num_rows($resultado2);
+                    $consulta3 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.presupuesto, pys_estadosol.nombreEstSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct
+                    FROM pys_actualizacionproy 
+                    INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idProy = pys_actualizacionproy.idProy 
+                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM 
+                    INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
+                    INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                    WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
+                    AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' AND (pys_solicitudes.fechSol >= '2019/01/01') AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    AND pys_actsolicitudes.presupuesto = '0'
+                    ORDER BY pys_actsolicitudes.idSol;";
+                    $resultado3 = mysqli_query($connection, $consulta3);
+                    $registros3 = mysqli_num_rows($resultado3);
+                    if ($registros2 > 0) {
+                        while($datos2 = mysqli_fetch_array($resultado2) ){
+                            $valorPS = 0;
+                            $salarioHor = 0;
+                            $salarioMin = 0;
+                            $idSol = $datos2['idSol'];
+                            $consulta4 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
+                                FROM pys_tiempos 
+                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
+                                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
+                                INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
+                                WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
+                                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                                AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
+                                ORDER BY pys_asignados.idSol;";
+                            $resultado4 = mysqli_query($connection, $consulta4);
+                            while ($datos4 = mysqli_fetch_array($resultado4)) {
+                                $salarioHor = $datos4['salario'];
+                                $salarioMin = $salarioHor / 60;
+                                $valorPS += (($datos4['horas'] * 60) + $datos4['minutos']) * $salarioMin;
+                            }
+                            $acumuladoTotalPS += $valorPS;
+                            $acumuladoTotalPresupuesto += $datos2['presupuesto'];
+                            $diferencia = $datos2['presupuesto'] - $valorPS;
+                        }
+                    }
+                    if ($registros3 > 0) {
+                        while($datos3 = mysqli_fetch_array($resultado3) ){
+                            $valorPS = 0;
+                            $salarioHor = 0;
+                            $salarioMin = 0;
+                            $idSol = $datos3['idSol'];
+                            $consulta4 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
+                                FROM pys_tiempos 
+                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
+                                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
+                                INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
+                                WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
+                                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                                AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
+                                ORDER BY pys_asignados.idSol;";
+                            $resultado4 = mysqli_query($connection, $consulta4);
+                            while ($datos4 = mysqli_fetch_array($resultado4)) {
+                                $salarioHor = $datos4['salario'];
+                                $salarioMin = $salarioHor / 60;
+                                $valorPS += (($datos4['horas'] * 60) + $datos4['minutos']) * $salarioMin;
+                            }
+                            $acumuladoTotalPS += $valorPS;
+                            $acumuladoTotalPresupuesto += $datos3['presupuesto'];
+                            $diferencia = $datos3['presupuesto'] - $valorPS;
+                        }
+                    }
+                    if ($acumuladoTotalPS != 0 || $acumuladoTotalPresupuesto != 0){
+                        $json[]     = array(
+                            'proyecto' => $codProy,
+                            'ejecutado'     => $acumuladoTotalPS,
+                            'presupuesto'     => $acumuladoTotalPresupuesto,
+                        );
+                    }
+                }
+            }
+            $jsonString = json_encode($json);
+            echo $jsonString;
             mysqli_close($connection); 
         }
     }

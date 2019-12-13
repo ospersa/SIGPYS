@@ -13,13 +13,77 @@ $('.modal').on('change', function () {
 });
 
 $(document).ready(function () {
+    let path = window.location.pathname;
+    let comp = path.split("/")
+    if (comp[3] == 'home.php') {
+        if ($('#chartSolicitud')) {
+            chartSolicitud();
+        }
+        if ($('#chartSolIni')) {
+            chartSolicitudIni();
+        }
+        if ($('#chartTiempo')) {
+            chartTiempo();
+        }
+        if ($('#chartInv')) {
+            chartInventario();
+        }
+        if ($('#chartCot')) {
+            chartCotizacion();
+        }
+        if ($('#chartProyecto')) {
+            chartProyecto();
+        }
+    }
 
-    
-    chartSolicitud();
-    chartSolicitudIni()
-    chartTiempo();
-    chartInventario();
-    chartCotizacion();
+
+    $("#busqueda").keyup(function () {
+        let consulta2 = $(this).val();
+        $.ajax({
+            url: "../Controllers/ctrl_visitante.php",
+            type: "POST",
+            data: "b=" + consulta2,
+            error: function () {
+                alert("error: No se puede realizar la busqueda en este momento.");
+            },
+            success: function (data) {
+                $("#smProy").empty();
+                $("#smProy").append('<option value="" disabled selected>Select your option.</option>');
+                $("#smProy").append(data);
+                $('select').formSelect();
+            }
+        });
+    });
+
+    $("#smProy").change(function () {
+        let consulta2 = $(this).val();
+        $.ajax({
+            url: "../Controllers/ctrl_visitante.php",
+            type: "POST",
+            data: "c=" + consulta2,
+            error: function () {
+                alert("error: No se puede realizar la busqueda en este momento.");
+            },
+            success: function (data) {
+                $("#cordinador").val(data);
+                M.textareaAutoResize($('#cordinador'));
+                $('#cordinador').attr('disabled', 'disabled');
+            }
+        });
+        $.ajax({
+            url: "../Controllers/ctrl_visitante.php",
+            type: "POST",
+            data: "a=" + consulta2,
+            error: function () {
+                alert("error: No se puede realizar la busqueda en este momento.");
+            },
+            success: function (data) {
+                $("#gestor").val(data);
+                M.textareaAutoResize($('#gestor'));
+                $('#gestor').attr('disabled', 'disabled');
+            }
+        });
+    });
     inicializarCampos();
     $('.tabs').tabs();
 
@@ -593,16 +657,16 @@ function pruebas(url) {
     });
 }
 
-function cargarResAgenda(fecha,elem){
+function cargarResAgenda(fecha, elem) {
     let letra = elem.find("h6");
     let path = window.location.pathname;
     let comp = path.split("/")
-    let url ="";
-    if (comp[3] == 'agenda.php'){
+    let url = "";
+    if (comp[3] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else  if (comp[3] == 'agendaAdmin.php'){
+    } else if (comp[3] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
-    } 
+    }
     let idper = $('#sltPersona').val();
     $.ajax({
         type: "POST",
@@ -664,7 +728,7 @@ function eliminarDiv(cont) {
     inicializarCampos();
 };
 
-function cargaSolicitudesProy(elem1, dir, destino,long) {
+function cargaSolicitudesProy(elem1, dir, destino, long) {
     $.ajax({
         type: "POST",
         url: dir,
@@ -684,7 +748,7 @@ function cargaSolicitudesProy(elem1, dir, destino,long) {
 }
 $("select[name='sltPersona']").on("change", () => {
     cargaPanelUsu();
-  });
+});
 
 function cargaPanelUsu() {
     let elem = $('#sltPersona');
@@ -694,11 +758,11 @@ function cargaPanelUsu() {
         url: '../Controllers/ctrl_agendaAdmin.php',
         data: {
             idper: persona,
-            cod :3,
+            cod: 3,
         },
         success: function (data) {
-        $("#div_dinaPanel").html(data);
-        inicializarCampos();
+            $("#div_dinaPanel").html(data);
+            inicializarCampos();
         }
     })
 }
@@ -931,12 +995,12 @@ function cancelarAgenda(id) {
 
 }
 
-function checkProd(check,num,long) {
+function checkProd(check, num, long) {
     var checkActive = $(check);
     var checked = $(check).attr('data-checked');
-    var min = "min"+long+"--"+num;
-    var horas = "horas"+long+"--"+num;
-    var obser = "obser"+long+"--"+num;
+    var min = "min" + long + "--" + num;
+    var horas = "horas" + long + "--" + num;
+    var obser = "obser" + long + "--" + num;
 
     if (checked == 'false') {
         $(checkActive).attr('checked', 'checked');
@@ -955,7 +1019,7 @@ function checkProd(check,num,long) {
 }
 
 function activar(id, url, nombre) {
-    var string = "¿Esta seguro de activar "+nombre+"?";
+    var string = "¿Esta seguro de activar " + nombre + "?";
     var mensaje = confirm(string);
     //Detectamos si el usuario acepto el mensaje
     if (mensaje) {
@@ -971,7 +1035,7 @@ function activar(id, url, nombre) {
             }
         });
     }
-}    
+}
 
 /** Funciones para generar Graficos en el Home */
 
@@ -990,7 +1054,7 @@ function chartSolicitud() {
                 var labels = template1.push(`${task.estado}`);
                 var votes = template2.push(task.cantidad);
             });
-            generarChart( "chartSolicitud", "doughnut", "", template1, template2)
+            generarChart("chartSolicitud", "doughnut", "", template1, template2)
         }
     });
 }
@@ -1010,7 +1074,7 @@ function chartSolicitudIni() {
                 var labels = template1.push(`${task.label}`);
                 var votes = template2.push(task.cant);
             });
-            generarChart( "chartSolIni", "doughnut", "", template1, template2)
+            generarChart("chartSolIni", "doughnut", "", template1, template2)
         }
     });
 
@@ -1031,7 +1095,7 @@ function chartInventario() {
                 var labels = template1.push(`${task.label}`);
                 var votes = template2.push(task.cant);
             });
-            generarChart( "chartInv", "doughnut", "", template1, template2)
+            generarChart("chartInv", "doughnut", "", template1, template2)
         }
     });
 }
@@ -1051,7 +1115,7 @@ function chartCotizacion() {
                 var labels = template1.push(`${task.label}`);
                 var votes = template2.push(task.cant);
             });
-            generarChart( "chartCot", "doughnut", "", template1, template2)
+            generarChart("chartCot", "doughnut", "", template1, template2)
         }
     });
 }
@@ -1071,62 +1135,100 @@ function chartTiempo() {
                 var labels = template1.push(`${task.label}`);
                 var votes = template2.push(task.cant);
             });
-            generarChart("chartTiempo","horizontalBar", "Tiempo", template1, template2);
+            generarChart("chartTiempo", "horizontalBar", "Tiempo", template1, template2);
         }
     });
 }
 
-function generarChart(elem, tipo, label, template1, template2){
-    switch (tipo){
+function chartProyecto() {
+    $.ajax({
+        url: '../Controllers/ctrl_home.php',
+        type: 'POST',
+        data: {
+            action: 'Proy'
+        },
+        success: function (response) {
+            let tasks = JSON.parse(response);
+            let template1 = [];
+            let template2 = [];
+            let template3 = [];
+            tasks.forEach(task => {
+                var proy = template1.push(`${task.proyecto}`);
+                var gast = template2.push(task.ejecutado);
+                var sobra = template3.push(task.presupuesto);
+            });
+            console.log(template1, template2, template3)
+            generarChart3Template("chartProyecto", "bar", template1, template2, template3);
+        }
+    });
+}
+
+
+function generarChart(elem, tipo, label, template1, template2) {
+    var dynamicColors = function () {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    };
+    switch (tipo) {
         case 'doughnut':
-            var dat=  {
+            var dat = {
                 labels: template1,
                 datasets: [{
-                data: template2,
-                backgroundColor: [
-                    "#F7464A", "#46BFBD", "#FDB45C", "#665191", "#488f31", "#eac99a", "#d45087", "#ff7c43", "#ffa600", "#a05195", "#de425b", "#e2e9cc"
+                    data: template2,
+                    backgroundColor: [
+                        dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors()
                     ]
                 }]
-            }; 
-            var option ={legend: {
-                position: 'right'
-            }};
+            };
+            var option = {
+                legend: {
+                    position: 'right'
+                }
+            };
             break;
         case 'line':
-            var dat=  {
+            var color = dynamicColors();
+            var dat = {
                 labels: template1,
                 datasets: [{
-                data: template2,
-                backgroundColor :"#6651918a",
-                borderColor: "#665191"
+                    data: template2,
+                    backgroundColor: color,
+                    borderColor: color
                 }]
-            }; 
-            var option ={legend: {
-                position: 'top'
-            }};
+            };
+            var option = {
+                legend: {
+                    position: 'top'
+                }
+            };
             break;
         case 'horizontalBar':
             var dat = {
                 labels: [label],
-                datasets:  [{
-                label: template1[0],
-                data: [template2[0]],
-                stack: 'Stack 0',
-                backgroundColor: [
-                    "#4988FA"
+                datasets: [{
+                        label: template1[0],
+                        data: [template2[0]],
+                        stack: 'Stack 0',
+                        backgroundColor: [
+                            dynamicColors()
+
+                        ]
+                    },
+                    {
+                        label: template1[1],
+                        data: [template2[1]],
+                        stack: 'Stack 0',
+                        backgroundColor: [
+                            dynamicColors()
+
+                        ]
+                    }
                 ]
-            },
-            {
-                label: template1[1],
-                data:[ template2[1]],
-                stack: 'Stack 0',
-                backgroundColor: [
-                    "#AF29BF"
-                ]
-                }]
             };
-            var option ={
-                
+            var option = {
+
                 tooltips: {
                     mode: 'index',
                     intersect: false
@@ -1149,7 +1251,115 @@ function generarChart(elem, tipo, label, template1, template2){
     };
     var ctx = document.getElementById(elem);
     var ctx = document.getElementById(elem).getContext('2d');
-    var chart = new Chart (ctx, config);
+    var chart = new Chart(ctx, config);
+}
+
+function generarChart3Template(elem, tipo, template1, template2, template3) {
+    var dynamicColors = function () {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    };
+    var colorPre = dynamicColors();
+    var colorEje = dynamicColors();
+    var config = {
+        type: tipo,
+        data: {
+            labels: template1,
+            datasets: [{
+                    label: 'Ejecutado',
+                    data: template2,
+                    stack: 'Stack 1',
+                    backgroundColor: [
+                        colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje, colorEje
+                    ]
+                },
+                {
+                    label: 'Presupuesto',
+                    data: template3,
+                    stack: 'Stack 2',
+                    backgroundColor: [
+                        colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre, colorPre
+                    ]
+                }
+            ]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    };
+    var ctx = document.getElementById(elem);
+    var ctx = document.getElementById(elem).getContext('2d');
+    var chart = new Chart(ctx, config);
+}
+
+
+
+/**vista visitantes */
+
+function duplicarDivVis() {
+    let url = '../Controllers/ctrl_visitante.php';
+    let form = $('#visitantes');
+    let cont = (form.find('.cardVis').length) + 1;
+    console.log(cont);
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            cantidad: cont
+        },
+        success: function (data) {
+            $('.cardVis:last-child').after(data);
+            $('select').formSelect();
+            inicializarCampos();
+        }
+    });
+};
+
+function eliminarDivVis(cont) {
+    let div = "#cardVis" + cont;
+    $(div).remove();
+    inicializarCampos();
+};
+
+function ocultardivVisit() {
+    $("#loaderVisit").addClass('hide')
+}
+
+function mostrardivVisit() {
+    $("#loaderVisit").removeClass('hide');
+
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_visitante.php',
+        data: $("#visitantesid").serialize(),
+        success: function (data) {
+            setTimeout(function () {
+                $('#loaderVisit').html(data)
+            }, 15000);
+            setTimeout(function () {
+                $('#loaderVisit').html(data)
+            }, 20000);
+        }
+    });
+    setTimeout(function () {
+        location.reload()
+    }, 20000);
 }
 
 

@@ -10,6 +10,7 @@ $passPOST = (isset($_POST['password'])) ? $_POST["password"] : null;
 $id		  = (isset($_POST["numCedula"])) ? $_POST["numCedula"] : null ;
 $user 	  = (isset($_POST["nomUsu"])) ? $_POST["nomUsu"] : null ;
 $pass 	  = (isset($_POST["txtpassPer"])) ? $_POST["txtpassPer"] : null ;
+$invitado = (isset($_POST['invitado'])) ? $_POST['invitado'] : null;
 $resul 	  = "";
 $string = mysqli_real_escape_string($connection, $userPOST);
 
@@ -33,21 +34,28 @@ $userBD = $datos['usrLogin'];
 $passwordBD = $datos['passwLogin'];
 $perfil = $datos['idPerfil'];
 
-//Comprobamos si los datos son correctos
-if(($userBD == $userPOSTMinusculas) and ($passPOST == $passwordBD)){
-	if(!isset($_SESSION)){ 
-		session_start();	
-		$_SESSION['usuario'] = $userBD;
-		$_SESSION['estado'] = 'Autenticado';
-		$_SESSION['perfil'] = $perfil;
-	} 	
-//Si los datos no son correctos, o están vacíos, muestra un error
-//Además, hay un script que vacía los campos con la clase "acceso" (formulario)
-} else if ( $userBD != $userPOSTMinusculas || $userPOST == "" || $passPOST == "" || $passPOST != $passwordBD ) {
-	die ('<script>$(".login").val("");</script> User name or password incorrect');
+
+if ($invitado == 1){
+ echo 1;
 } else {
-	die('Error');
+	//Comprobamos si los datos son correctos
+	if(($userBD == $userPOSTMinusculas) and ($passPOST == $passwordBD)){
+		if(!isset($_SESSION)){ 	
+			session_start();
+			$_SESSION['invitado'] = '';
+			$_SESSION['usuario'] = $userBD;
+			$_SESSION['estado'] = 'Autenticado';
+			$_SESSION['perfil'] = $perfil;
+		} 	
+	//Si los datos no son correctos, o están vacíos, muestra un error
+	//Además, hay un script que vacía los campos con la clase "acceso" (formulario)
+	} else if ( $userBD != $userPOSTMinusculas || $userPOST == "" || $passPOST == "" || $passPOST != $passwordBD ) {
+		die ('<script>$(".login").val("");</script> User name or password incorrect');
+	} else {
+		die('Error');
+	}
 }
+
 //modal recuperacion de contraseña
 if (isset($_POST['CambiarPassword'])){
 	Login::cambiarPassword($user,$pass);
@@ -55,11 +63,15 @@ if (isset($_POST['CambiarPassword'])){
 	if ($id != null && $user != null){
 		Login::validar($id, $user);
 	} else {
-		echo '
-		<div class=" teal darken-3 col l10 m10 s12 offset-l1 offset-m1">
-			<h6 class=" white-text"> Valide que no hay ningun campo vacio </h6>
-		</div>';
-		
+		$json = array();
+		$json[]     = array(
+			'estado' => false,
+			'datos'     =>'
+			<div class=" teal darken-3 col l10 m10 s12 offset-l1 offset-m1">
+				<h6 class=" white-text"> Valide que no hay ningun campo vacio </h6>
+			</div>',
+		);
+		$jsonString = json_encode($json);
+		echo $jsonString;
 	}
 } 
-

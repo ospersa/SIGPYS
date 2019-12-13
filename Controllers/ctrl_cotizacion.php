@@ -23,7 +23,6 @@ $busqueda      = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
 if ($idAsig) {
     $id = substr($idAsig, 0, 2);
     if ($id == "C_") {
-        echo $idAsig;
         $detail = Cotizacion::onLoad2(substr($idAsig, 2));
         $valCot = $detail['valorPresupuesto'];
         $obsSol = $detail['obsSolicitante'];
@@ -98,7 +97,7 @@ if (isset($_POST['enviar'])){
     $solEsp     = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
     $solicita   = (isset($_POST['txtSolicita'])) ? $_POST['txtSolicita'] : null;
     $idAsig     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-    Cotizacion::cambiarEstadoAsignacion($idAsig, $solEsp, $accion, $solicita);
+    Asignados::cambiarEstadoAsignacion($idAsig, $solEsp, $accion, $solicita);
 }
 
 if (isset($_REQUEST['cod'])) {
@@ -154,9 +153,9 @@ if (isset($_POST['val'])) {
     $maxhora    = (isset($_POST['txtHoras'])) ? $_POST['txtHoras'] : null;
     $maxmin     = (isset($_POST['txtMinutos'])) ? $_POST['txtMinutos'] : null;
     if ($val == "1") {
-        $resultado = Cotizacion::actualizarAsignacion($idAsig, $maxhora, $maxmin, $solEsp);
+        $resultado = Asignados::actualizarAsignacion($idAsig, $maxhora, $maxmin, $solEsp);
     } else if ($val == "2") {
-        $resultado = Cotizacion::suprimirAsignacion($idAsig, $solEsp);
+        //$resultado = Cotizacion::suprimirAsignacion($idAsig, $solEsp);
     } else if ($val == "3") {
         $idCot = $_POST['idCot'];
         $valCot = $_POST['txtValCot'];

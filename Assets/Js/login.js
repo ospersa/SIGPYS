@@ -8,7 +8,6 @@ $(document).ready(function () {
 
 	//Cuando validar usuario se envie
 	$('#modalform').on("submit", function () {
-		console.log("pruebas");
 		var formData = new FormData(document.getElementById("modalform"));
 		$.ajax({
 			url: "../Controllers/ctrl_login.php",
@@ -55,11 +54,23 @@ function buscar(url) {
 		type: "POST",
 		data: $('#modalform').serialize(),
 		success: function (data) {
-			$('#div_dinamico').html(data);
-			$('#numCedula, #nomUsu').attr("readOnly", true);
+			let tasks = JSON.parse(data);
+			let template1 = [];
+			let template2 = [];
+			tasks.forEach(task => {
+				var estado = template1.push(`${task.estado}`);
+				var datos = template2.push(task.datos);
+			});
+			$('#div_dinamico').html(template2[0]);
+			console.log (template1[0]);
+			if(template1[0]== 'true'){
+				console.log ('cghj');
+
+				$('#numCedula, #nomUsu').attr("readOnly", true);
+			}
 		}
 	});
-
+	
 }
 
 //Cuando el formulario con ID acceso se envíe...

@@ -25,19 +25,26 @@ session_start();
 //Comprobamos si el usario está logueado
 //Si no lo está, se le redirecciona al index
 //Si lo está, definimos el botón de cerrar sesión y la duración de la sesión
-if ((!isset($_SESSION['usuario'])) and ($_SESSION['estado'] != 'Autenticado')) {
-    header('Location: ../index.php');
-} else {
-    require('../Core/sessions.php');
-    $usserName = $_SESSION['usuario'];
-    $salir = '<a href="logout.php" target="_self" class="white-text">Cerrar sesión</a>';
-};
+$path = $_SERVER['REQUEST_URI'];
+$path = explode('/', $path);
+$path = end($path);
+if( $path != "visitante.php"){
+    if ((!isset($_SESSION['usuario'])) and ($_SESSION['estado'] != 'Autenticado')) {
+        header('Location: ../index.php');
+    } else {
+        require('../Core/sessions.php');
+        $usserName = $_SESSION['usuario'];
+        $salir = '<a href="logout.php" target="_self" class="white-text">Cerrar sesión</a>';
+    };
+}
 ?>
 
     <body>
         <header>
             <?php
+            if( $path != "visitante.php"){
                 require_once('../Controllers/ctrl_menu.php');
+            }
             ?>
         </header>
         <main>
