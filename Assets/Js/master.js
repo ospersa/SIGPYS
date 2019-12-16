@@ -1157,7 +1157,6 @@ function chartProyecto() {
                 var gast = template2.push(task.ejecutado);
                 var sobra = template3.push(task.presupuesto);
             });
-            console.log(template1, template2, template3)
             generarChart3Template("chartProyecto", "bar", template1, template2, template3);
         }
     });
@@ -1316,7 +1315,6 @@ function duplicarDivVis() {
     let url = '../Controllers/ctrl_visitante.php';
     let form = $('#visitantes');
     let cont = (form.find('.cardVis').length) + 1;
-    console.log(cont);
     $.ajax({
         type: "POST",
         url: url,

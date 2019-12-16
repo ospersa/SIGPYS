@@ -10,7 +10,7 @@ require('../Estructure/header.php');
 </div>
 
 <div id="content" class="center-align">
-    <h4>COTIZACIÓN</h4>
+    <h4>PRESUPUESTO</h4>
     <div class="row">
         <form action="#">
             <?php

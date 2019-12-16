@@ -10,7 +10,7 @@ require('../Controllers/ctrl_cotizacion.php');
 </div>
 
 <div id="content" class="center-align">
-    <h4>CONSULTA COTIZACIONES</h4>
+    <h4>CONSULTA PRESUPUESO</h4>
 </div>
 
 <div class="row">

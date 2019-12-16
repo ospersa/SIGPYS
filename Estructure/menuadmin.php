@@ -51,7 +51,7 @@
         <div class="divider"></div>
     </li>-->
     <li>
-        <a class="dropdown-trigger" href="#!" data-target="cotizador">Cotizaciones
+        <a class="dropdown-trigger" href="#!" data-target="cotizador">Presupuestos
             <i class="material-icons right">arrow_drop_down</i>
         </a>
     </li>
@@ -365,10 +365,10 @@
 
     <ul id="cotizador" class="dropdown-content teal darken-1">
         <li>
-            <a href="busCotizacion.php">Buscar Cotización</a>
+            <a href="busCotizacion.php">Buscar Presupuesto</a>
         </li>
         <li>
-            <a href="cotizacion.php?cod=1">Nueva Cotización</a>
+            <a href="cotizacion.php?cod=1">Nuevo Presupuesto</a>
         </li>
     </ul>
     <ul id="EntidadesEli" class="dropdown-content teal darken-1">

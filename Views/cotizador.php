@@ -2,7 +2,7 @@
 require('../Estructure/header.php');
 ?>
 <div id="content" class="center-align">
-    <h4>COTIZACIÓN</h4>
+    <h4>PRESUPUESTO</h4>
     <h5>Información Solicitud:</h5>
     <div class="container">
         <form id="frmCotizador" action="../Controllers/ctrl_cotizacion.php" method="post" autocomplete="off" onKeyPress="if(event.keyCode == 13) event.returnValue = false;">

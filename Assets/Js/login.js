@@ -62,10 +62,7 @@ function buscar(url) {
 				var datos = template2.push(task.datos);
 			});
 			$('#div_dinamico').html(template2[0]);
-			console.log (template1[0]);
 			if(template1[0]== 'true'){
-				console.log ('cghj');
-
 				$('#numCedula, #nomUsu').attr("readOnly", true);
 			}
 		}
