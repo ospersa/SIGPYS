@@ -702,6 +702,20 @@ function cargarResAgenda(fecha, elem) {
     });
 };
 
+function agendaDia(fecha){
+    console.log (fecha);
+    window.location="../Views/agenda.php?hoy="+fecha;
+};
+
+function seleccionarDia(hoy){
+    $.each($('.fechPer'), function () {  
+        let fecha = $(this).find('h6').text();   
+        if(  fecha == hoy ){
+            let elem = $(this);
+            cargarResAgenda(hoy, elem)
+        }
+    });
+}
 /*------- Duplicar div de proyecto en Agenda -------*/
 
 function duplicarDiv() {

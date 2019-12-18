@@ -19,7 +19,7 @@ $chart      = (isset($_POST['action'])) ? $_POST['action'] : null;
 $agenda = Home::agendaDia($usuario);
 $solicitudes = Home::solicitudesAsig($usuario);
 $validarAse = Menu:: validar ($usuario);
-
+$fechaActual = date("d-m-Y"); 
 
 if ($chart == "Sol"){
     echo Home::solicitudes ($usuario);

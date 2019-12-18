@@ -236,8 +236,6 @@ const STYLEBODY = ['font' => [
                     
                 }
 
-                $spreadsheet->getActiveSheet()->getStyle('A4:J'.$fila)->applyFromArray(STYLEBODY);
-                $spreadsheet->getActiveSheet()->getStyle('A3:J'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="Informe de Inventario.xlsx"');

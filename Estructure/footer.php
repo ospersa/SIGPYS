@@ -2,27 +2,27 @@
     <footer class="page-footer teal darken-1">
         <div class="container">
             <div class="row">
-                <div class="col l6 s12">
-                    <h5 class="white-text">Footer Content</h5>
-                    <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-                </div>
-                <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Links</h5>
+                
+                <div class="col l8 s12">
                     <ul>
                         <li>
-                            <a class="grey-text text-lighten-3" href="#!">Link 1</a>
+                            <a class="grey-text text-lighten-3" href="https://conectate.uniandes.edu.co/">Conecta-TE</a>
                         </li>
                         <li>
-                            <a class="grey-text text-lighten-3" href="#!">Link 2</a>
+                            <a class="grey-text text-lighten-3" href="https://uniandes.edu.co/">Universidad de los Andes</a>
                         </li>
                     </ul>
+                </div>
+                <div class="col l2 offset-l2 s12 right-align">
+                    <h6 class="white-text"><?php echo $usserName; ?></h6>
+                    <?php echo $salir; ?>
                 </div>
             </div>
         </div>
         <div class="footer-copyright">
             <div class="container">
-                Año 2014 Copyright Text
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+                © - Derechos Reservados Universidad de los Andes
+                <span class="grey-text text-lighten-4 right" >SIGPYS 3.0</a>
             </div>
         </div>
     </footer>

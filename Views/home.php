@@ -73,7 +73,7 @@ require('../Controllers/ctrl_home.php');
 		
 	';
 
-		} else if ( $validarAse = true){
+		} else if ( $validarAse == true){
 			echo  '<div class=" col l12 m12 s12 ">
 			<div class="card-panel cardHome ">
 				<span class="card-title white-text">
@@ -91,6 +91,9 @@ require('../Controllers/ctrl_home.php');
 				<div class="card-panel teal cardHome margintop ">
 					<span class="card-title white-text">
 						<h5 class="center-align white-text">Agenda del día</h5>
+						<div class="row">							
+                <a class = "waves-effect waves-light tooltipped right" data-position="left" data-tooltip="Ver agenda completa" <?php  echo 'onclick ="agendaDia(\''.$fechaActual.'\')"'?> href="#!" ><i class="material-icons white-text">event_note</i></a>
+            </div>
 					</span>
 					<?php
 						echo $agenda;

@@ -27,6 +27,12 @@ require('../Core/sessions.php');
 
 <body>
     <main class="valign-wrapper teal darken-1">
+    <div class="row">
+        <h1 class ="white-text center nomarginBottom">SIGPYS</h1>
+        <h6 class= "white-text">Sistema de información y gestión PYS</h6>
+    </div>
+        <br>
+        <br>
         <div class="container ">
             <div class="row">
                 <form id="login" action=""  method="post" class="login white col l6 m6 s12 offset-l3 offset-m3">

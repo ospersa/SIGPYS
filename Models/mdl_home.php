@@ -184,11 +184,11 @@
             }
             $conSolEs =mysqli_num_rows($resultado)-$count;
             $json[]     = array(
-                'label' => 'Con Solicitud Especifica',
+                'label' => 'Con Producto/Servicio',
                 'cant'     => $conSolEs,
             );
             $json[]     = array(
-                'label' => 'Sin Solicitud Especifica',
+                'label' => 'Sin Producto/Servicio',
                 'cant'     => $count,
             );
             $jsonString = json_encode($json);
@@ -235,7 +235,7 @@
             $datos = mysqli_fetch_array($resultado);
             $cant = $datos['COUNT(pys_actsolicitudes.idSol)'];
             $json[]     = array(
-                'label' => 'Sin cotización',
+                'label' => 'Sin Presupuesto',
                 'cant'     => $cant,
             );
             $consulta2 ="SELECT COUNT(pys_actsolicitudes.idSol)
@@ -255,7 +255,7 @@
             $datos2 = mysqli_fetch_array($resultado2);
             $cant2 = $datos2['COUNT(pys_actsolicitudes.idSol)']-$cant;
             $json[]     = array(
-                'label' => 'Con cotización',
+                'label' => 'Con Presupuesto',
                 'cant'     => $cant2,
             );
             $jsonString = json_encode($json);

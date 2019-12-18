@@ -29,6 +29,7 @@ body {
     main {
         flex: 1 0 auto;
         padding: 0 30px;
+        flex-direction: column;
     }
 
     footer {
@@ -525,4 +526,13 @@ td, .trunca {
     background: white;
     z-index: 6;
 
+}
+
+.nomarginBottom{
+    margin-bottom: 0px;
+}
+.table{
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
 }

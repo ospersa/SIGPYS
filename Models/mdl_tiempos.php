@@ -99,7 +99,7 @@
                 INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
                 INNER JOIN pys_tiempos on pys_asignados.idAsig=pys_tiempos.idAsig 
                 INNER JOIN pys_fases ON pys_tiempos.idFase=pys_fases.idFase 
-                WHERE pys_asignados.idSol= '$codsol' AND pys_login.usrLogin ='$idPer' AND pys_tiempos.estTiempo=1 AND pys_asignados.est=1";
+                WHERE pys_asignados.idSol= '$codsol' AND pys_login.usrLogin ='$idPer' AND pys_tiempos.estTiempo=1 AND pys_asignados.est=1 ORDER BY pys_tiempos.fechTiempo DESC";
             $resultado = mysqli_query($connection, $consulta);
             $dat = mysqli_num_rows($resultado);
             if( $dat > 0){                

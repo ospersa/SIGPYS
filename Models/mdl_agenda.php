@@ -4,10 +4,11 @@ class  PlaneacionAse{
 
     public static function onPeriodoActual() {
         require('../Core/connection.php');
-        $consulta ="SELECT MAX(idPeriodo) FROM pys_periodos;";
+        $fechaAct = $newFecha = date("Y/m/d");
+        $consulta ="SELECT idPeriodo FROM pys_periodos WHERE inicioPeriodo < '$fechaAct' AND '$fechaAct'< finPeriodo;";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
-        return $datos['MAX(idPeriodo)'];
+        return $datos['idPeriodo'];
         mysqli_close($connection);
     }
 
@@ -44,7 +45,7 @@ class  PlaneacionAse{
                 $color = 'teal lighten-5';
                 $letra = "black";
             }
-            if($diafech != 0 && $diafech != 6){
+            if($diafech != 0 && $diafech != 7){
             $string .= '
             <div class="col s2 m2 l2">
                 <div class="card">
@@ -53,7 +54,7 @@ class  PlaneacionAse{
                     </div>
                 </div>
             </div>';
-            } else if($diafech == 6){
+            } else if($diafech == 7){
                 $string .= '
             <div class="col s2 m2 l2">
                 <div class="card">
