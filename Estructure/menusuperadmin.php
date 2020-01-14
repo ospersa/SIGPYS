@@ -168,7 +168,7 @@
         <a href="#!">Ejecuciones</a>
     </li>
     <li>
-        <a href="#!">Ejecuciones Productos/Servicios</a>
+        <a href="infEjecuProdSer.php">Ejecuciones Productos/Servicios</a>
     </li>
     <li>
         <a href="infNomina.php">Nómina</a>
