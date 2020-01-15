@@ -174,7 +174,7 @@
         <a href="infNomina.php">Nómina</a>
     </li>
     <li>
-        <a href="#!">Personas</a>
+        <a href="infPersonas.php">Personas</a>
     </li>
     <li>
         <a href="infPlaneacion.php">Planeación</a>

@@ -950,6 +950,7 @@ function mostrarInfo(url) {
 /** Función para enviar los datos de formulario para el informe de P/S */
 
 function buscar(url) {
+    console.log($('form').serialize());
     $.ajax({
         type: "POST",
         url: url,
