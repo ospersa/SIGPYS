@@ -14,8 +14,8 @@
                     </ul>
                 </div>
                 <div class="col l2 offset-l2 s12 right-align">
-                    <h6 class="white-text"><?php echo $usserName; ?></h6>
-                    <?php echo $salir; ?>
+                    <h6 class="white-text"><?php if(!empty( $usserName )) {echo $usserName;} ?></h6>
+                    <?php if(!empty( $salir )) { echo $salir; }?>
                 </div>
             </div>
         </div>
@@ -32,8 +32,8 @@
     <script src="../Assets/Js/jquery-3.1.0.min.js"></script>
     <script src="../Assets/Js/materialize.js"></script>
     <script src="../Assets/Js/Chart.js"></script>
-    <script src="../Assets/Js/master.js"></script>
     <script src="../Assets/Js/paginathing.js"></script>
+	<script src="../Assets/Js/master.js"></script>
 </body>
 
 </html>

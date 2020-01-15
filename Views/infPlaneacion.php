@@ -11,13 +11,13 @@ include_once('../Controllers/ctrl_infPlaneacionXls.php');
                     <select name="sltPeriodoPlan" id="sltPeriodoPlan">
                         <option value="0">Seleccionar</option>
                         <?php
-                        include_once ('../Core/connection.php');
+                        require ('../Core/connection.php');
                         $cod = $_REQUEST['cod'];
-                        $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo = '1' ORDER BY inicioPeriodo DESC;";
+                        $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo = 1 ORDER BY inicioPeriodo DESC;";
                         $resultado = mysqli_query($connection, $consulta);
                         $count = mysqli_num_rows($resultado);
                         if ($count == 0){
-                            echo "<script> alert ('No hay periodos registrados en la base de datos');</script>";
+                            echo "<script> alert ('No hay periodos registrados en la base de datos' );</script>";
                         } else {
                             while ($datos =mysqli_fetch_array($resultado)){
                                 if ($cod == $datos['idPeriodo']) {

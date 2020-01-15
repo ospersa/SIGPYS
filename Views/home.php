@@ -31,7 +31,7 @@ require('../Controllers/ctrl_home.php');
 		<div class=" col l6 m6 s12 ">
 			<div class="card-panel cardHome">
 				<span class="card-title white-text">
-					<h5 class="center-align">Productos/Servicios segun su estado </h5>
+					<h5 class="center-align">Productos/Servicios según su estado </h5>
 				</span>
 				<canvas id="chartSolicitud" width="100" height="70"></canvas>
 			</div>

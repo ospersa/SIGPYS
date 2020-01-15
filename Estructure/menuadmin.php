@@ -14,13 +14,13 @@
             </span>
         </div>
     </li>
-    <!--
+    
     <li>
         <a href="home.php">Home</a>
     </li>
     <li>
         <div class="divider"></div>
-    </li>-->
+    </li>
     <li>
         <a href="misproductosservicios.php">Mis Productos/Servicios</a>
     </li>
@@ -178,14 +178,14 @@
         <a href="#!">Ejecuciones</a>
     </li>
     <li>
-        <a href="infEjecuProdSer.php">Ejecuciones Productos/Servicios</a>
+        <a href="#!">Ejecuciones Productos/Servicios</a>
     </li>-->
         <li>
             <a href="infNomina.php">Nómina</a>
         </li>
         <li>
-        <a href="infPersonas.php">Personas</a>
-    </li>
+			<a href="infPersonas.php">Personas</a>
+		</li>
         <li>
             <a href="infPlaneacion.php">Planeación</a>
         </li>

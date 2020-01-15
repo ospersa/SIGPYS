@@ -64,8 +64,8 @@
                 <label for="autores" class="active">Autores*:</label>
             </div>
             <div class="input-field col l11 m12 s12 ">
-                <input type="url" name="url" id="url" value="<?php echo $url;?>">
-                <label for="url" class="active">URL store easy Conecta-TE:</label>
+                <input type="text" name="url" id="url" value="<?php echo $url;?>">
+                <label for="url" class="active">Enlace para inventario:</label>
             </div>
             <div class="input-field col l11 m12 s12 ">
                 <input type="url" name="urlV" id="urlV" value="<?php echo $urlVimeo;?>">

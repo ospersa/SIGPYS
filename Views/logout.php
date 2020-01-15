@@ -15,5 +15,5 @@ session_destroy();
 mysqli_close($connection);
 
 //Redireccionamos a el index
-header("Location: /SIGPYS/");
+header("Location: /");
 die();

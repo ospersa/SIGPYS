@@ -94,7 +94,7 @@
             require('../Core/connection.php');
             $json = array();
             $fecha = date("Y-m-d");
-            $consultaPerAct ="SELECT idPeriodo, inicioPeriodo, finPeriodo FROM pys_periodos WHERE inicioPeriodo < '$fecha' AND finPeriodo > '$fecha'";
+            $consultaPerAct ="SELECT idPeriodo, inicioPeriodo, finPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fecha' AND finPeriodo >= '$fecha'";
             $resultadoP = mysqli_query($connection, $consultaPerAct);
             $datosP = mysqli_fetch_array($resultadoP);
             $idPeriodo = $datosP['idPeriodo'];
@@ -103,7 +103,7 @@
             $consulta = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
             INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
             INNER JOIN pys_login ON pys_login.idPersona =pys_asignados.idPersona
-            WHERE pys_tiempos.estTiempo= 1 AND pys_login.usrLogin ='$user' AND fechTiempo > '$fechIni' AND fechTiempo <'$fechaFin'";
+            WHERE pys_tiempos.estTiempo= 1 AND pys_login.usrLogin ='$user' AND fechTiempo >= '$fechIni' AND fechTiempo <='$fechaFin'";
             $resultado = mysqli_query($connection, $consulta);
             $data = mysqli_fetch_array($resultado);
             $consulta1 ="SELECT totalHoras FROM pys_dedicaciones  
@@ -144,7 +144,7 @@
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
             INNER JOIN pys_login ON pys_login.idPersona =pys_asignados.idPersona 
             WHERE pys_actsolicitudes.est = 1 AND pys_solicitudes.est = 1 AND pys_actualizacionproy.est = 1 AND pys_asignados.est = 1 AND pys_login.est = 1 AND pys_login.usrLogin = '$user'
-            ORDER BY `pys_asignados`.`fechAsig` DESC LIMIT 4";
+            ORDER BY `pys_asignados`.`fechAsig` DESC LIMIT 5";
             $resultado = mysqli_query($connection, $consulta);
             while($datos = mysqli_fetch_array($resultado) ){
                 $idSol = $datos['idSol'];
@@ -164,6 +164,7 @@
                 </tbody> ';
             }
             $string .= '</table>';
+			$string .= '<div class="col s12 m3 l3 offset-m9 offset-l9"><br><a href="misproductosservicios.php" class="teal-text right-align">+ Ver todos mís Productos/Servicios</a> </div>';
             return $string;  
             mysqli_close($connection);  
         }

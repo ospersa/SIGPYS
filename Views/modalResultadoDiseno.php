@@ -52,8 +52,8 @@
             ?>
             </div>
             <div class="input-field col l11 m12 s12 ">
-                <input type="url" name="url" id="url" value="<?php echo $url;?>">
-                <label for="url" class="active">URL store easy Conecta-TE:</label>
+                <input type="text" name="url" id="url" value="<?php echo $url;?>">
+                <label for="url" class="active">Enlace para inventario:</label>
             </div>
             <div class="input-field col l11 m12 s12  left-align">
                 <textarea name="labor" id="labor" class="materialize-textarea"><?php echo $labor;?></textarea>

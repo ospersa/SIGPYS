@@ -15,7 +15,7 @@ $('.modal').on('change', function () {
 $(document).ready(function () {
     let path = window.location.pathname;
     let comp = path.split("/")
-    if (comp[3] == 'home.php') {
+    if (comp[2] == 'home.php') {
         if ($('#chartSolicitud')) {
             chartSolicitud();
         }
@@ -662,9 +662,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[3] == 'agenda.php') {
+    if (comp[2] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[3] == 'agendaAdmin.php') {
+    } else if (comp[2] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();
@@ -950,7 +950,6 @@ function mostrarInfo(url) {
 /** Función para enviar los datos de formulario para el informe de P/S */
 
 function buscar(url) {
-    console.log($('form').serialize());
     $.ajax({
         type: "POST",
         url: url,

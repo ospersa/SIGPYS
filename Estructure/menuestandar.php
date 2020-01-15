@@ -17,14 +17,13 @@ require('../Controllers/ctrl_restriccionMenu.php');
             </span>
         </div>
     </li>
-    <!--
+    
     <li>
         <a href="home.php">Home</a>
     </li>
     <li>
         <div class="divider"></div>
     </li>
-    -->
     <li>
         <a href="misproductosservicios.php">Mis Productos/Servicios</a>
     </li>

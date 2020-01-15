@@ -1,18 +1,16 @@
-<h4>Registro de tiempos</h4>
+<h4>Modificación de tiempos</h4>
 <div class="row">
     <div class="col s12 my-2">
         <ul class="tabs teal lighten-2">
-            <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test1">Tiempos</a></li>
-            <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test2">Resumen tiempo
-                    invertido</a></li>
-            <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test3">Resumen
-                    Producto/Servicio</a></li>
+            <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test1">Tiempo Individual</a></li>
+            <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test2">Tiempo Grupal</a></li>
+            <li class="tab col s4"><a class="waves-effect waves-light white-text" href="#test3">Información Producto/Servicio</a></li>
             <li class="indicator"></li>
         </ul>
     </div>
     <div id="test1" class="col s12 tab-container">
         <ul class="collapsible">
-            <li class="active">
+            <!--<li>
                 <div class="collapsible-header teal-text">
                     <h6>Registrar Tiempos</h6>
                 </div>
@@ -46,8 +44,8 @@
                         </form>
                     </div>
                 </div>
-            </li>
-            <li>
+            </li>-->
+            <li class="active">
                 <div class="collapsible-header teal-text">
                     <h6>Tiempos Registrados</h6>
                 </div>

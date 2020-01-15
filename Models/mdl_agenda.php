@@ -5,7 +5,7 @@ class  PlaneacionAse{
     public static function onPeriodoActual() {
         require('../Core/connection.php');
         $fechaAct = $newFecha = date("Y/m/d");
-        echo  $consulta ="SELECT idPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fechaAct' AND '$fechaAct'<= finPeriodo;";
+        $consulta ="SELECT idPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fechaAct' AND '$fechaAct'<= finPeriodo;";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
         return $datos['idPeriodo'];
@@ -37,7 +37,7 @@ class  PlaneacionAse{
         for($i=0;$i<=$diasFalt;$i++){
             $fechaDia = date("d-m-Y", strtotime( '+'.$i.' day', $fechaini ));
             $diafech = date('w', strtotime($fechaDia));
-            $conteo = PlaneacionAse::ValidacionPlaneacionDia($fechaDia, $usuario);
+            $conteo = self::ValidacionPlaneacionDia($fechaDia, $usuario);
             if($conteo > 0){
                 $color = 'teal';
                 $letra = "white";
@@ -95,7 +95,7 @@ class  PlaneacionAse{
                     <button id="btn-pass" class="btn waves-effect waves-light" type="submit"
                     name="btnGuardar">Guardar</button>
                         </div>
-                                            '.PlaneacionAse::crearDivP($long, $usuario).'
+                            '.PlaneacionAse::crearDivP($long, $usuario).'
                     </form>
                 </div>
                 </div>
@@ -450,6 +450,7 @@ class  PlaneacionAse{
     }
     public static function mostrarAgendaAdmin ($fecha, $user){
         require('../Core/connection.php');
+		require('mdl_tiempos.php');
         $string = '<ul class="collapsible">
         <li class="active">
         <div class="collapsible-header teal"><h6 class ="white-text">Planeación Registrada '.$fecha.'</h6></div>
@@ -680,7 +681,7 @@ class  PlaneacionAse{
         INNER JOIN pys_personas ON pys_personas.idPersona = solicitudInicial.idSolicitante 
         INNER JOIN pys_roles ON pys_roles.idRol = pys_asignados.idRol 
         WHERE pys_asignados.idPersona = '$idPer' AND pys_actsolicitudes.idSolicitante = '' AND pys_asignados.est = '1' AND pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND solicitudInicial.est = '1' AND solicitudEspecifica.est = '1' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005')  GROUP BY pys_actualizacionproy.codProy
-        ORDER BY `pys_actsolicitudes`.`idSol` ASC
+        ORDER BY `pys_actualizacionproy`.`codProy` ASC
         ";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {

@@ -62,6 +62,7 @@
                         <th>Producto/Servicio</th>
                         <th>Equipo -- Servicio</th>
                         <th>Descripción Producto/Servicio</th>
+						<th>Nombre Producto</th>
                         <th>Fecha prevista entrega</th>
                         <th>Fecha creación</th>
                         <th>Información</th>
@@ -109,7 +110,7 @@
                             <td>P'.$idSol.'</td>
                             <td>'.$nombreEqu.' -- '.$nombreSer.'</td>
                             <td><p class="truncate">'.$ObservacionAct.'</p></td>
-                            <td>aa'.$nomProduc.'</td>
+                            <td>'.$nomProduc.'</td>
                             <td>'.$fechPrev.'</td>
                             <td>'.$fechSol.'</td>
                             <td><a href="#modalTerminarProSer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>

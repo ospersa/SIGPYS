@@ -485,8 +485,8 @@ const STYLEBODY = ['font' => [
                     $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':H'.($fila+3))->applyFromArray(STYLETABLETITLESUB2);
                     $fila += 4;  
                 }
-                $spreadsheet->getActiveSheet()->getStyle('A6:H'.$fila)->getBorders()->applyFromArray(STYLEBORDER);
-                $spreadsheet->getActiveSheet()->getStyle('A6:H'.$fila)->applyFromArray(STYLEBODY);
+                $spreadsheet->getActiveSheet()->getStyle('A6:H'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                $spreadsheet->getActiveSheet()->getStyle('A6:H'.($fila-1))->applyFromArray(STYLEBODY);
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="Informe de supervisión '.gmdate(' d M Y ').'.xlsx"');
                 header('Cache-Control: max-age=0');

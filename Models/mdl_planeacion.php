@@ -30,7 +30,7 @@ class Planeacion{
             AND pys_actualizacionproy.est = '1'
             AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005')
             ORDER BY pys_actualizacionproy.codProy ASC;";*/
-        echo $consulta = "SELECT pys_actualizacionproy.idCelula, pys_asignados.maxhora, pys_asignados.maxmin, pys_asignados.idSol, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idAsig, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_roles.nombreRol, pys_actsolicitudes.ObservacionAct
+			$consulta = "SELECT pys_actualizacionproy.idCelula, pys_asignados.maxhora, pys_asignados.maxmin, pys_asignados.idSol, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idAsig, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_roles.nombreRol, pys_actsolicitudes.ObservacionAct
             FROM pys_asignados 
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
             INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol
