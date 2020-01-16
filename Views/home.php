@@ -91,9 +91,10 @@ require('../Controllers/ctrl_home.php');
 				<div class="card-panel teal cardHome margintop ">
 					<span class="card-title white-text">
 						<h5 class="center-align white-text">Agenda del día</h5>
-						<div class="row">							
-                <a class = "waves-effect waves-light tooltipped right" data-position="left" data-tooltip="Ver agenda completa" <?php  echo 'onclick ="agendaDia(\''.$fechaActual.'\')"'?> href="#!" ><i class="material-icons white-text">event_note</i></a>
-            </div>
+						<div class="row">	
+							<a href="infMisTiempos.php" class = "enlace blue-grey-text text-lighten-4"> Ver mis tiempos</a>						
+							<a class = "waves-effect waves-light tooltipped right" data-position="left" data-tooltip="Ver agenda completa" <?php  echo 'onclick ="agendaDia(\''.$fechaActual.'\')"'?> href="#!" ><i class="material-icons white-text">event_note</i></a>
+						</div>
 					</span>
 					<?php
 						echo $agenda;

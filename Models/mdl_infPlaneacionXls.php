@@ -103,12 +103,12 @@ const STYLEBODY = ['font' => [
             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(30);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(13);
             $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(45);
-            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(18);
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(45);
-            $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(6);
-            $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(6);
+            $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(8);
+            $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(8);
             $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(10);
-            $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+            $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(50);
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'Informe Planeación por Periodo');
             $sheet->setCellValue('A3', 'Desde: '.$fecIni.'. Hasta: '.$fecFin.'');
@@ -181,20 +181,22 @@ const STYLEBODY = ['font' => [
                 $totMin2 = ($acumHrs * 60) + $acumMin;
                 if ($acumMin >= 60) {
                     $acumHrs = floor($totMin2 / 60);
-                    $acumMin = round(((($totMin2 / 60) - $acumHrs) * 60), 0);
+                    $acumMin = (($totMin2 / 60) - $acumHrs) * 60;
                 }
                 $tiemDisp = ($totMin - $totMin2) / 60;
-                $minDisp = round((($tiemDisp - floor($tiemDisp)) * 60), 0);
+                $minDisp = ($tiemDisp - floor($tiemDisp)) * 60;
                 $porcenDisp = ABS((($totMin2 / $totMin) - 1) );
                 $sheet->setCellValue('A'.$fila, 'Distribución tiempos');
-                $planeado =['Tiempo total planeado', $acumHrs, $acumMin, round($acumPorcen, 2)];
+                $planeado =['Tiempo total planeado', $acumHrs, $acumMin, $acumPorcen];
                 $dedicar=['Tiempo a dedicar en el periodo:', $totHrs, $totMin1];
                 $disponible = ['Tiempo disponible para asignar:', floor($tiemDisp), $minDisp, $porcenDisp];
-                $spreadsheet->getActiveSheet()->fromArray($planeado,null,'D'.$fila);
-                $spreadsheet->getActiveSheet()->fromArray($dedicar,null,'D'.($fila+1));
-                $spreadsheet->getActiveSheet()->fromArray($disponible,null,'D'.($fila+2));
-                $spreadsheet->getActiveSheet()->getStyle('H'.$filaini.':H'.($fila+2))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
-                $sheet->mergeCells('A'.$fila.':C'.($fila+2));
+                $spreadsheet->getActiveSheet()->fromArray($planeado,null,'E'.$fila);
+                $spreadsheet->getActiveSheet()->fromArray($dedicar,null,'E'.($fila+1));
+                $spreadsheet->getActiveSheet()->fromArray($disponible,null,'E'.($fila+2));
+                $spreadsheet->getActiveSheet()->getStyle('E'.$filaini.':E'.($fila+2))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
+				$spreadsheet->getActiveSheet()->getStyle('F'.$filaini.':F'.($fila+2))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
+				$spreadsheet->getActiveSheet()->getStyle('H'.$filaini.':H'.($fila+2))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                $sheet->mergeCells('A'.$fila.':D'.($fila+2));
                 $spreadsheet->getActiveSheet()->getStyle('A5:I'.($fila+2))->getBorders()->applyFromArray(STYLEBORDER);
                 $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':I'.($fila+2))->applyFromArray(STYLETABLETITLESUB);
                 

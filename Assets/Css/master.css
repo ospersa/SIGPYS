@@ -477,3 +477,6 @@ td:hover .truncate, .trunca:hover .truncate {
   padding: .75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6; }
+
+.enlace {
+  border-bottom: 1px solid #cfd8dc; }

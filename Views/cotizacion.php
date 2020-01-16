@@ -3,11 +3,12 @@ require('../Estructure/header.php');
 ?>
 
 <div class="row search">
-    <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" autocomplete="off" data-url="../Controllers/ctrl_cotizacion.php">
-    <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_cotizacion.php')">
+    <input id="txt-search" name="txt-search" class="hide" type="search" placeholder="Buscar" autocomplete="off" data-url="../Controllers/ctrl_busCotizacion.php">
+    <button id="btn-search" class="btn" onclick="busqueda('../Controllers/ctrl_busCotizacion.php')">
         <i class="material-icons">search</i>
     </button>
 </div>
+
 
 <div id="content" class="center-align">
     <h4>PRESUPUESTO</h4>

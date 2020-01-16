@@ -166,10 +166,11 @@ if (isset($_POST['val'])) {
     } 
 }
 if (isset($_POST['txt-search'])) {
+    $busqueda = $_POST['txt-search'];
     if ($busqueda == null) {
-        echo $cotizaciones = Cotizacion::listarCotizaciones();
+        echo "<script>alert('Por favor no deje el campo de busqueda vacío.')</script>";
     } else {
-        $cotizaciones = Cotizacion::busquedaPendientes($busqueda);
+        $resultado = Cotizacion::busqueda($busqueda);
     }
 }
 

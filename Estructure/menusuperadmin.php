@@ -32,7 +32,7 @@
     <li>
         <div class="divider"></div>
     </li>
-   
+
     <li>
         <a class="dropdown-trigger" href="#!" data-target="gestores">Gestor/Asesor RED
             <i class="material-icons right">arrow_drop_down</i>
@@ -165,7 +165,7 @@
 </ul>
 <ul id="informes" class="dropdown-content teal darken-1">
     <li>
-        <a href="#!">Ejecuciones</a>
+        <a href="infEjecuciones.php">Ejecuciones</a>
     </li>
     <li>
         <a href="infEjecuProdSer.php">Ejecuciones Productos/Servicios</a>
@@ -195,7 +195,7 @@
         <a href="#!">P/S con Saldo Negativo</a>
     </li>-->
     <li>
-        <a href="#!">Proyectos</a>
+        <a href="infProyectos.php">Proyectos</a>
     </li>
     <li>
         <a href="#!">Supervisión</a>
@@ -310,16 +310,16 @@
         <a href="eliminadosConvocatoria.php">Convocatorias</a>
     </li>
     <li>
-        <a href="eliminadosFases.php" >Fases</a>
+        <a href="eliminadosFases.php">Fases</a>
     </li>
     <li>
-        <a href="eliminadosFrentes.php" >Frentes</a>
+        <a href="eliminadosFrentes.php">Frentes</a>
     </li>
     <li>
-        <a href="eliminadosPlataformas.php" >Plataformas</a>
+        <a href="eliminadosPlataformas.php">Plataformas</a>
     </li>
     <li>
-        <a href="eliminadosRoles.php" >Roles</a>
+        <a href="eliminadosRoles.php">Roles</a>
     </li>
     <li>
         <a href="eliminadosEntidades.php">Entidades</a>
@@ -330,27 +330,27 @@
     <li>
         <a href="eliminadosDepartamentos.php">Departamentos</a>
     </li>
-    
+
     <li>
-        <a href="eliminadosCargos.php" >Cargos</a>
+        <a href="eliminadosCargos.php">Cargos</a>
     </li>
     <li>
-        <a href="eliminadosEquipos.php" >Equipos</a>
+        <a href="eliminadosEquipos.php">Equipos</a>
     </li>
     <li>
-        <a href="eliminadosProyectos.php" >Proyectos</a>
+        <a href="eliminadosProyectos.php">Proyectos</a>
     </li>
     <li>
-        <a href="eliminadosSalarios.php" >Salarios</a>
+        <a href="eliminadosSalarios.php">Salarios</a>
     </li>
     <li>
-        <a href="eliminadosServicios.php" >Servicios</a>
+        <a href="eliminadosServicios.php">Servicios</a>
     </li>
     <li>
-        <a href="eliminadosUsuarios.php" >Personas</a>
+        <a href="eliminadosUsuarios.php">Personas</a>
     </li>
     <li>
-        <a href="eliminadosPassword.php" >Password</a>
+        <a href="eliminadosPassword.php">Password</a>
     </li>
 </ul>
 

@@ -517,7 +517,7 @@ Class Cotizacion {
 
     public static function mostrarAsignados ($solEsp) {
         include_once('mdl_asignados.php');
-        $prueba = Asignados::mostrarAsignados("Cot", $solEsp);
+        echo $prueba = Asignados::mostrarAsignados("Cot", $solEsp);
     }
 
     public static function totalAsignaciones($solEsp) {

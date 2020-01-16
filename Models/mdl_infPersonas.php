@@ -259,7 +259,7 @@ const STYLEBODY = ['font' => [
                     ->setDescription('Informe de Personas')
                     ->setKeywords('Informe de Personas')
                     ->setCategory('Test result file');
-                $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-Ejecuciones');
+                $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-Personas');
                 $spreadsheet->addSheet($myWorkSheet, 0);
                 $sheetIndex = $spreadsheet->getIndex($spreadsheet->getSheetByName('Worksheet'));
                 $spreadsheet->removeSheetByIndex($sheetIndex);

@@ -14,7 +14,7 @@
             </span>
         </div>
     </li>
-    
+
     <li>
         <a href="home.php">Home</a>
     </li>
@@ -174,18 +174,18 @@
         </li>
     </ul>
     <ul id="informes" class="dropdown-content teal darken-1">
-        <!-- <li>
-        <a href="#!">Ejecuciones</a>
-    </li>
-    <li>
-        <a href="#!">Ejecuciones Productos/Servicios</a>
+        <li>
+            <a href="infEjecuciones.php">Ejecuciones</a>
+        </li>
+        <!--<li>
+        <a href="infEjecuProdSer.php">Ejecuciones Productos/Servicios</a>
     </li>-->
         <li>
             <a href="infNomina.php">Nómina</a>
         </li>
         <li>
-			<a href="infPersonas.php">Personas</a>
-		</li>
+            <a href="infPersonas.php">Personas</a>
+        </li>
         <li>
             <a href="infPlaneacion.php">Planeación</a>
         </li>
@@ -204,10 +204,10 @@
         <!--<li>
         <a href="#!">P/S con Saldo Negativo</a>
     </li>-->
+        <li>
+            <a href="infProyectos.php">Proyectos</a>
+        </li>
         <!--<li>
-        <a href="#!">Proyectos</a>
-    </li>
-    <li>
         <a href="#!">Supervisión</a>
     </li>-->
         <li>
@@ -325,7 +325,7 @@
                 <i class="material-icons right">arrow_drop_down</i>
             </a>
         </li>
-       <!--  <li>
+        <!--  <li>
             <a href="eliminadosCargos.php">Cargos</a>
         </li>
         <li>

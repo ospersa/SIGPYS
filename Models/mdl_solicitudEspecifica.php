@@ -365,7 +365,7 @@
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
-                                        <th>Registrar tiempos</th>
+                                        <th>Modificar tiempos</th>
                                         <th>Información Producto/Servicio</th>
                                         <th>Marcar como terminado</th>
                                     </tr>
