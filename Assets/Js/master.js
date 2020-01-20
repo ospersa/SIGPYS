@@ -662,9 +662,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[2] == 'agenda.php') {
+    if (comp[3] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[2] == 'agendaAdmin.php') {
+    } else if (comp[3] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();
@@ -969,7 +969,8 @@ function registrarTiempo(id) {
     var formT = "formAgenda" + id;
     var newformT = new FormData(document.getElementById(formT));
     newformT.append("cod", "1");
-
+    var newform3 = document.getElementById(formT);
+    var fecha = newform3['fecha'].value;
     //Detectamos si el usuario acepto el mensaje
     if (mensaje) {
         $.ajax({
@@ -980,7 +981,7 @@ function registrarTiempo(id) {
             processData: false,
             success: function (data) {
                 alert(data);
-                location.reload();
+                location.replace("agenda.php?hoy="+fecha);
             }
         });
     }
@@ -991,6 +992,8 @@ function cancelarAgenda(id) {
     var mensaje = confirm("¿Esta seguro de cancelar la actividad?");
     var form2 = "formAgenda" + id;
     var newform2 = new FormData(document.getElementById(form2));
+    var newform3 = document.getElementById(form2);
+    var fecha = newform3['fecha'].value;
     newform2.append("cod", "2");
     //Detectamos si el usuario acepto el mensaje
     if (mensaje) {
@@ -1002,12 +1005,29 @@ function cancelarAgenda(id) {
             processData: false,
             success: function (data) {
                 alert(data);
-                location.reload();
+                location.replace("agenda.php?hoy="+fecha);
             }
         });
     }
 
 }
+function checkFechaC(check, cod) {
+    var checkActive = $(check);
+    var checked = $(check).attr('data-checked');
+    var fechaCambio = "fechaCambio" + cod;
+
+    if (checked == 'false') {
+        $(checkActive).attr('checked', 'checked');
+        document.getElementById(fechaCambio).disabled = false;
+        $(checkActive).attr('data-checked', 'true');
+    } else if (checked == 'true') {
+        $(checkActive).removeAttr('checked');
+        document.getElementById(fechaCambio).disabled = true;
+        $(checkActive).attr('data-checked', 'false');
+    }
+
+}
+
 
 function checkProd(check, num, long) {
     var checkActive = $(check);

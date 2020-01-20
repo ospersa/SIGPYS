@@ -92,9 +92,14 @@ class  PlaneacionAse{
                     <input type="text" class="validate" name ="fecha" hidden value="'.$fecha.'">
                         
                     <a class="sumarDiv btn btn-floating waves-effect waves-light teal tooltipped" data-position="top" data-tooltip="Añadir Actividad" onclick="duplicarDiv()"><i class="material-icons" >add</i></a>
-                    <button id="btn-pass" class="btn waves-effect waves-light" type="submit"
+                    <button id="btn-guardar" class="btn waves-effect waves-light" type="submit"
                     name="btnGuardar">Guardar</button>
                         </div>
+						<script>
+                            window.addEventListener("scroll", function(e) {
+                                $("#btn-guardar").addClass("botonGuardar");
+                            });     
+                        </script>
                             '.PlaneacionAse::crearDivP($long, $usuario).'
                     </form>
                 </div>
@@ -203,7 +208,7 @@ class  PlaneacionAse{
             $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
             if ($totalTiempo > 720){
                 echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
             }else{
                 $cant = count($productos);
                 for($i=0;$i<$cant ;$i++){
@@ -214,9 +219,10 @@ class  PlaneacionAse{
                             $count += 1;
                             while ($datos = mysqli_fetch_array($resultado)){
                                 $idAsig = $datos['idAsig'];
-                                $consultaInsert = 'INSERT INTO pys_agenda  VALUES (null, '.$idAsig.', "'.$newFecha.'", "'.$obs[$i].'", '.$horas[$i].', '.$min[$i].', now(), 1);';
+                                $obser = mysqli_real_escape_string($connection, $obs[$i]);
+                                $consultaInsert = 'INSERT INTO pys_agenda  VALUES (null, '.$idAsig.', "'.$newFecha.'", "'.$obser.'", '.$horas[$i].', '.$min[$i].', now(), 1);';
                                 $resultadoInsert = mysqli_query($connection, $consultaInsert);
-                                $consultaplan = PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obs[$i], $usuario, $newFecha, $periodo);
+                                $consultaplan = PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obser, $usuario, $newFecha, $periodo);
                                 if($resultadoInsert && $consultaplan){
                                     $countSi += 1;
                                 }
@@ -226,15 +232,15 @@ class  PlaneacionAse{
                 }
                 if ($count == $countSi){
                     echo "<script> alert ('Se guardó correctamente la información');</script>";
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
+                    echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
                 } else {
                     echo "<script> alert ('No se guardó correctamente la información');</script>";
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
+                    echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
                 } 
             } 
         }else {
             echo "<script> alert ('No se ha seleccionado ninguna solicitud');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
         }
         mysqli_close($connection);
     }
@@ -273,7 +279,7 @@ class  PlaneacionAse{
                 $horaTotal = intval(( $minTotal/60 )+$horaTotal);
                 $minTotal = intval( $minTotal%60);
             } 
-            $obs = $observacion.'; '.$obser. 'fecha: '.$fecha;
+            $obs = $observacion.'; '.$obser. ' -fecha: '.$fecha;
             $consultaUpdate = "UPDATE pys_asignaciones SET horasInvertir=".$horaTotal.", minutosInvertir =".$minTotal.",observacion ='".$obs."' WHERE idAsignacion=".$idAsignacion;
             return mysqli_query($connection, $consultaUpdate);
         } else {
@@ -376,9 +382,9 @@ class  PlaneacionAse{
             <div class="card-content ">
                 <div class="row">
                     <form id="formAgenda'.$cont.'" action="../Controllers/ctrl_agenda.php" method="post">
-                        <input id="idSol" name="idAgenda" value="'.$idAgenda.'" type="hidden">
+                        <input id="idAgenda" name="idAgenda" value="'.$idAgenda.'" type="hidden">
                         <input id="idSol" name="idSol" value="'.$idSol.'" type="hidden">
-                        <input id="idSol" name="fecha" value="'.$fecha.'" type="hidden">
+                        <input id="fecha" name="fecha" value="'.$fecha.'" type="hidden">
                         <div class="row">
                             <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
                                 <p class="left-center teal-text">
@@ -413,6 +419,31 @@ class  PlaneacionAse{
                             </div>
                             <div class="input-field col s12 m5 l5">'.Tiempos::selectFase(null).'
                             </div>';
+							  if ($estAgenda == 1) {
+                                $string .= '
+                                
+                             <div class="input-field col l4 m4 s12  ">
+                                <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
+                                    name="btnRegTiempo" id="btnRegTiempo" data-position="right" onclick="registrarTiempo('.$cont.')"
+                                    data-tooltip="Registrar tiempo"><i class="material-icons teal-text">timer</i></button>
+                            </div>
+                            ';
+            } 
+                       $string .= '</div>
+                        <div class="row">
+                            <div class="input-field col l4 m4 s12">
+                                <p>
+                                    <label>
+                                        <input type="checkbox" id="checkFechaC'.$cont.'" name="checkFechaC'.$cont.'" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC'.$cont.'\',\''.$cont.'\')">
+                                        <span>Mover a otro día</span>
+                                    </label>
+                                <p>
+                            </div>
+                            <div class="input-field col l4 m4 s12">
+                                <input id="fechaCambio'.$cont.'" name="fechaCambio" type="text" class="datepicker" disabled>
+                                <label for="fechaCambio'.$cont.'">Ingrese la nueva fecha </label>
+                            </div>
+                        </div>';
             if ($estAgenda == 1) {
                                 $string .= '
                                 
@@ -422,15 +453,11 @@ class  PlaneacionAse{
                                     name="btnCancelarAgen" data-position="right" onclick="cancelarAgenda('.$cont.')"
                                     data-tooltip="Cancelar de Agenda"><i class="material-icons red-text">clear</i></button>
                             </div>
-                            <div class="input-field col l4 m4 s12  ">
-                                <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
-                                    name="btnRegTiempo" id="btnRegTiempo" data-position="right" onclick="registrarTiempo('.$cont.')"
-                                    data-tooltip="Registrar tiempo"><i class="material-icons teal-text">done</i></button>
-                            </div>
+                  
                             <div class="input-field col l2 m2 s12  ">
                                 <button class="btn btn-floating  waves-effect transparent  tooltipped" type="submit"
                                     name="btnActAgenda" data-position="right" data-tooltip="Actualizar en Agenda"><i
-                                        class="material-icons teal-text">update</i></button>
+                                        class="material-icons teal-text">done</i></button>
                             </div>
                             </div>';
             } 
@@ -556,7 +583,7 @@ class  PlaneacionAse{
     Estado 3 son las actividades Canceladas y no registradas en tiempos
     */
 
-    public static function cambiarEstadoAgenda($fecha, $usuario, $idSol, $idAgenda, $hora, $min, $obs, $estado, $sltFase){
+    public static function cambiarEstadoAgenda($fecha, $usuario, $idSol, $idAgenda, $hora, $min, $obs, $estado, $sltFase, $fechaCambio){
         require('../Core/connection.php');
         $resultadoUpdate = false;
         $regTiempo = [];
@@ -568,23 +595,36 @@ class  PlaneacionAse{
         $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min, $idAgenda);
         $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
         if ($totalTiempo > 720 && $estado == 1 ){
-            echo "<script> alert ('$totalTiempo...Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php">';
+            echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='. date("d-m-Y", strtotime($fecha)).'">';
         }else {
             if($resultado){
                 $datos = mysqli_fetch_array($resultado);
                 $idAgenda = $datos['idAgenda'];
-                $idAsig = $datos['idAsig'];
                 if($estado == 2){
                     $regTiempo = Tiempos::registrarTiempos($idSol, $usuario,  date("Y-m-d", strtotime($fecha)), $obs, $hora, $min, $sltFase,1);
                     if ($regTiempo[0] == true){
                         $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
-                        $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
-                        
+                        $resultadoUpdate = mysqli_query($connection, $consultaUpdate);  
                     }
                 } else if ($estado == 1){
-                    $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
-                    $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+                    if ($fecha == $fechaCambio || $fechaCambio == null){
+                        $consultaUpdate = "UPDATE pys_agenda SET notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
+                        $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+                    }else{
+                        $fechCambio = date("Y-m-d", strtotime($fechaCambio));
+                        $tiempoCambio = PlaneacionAse::validarHorasDia($fechCambio, $usuario, $hora, $min, $idAgenda);
+                        $totalTiempoC = ($tiempoCambio[0]*60) +$tiempoCambio[1];
+                        if ($totalTiempoC > 720){
+                            echo "<script> alert ('No es posible realizar el cambio de fecha');</script>";
+                            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='. date("d-m-Y", strtotime($fecha)).'">';
+                        } else{
+                            $consultaUpdate = "UPDATE pys_agenda SET fechAgenda='$fechCambio', notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
+                            $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
+                            $fecha = $fechCambio;
+                        }
+                        
+                    }
                 } else  if($estado == 3){
                     $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda = $idAgenda";
                     $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
@@ -592,7 +632,7 @@ class  PlaneacionAse{
                 if ($resultadoUpdate){
                     if($estado == 1){
                         echo ' <script> alert("Se actualizo el registro")</script>
-                        <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                        <meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.date("d-m-Y", strtotime($fecha)).'">';
                     } else if ($estado == 2) {
                         echo $regTiempo[1].' Se ha cambiado el estado en agenda';
 
@@ -603,7 +643,7 @@ class  PlaneacionAse{
 
                     if($estado == 1){
                         echo ' <script> alert("No es posible actualizar el registro")</script>
-                        <meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">'; 
+                        <meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.date("d-m-Y", strtotime($fecha)).'">'; 
                     } else if ($estado == 2) {
                         echo $regTiempo[1].' No se ha cambiado el estado en agenda';
 

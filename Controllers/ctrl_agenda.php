@@ -21,6 +21,7 @@ $fecha        = (isset($_POST['fecha'])) ? $_POST['fecha'] : null;
 $sltFase      = (isset($_POST['sltFase'])) ? $_POST['sltFase'] : null;
 $long         = (isset($_POST['long'])) ? $_POST['long'] : null;
 $cod          = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$fechaCambio  = (isset($_POST['fechaCambio'])) ? $_POST['fechaCambio'] : null;
 $check ="";
 $selectProyecto = "";
 $usuario    = $_SESSION['usuario'];
@@ -45,11 +46,11 @@ if (isset($_POST['cantidad'])){
 } else if (isset($_POST['btnGuardar']) ){
     PlaneacionAse::guardarPlaneacion($idSol, $horas, $min, $obser, $usuario, $fecha,$idPeriodo);
 } else if ($cod == 1){
-    PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 2, $sltFase);
+    PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 2, $sltFase, $fechaCambio);
 } else if (isset($_POST['btnActAgenda'])){
-    PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 1, $sltFase);
+    PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 1, $sltFase, $fechaCambio);
 } else if ($cod == 2){
-    PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 3, $sltFase);
+    PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 3, $sltFase, $fechaCambio);
 }
 
 ?>

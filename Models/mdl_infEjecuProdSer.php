@@ -107,7 +107,7 @@ const STYLEBODY = ['font' => [
             $horPer = 0;
             $minPer = 0;
             require('../Core/connection.php');
-            if ($proyecto == null){
+            if ($proyecto == "sltProy"){
                 $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' ORDER BY codProy asc;";
             } else {
@@ -274,7 +274,7 @@ const STYLEBODY = ['font' => [
 
         public static function descarga ($proyecto, $fechaini, $fechafin) {
             require('../Core/connection.php');
-            if ($proyecto == null){
+            if ($proyecto == "sltProy"){
                 $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' ORDER BY codProy asc;";
             } else {
@@ -318,7 +318,7 @@ const STYLEBODY = ['font' => [
                 $sheet->mergeCells("A4:J4");
                 $titulos=['Proyecto', 'Cod. Producto/servicio', 'Estado', 'Producto/servicio','Presupuesto Producto/servicio', 'Asignado', 'Tiempo invertido', 'Valor Producto/Servicio'];
                 $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
-                $spreadsheet->getActiveSheet()->getStyle('A6:J6')->applyFromArray(STYLETABLETITLE);
+                $spreadsheet->getActiveSheet()->getStyle('A6:H6')->applyFromArray(STYLETABLETITLE);
                 $fila = 7;
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $totPresupuesto = 0;

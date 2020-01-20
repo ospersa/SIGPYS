@@ -21,11 +21,11 @@ require_once('../Controllers/ctrl_infEjecuProdSer.php');
                     <input type="text" name="txtBusquedaProy" id="txtBusquedaProy" placeholder="Ingrese el código del proyecto">
                     <label for="txtBusquedaProy">Cód. Proyecto Conecta-TE*</label>
                 </div>
-                <div class="input-field col l6 m8 s12" id="sltProyecto">
-                    <select name="sltProyecto" id="">
-                        <option value="sltProyecto">Seleccione</option>
+                <div class="input-field col l6 m8 s12" id="sltProy">
+                    <select name="sltProy" id="">
+                        <option value="sltProy">Seleccione</option>
                     </select>
-                    <label for="sltProyecto">Seleccione un proyecto</label>
+                    <label for="sltProy">Seleccione un proyecto</label>
                 </div>
             </div>
             <div class="row">
