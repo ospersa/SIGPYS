@@ -80,45 +80,9 @@ class  PlaneacionAse{
         mysqli_close($connection);
     }
   
-    public static function crearDiv ($long, $usuario, $fecha){
-        echo '
-        <ul class="collapsible">
-            <li>
-                <div class="collapsible-header teal white-text"><h6 class ="white-text">Registrar Planeación '.$fecha.'</h6></div>
-                <div class="collapsible-body">
-                    <div class="row">
-                    <form id="proyAgend" action="../Controllers/ctrl_agenda.php" method="post">
-                    <div class="row btnmas ">
-                    <input type="text" class="validate" name ="fecha" hidden value="'.$fecha.'">
-                        
-                    <a class="sumarDiv btn btn-floating waves-effect waves-light teal tooltipped" data-position="top" data-tooltip="Añadir Actividad" onclick="duplicarDiv()"><i class="material-icons" >add</i></a>
-                    <button id="btn-guardar" class="btn waves-effect waves-light" type="submit"
-                    name="btnGuardar">Guardar</button>
-                        </div>
-						<script>
-                            window.addEventListener("scroll", function(e) {
-                                $("#btn-guardar").addClass("botonGuardar");
-                            });     
-                        </script>
-                            '.PlaneacionAse::crearDivP($long, $usuario).'
-                    </form>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="collapsible-header teal"><h6 class ="white-text">Planeación Registrada</h6></div>
-                <div class="collapsible-body">
-                    <div class="row">
-                        '.PlaneacionAse::mostrarAgenda ($fecha, $usuario).'
-                    </div>
-                </div>
-            </li>
-            </ul>
-        ';
-    }
-
+    
     public static function crearDivP($long, $usuario){
-        return '
+        echo '
         <div class="row" id="cardPro'.$long.'">
             <div class="col s12 m12 l12">
                 <div class="card" >
@@ -204,7 +168,8 @@ class  PlaneacionAse{
             $countSi = 0;
             $horasSum= array_sum($horas);
             $minutosSum = array_sum($min);
-            $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $horasSum, $minutosSum,'null');
+            $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $horasSum, $minutosSum,"''");
+            $tiempoReg[0]."horas".$tiempoReg[1];
             $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
             if ($totalTiempo > 720){
                 echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
@@ -338,16 +303,17 @@ class  PlaneacionAse{
     public static function mostrarAgenda ($fecha, $user){
         require('../Core/connection.php');
         include_once('mdl_tiempos.php');
-        $string = "";
+        $json = array();
         $newFecha = date("Y-m-d", strtotime($fecha));
         $cont = 1;
-        $consulta ="SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda 
+        $agenda = "";
+        $consulta ="SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda, estAgenda 
         FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
         WHERE pys_agenda.estAgenda <> 0 AND( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_login.est = 1 AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha'";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos = mysqli_fetch_array($resultado)){
+        while ($datos = mysqli_fetch_array($resultado)){    
             $idAgenda = $datos['idAgenda'];
             $idAsig = $datos['idAsig'];
             $notaAgenda = $datos['notaAgenda'];
@@ -378,101 +344,45 @@ class  PlaneacionAse{
                 <p class="left-align teal-text text-darken-1">*Esta actividad ha sido cancelada*</p>
                 </div>';
             }
-            $string .='<div class="card">
-            <div class="card-content ">
-                <div class="row">
-                    <form id="formAgenda'.$cont.'" action="../Controllers/ctrl_agenda.php" method="post">
-                        <input id="idAgenda" name="idAgenda" value="'.$idAgenda.'" type="hidden">
-                        <input id="idSol" name="idSol" value="'.$idSol.'" type="hidden">
-                        <input id="fecha" name="fecha" value="'.$fecha.'" type="hidden">
-                        <div class="row">
-                            <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                                <p class="left-center teal-text">
-                                    <h6>'.$codProy.' -- '.$nombreProy.'</h6>
-                                </p>
-                                <p class="left-align">P'.$idSol.' '.$descripcionSol.'</p>
-                            </div>
-                            <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                                <p class="left-align">Tiempo:</p>
-                            </div>
-                            <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                                <input type="number" class="validate" name="horas" value="'.$horaAgenda.'" '.$type.'>
-                                <label for="horas" class="active">Horas</label>
-                            </div>
-                            <div class="input-field col l1 m1 s12">
-                                <input type="number" class="validate" name="min" value="'.$minAgenda.'" '.$type.'>
-                                <label for="min" class="active">Minutos</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
-                                <p class="left-align">Actividad:</p>
-                            </div>
-                            <div class="input-field col l7 m7 s12">
-                                <textarea name="obser" class="materialize-textarea" '.$type.'>'.$notaAgenda.'</textarea>
-                                <label for="obser" class="active">Actividad</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
-                                <p class="left-align">Fase:</p>
-                            </div>
-                            <div class="input-field col s12 m5 l5">'.Tiempos::selectFase(null).'
-                            </div>';
-							  if ($estAgenda == 1) {
-                                $string .= '
-                                
-                             <div class="input-field col l4 m4 s12  ">
-                                <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
-                                    name="btnRegTiempo" id="btnRegTiempo" data-position="right" onclick="registrarTiempo('.$cont.')"
-                                    data-tooltip="Registrar tiempo"><i class="material-icons teal-text">timer</i></button>
-                            </div>
-                            ';
-            } 
-                       $string .= '</div>
-                        <div class="row">
-                            <div class="input-field col l4 m4 s12">
-                                <p>
-                                    <label>
-                                        <input type="checkbox" id="checkFechaC'.$cont.'" name="checkFechaC'.$cont.'" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC'.$cont.'\',\''.$cont.'\')">
-                                        <span>Mover a otro día</span>
-                                    </label>
-                                <p>
-                            </div>
-                            <div class="input-field col l4 m4 s12">
-                                <input id="fechaCambio'.$cont.'" name="fechaCambio" type="text" class="datepicker" disabled>
-                                <label for="fechaCambio'.$cont.'">Ingrese la nueva fecha </label>
-                            </div>
-                        </div>';
             if ($estAgenda == 1) {
-                                $string .= '
-                                
-                                <div class="row">
-                            <div class="input-field col l4 m4 s12  offset-l1 offset-m1">
-                                <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
-                                    name="btnCancelarAgen" data-position="right" onclick="cancelarAgenda('.$cont.')"
-                                    data-tooltip="Cancelar de Agenda"><i class="material-icons red-text">clear</i></button>
-                            </div>
-                  
-                            <div class="input-field col l2 m2 s12  ">
-                                <button class="btn btn-floating  waves-effect transparent  tooltipped" type="submit"
-                                    name="btnActAgenda" data-position="right" data-tooltip="Actualizar en Agenda"><i
-                                        class="material-icons teal-text">done</i></button>
-                            </div>
-                            </div>';
-            } 
-             $string .= $text.'
-                            
-                            </div>
-                        </form>
+                $agenda = '
+                
+                        <div class="row">
+                    <div class="input-field col l4 m4 s12  offset-l1 offset-m1">
+                        <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
+                            name="btnCancelarAgen" data-position="right" onclick="cancelarAgenda('.$cont.')"
+                            data-tooltip="Cancelar de Agenda"><i class="material-icons red-text">clear</i></button>
                     </div>
-                </div>
-            </div>
-                ';
+        
+                    <div class="input-field col l2 m2 s12  ">
+                        <button class="btn btn-floating  waves-effect transparent  tooltipped" type="submit"
+                            name="btnActAgenda" data-position="right" data-tooltip="Actualizar en Agenda"><i
+                                class="material-icons teal-text">done</i></button>
+                    </div>
+                    </div>';
+            } 
+            $fase =Tiempos::selectFase("Sin Label");
+                $json[]     = array(
+                    'type' => $type,
+                    'text'     => $text,
+                    'cont'     => $cont,
+                    'idAgenda'     => $idAgenda,
+                    'idSol'     => $idSol,
+                    'fecha'     => $fecha,
+                    'codProy'     => $codProy,
+                    'nombreProy'     => $nombreProy,
+                    'descripcionSol'     => $descripcionSol,
+                    'horaAgenda'     => $horaAgenda,
+                    'minAgenda'     => $minAgenda,
+                    'notaAgenda'     => $notaAgenda,
+                    'agenda'     => $agenda,
+                    'fase'     => $fase,
+                    'estAgenda'     => $estAgenda,
+                );
                 $cont += 1;
-            
         }
-        return $string;
+        $jsonString = json_encode($json);
+        echo $jsonString;
         mysqli_close($connection);
     }
     public static function mostrarAgendaAdmin ($fecha, $user){
@@ -595,9 +505,11 @@ class  PlaneacionAse{
         $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min, $idAgenda);
         $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
         if ($totalTiempo > 720 && $estado == 1 ){
+            echo $totalTiempo."aaaa"; 
             echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='. date("d-m-Y", strtotime($fecha)).'">';
         }else {
+            echo $estado."sss"; 
             if($resultado){
                 $datos = mysqli_fetch_array($resultado);
                 $idAgenda = $datos['idAgenda'];
@@ -608,10 +520,8 @@ class  PlaneacionAse{
                         $resultadoUpdate = mysqli_query($connection, $consultaUpdate);  
                     }
                 } else if ($estado == 1){
-                    if ($fecha == $fechaCambio || $fechaCambio == null){
-                        $consultaUpdate = "UPDATE pys_agenda SET notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
-                        $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
-                    }else{
+                    echo "fechaCambio".$fechaCambio;
+                    if ($fechaCambio != null){
                         $fechCambio = date("Y-m-d", strtotime($fechaCambio));
                         $tiempoCambio = PlaneacionAse::validarHorasDia($fechCambio, $usuario, $hora, $min, $idAgenda);
                         $totalTiempoC = ($tiempoCambio[0]*60) +$tiempoCambio[1];
@@ -623,6 +533,9 @@ class  PlaneacionAse{
                             $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
                             $fecha = $fechCambio;
                         }
+                    }else{
+                        $consultaUpdate = "UPDATE pys_agenda SET notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
+                        $resultadoUpdate = mysqli_query($connection, $consultaUpdate);
                         
                     }
                 } else  if($estado == 3){
@@ -678,7 +591,7 @@ class  PlaneacionAse{
         $consulta ="SELECT horaAgenda, minAgenda FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
-        WHERE pys_agenda.estAgenda = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_login.est=1 AND pys_agenda.fechAgenda ='$newFecha' AND pys_login.usrLogin='$usuario' AND pys_agenda.idAgenda <> $idAgenda";
+        WHERE pys_agenda.estAgenda = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_login.est=1 AND pys_agenda.fechAgenda ='$newFecha' AND pys_login.usrLogin='$usuario' AND idAgenda <> $idAgenda ";
         $resultado = mysqli_query($connection, $consulta);
         while( $datos = mysqli_fetch_array($resultado)){
             $horaAgenda = $datos['horaAgenda'];
@@ -697,7 +610,7 @@ class  PlaneacionAse{
             $horasA += $horaTiempo;
             $minA += $minTiempo;
         }
-        if ($minA > 60){
+        if ($minA >= 60){
             $horasA = intval(( $minA/60 )+$horasA);
             $minA = intval( $minA%60);
         } 
@@ -752,5 +665,39 @@ class  PlaneacionAse{
         return $datos['usrLogin'];
         mysqli_close($connection);
     }
+
+    
+    public static function registrarTiemposAge($idAgenda, $fase, $fecha, $usuario){
+        require('../Core/connection.php');        
+        if($idAgenda != [] && $fase != [] ){
+            $cant = count($idAgenda); 
+            $cant2 = count($fase); 
+            if($cant == $cant2){
+                for($i=0;$i<$cant;$i++){
+                   echo $consulta ="SELECT * FROM pys_agenda
+                     INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
+                     WHERE idAgenda = $idAgenda[$i]" ;
+                    $resultado = mysqli_query($connection, $consulta);
+                    $datos = mysqli_fetch_array($resultado);
+                    $fechAgenda = $datos['fechAgenda'];
+                    $notaAgenda = $datos['notaAgenda'];
+                    $horaAgenda = $datos['horaAgenda'];
+                    $minAgenda = $datos['minAgenda'];
+                    $idSol = $datos['idSol'];
+                    PlaneacionAse::cambiarEstadoAgenda($fechAgenda, $usuario, $idSol, $idAgenda[$i], $horaAgenda, $minAgenda, $notaAgenda, 2, $fase[$i], "");
+                }
+            } else{
+                echo "<script>alert('Por favor seleccionar la fase en todos los producto/servicio a registrar.')</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
+            }
+        }  else{
+            echo "<script>alert('Debe seleccionar al menos un producto/servicio para registrar.')</script>";
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
+        }
+
+        mysqli_close($connection);
+    }
+
+
 }
 ?>

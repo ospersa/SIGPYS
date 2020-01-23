@@ -73,9 +73,9 @@ if (isset($_POST['btnAsignar'])) {
     if ($obs != null){
         $mensaje .= "<strong>Observación de la solicitud: </strong><br>".$obs."<br><br>";
     }
-    echo $mensaje .= $infoAsi.$nota.$msj2;
+    $mensaje .= $infoAsi.$nota.$msj2;
     $asunto = "Asignación formal solicitud / $codProy / $nombreEqu - $nombreSer"; 
-    echo $ccemail= Asignados::correosResponsable($idSol2);
+    $ccemail= Asignados::correosResponsable($idSol2);
     EnviarCorreo::enviarCorreoAsignados($correoSol, $ccemail, $asunto, $mensaje);    
 }
 

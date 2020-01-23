@@ -101,7 +101,7 @@ use PHPMailer\PHPMailer\Exception;
                 //Server settings
                 $mail->SMTPDebug = 2;                      
                 $mail->isSMTP();                                            
-                $mail->Host       = 'smtp.office';                    
+                $mail->Host       = 'smtp.office365.com';                    
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'apoyoconectedu.co';       
                 $mail->Password   = 'Ceintic13';                            
@@ -109,7 +109,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Port       = 587;                                    
 
                 //Recipients
-                $mail->setFrom('apoyoconecto', 'Conecta-Te');
+                $mail->setFrom('apoyoconectate@uniandes.edu.co', 'Conecta-Te');
                 $mail->addAddress($solicitante, ''); 
                 $mail->addCC('apoyoconectate@uniandes.edu.co');
                 foreach($arrayccEmail as $item) {
@@ -141,7 +141,7 @@ use PHPMailer\PHPMailer\Exception;
                 //Server settings
                 $mail->SMTPDebug = 2;                      
                 $mail->isSMTP();                                            
-                $mail->Host       = 'smtp.office';                    
+                $mail->Host       = 'smtp.office365.com';                    
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'apoyoconectedu.co';       
                 $mail->Password   = 'Ceintic13';                            
@@ -149,7 +149,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Port       = 587;                                    
 
                 //Recipients
-                $mail->setFrom('apoyoconecto', 'Conecta-Te');
+                $mail->setFrom('apoyoconectate@uniandes', 'Conecta-Te');
                 $mail->addCC('apoyoconectate@uniandes.edu.co');
                 foreach($arrayEmail as $item) {
                     $mail->addAddress($item, '');

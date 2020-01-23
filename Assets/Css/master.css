@@ -485,3 +485,8 @@ td:hover .truncate, .trunca:hover .truncate {
   top: 0;
   position: fixed;
   right: 20%; }
+
+.botonRegistrarT {
+  bottom: 10px;
+  position: fixed;
+  right: 20px; }

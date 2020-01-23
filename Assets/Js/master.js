@@ -104,6 +104,13 @@ $(document).ready(function () {
             inicializarCampos();
         }
     });
+    $('#btnRegTiempo').click(function(){
+        var fecha = $("#fecha").val();
+        $('.modal').modal({
+            onOpenStart: modalAgenda(fecha),
+            onOpenEnd: inicializarCampos(),
+        });
+    });
 
     $('.collapsible').collapsible({
         onOpenEnd: function () {
@@ -676,7 +683,7 @@ function cargarResAgenda(fecha, elem) {
             idper: idper
         },
         beforeSend: function () {
-            $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+            $('#div_dinamico1').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
             $.each($('.fechPer'), function () {
@@ -695,15 +702,192 @@ function cargarResAgenda(fecha, elem) {
             } else {
                 elem.removeClass('teal').addClass(' blue  darken-4 ');
             }
-            $('#div_dinamico').html(data);
+            $('#fechaA').text(fecha);
+            $('#fechaDia').val(fecha);
+            $('#div_dinamico1').html(data);
             $('#div_dinamico').slideDown("slow");
+            planeacionDia(fecha, idper, url);
             inicializarCampos();
         }
     });
 };
 
+function planeacionDia(fecha, idper, url){
+    var string = "";
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            fech2: fecha,
+            idper: idper
+        },
+        beforeSend: function () {
+            $('#div_dinamico2').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            let tasks = JSON.parse(data);
+            $('#div_dinamico2').hide();
+            tasks.forEach(task => {
+               string += `<div class="card">
+               <div class="card-content "><div class="row">
+                       <form id="formAgenda${task.cont}" action="../Controllers/ctrl_agenda.php" method="post">
+                           <input id="idAgenda" name="idAgenda" value="${task.idAgenda}" type="hidden">
+                           <input id="idSol" name="idSol" value="${task.idSol}" type="hidden">
+                           <input id="fecha" name="fecha" value="${task.fecha}" type="hidden">
+                           <div class="row">
+                               <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
+                                   <p class="left-center teal-text">
+                                       <h6>${task.codProy} -- ${task.nombreProy}</h6>
+                                   </p>
+                                   <p class="left-align">P${task.idSol} ${task.descripcionSol}</p>
+                               </div>
+                               <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                                   <p class="left-align">Tiempo:</p>
+                               </div>
+                               <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                                   <input type="number" class="validate" name="horas" value="${task.horaAgenda}" ${task.type}>
+                                   <label for="horas" class="active">Horas</label>
+                               </div>
+                               <div class="input-field col l1 m1 s12">
+                                   <input type="number" class="validate" name="min" value="${task.minAgenda}" ${task.type}>
+                                   <label for="min" class="active">Minutos</label>
+                               </div>
+                           </div>
+                           <div class="row">
+                               <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
+                                   <p class="left-align">Actividad:</p>
+                               </div>
+                               <div class="input-field col l7 m7 s12">
+                                   <textarea name="obser" class="materialize-textarea" ${task.type}>${task.notaAgenda}</textarea>
+                                   <label for="obser" class="active">Actividad</label>
+                               </div>
+                           </div>
+                           <div class="row">
+                            <div class="input-field col l4 m4 s12">
+                                <p>
+                                    <label>
+                                        <input type="checkbox" id="checkFechaC${task.cont}" name="checkFechaC${task.cont}" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC${task.cont}\',\'${task.cont}\')">
+                                        <span>Mover a otro día</span>
+                                    </label>
+                                <p>
+                            </div>
+                            <div class="input-field col l4 m4 s12">
+                                <input id="fechaCambio${task.cont}" name="fechaCambio" type="text" class="datepicker" disabled>
+                                <label for="fechaCambio${task.cont}">Ingrese la nueva fecha </label>
+                            </div>
+                        </div>
+                        ${task.agenda}
+                        ${task.text}
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+               `;
+            });
+            $('#div_dinamico2').html(string);
+            $('#div_dinamico2').slideDown("slow");
+        }
+    });
+
+
+};
+
+function modalAgenda(fecha){
+    var string = "";
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_agenda.php',
+        data: {
+            fech2: fecha
+        },
+        beforeSend: function () {
+            $('#modalA').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            let tasks = JSON.parse(data);
+            
+            string += `
+            <input id="fecha" name="fecha" value="`+fecha+`" type="hidden">
+            <table class="left responsive-table">
+            <thead>
+                <tr>
+                    <th>Producto/Servicio</th>
+                    <th>Descripción del Producto/Servicio</th>
+                    <th>Actividad</th>
+                    <th>Tiempo</th>
+                    <th>Fase</th>
+                    <th>Registrar</th>
+                </tr>
+            </thead>
+            <tbody>`;
+            tasks.forEach(task => {
+                if (task.estAgenda == 1){
+                
+                string += `
+                    <tr>
+                    <td>P${task.idSol}</td>
+                        <td><p class="truncate">${task.descripcionSol}</p></td>
+                        <td><p class="truncate">${task.notaAgenda}</p></td>
+                        <td>${task.horaAgenda} h ${task.minAgenda} m </td>
+                        <td>${task.fase}</td>
+                        <td><p>
+                        <label>
+                          <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />
+                          <span></span>
+                        </label></td>
+                    </tr>`;
+                }
+
+            });
+            string += `
+                </tbody>
+                </table>`;
+                $('#modalA').html(string);
+                inicializarCampos();
+        }
+    });
+
+   
+};
+
+function checkRegistarT(check) {
+    var checkActive = $(check);
+    var checked = $(check).attr('data-checked');
+    if (checked == 'false') {
+        $(checkActive).attr('checked', 'checked');
+        $(check).parent().parent().parent().siblings().find("div select").removeAttr("disabled").attr("required", "required");
+        inicializarCampos();
+        $(checkActive).attr('data-checked', 'true');
+    } else if (checked == 'true') {
+        $(checkActive).removeAttr('checked');
+        $(check).parent().parent().parent().siblings().find("div select").attr("disabled", "disabled");
+        $(checkActive).attr('data-checked', 'false');
+        inicializarCampos();
+    }
+}
+
+function guardarTiempo(){
+    var valor =  $( '#formModalA .filled-in' ).data( 'checked')==="true";
+    console.log( $( '#formModalA .filled-in' ).attr('checked')==="checked");
+   /*  $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_agenda.php',
+        data: $("#formModalA").serialize(),
+        success: function (data) {
+            $('#div_dinamico').empty();
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+            var tooltips = $('.tooltipped');
+            if (tooltips.length != 0) {
+                $('.tooltipped').tooltip();
+            };
+        }
+    }); */
+
+};
+
 function agendaDia(fecha){
-    console.log (fecha);
     window.location="../Views/agenda.php?hoy="+fecha;
 };
 

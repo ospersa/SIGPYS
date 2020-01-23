@@ -43,12 +43,60 @@ if( !empty( $hoy ) ){
             </div>
         </div>
         <div class="col l5 m5 s12 offset-l1 offset-m1">
-            <div class="row" id="div_dinamico" ></div>
+            <ul class="collapsible">
+                <li>
+                    <div class="collapsible-header teal white-text">
+                        <h6 class="white-text">Registrar Planeación <span id="fechaA"></span></h6>
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="row">
+                            <form id="proyAgend" action="../Controllers/ctrl_agenda.php" method="post">
+                                <div class="row btnmas ">
+
+
+                                    <a class="sumarDiv btn btn-floating waves-effect waves-light teal tooltipped"
+                                        data-position="top" data-tooltip="Añadir Actividad" onclick="duplicarDiv()"><i
+                                            class="material-icons">add</i></a>
+                                    <button id="btn-guardar" class="btn waves-effect waves-light" type="submit"
+                                        name="btnGuardar">Guardar</button>
+                                </div>
+                                <input type="hidden" class="validate" name="fecha" id="fechaDia" value="">
+                                <script>
+                                    window.addEventListener("scroll", function (e) {
+                                        $("#btn-guardar").addClass("botonGuardar");
+                                    });
+                                </script>
+                                <div id="div_dinamico1"></div>
+
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header teal">
+                        <h6 class="white-text">Planeación Registrada</h6>
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="row">
+
+                            <div id="div_dinamico2"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
 
-
+<div class="input-field col l4 m4 s12 botonRegistrarT ">
+    <button data-target="modalAgenda" class=" btn btn-large btn-floating modal-trigger waves-effect teal white-text tooltipped" name="btnRegTiempo"
+    id="btnRegTiempo" data-position="left" data-tooltip="Registrar tiempo"><i class="large material-icons white-text">timer</i></button>
+</div>
+<div id="modalAgenda" class="modal">
+    <?php
+        require('modalAgenda.php');
+    ?>
+</div>
 <?php
 require('../Estructure/footer.php');
 ?>

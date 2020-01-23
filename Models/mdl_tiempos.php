@@ -290,8 +290,10 @@
                     $string = '  <select name="sltFase" id="sltFase" class="asignacion"  >
                                 <option value="" selected disabled>Seleccione</option>';
 
-                } else {
-                    $string = '  <select name="sltFaseEdit" id="sltFaseEdit" class="asignacion"  >
+                } else  {
+                    $cons = ($cod != "Sin Label") ? " " : "[]" ;
+                    $disabled = ($cod != "Sin Label") ? " " : "disabled" ;
+                    $string = '  <select name="sltFaseEdit'.$cons.'" id="sltFaseEdit'.$cons.'" class="asignacion" '.$disabled.'>
                                 <option value="" selected disabled>Seleccione</option>';
                 }
                 while ($datos = mysqli_fetch_array($resultado)) {
@@ -303,7 +305,7 @@
                 if($cod == null){
                     $string .= '  </select>
                             <label for="sltFase">Fase*</label>';
-                } else {
+                } else if ($cod != "Sin Label"){           
                     $string .= '  </select>
                             <label for="sltFaseEdit">Fase*</label>';
                 }
