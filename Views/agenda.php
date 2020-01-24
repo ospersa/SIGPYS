@@ -97,6 +97,8 @@ if( !empty( $hoy ) ){
         require('modalAgenda.php');
     ?>
 </div>
+
 <?php
-require('../Estructure/footer.php');
+    require('../Estructure/footer.php');
+
 ?>

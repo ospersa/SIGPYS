@@ -505,11 +505,9 @@ class  PlaneacionAse{
         $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min, $idAgenda);
         $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
         if ($totalTiempo > 720 && $estado == 1 ){
-            echo $totalTiempo."aaaa"; 
             echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='. date("d-m-Y", strtotime($fecha)).'">';
         }else {
-            echo $estado."sss"; 
             if($resultado){
                 $datos = mysqli_fetch_array($resultado);
                 $idAgenda = $datos['idAgenda'];
@@ -547,7 +545,7 @@ class  PlaneacionAse{
                         echo ' <script> alert("Se actualizo el registro")</script>
                         <meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.date("d-m-Y", strtotime($fecha)).'">';
                     } else if ($estado == 2) {
-                        echo $regTiempo[1].' Se ha cambiado el estado en agenda';
+                        return $regTiempo[1].' Se ha cambiado el estado en agenda';
 
                     } else if ($estado == 3) {
                         echo 'Se ha cancelado la asigancion en la agenda';
@@ -558,7 +556,7 @@ class  PlaneacionAse{
                         echo ' <script> alert("No es posible actualizar el registro")</script>
                         <meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.date("d-m-Y", strtotime($fecha)).'">'; 
                     } else if ($estado == 2) {
-                        echo $regTiempo[1].' No se ha cambiado el estado en agenda';
+                        return $regTiempo[1].' No se ha cambiado el estado en agenda';
 
                     } else if ($estado == 3) {
                         echo 'No se ha cancelado la asigancion en la agenda';
@@ -668,15 +666,16 @@ class  PlaneacionAse{
 
     
     public static function registrarTiemposAge($idAgenda, $fase, $fecha, $usuario){
-        require('../Core/connection.php');        
+        require('../Core/connection.php');   
+        $json = array();   
         if($idAgenda != [] && $fase != [] ){
             $cant = count($idAgenda); 
             $cant2 = count($fase); 
             if($cant == $cant2){
                 for($i=0;$i<$cant;$i++){
-                   echo $consulta ="SELECT * FROM pys_agenda
-                     INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
-                     WHERE idAgenda = $idAgenda[$i]" ;
+                    $consulta ="SELECT * FROM pys_agenda
+                    INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
+                    WHERE idAgenda = $idAgenda[$i]" ;
                     $resultado = mysqli_query($connection, $consulta);
                     $datos = mysqli_fetch_array($resultado);
                     $fechAgenda = $datos['fechAgenda'];
@@ -684,17 +683,19 @@ class  PlaneacionAse{
                     $horaAgenda = $datos['horaAgenda'];
                     $minAgenda = $datos['minAgenda'];
                     $idSol = $datos['idSol'];
-                    PlaneacionAse::cambiarEstadoAgenda($fechAgenda, $usuario, $idSol, $idAgenda[$i], $horaAgenda, $minAgenda, $notaAgenda, 2, $fase[$i], "");
+                    $mensaje = PlaneacionAse::cambiarEstadoAgenda($fechAgenda, $usuario, $idSol, $idAgenda[$i], $horaAgenda, $minAgenda, $notaAgenda, 2, $fase[$i], "");
+                    $json[]     = array(
+                        'mensaje' => "P$idSol : $mensaje",  
+                    );
                 }
-            } else{
-                echo "<script>alert('Por favor seleccionar la fase en todos los producto/servicio a registrar.')</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
-            }
+            } 
         }  else{
-            echo "<script>alert('Debe seleccionar al menos un producto/servicio para registrar.')</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
+            $json[]     = array(
+                'mensaje' => "Debe seleccionar al menos un producto/servicio para registrar.",  
+            );
         }
-
+        $jsonString = json_encode($json);
+        return $jsonString;
         mysqli_close($connection);
     }
 

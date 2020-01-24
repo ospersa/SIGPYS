@@ -8,7 +8,7 @@ $('.modal').on('load', function () {
 
 $('.modal').on('change', function () {
     $('select').formSelect();
-    $('select').addClass('hide');
+    /* $('select').addClass('hide'); */
     inicializarCampos();
 });
 
@@ -35,7 +35,6 @@ $(document).ready(function () {
             chartProyecto();
         }
     }
-
 
     $("#busqueda").keyup(function () {
         let consulta2 = $(this).val();
@@ -104,6 +103,7 @@ $(document).ready(function () {
             inicializarCampos();
         }
     });
+
     $('#btnRegTiempo').click(function(){
         var fecha = $("#fecha").val();
         $('.modal').modal({
@@ -516,6 +516,7 @@ function editarRegistro(idTiempo) {
             $('#editRegistro').html(data);
             $('#editRegistro').slideDown("slow");
             $('#sltFaseEdit').formSelect();
+            inicializarCampos();
         }
     });
 };
@@ -805,50 +806,49 @@ function modalAgenda(fecha){
             $('#modalA').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
-            let tasks = JSON.parse(data);
-            
-            string += `
-            <input id="fecha" name="fecha" value="`+fecha+`" type="hidden">
-            <table class="left responsive-table">
-            <thead>
-                <tr>
-                    <th>Producto/Servicio</th>
-                    <th>Descripción del Producto/Servicio</th>
-                    <th>Actividad</th>
-                    <th>Tiempo</th>
-                    <th>Fase</th>
-                    <th>Registrar</th>
-                </tr>
-            </thead>
-            <tbody>`;
-            tasks.forEach(task => {
-                if (task.estAgenda == 1){
-                
+            if (data !=""){
+                let tasks = JSON.parse(data);              
                 string += `
+                <input id="fecha" name="fecha" value="`+fecha+`" type="hidden">
+                <table class="left responsive-table">
+                <thead>
                     <tr>
-                    <td>P${task.idSol}</td>
-                        <td><p class="truncate">${task.descripcionSol}</p></td>
-                        <td><p class="truncate">${task.notaAgenda}</p></td>
-                        <td>${task.horaAgenda} h ${task.minAgenda} m </td>
-                        <td>${task.fase}</td>
-                        <td><p>
-                        <label>
-                          <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />
-                          <span></span>
-                        </label></td>
-                    </tr>`;
-                }
-
-            });
-            string += `
-                </tbody>
-                </table>`;
-                $('#modalA').html(string);
-                inicializarCampos();
+                        <th>Producto/Servicio</th>
+                        <th>Descripción del Producto/Servicio</th>
+                        <th>Actividad</th>
+                        <th>Tiempo</th>
+                        <th>Fase</th>
+                        <th>Registrar</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+                tasks.forEach(task => {
+                    if (task.estAgenda == 1){
+                    string += `
+                        <tr>
+                        <td>P${task.idSol}</td>
+                            <td><p class="truncate">${task.descripcionSol}</p></td>
+                            <td><p class="truncate">${task.notaAgenda}</p></td>
+                            <td>${task.horaAgenda} h ${task.minAgenda} m </td>
+                            <td>${task.fase}</td>
+                            <td><p>
+                            <label>
+                              <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />
+                              <span></span>
+                            </label></td>
+                        </tr>`;
+                    }
+                });
+                string += `
+                    </tbody>
+                    </table>`;
+                    $('#modalA').html(string);
+                    inicializarCampos();
+            } else{
+                $('#modalA').html("No se ha registrado ningun Producto/Servicio para este día");
+            }
         }
     });
-
-   
 };
 
 function checkRegistarT(check) {
@@ -867,29 +867,37 @@ function checkRegistarT(check) {
     }
 }
 
-function guardarTiempo(){
-    var valor =  $( '#formModalA .filled-in' ).data( 'checked')==="true";
-    console.log( $( '#formModalA .filled-in' ).attr('checked')==="checked");
-   /*  $.ajax({
-        type: "POST",
-        url: '../Controllers/ctrl_agenda.php',
-        data: $("#formModalA").serialize(),
-        success: function (data) {
-            $('#div_dinamico').empty();
-            $('#div_dinamico').html(data);
-            $('#div_dinamico').slideDown("slow");
-            var tooltips = $('.tooltipped');
-            if (tooltips.length != 0) {
-                $('.tooltipped').tooltip();
-            };
-        }
-    }); */
+function regTiemposModalA(){
+    var checked = $('#modalAgenda').find('.filled-in').attr('data-checked');
+
+    if (checked === 'false') {
+        $("#formModalA").submit(function(e){
+        e.preventDefault();
+        M.toast({ html: "Seleccione mínimo un producto/servicio"});
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            url: '../Controllers/ctrl_agenda.php',
+            data: $('#formModalA').serialize(),
+            success: function (response) {
+                console.log(response)
+                let data = JSON.parse(response)
+                data.forEach( task => {
+                    M.toast({ html: `${task.mensaje}`});
+                    }
+                );
+            }
+        });
+    }
+    checked = "";
+
 
 };
 
-function agendaDia(fecha){
+/* function agendaDia(fecha){
     window.location="../Views/agenda.php?hoy="+fecha;
-};
+}; */
 
 function seleccionarDia(hoy){
     $.each($('.fechPer'), function () {  

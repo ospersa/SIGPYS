@@ -26,6 +26,8 @@ $fechaCambio  = (isset($_POST['fechaCambio'])) ? $_POST['fechaCambio'] : null;
 $check ="";
 $selectProyecto = "";
 $usuario    = $_SESSION['usuario'];
+$registrados = "";        
+
 /*
 cod = 1 si se va ha realizar el registro de tiempo
 cod = 2 si se va ha cancelar la actividad en la agenda
@@ -56,8 +58,7 @@ else if (isset($_POST['btnActAgenda'])){
     PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 3, $sltFase, $fechaCambio);
 }
 else if (isset($_POST['idAgenda']) && isset($_POST['sltFaseEdit'])){
-    
-    PlaneacionAse::registrarTiemposAge($idAgenda, $sltFase, $fecha, $usuario);
+    $_SESSION['registrado'] = PlaneacionAse::registrarTiemposAge($idAgenda, $sltFase, $fecha, $usuario);
 }  
 
 ?>
