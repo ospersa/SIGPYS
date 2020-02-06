@@ -110,8 +110,6 @@ class Visitante{
         $producto2 = "";
        /*  require_once 'mail.php'; */
 
-        $begin = mysqli_query($connection, "BEGIN;"); 
-
         /* contador para tabla pys_solicitudes */
         $sql="select count(idSol), Max(idSol) from pys_solicitudes";
         $cs=mysqli_query($connection, $sql);
@@ -174,29 +172,15 @@ class Visitante{
 
         if ($cs && $cs1) {
             /** Si ambas consultas son exitosas hacemos commit en la base de datos y guardamos los cambios */
-            $commit = mysqli_query($connection, "COMMIT;");
-            if ($commit) {
-                //Visitante::informacionEmail($solicitante, $proyecto, $producto, $codsol);
+            Visitante::informacionEmail($solicitante, $proyecto, $producto, $codsol);
                 //Mensaje de guardado
               $string = '<h4 class="teal-text">Registrado</h4><br>
-              <p>Gracias. Su solicitud se registró correctamente. Será direccionado automáticamente a la página principal.</p><br>';
-               
-            } else {
-                $rollback = mysqli_query($connection, "ROLLBACK;");
-                if ($rollback) {
-                    //Mensaje de guardado
-                    $string ='<h4 class="teal-text">No Registrado</h4><br>
-                    <p>Opss!. Su solicitud no se registró correctamente. Será direccionado automáticamente a la página principal.</p><br>';
-                    
-                }
-            }
+              <p>Gracias. Su solicitud se registró correctamente. Será direccionado automáticamente a la página principal.</p><br>';       
         } else {
-            $rollback = mysqli_query($connection, "ROLLBACK;");
-            if ($rollback) {
                 //Mensaje de guardado
                 $string ='<h4 class="teal-text">No Registrado</h4><br>
                 <p>Opss!. Su solicitud no se registró correctamente. Será direccionado automáticamente a la página principal.</p><br>';
-            }
+           
         }
         echo $string;
     }
@@ -297,7 +281,7 @@ class Visitante{
         Mediante este correo confirmamos el registro de la solicitud <strong> $codsol </strong> con la siguiente información:<br /><br />
 
 
-        <strong>Solicitante: </strong>$nomres $apellidos <br />
+        <strong>Solicitante: </strong>$nombres $apellido <br />
         <strong>Proyecto: </strong>$codProy - $nombreProy<br /><br />
 
         $producto<br /><br />
@@ -314,7 +298,7 @@ class Visitante{
         Universidad de los Andes<br />
         apoyoconectate@uniandes.edu.co
         ";
-       // EnviarCorreo::enviarCorreoSolicitud($correos, $asunto, $cuerpo);
+        EnviarCorreo::enviarCorreoSolicitud($correos, $asunto, $cuerpo);
 
     }
 

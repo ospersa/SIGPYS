@@ -103,7 +103,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->isSMTP();                                            
                 $mail->Host       = 'smtp.office365.com';                    
                 $mail->SMTPAuth   = true;                                   
-                $mail->Username   = 'apoyoconectedu.co';       
+                $mail->Username   = 'apoyoconectate@uniandes.edu.co';       
                 $mail->Password   = 'Ceintic13';                            
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
                 $mail->Port       = 587;                                    
@@ -143,13 +143,13 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->isSMTP();                                            
                 $mail->Host       = 'smtp.office365.com';                    
                 $mail->SMTPAuth   = true;                                   
-                $mail->Username   = 'apoyoconectedu.co';       
+                $mail->Username   = 'apoyoconectate@uniandes.edu.co';       
                 $mail->Password   = 'Ceintic13';                            
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
                 $mail->Port       = 587;                                    
 
                 //Recipients
-                $mail->setFrom('apoyoconectate@uniandes', 'Conecta-Te');
+                $mail->setFrom('apoyoconectate@uniandes.edu.co', 'Conecta-Te');
                 $mail->addCC('apoyoconectate@uniandes.edu.co');
                 foreach($arrayEmail as $item) {
                     $mail->addAddress($item, '');

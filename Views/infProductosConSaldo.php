@@ -18,7 +18,7 @@ require_once('../Controllers/ctrl_infProductoServicio.php');
                 <div class="input-field col l2 m2 s12">
                     <p>
                         <label>
-                            <input type="checkbox" name="chkHistorico" id="check"/>
+                            <input type="checkbox" name="chkHistorico" id="check" />
                             <span>Histórico</span>
                         </label>
                     </p>
@@ -26,7 +26,8 @@ require_once('../Controllers/ctrl_infProductoServicio.php');
             </div>
             <div class="row">
                 <div class="input-field col l2 m2 s12 offset-l2 offset-m1">
-                    <input type="text" name="txtBusquedaProy" id="txtBusquedaProy" placeholder="Ingrese el código del proyecto">
+                    <input type="text" name="txtBusquedaProy" id="txtBusquedaProy"
+                        placeholder="Ingrese el código del proyecto">
                     <label for="txtBusquedaProy">Cód. Proyecto Conecta-TE*</label>
                 </div>
                 <div class="input-field col l6 m8 s12" id="sltProyecto">
@@ -38,10 +39,12 @@ require_once('../Controllers/ctrl_infProductoServicio.php');
             </div>
             <div class="row">
                 <div class="input-field col l2 m2 s12 offset-l4 offset-m4">
-                    <button class="btn waves-effect waves-light" type="button" name="btnBuscar" onclick="buscar('../Controllers/ctrl_infProductoServicio.php');">Buscar</button>
+                    <button class="btn waves-effect waves-light" type="button" name="btnBuscar"
+                        onclick="buscar('../Controllers/ctrl_infProductoServicio.php');">Buscar</button>
                 </div>
                 <div class="input-field col l2 m2 s12">
-                    <button class="btn waves-effect waves-light" type="submit" name="btnDescargar" id="btnDescargar">Guardar</button>
+                    <button class="btn waves-effect waves-light" type="submit" name="btnDescargar"
+                        id="btnDescargar">Guardar</button>
                 </div>
             </div>
         </form>

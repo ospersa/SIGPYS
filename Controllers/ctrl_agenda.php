@@ -35,6 +35,11 @@ cod = 2 si se va ha cancelar la actividad en la agenda
 
 
 /* Procesamiento peticiones al controlador */
+
+if(!empty($_SESSION['registrado'])){
+    unset($_SESSION['registrado']);
+}
+
 $idPeriodo  = PlaneacionAse::onPeriodoActual();
 $panel      = PlaneacionAse::onPeriodo($idPeriodo, $usuario);
 $personas   = Personas::selectPersonas2($idPeriodo);
@@ -58,7 +63,8 @@ else if (isset($_POST['btnActAgenda'])){
     PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 3, $sltFase, $fechaCambio);
 }
 else if (isset($_POST['idAgenda']) && isset($_POST['sltFaseEdit'])){
-    $_SESSION['registrado'] = PlaneacionAse::registrarTiemposAge($idAgenda, $sltFase, $fecha, $usuario);
+   return $registrado = PlaneacionAse::registrarTiemposAge($idAgenda, $sltFase, $fecha, $usuario);
+    $_SESSION['registrado']= $registrado;
 }  
 
 ?>

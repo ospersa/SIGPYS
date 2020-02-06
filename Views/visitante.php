@@ -9,7 +9,7 @@ require('../Controllers/ctrl_visitante.php');
 <div class="section container">
     <div class="row">
         <div class="col s12">
-            <form id="visitantesid" method="post">
+            <form id="visitantesid">
                 <div class="section">
                     <div class="row">
                         <div class="input-field col s12 m6">

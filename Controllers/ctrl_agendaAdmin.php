@@ -8,7 +8,7 @@ include_once "../Models/mdl_agenda.php";
 include_once "../Models/mdl_personas.php";
 
 /* Inicialización variables*/
-$fech   = (isset($_POST['fech'])) ? $_POST['fech'] : null;
+$fech   = (isset($_POST['fech2'])) ? $_POST['fech2'] : null;
 $idper  = (isset($_POST['idper'])) ? $_POST['idper'] : null;
 $cod    = (isset($_POST['cod'])) ? $_POST['cod'] : null;  //cod = 3 Para cargar el panel de la persona seleccionada 
 
@@ -18,7 +18,7 @@ $idPeriodo = PlaneacionAse::onPeriodoActual();
 $personas = Personas::selectPersonas2($idPeriodo);
 if ($cod == 3){
     echo $panel = PlaneacionAse::onPeriodo($idPeriodo, $usuario);
-} else if (isset($_POST['fech'])){
+} else if (isset($_POST['fech2'])){
     echo PlaneacionAse:: mostrarAgendaAdmin ($fech, $usuario);
 
 }

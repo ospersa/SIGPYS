@@ -339,7 +339,7 @@
 
         public static function selectFacultades ($idEnt, $idPersona, $accion) {
             require('../Core/connection.php');
-            $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac != 'FAC014' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
+            $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($idPersona == null && $accion == null) {
@@ -351,7 +351,7 @@
                         echo '      <option value="'.$datos['idFac'].'">'.$datos['facDeptoFacultad'].'</option>';
                     }
                     echo '      </select>
-                                <label for="sltFacul">Facultad</label>';
+                                <label for="sltFacul">Facultad*</label>';
                 }
             } else if ($idPersona == null && $accion == "1") {
                 if ($registros > 0) {
@@ -363,7 +363,7 @@
                     }
                     echo '      
                         </select>
-                        <label for="sltFacul2">Facultad</label>';    
+                        <label for="sltFacul2">Facultad*</label>';    
                 }
             } else {
                 $consulta2 = "SELECT idFac, facDeptoFacultad FROM pys_personas

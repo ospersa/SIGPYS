@@ -8,15 +8,15 @@
                 include_once('../Controllers/ctrl_solicitudInicial.php');
                 include_once('../Controllers/ctrl_solicitud.php');
             ?>
-            <input type="hidden" id="txtIdCM" name="txtIdCM" value="<?php echo $idCM; ?>">
+            <input type="hidden" id="txtIdCM" name="txtIdCM" value="<?php echo $idCM; ?>" >
             <input type="hidden" id="txtEstProy" name="txtEstProy" value="<?php echo $estProy; ?>">
             <div class="row">
                 <div class="input-field col l4 m4 s12">
-                    <input required name="txtIdSol" id="txtIdSol" type="text" readonly value="<?php echo $idSolicitud;?>">
+                    <input required name="txtIdSol" id="txtIdSol" type="text" readonly value="<?php echo $idSolicitud;?>" >
                     <label for="txtIdSol" class="active">CSI:</label>
                 </div>
                 <div class="input-field col l4 m4 s12">
-                    <input required name="txtTipoSol" id="txtTipoSol" type="text" readonly value="<?php echo $tipoSolicitud;?>">
+                    <input required name="txtTipoSol" id="txtTipoSol" type="text" readonly value="<?php echo $tipoSolicitud;?>" >
                     <label for="txtTipoSol" class="active">Tipo de Solicitud:</label>
                 </div>
                 <div class="input-field col l4 m4 s12">
@@ -25,13 +25,13 @@
             </div>
             <div class="row">
                 <div class="input-field col l12 m12 s12">
-                    <input required name="txtRegistro" id="txtRegistro" type="text" readonly value="<?php echo $registro;?>">
+                    <input required name="txtRegistro" id="txtRegistro" type="text" readonly value="<?php echo $registro;?> " >
                     <label for="txtRegistro" class="active">Registró*</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col l12 m12 s12">
-                    <input required name="txtProyecto2" id="txtProyecto2" type="text" readonly value="<?php echo $proyecto;?>">
+                    <input required name="txtProyecto2" id="txtProyecto2" type="text" readonly value="<?php echo $proyecto;?>" >
                     <label for="txtProyecto2" class="active">Proyecto*</label>
                 </div>
             </div>
@@ -49,7 +49,7 @@
             </div>
             <div class="row">
                 <div class="input-field col l3 m3 s12">
-                    <input required name="txtActualizacion" id="txtActualizacion" type="text" readonly value="<?php echo $fechActualizacion;?>">
+                    <input required name="txtActualizacion" id="txtActualizacion" type="text" readonly value="<?php echo $fechActualizacion;?>" >
                     <label for="txtActualizacion" class="active">Fecha Actualización</label>
                 </div>
                 <div class="input-field col l9 m9 s12">

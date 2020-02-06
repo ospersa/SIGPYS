@@ -18,17 +18,17 @@ $selectSolicitante = SolicitudInicial::selectSolicitante(null);
         <form action="../Controllers/ctrl_solicitudInicial.php" method="post" class="col l12 m12 s12" autocomplete="off">
             <div class="row">
                 <div class="input-field col l2 m2 s12 offset-l3 offset-m3">
-                    <input readonly type="text" name="txtIdSol" id="txtIdSol" value="<?php echo $precarga['idSolicitud'];?>">
+                    <input readonly type="text" name="txtIdSol" id="txtIdSol" value="<?php echo $precarga['idSolicitud'];?>" >
                     <label for="txtIdSol" class="active">Cod. Solicitud inicial</label>
                 </div>
                 <div class="input-field col l2 m2 s12">
                     <input type="hidden" name="txtIdTipSol" value="<?php echo $precarga['idTipo'];?>">
-                    <input readonly type="text" name="txtTipoSol" id="txtTipoSol" value="<?php echo $precarga['nombreTipo'];?>">
+                    <input readonly type="text" name="txtTipoSol" id="txtTipoSol" value="<?php echo $precarga['nombreTipo'];?>" >
                     <label for="txtTipoSol" class="active">Tipo solicitud</label>
                 </div>
                 <div class="input-field col l2 m2 s12">
                     <input type="hidden" name="txtIdEstSol" value="<?php echo $precarga['idEstado'];?>">
-                    <input readonly type="text" name="txtEstadoSol" id="txtEstadoSol" value="<?php echo $precarga['nombreEstado'];?>">
+                    <input readonly type="text" name="txtEstadoSol" id="txtEstadoSol" value="<?php echo $precarga['nombreEstado'];?>" >
                     <label for="txtEstadoSol">Estado solicitud</label>
                 </div>
             </div>

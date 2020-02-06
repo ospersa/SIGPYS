@@ -675,7 +675,7 @@ class Proyecto {
 
     public static function selectFacultad ($idEnt, $idProy) {
         require('../Core/connection.php');
-        $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idFac != 'FAC014' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
+        $consulta = "SELECT idFac, facDeptoFacultad FROM pys_facdepto WHERE estFacdeptoFac = '1' AND idDepto = 'DP0027' AND idEnt = '$idEnt' ORDER BY facDeptoFacultad;";
         $resultado = mysqli_query($connection, $consulta);
         if ($idProy == null) {
             if (mysqli_num_rows($resultado) > 0) {
@@ -695,7 +695,6 @@ class Proyecto {
                     WHERE pys_actualizacionproy.est = '1' AND pys_actualizacionproy.idProy = '$idProy';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
-                if ($datos2['idFac'] != "FAC014") {
                     echo '  <select name="sltFacul" id="sltFacul" onchange="cargaSelect(\'#sltFacul\',\'../Controllers/ctrl_proyecto.php\',\'#sltDeptoProy\');">';
                     while ($datos = mysqli_fetch_array($resultado)) {
                         if ($datos['idFac'] == $datos2['idFac']) {
@@ -706,14 +705,14 @@ class Proyecto {
                     }
                     echo '  </select>
                             <label for="sltFacul">Facultad</label>';    
-                }
+                
             }
         }
         mysqli_close($connection);
     }
     public static function selectDepartamento ($idFacul, $idProy) {
         require('../Core/connection.php');
-        $consulta = "SELECT idFacDepto, facDeptoDepartamento, idDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND pys_facdepto.idFac != 'FAC014' AND pys_facdepto.idDepto != 'DP0027' AND idFac = '$idFacul';";
+        $consulta = "SELECT idFacDepto, facDeptoDepartamento, idDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND  idFac = '$idFacul';";
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($idProy == null && $idFacul != null) {
@@ -732,7 +731,6 @@ class Proyecto {
                 WHERE idProy = '$idProy' AND pys_actualizacionproy.est = '1';";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
-            if ($datos2['idDepto'] != "DP0027") {
                 echo '  <select id="sltDepto" name="sltDepto">';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if ($datos['idDepto'] == $datos2['idDepto']) {
@@ -743,7 +741,7 @@ class Proyecto {
                 }
                 echo '  </select>
                 <label for="sltDepto">Departamento</label>';
-            }
+            
         }
         mysqli_close($connection);
     }

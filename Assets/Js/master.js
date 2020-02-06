@@ -670,9 +670,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[3] == 'agenda.php') {
+    if (comp[2] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[3] == 'agendaAdmin.php') {
+    } else if (comp[2] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();
@@ -689,19 +689,25 @@ function cargarResAgenda(fecha, elem) {
         success: function (data) {
             $.each($('.fechPer'), function () {
                 let color2 = $(this).hasClass('w');
+                let color2T = $(this).hasClass('v');
                 if (color2) {
                     $(this).removeClass(' blue  darken-4').addClass('teal lighten-5');
                     $(this).find('h6').removeClass('white-text').addClass('black-text');
+                } else if (color2T) {
+                    $(this).removeClass(' blue  darken-4').addClass('teal darken-3');
                 } else {
-                    $(this).removeClass(' blue  darken-4').addClass('teal');
+                    $(this).removeClass(' blue  darken-4').addClass('teal accent-4');
                 }
             });
             let color = elem.hasClass('lighten-5');
+            let colorT = elem.hasClass('darken-3');
             if (color) {
                 elem.removeClass('teal lighten-5').addClass(' blue  darken-4 w');
                 letra.removeClass('black-text').addClass('white-text');
-            } else {
-                elem.removeClass('teal').addClass(' blue  darken-4 ');
+            } else if (colorT){
+                elem.removeClass('teal darken-3').addClass(' blue  darken-4 v');
+            } else{
+                elem.removeClass('teal accent-4').addClass(' blue  darken-4 ');
             }
             $('#fechaA').text(fecha);
             $('#fechaDia').val(fecha);
@@ -726,60 +732,67 @@ function planeacionDia(fecha, idper, url){
             $('#div_dinamico2').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
+            console.log(idper);
             let tasks = JSON.parse(data);
             $('#div_dinamico2').hide();
             tasks.forEach(task => {
-               string += `<div class="card">
-               <div class="card-content "><div class="row">
-                       <form id="formAgenda${task.cont}" action="../Controllers/ctrl_agenda.php" method="post">
-                           <input id="idAgenda" name="idAgenda" value="${task.idAgenda}" type="hidden">
-                           <input id="idSol" name="idSol" value="${task.idSol}" type="hidden">
-                           <input id="fecha" name="fecha" value="${task.fecha}" type="hidden">
-                           <div class="row">
-                               <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                                   <p class="left-center teal-text">
-                                       <h6>${task.codProy} -- ${task.nombreProy}</h6>
-                                   </p>
-                                   <p class="left-align">P${task.idSol} ${task.descripcionSol}</p>
-                               </div>
-                               <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                                   <p class="left-align">Tiempo:</p>
-                               </div>
-                               <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                                   <input type="number" class="validate" name="horas" value="${task.horaAgenda}" ${task.type}>
-                                   <label for="horas" class="active">Horas</label>
-                               </div>
-                               <div class="input-field col l1 m1 s12">
-                                   <input type="number" class="validate" name="min" value="${task.minAgenda}" ${task.type}>
-                                   <label for="min" class="active">Minutos</label>
-                               </div>
-                           </div>
-                           <div class="row">
-                               <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
-                                   <p class="left-align">Actividad:</p>
-                               </div>
-                               <div class="input-field col l7 m7 s12">
-                                   <textarea name="obser" class="materialize-textarea" ${task.type}>${task.notaAgenda}</textarea>
-                                   <label for="obser" class="active">Actividad</label>
-                               </div>
-                           </div>
-                           <div class="row">
-                            <div class="input-field col l4 m4 s12">
-                                <p>
-                                    <label>
-                                        <input type="checkbox" id="checkFechaC${task.cont}" name="checkFechaC${task.cont}" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC${task.cont}\',\'${task.cont}\')">
-                                        <span>Mover a otro día</span>
-                                    </label>
-                                <p>
-                            </div>
-                            <div class="input-field col l4 m4 s12">
-                                <input id="fechaCambio${task.cont}" name="fechaCambio" type="text" class="datepicker" disabled>
-                                <label for="fechaCambio${task.cont}">Ingrese la nueva fecha </label>
-                            </div>
-                        </div>
-                        ${task.agenda}
-                        ${task.text}
-                        </div>
+                string += `<div class="card">
+                    <div class="card-content ">
+                        <div class="row">
+                            <form id="formAgenda${task.cont}" action="../Controllers/ctrl_agenda.php" method="post">
+                                <input id="idAgenda" name="idAgenda" value="${task.idAgenda}" type="hidden">
+                                <input id="idSol" name="idSol" value="${task.idSol}" type="hidden">
+                                <input id="fecha" name="fecha" value="${task.fecha}" type="hidden">
+                                <div class="row">
+                                    <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
+                                        <p class="left-center teal-text">
+                                        <h6>${task.codProy} -- ${task.nombreProy}</h6>
+                                        </p>
+                                        <p class="left-align">P${task.idSol} ${task.descripcionSol}</p>
+                                    </div>
+                                    <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                                        <p class="left-align">Tiempo:</p>
+                                    </div>
+                                    <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
+                                        <input type="number" class="validate" name="horas" value="${task.horaAgenda}" ${task.type}>
+                                        <label for="horas" class="active">Horas</label>
+                                    </div>
+                                    <div class="input-field col l1 m1 s12">
+                                        <input type="number" class="validate" name="min" value="${task.minAgenda}" ${task.type}>
+                                        <label for="min" class="active">Minutos</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
+                                        <p class="left-align">Actividad:</p>
+                                    </div>
+                                    <div class="input-field col l7 m7 s12">
+                                        <textarea name="obser" class="materialize-textarea" ${task.type}>${task.notaAgenda}</textarea>
+                                        <label for="obser" class="active">Actividad</label>
+                                    </div>
+                                </div>`;
+                            if (idper == null){
+                                string += 
+                               `
+                                <div class="row">
+                                    <div class="input-field col l4 m4 s12">
+                                        <p>
+                                            <label>
+                                                <input type="checkbox" id="checkFechaC${task.cont}" name="checkFechaC${task.cont}" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC${task.cont}\',\'${task.cont}\')">
+                                                <span>Mover a otro día</span>
+                                            </label>
+                                        <p>
+                                    </div>
+                                    <div class="input-field col l4 m4 s12">
+                                        <input id="fechaCambio${task.cont}" name="fechaCambio" type="text" class="datepicker" disabled>
+                                        <label for="fechaCambio${task.cont}">Ingrese la nueva fecha </label>
+                                    </div>
+                                </div>
+                                `;
+                            }
+                            string += `
+                                ${task.agenda}
+                                ${task.text}
                         </form>
                     </div>
                 </div>
@@ -868,36 +881,45 @@ function checkRegistarT(check) {
 }
 
 function regTiemposModalA(){
-    var checked = $('#modalAgenda').find('.filled-in').attr('data-checked');
-
-    if (checked === 'false') {
-        $("#formModalA").submit(function(e){
+    var checked = $('#modalAgenda').find('.filled-in');
+    var checkedL = $('#modalAgenda').find('.filled-in').length;
+    var cont = 0;
+    $("#formModalA").submit(function(e){
         e.preventDefault();
+    });
+    $.each($('#modalAgenda .filled-in'), function () {  
+        if($(this).attr('data-checked')== 'false'){
+            cont +=1;
+        }
+    });
+    if (cont === checkedL) {
+        console.log("a"+cont);
         M.toast({ html: "Seleccione mínimo un producto/servicio"});
-        });
+        
+        /* inicializarCampos(); */
     } else {
         $.ajax({
-            type: "POST",
-            url: '../Controllers/ctrl_agenda.php',
-            data: $('#formModalA').serialize(),
-            success: function (response) {
-                console.log(response)
-                let data = JSON.parse(response)
-                data.forEach( task => {
-                    M.toast({ html: `${task.mensaje}`});
-                    }
-                );
-            }
+        type: "POST",
+        url: '../Controllers/ctrl_agenda.php',
+        data: $('#formModalA').serialize(),
+        success: function (response) {
+            console.log(response);
+            let data = JSON.parse(response)
+            data.forEach( task => {
+                M.toast({ html: `${task.mensaje}`, completeCallback: function(){window.location="../Views/agenda.php?hoy="+`${task.fecha}`}});
+                }
+            );
+        }
         });
+        /* inicializarCampos(); */
     }
-    checked = "";
 
 
 };
 
-/* function agendaDia(fecha){
+function agendaDia(fecha){
     window.location="../Views/agenda.php?hoy="+fecha;
-}; */
+};
 
 function seleccionarDia(hoy){
     $.each($('.fechPer'), function () {  
@@ -1212,10 +1234,12 @@ function checkFechaC(check, cod) {
         $(checkActive).attr('checked', 'checked');
         document.getElementById(fechaCambio).disabled = false;
         $(checkActive).attr('data-checked', 'true');
+		inicializarCampos();
     } else if (checked == 'true') {
         $(checkActive).removeAttr('checked');
         document.getElementById(fechaCambio).disabled = true;
         $(checkActive).attr('data-checked', 'false');
+		inicializarCampos();
     }
 
 }
@@ -1390,22 +1414,14 @@ function chartProyecto() {
 
 
 function generarChart(elem, tipo, label, template1, template2) {
-    var dynamicColors = function () {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
-    };
     switch (tipo) {
         case 'doughnut':
             var dat = {
                 labels: template1,
                 datasets: [{
                     data: template2,
-                    backgroundColor: [
-                        dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors(), dynamicColors()
-                    ]
-                }]
+                    backgroundColor: ['#3f9c96', '#444344', '#8cb821', '#266669', '#7da3a6', '#f5e88a'  ]
+                                  }]
             };
             var option = {
                 legend: {
@@ -1414,7 +1430,7 @@ function generarChart(elem, tipo, label, template1, template2) {
             };
             break;
         case 'line':
-            var color = dynamicColors();
+            var color = '#3f9c96';
             var dat = {
                 labels: template1,
                 datasets: [{
@@ -1437,7 +1453,7 @@ function generarChart(elem, tipo, label, template1, template2) {
                         data: [template2[0]],
                         stack: 'Stack 0',
                         backgroundColor: [
-                            dynamicColors()
+                            '#266669'
 
                         ]
                     },
@@ -1446,7 +1462,7 @@ function generarChart(elem, tipo, label, template1, template2) {
                         data: [template2[1]],
                         stack: 'Stack 0',
                         backgroundColor: [
-                            dynamicColors()
+                            '#f5e88a'
 
                         ]
                     }
@@ -1480,14 +1496,8 @@ function generarChart(elem, tipo, label, template1, template2) {
 }
 
 function generarChart3Template(elem, tipo, template1, template2, template3) {
-    var dynamicColors = function () {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
-    };
-    var colorPre = dynamicColors();
-    var colorEje = dynamicColors();
+    var colorPre = '#3f9c96';
+    var colorEje = '#8cb821';
     var config = {
         type: tipo,
         data: {
@@ -1566,24 +1576,19 @@ function ocultardivVisit() {
 }
 
 function mostrardivVisit() {
+    $('#visitantesid').submit(function(e){
+        return false;
+    });
     $("#loaderVisit").removeClass('hide');
-
     $.ajax({
         type: "POST",
         url: '../Controllers/ctrl_visitante.php',
         data: $("#visitantesid").serialize(),
         success: function (data) {
-            setTimeout(function () {
-                $('#loaderVisit').html(data)
-            }, 15000);
-            setTimeout(function () {
-                $('#loaderVisit').html(data)
-            }, 20000);
+            $('#loaderVisit').html(data)     
+            setTimeout(function(){ location.reload()}, 10000);
         }
     });
-    setTimeout(function () {
-        location.reload()
-    }, 20000);
 }
 
 

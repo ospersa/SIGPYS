@@ -38,11 +38,24 @@ class  PlaneacionAse{
             $fechaDia = date("d-m-Y", strtotime( '+'.$i.' day', $fechaini ));
             $diafech = date('w', strtotime($fechaDia));
             $conteo = self::ValidacionPlaneacionDia($fechaDia, $usuario);
-            if($conteo > 0){
-                $color = 'teal';
+            $fechaCons = date("Y-m-d", strtotime($fechaDia));
+            $consultaTiempo ="SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos  
+                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+                INNER JOIN pys_login  ON pys_login.idPersona = pys_asignados.idPersona
+                WHERE usrLogin = '$usuario' AND estTiempo = 1 AND fechTiempo ='$fechaCons'";
+            $resultadoTiempo = mysqli_query($connection, $consultaTiempo);
+            $datosTiempo = mysqli_fetch_array($resultadoTiempo);
+            $horaTiempo =$datosTiempo['SUM(horaTiempo)'];
+            $minTiempo = $datosTiempo['SUM(minTiempo)'];
+            $tiempoTotal = ($horaTiempo*60)+ $minTiempo;
+            if($conteo > 0 && $tiempoTotal < 480){
+                $color = 'teal accent-4';
+                $letra = "black";
+            } else if ($tiempoTotal >= 480) {
+                $color = 'teal  darken-3 v';
                 $letra = "white";
-            }else{
-                $color = 'teal lighten-5';
+            } else{ 
+                $color = 'teal lighten-5 w';
                 $letra = "black";
             }
             if($diafech != 0 && $diafech != 7){
@@ -385,16 +398,11 @@ class  PlaneacionAse{
         echo $jsonString;
         mysqli_close($connection);
     }
-    public static function mostrarAgendaAdmin ($fecha, $user){
+	
+     public static function mostrarAgendaAdmin ($fecha, $user){
         require('../Core/connection.php');
-		require('mdl_tiempos.php');
-        $string = '<ul class="collapsible">
-        <li class="active">
-        <div class="collapsible-header teal"><h6 class ="white-text">Planeación Registrada '.$fecha.'</h6></div>
-                <div class="collapsible-body">
-                    <div class="row">
-                        
-            ';
+        require('mdl_tiempos.php');
+        $json = array();
         $newFecha = date("Y-m-d", strtotime($fecha));
         $cont = 1;
         $consulta ="SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda 
@@ -420,72 +428,42 @@ class  PlaneacionAse{
             $descripcionSol = $datos2['descripcionSol'];
             $nombreProy = $datos2['nombreProy'];
             $codProy = $datos2['codProy'];
+                $type = 'disabled';
             if ($estAgenda == 1) {
-                $type = "";
                 $text = "";
             } else if ($estAgenda == 2) {
-                $type = 'disabled';
                 $text = '<div class="input-field col l10 m10 s12  offset-l1 offset-m1">
                 <p class="left-align teal-text text-darken-1">*Esta actividad ya ha sido registrada en Tiempo*</p>
                 </div>';
             } else if ($estAgenda == 3) {
-                $type = 'disabled';
                 $text = '<div class="input-field col l10 m10 s12  offset-l1 offset-m1">
                 <p class="left-align teal-text text-darken-1">*Esta actividad ha sido cancelada*</p>
                 </div>';
             }
-            $string .='
-        <div class="card">
-            <div class="card-content ">
-                <div class="row">
-                    <div class="row">
-                        <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                            <p class="left-center teal-text">
-                                <h6>'.$codProy.' -- '.$nombreProy.'</h6>
-                            </p>
-                            <p class="left-align">P'.$idSol.' '.$descripcionSol.'</p>
-                        </div>
-                        <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                            <p class="left-align">Tiempo:</p>
-                        </div>
-                        <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                            <input type="number" class="validate" name="horas" value="'.$horaAgenda.'" '.$type.'>
-                            <label for="horas" class="active">Horas</label>
-                        </div>
-                        <div class="input-field col l1 m1 s12">
-                            <input type="number" class="validate" name="min" value="'.$minAgenda.'" '.$type.'>
-                            <label for="min" class="active">Minutos</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
-                            <p class="left-align">Actividad:</p>
-                        </div>
-                        <div class="input-field col l7 m7 s12">
-                            <textarea name="obser" class="materialize-textarea" '.$type.'>'.$notaAgenda.'</textarea>
-                            <label for="obser" class="active">Actividad</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
-                            <p class="left-align">Fase:</p>
-                        </div>
-                        <div class="input-field col s12 m5 l5">'.Tiempos::selectFase(null).'</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-                ';
-                $cont += 1;
+            $json[]     = array(
+                'type' => $type,
+                'text'     => $text,
+                'cont'     => $cont,
+                'idAgenda'     => $idAgenda,
+                'idSol'     => $idSol,
+                'fecha'     => $fecha,
+                'codProy'     => $codProy,
+                'nombreProy'     => $nombreProy,
+                'descripcionSol'     => $descripcionSol,
+                'horaAgenda'     => $horaAgenda,
+                'minAgenda'     => $minAgenda,
+                'notaAgenda'     => $notaAgenda,
+                'estAgenda'     => $estAgenda,
+                'agenda'     => "",
+            );
+            $cont += 1;
             
         }
-        $string .= ' </div>
-        </div>
-    </li>
-    </ul>';
-        return $string;
+        $jsonString = json_encode($json);
+        echo $jsonString;
         mysqli_close($connection);
     }
+	
     /* Estados de la Agenda 
     Estado 0 son las eliminadas.
     Estado 1 son las actividades unicamente registradas en la agenda
@@ -500,7 +478,7 @@ class  PlaneacionAse{
         $consulta ="SELECT idAgenda, pys_agenda.idAsig FROM pys_agenda 
         INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
         INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
-        WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est=1 AND pys_agenda.fechAgenda ='$fecha' AND pys_login.usrLogin='$usuario'  AND pys_asignados.idSol ='$idSol'";
+        WHERE pys_agenda.estAgenda <> 0 AND pys_asignados.est = 1 AND pys_login.est=1 AND pys_agenda.fechAgenda ='$fecha' AND pys_login.usrLogin='$usuario'  AND pys_asignados.idSol ='$idSol' AND idAgenda = $idAgenda";
         $resultado = mysqli_query($connection, $consulta);
         $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min, $idAgenda);
         $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
@@ -686,6 +664,8 @@ class  PlaneacionAse{
                     $mensaje = PlaneacionAse::cambiarEstadoAgenda($fechAgenda, $usuario, $idSol, $idAgenda[$i], $horaAgenda, $minAgenda, $notaAgenda, 2, $fase[$i], "");
                     $json[]     = array(
                         'mensaje' => "P$idSol : $mensaje",  
+                        'fecha' => date("d-m-Y", strtotime($fechAgenda)) ,  
+                        
                     );
                 }
             } 
@@ -695,7 +675,7 @@ class  PlaneacionAse{
             );
         }
         $jsonString = json_encode($json);
-        return $jsonString;
+        echo $jsonString;
         mysqli_close($connection);
     }
 

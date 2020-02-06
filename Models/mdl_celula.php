@@ -99,7 +99,6 @@
         public static function registrarCelula ($nombreCelula, $coordinacion) {
             if ($nombreCelula != null) {
                 require('../Core/connection.php');
-                mysqli_query($connection, "BEGIN;");
                 /** Generación del ID para la tabla pys_celulas */
                 $consulta = "SELECT COUNT(idCelula), MAX(idCelula) FROM pys_celulas;";
                 $resultado = mysqli_query($connection, $consulta);
@@ -119,15 +118,14 @@
                     $resultado3 = mysqli_query($connection, $consulta3);
                     $guardarCoor = Celula::guardarCoordinador($idCelula, $coordinacion);
                     if ($resultado3 && $guardarCoor) {
-                        if  ($commit = mysqli_query($connection, "COMMIT;")) {
                             echo "<script> alert('Registro guardado correctamente.');</script>";
                             echo '<meta http-equiv="Refresh" content="0;url=../Views/celula.php">';
-                        }
+
                     } else {
-                        if ($rollback = mysqli_query($connection, "ROLLBACK;")) {
+                      
                             echo "<script> alert('Ocurrió un error al intentar guardar el registro.');</script>";
                             echo '<meta http-equiv="Refresh" content="0;url=../Views/celula.php">';
-                        }
+                    
                     }
                 } else {
                     echo "<script> alert('Ya existe un registro con el nombre ingresado. La información no se modificó');</script>";
@@ -143,7 +141,6 @@
         public static function guardarCoordinador($celula, $coordinador) {
             require '../Core/connection.php';
             $guardado = 0;
-            mysqli_query($connection, "BEGIN;");
             for ($i=0; $i < count($coordinador); $i++) {
                 $cons = "   SELECT pys_celulascoordinador.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres
                                 FROM pys_celulascoordinador 
@@ -163,10 +160,8 @@
                 }
             }
             if ($guardado > 0) {
-                mysqli_query($connection, "COMMIT;");
                 return true;
             } else {
-                mysqli_query($connection, "ROLLBACK;");
                 return false;
             }
             mysqli_close($connection);

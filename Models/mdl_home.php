@@ -285,9 +285,12 @@
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
                 INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
                 INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
-                INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+                INNER JOIN pys_asignados ON pys_asignados.idProy = pys_actualizacionproy.idProy
+                INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
                 WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                 AND pys_actualizacionproy.est = '1'
+                AND pys_asignados.est = '1'
+                AND pys_login.est = '1'
                 AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
                 AND pys_solicitudes.fechSol >= '2019/01/01'
                 AND (idRol= 'ROL024' OR idRol= 'ROL025')

@@ -37,7 +37,19 @@ include_once('../Controllers/ctrl_agendaAdmin.php');
             </div>
         </div>
         <div class="col l5 m5 s12 offset-l1 offset-m1">
-            <div class="row" id="div_dinamico" ></div>
+            <ul class="collapsible">
+                <li class="active">
+                    <div class="collapsible-header teal">
+                        <h6 class="white-text">Planeación Registrada <span id="fechaA"></span></h6>
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="row">
+                            <div class="row" id="div_dinamico2">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>    
         </div>
     </div>
 </div>

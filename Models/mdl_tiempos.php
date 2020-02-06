@@ -131,7 +131,7 @@
                             <td>'.$datos['fechTiempo'].'</td>
                             <td>'.$hora.'h '.$minutos.'m </td>
                             <td>'.$datos['nombreFase'].'</td>
-                            <td>'.$datos['notaTiempo'].'</td>
+                            <td><p class = "truncate">'.$datos['notaTiempo'].'</p></td>
                             <td><a href="#!" class="waves-effect waves-light" onclick ="editarRegistro(\''.$datos[0].'\')"title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                             <td><a href="#!" class="waves-effect waves-light" onclick ="ocultarEditar(\''.$datos[0].'\')"title="Suprimir"><i class="material-icons red-text">delete</i></a></td>
                     </tr>';
@@ -291,8 +291,8 @@
                                 <option value="" selected disabled>Seleccione</option>';
 
                 } else  {
-                    $cons = ($cod != "Sin Label") ? " " : "[]" ;
-                    $disabled = ($cod != "Sin Label") ? " " : "disabled" ;
+                    $cons = ($cod != "Sin Label") ? "" : "[]" ;
+                    $disabled = ($cod != "Sin Label") ? "" : "disabled" ;
                     $string = '  <select name="sltFaseEdit'.$cons.'" id="sltFaseEdit'.$cons.'" class="asignacion" '.$disabled.'>
                                 <option value="" selected disabled>Seleccione</option>';
                 }

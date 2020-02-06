@@ -370,7 +370,7 @@
                                         <th>Marcar como terminado</th>
                                     </tr>
                                 </thead>
-                                <tbody id="misSolicitudes">';
+                                <tbody>';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
                     $string .= '    <tr>

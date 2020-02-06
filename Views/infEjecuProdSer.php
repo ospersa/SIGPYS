@@ -18,22 +18,25 @@ require_once('../Controllers/ctrl_infEjecuProdSer.php');
             </div>
             <div class="row">
                 <div class="input-field col l2 m2 s12 offset-l2 offset-m1">
-                    <input type="text" name="txtBusquedaProy" id="txtBusquedaProy" placeholder="Ingrese el código del proyecto">
+                    <input type="text" name="txtBusquedaProy" id="txtBusquedaProy"
+                        placeholder="Ingrese el código del proyecto">
                     <label for="txtBusquedaProy">Cód. Proyecto Conecta-TE*</label>
                 </div>
-                <div class="input-field col l6 m8 s12" id="sltProy">
-                    <select name="sltProy" id="">
-                        <option value="sltProy">Seleccione</option>
+                <div class="input-field col l6 m8 s12" id="sltProyecto">
+                    <select name="sltProyecto" id="">
+                        <option value="sltProyecto">Seleccione</option>
                     </select>
-                    <label for="sltProy">Seleccione un proyecto</label>
+                    <label for="sltProyecto">Seleccione un proyecto</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col l2 m2 s12 offset-l4 offset-m4">
-                    <button class="btn waves-effect waves-light" type="button" name="btnBuscar" onclick="buscar('../Controllers/ctrl_infEjecuProdSer.php');">Buscar</button>
+                    <button class="btn waves-effect waves-light" type="button" name="btnBuscar"
+                        onclick="buscar('../Controllers/ctrl_infEjecuProdSer.php');">Buscar</button>
                 </div>
                 <div class="input-field col l2 m2 s12">
-                    <button class="btn waves-effect waves-light" type="submit" name="btnDescargar" id="btnDescargar">Guardar</button>
+                    <button class="btn waves-effect waves-light" type="submit" name="btnDescargar"
+                        id="btnDescargar">Guardar</button>
                 </div>
             </div>
         </form>
