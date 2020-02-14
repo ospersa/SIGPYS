@@ -47,7 +47,8 @@ class Login {
 
     public static function cambiarPassword($id, $pass){
         require('../Core/connection.php');
-        echo $consulta = "UPDATE pys_login SET  passwLogin ='$pass'  WHERE usrLogin = '$id';";
+        $hash = password_hash($pass, PASSWORD_DEFAULT, [15]);
+        $consulta = "UPDATE pys_login SET  passwLogin ='$hash'  WHERE usrLogin = '$id';";
         $resultado = mysqli_query($connection, $consulta);
         if ($resultado){
             echo "<script> alert ('Se actualizó correctamente la contraseña, ingrese con la nueva contraseña.');</script>";

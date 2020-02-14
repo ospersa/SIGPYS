@@ -167,8 +167,9 @@ class Password {
         } else {
             $codLogin='L'.substr((substr($max, 1)+100001), 1);
         }
+        $hash = password_hash($userPass, PASSWORD_DEFAULT, [15]);
         //insert tabla Login
-        $sql="INSERT INTO pys_login VALUES ('$codLogin', '$userPerfil', '$userId', '$userName', '$userPass', '1');";
+        $sql="INSERT INTO pys_login VALUES ('$codLogin', '$userPerfil', '$userId', '$userName', '$hash', '1');";
         $resultado2 = mysqli_query($connection, $sql);
         if ($resultado && $resultado2 ){
             echo "<script> alert ('Se guardó correctamente la información');</script>";
@@ -240,7 +241,8 @@ class Password {
 
     public static function ActualizarConPassword($id, $perfil, $user,$pass){
         require('../Core/connection.php');
-        $consulta = "UPDATE pys_login SET  usrLogin = '$user', idPerfil = '$perfil', passwLogin ='$pass'  WHERE idLogin = '$id';";
+        $hash = password_hash($pass, PASSWORD_DEFAULT, [15]);
+        $consulta = "UPDATE pys_login SET  usrLogin = '$user', idPerfil = '$perfil', passwLogin ='$hash'  WHERE idLogin = '$id';";
         $resultado = mysqli_query($connection, $consulta);
         if ($resultado){
             echo "<script> alert ('Se actualizó correctamente la información');</script>";

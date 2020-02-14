@@ -15,7 +15,7 @@ $('.modal').on('change', function () {
 $(document).ready(function () {
     let path = window.location.pathname;
     let comp = path.split("/")
-    if (comp[2] == 'home.php') {
+    if (comp[3] == 'home.php') {
         if ($('#chartSolicitud')) {
             chartSolicitud();
         }
@@ -521,15 +521,6 @@ function editarRegistro(idTiempo) {
     });
 };
 
-function cerrar() {
-    $.ajax({
-        beforeSend: function () {
-            $('#fondo').addClass("hide");
-            $('#editRegistro').addClass("hide");
-        }
-    });
-};
-
 function ocultarEditar(id) {
     var mensaje = confirm("¿Esta seguro de eliminar el Registro?");
     //Detectamos si el usuario acepto el mensaje
@@ -670,9 +661,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[2] == 'agenda.php') {
+    if (comp[3] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[2] == 'agendaAdmin.php') {
+    } else if (comp[3] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();
@@ -732,7 +723,6 @@ function planeacionDia(fecha, idper, url){
             $('#div_dinamico2').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
-            console.log(idper);
             let tasks = JSON.parse(data);
             $('#div_dinamico2').hide();
             tasks.forEach(task => {
@@ -893,8 +883,7 @@ function regTiemposModalA(){
         }
     });
     if (cont === checkedL) {
-        console.log("a"+cont);
-        M.toast({ html: "Seleccione mínimo un producto/servicio"});
+        M.toast({ html: "Seleccione mínimo un producto/servicio"},3000);
         
         /* inicializarCampos(); */
     } else {
@@ -903,10 +892,9 @@ function regTiemposModalA(){
         url: '../Controllers/ctrl_agenda.php',
         data: $('#formModalA').serialize(),
         success: function (response) {
-            console.log(response);
             let data = JSON.parse(response)
             data.forEach( task => {
-                M.toast({ html: `${task.mensaje}`, completeCallback: function(){window.location="../Views/agenda.php?hoy="+`${task.fecha}`}});
+                M.toast({ html: `${task.mensaje}`, displayLength: 2000, completeCallback: function(){window.location="../Views/agenda.php?hoy="+`${task.fecha}`}});
                 }
             );
         }

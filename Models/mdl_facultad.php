@@ -25,7 +25,7 @@
                 INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                 INNER JOIN pys_personas ON pys_facultades.coordFac = pys_personas.idPersona
                 INNER JOIN pys_cargos ON pys_facultades.cargoCoordFac = pys_cargos.idCargo
-                WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1'  AND pys_facdepto.facDeptoDepartamento ='No Aplica' AND pys_personas.est = '1' AND pys_cargos.est = '1' 
+                WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1'  AND pys_facdepto.facDeptoDepartamento ='' AND pys_personas.est = '1' AND pys_cargos.est = '1' 
                 ORDER BY pys_facultades.nombreFac;";
             $resultado = mysqli_query($connection, $consulta);
             echo'

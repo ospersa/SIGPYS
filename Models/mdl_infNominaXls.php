@@ -108,6 +108,20 @@ Class InformeNomima {
     public static function informePreliminar ($anio, $mes) {
         require('../Core/connection.php');
         $i2 = $mes + 1;
+        $anio2 = $anio;
+        if($i2 == 13){
+            $i2 = 1;
+            $anio2 = $anio+1;
+        }
+        $consultaPer = "SELECT inicioPeriodo, finPeriodo FROM `pys_periodos` WHERE (`inicioPeriodo` BETWEEN '$anio-$mes-01' AND '$anio-$mes-30') AND (`finPeriodo` BETWEEN '$anio2-$i2-01' AND '$anio2-$i2-30');";
+        $resultadoPer = mysqli_query($connection, $consultaPer);
+        $datosPer = mysqli_fetch_array($resultadoPer);
+        $inicioPeriodo =$datosPer['inicioPeriodo'];
+        $finPeriodo =$datosPer['finPeriodo'];
+        $consultaPerIniA = "SELECT inicioPeriodo FROM `pys_periodos` WHERE (`inicioPeriodo` BETWEEN '$anio-01-01' AND '$anio-1-30');";
+        $resultadoPerIniA = mysqli_query($connection, $consultaPerIniA);
+        $datosPerA = mysqli_fetch_array($resultadoPerIniA);
+        $inicioPeriodoA =$datosPerA['inicioPeriodo'];
         $meses = [1 => "ENE", 2 => "FEB", 3 => "MAR", 4 => "ABR", 5 => "MAY", 6 => "JUN", 7 => "JUL", 8 => "AGO", 9 => "SEP", 10 => "OCT", 11 => "NOV", 12 => "DIC"];
         $consulta = "SELECT pys_frentes.descripcionFrente, pys_convocatoria.nombreConvocatoria, pys_actualizacionproy.codProy, 
             pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actualizacionproy.nombreProy, pys_personas.idPersona, pys_actualizacionproy.idProy, pys_actualizacionproy.semAcompanamiento, pys_personas.categoriaCargo
@@ -123,7 +137,7 @@ Class InformeNomima {
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
             AND pys_personas.est = '1'
-            AND pys_tiempos.fechTiempo BETWEEN '$anio-01-15' AND '$anio-$i2-15'
+            AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodoA' AND '$finPeriodo'
             GROUP BY pys_actualizacionproy.codProy, pys_frentes.descripcionFrente, pys_convocatoria.nombreConvocatoria, 
             pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actualizacionproy.nombreProy, pys_personas.idPersona, pys_actualizacionproy.idProy,
             pys_actualizacionproy.semAcompanamiento, pys_personas.categoriaCargo;";
@@ -200,40 +214,38 @@ Class InformeNomima {
                 $porcentajeAcum = 0;
                 for ($y=1; $y <= $mes; $y++) {
                     $y2 = $y + 1;
+                    $anio2 = $anio;
+                    if($i2 == 13){
+                        $i2 = 1;
+                        $anio2 = $anio+1;
+                    }
+                    $consultaPer = "SELECT inicioPeriodo, finPeriodo FROM `pys_periodos` WHERE (`inicioPeriodo` BETWEEN '$anio-$y-01' AND '$anio-$y-30') AND (`finPeriodo` BETWEEN '$anio2-$y2-01' AND '$anio2-$y2-30');";
+                    $resultadoPer = mysqli_query($connection, $consultaPer);
+                    $datosPer = mysqli_fetch_array($resultadoPer);
+                    $inicioPeriodo =$datosPer['inicioPeriodo'];
+                    $finPeriodo =$datosPer['finPeriodo'];
                     $consulta5 = "SELECT pys_periodos.diasSegmento1, pys_periodos.diasSegmento2, pys_dedicaciones.porcentajeDedicacion1, pys_dedicaciones.porcentajeDedicacion2 
                         FROM pys_periodos 
                         INNER JOIN pys_dedicaciones ON pys_dedicaciones.periodo_IdPeriodo = pys_periodos.idPeriodo 
                         WHERE pys_periodos.estadoPeriodo = '1' AND pys_dedicaciones.estadoDedicacion = '1' 
-                        AND pys_dedicaciones.persona_IdPersona = '".$datos['idPersona']."' AND inicioPeriodo = '$anio-$y-15' AND finPeriodo = '$anio-$y2-15';";
+                        AND pys_dedicaciones.persona_IdPersona = '".$datos['idPersona']."' AND inicioPeriodo = '$inicioPeriodo' AND finPeriodo = '$finPeriodo';";
                     $resultado5 = mysqli_query($connection, $consulta5);
                     $datos5 = mysqli_fetch_array($resultado5);
-                    $per1 = $datos5['diasSegmento1'];
-                    $per2 = $datos5['diasSegmento2'];
                     $diasPer1 = ($datos5['diasSegmento1'] * $datos5['porcentajeDedicacion1'] / 100) ;
                     $diasPer2 = ($datos5['diasSegmento2'] * $datos5['porcentajeDedicacion2'] / 100) ;
                     $hrsPeriodo = ($diasPer1 + $diasPer2) * 8;
                     if ($hrsPeriodo == 0) {
                         $hrsPeriodo = 160;
                     }
-                    if ($y == 1) {
-                        $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
-                            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-                            WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
-                            AND pys_asignados.idProy = '".$datos['idProy']."'
-                            AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-15' AND '$anio-$y2-15'
-                            AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
-                        $resultado2 = mysqli_query($connection, $consulta2);
-                    } else {
-                        $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
-                            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-                            WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
-                            AND pys_asignados.idProy = '".$datos['idProy']."'
-                            AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-16' AND '$anio-$y2-15'
-                            AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
-                        $resultado2 = mysqli_query($connection, $consulta2);
-                    }
+                    $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
+                        INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+                        WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
+                        AND pys_asignados.idProy = '".$datos['idProy']."'
+                        AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodo' AND '$finPeriodo'
+                        AND pys_tiempos.estTiempo = '1'
+                        AND pys_asignados.est = '1';";
+                    $resultado2 = mysqli_query($connection, $consulta2);
+                    
                     
                     while ($datos2 = mysqli_fetch_array($resultado2)) {
                         $totalMinutos = ($datos2[0] * 60) + $datos2[1]; // Total de minutos registrados en el periodo correspondiente
@@ -275,6 +287,20 @@ Class InformeNomima {
         $spreadsheet->getActiveSheet()->setShowGridlines(false);   
         $sheet = $spreadsheet->getActiveSheet();
         $i2 = $mes + 1;
+        $anio2 = $anio;
+        if($i2 == 13){
+            $i2 = 1;
+            $anio2 = $anio+1;
+        }
+        $consultaPer = "SELECT inicioPeriodo, finPeriodo FROM `pys_periodos` WHERE (`inicioPeriodo` BETWEEN '$anio-$mes-01' AND '$anio-$mes-30') AND (`finPeriodo` BETWEEN '$anio2-$i2-01' AND '$anio2-$i2-30');";
+        $resultadoPer = mysqli_query($connection, $consultaPer);
+        $datosPer = mysqli_fetch_array($resultadoPer);
+        $inicioPeriodo =$datosPer['inicioPeriodo'];
+        $finPeriodo =$datosPer['finPeriodo'];
+        $consultaPerIniA = "SELECT inicioPeriodo FROM `pys_periodos` WHERE (`inicioPeriodo` BETWEEN '$anio-01-01' AND '$anio-1-30');";
+        $resultadoPerIniA = mysqli_query($connection, $consultaPerIniA);
+        $datosPerA = mysqli_fetch_array($resultadoPerIniA);
+        $inicioPeriodoA =$datosPerA['inicioPeriodo'];
         $meses = [1 => "ENE", 2 => "FEB", 3 => "MAR", 4 => "ABR", 5 => "MAY", 6 => "JUN", 7 => "JUL", 8 => "AGO", 9 => "SEP", 10 => "OCT", 11 => "NOV", 12 => "DIC"];
         $consulta = "SELECT pys_frentes.descripcionFrente, pys_convocatoria.nombreConvocatoria, pys_actualizacionproy.codProy, 
             pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actualizacionproy.nombreProy, pys_personas.idPersona, pys_actualizacionproy.idProy, pys_actualizacionproy.semAcompanamiento, pys_personas.categoriaCargo
@@ -290,7 +316,7 @@ Class InformeNomima {
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
             AND pys_personas.est = '1'
-            AND pys_tiempos.fechTiempo BETWEEN '$anio-01-15' AND '$anio-$i2-15'
+            AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodoA' AND '$finPeriodo'
             GROUP BY pys_actualizacionproy.codProy, pys_frentes.descripcionFrente, pys_convocatoria.nombreConvocatoria, 
             pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actualizacionproy.nombreProy, pys_personas.idPersona, pys_actualizacionproy.idProy,
             pys_actualizacionproy.semAcompanamiento, pys_personas.categoriaCargo;";
@@ -337,19 +363,21 @@ Class InformeNomima {
                 $porcentajeAcum = 0;
                 for ($y=1; $y <= $mes; $y++) {
                     $y2 = $y + 1;
-                    if ($y == 1) {
-                        $consulta5 = "SELECT pys_periodos.diasSegmento1, pys_periodos.diasSegmento2, pys_dedicaciones.porcentajeDedicacion1, pys_dedicaciones.porcentajeDedicacion2 
-                            FROM pys_periodos 
-                            INNER JOIN pys_dedicaciones ON pys_dedicaciones.periodo_IdPeriodo = pys_periodos.idPeriodo 
-                            WHERE pys_periodos.estadoPeriodo = '1' AND pys_dedicaciones.estadoDedicacion = '1' 
-                            AND pys_dedicaciones.persona_IdPersona = '".$datos['idPersona']."' AND inicioPeriodo = '$anio-$y-15' AND finPeriodo = '$anio-$y2-15';";
-                    } else {
-                        $consulta5 = "SELECT pys_periodos.diasSegmento1, pys_periodos.diasSegmento2, pys_dedicaciones.porcentajeDedicacion1, pys_dedicaciones.porcentajeDedicacion2 
+                    $anio2 = $anio;
+                    if($i2 == 13){
+                        $i2 = 1;
+                        $anio2 = $anio+1;
+                    }
+                    $consultaPer = "SELECT inicioPeriodo, finPeriodo FROM `pys_periodos` WHERE (`inicioPeriodo` BETWEEN '$anio-$y-01' AND '$anio-$y-30') AND (`finPeriodo` BETWEEN '$anio2-$y2-01' AND '$anio2-$y2-30');";
+                    $resultadoPer = mysqli_query($connection, $consultaPer);
+                    $datosPer = mysqli_fetch_array($resultadoPer);
+                    $inicioPeriodo =$datosPer['inicioPeriodo'];
+                    $finPeriodo =$datosPer['finPeriodo'];
+                    $consulta5 = "SELECT pys_periodos.diasSegmento1, pys_periodos.diasSegmento2, pys_dedicaciones.porcentajeDedicacion1, pys_dedicaciones.porcentajeDedicacion2 
                         FROM pys_periodos 
                         INNER JOIN pys_dedicaciones ON pys_dedicaciones.periodo_IdPeriodo = pys_periodos.idPeriodo 
                         WHERE pys_periodos.estadoPeriodo = '1' AND pys_dedicaciones.estadoDedicacion = '1' 
-                        AND pys_dedicaciones.persona_IdPersona = '".$datos['idPersona']."' AND inicioPeriodo = '$anio-$y-16' AND finPeriodo = '$anio-$y2-15';";
-                    }
+                        AND pys_dedicaciones.persona_IdPersona = '".$datos['idPersona']."' AND inicioPeriodo = '$inicioPeriodo' AND finPeriodo = '$finPeriodo';";
                     $resultado5 = mysqli_query($connection, $consulta5);
                     $datos5 = mysqli_fetch_array($resultado5);
                     $per1 = $datos5[0];
@@ -360,34 +388,14 @@ Class InformeNomima {
                     if ($hrsPeriodo == 0) {
                         $hrsPeriodo = 160;
                     }
-                    if ($y == 1) {
-                        $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
-                            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-                            WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
-                            AND pys_asignados.idProy = '".$datos['idProy']."'
-                            AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-08' AND '$anio-$y2-15'
-                            AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
-                        $resultado2 = mysqli_query($connection, $consulta2);
-                    } else if ($y == 12) {
-                        $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
-                            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-                            WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
-                            AND pys_asignados.idProy = '".$datos['idProy']."'
-                            AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-16' AND '$anio-$y-31'
-                            AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
-                        $resultado2 = mysqli_query($connection, $consulta2);
-                    } else {
-                        $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
-                            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-                            WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
-                            AND pys_asignados.idProy = '".$datos['idProy']."'
-                            AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-16' AND '$anio-$y2-15'
-                            AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
-                        $resultado2 = mysqli_query($connection, $consulta2);
-                    }
+                    $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
+                        INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+                        WHERE pys_asignados.idPersona = '".$datos['idPersona']."' 
+                        AND pys_asignados.idProy = '".$datos['idProy']."'
+                        AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodo' AND '$finPeriodo'
+                        AND pys_tiempos.estTiempo = '1'
+                        AND pys_asignados.est = '1';";
+                    $resultado2 = mysqli_query($connection, $consulta2);
                     
                     while ($datos2 = mysqli_fetch_array($resultado2)) {
                         $totalMinutos = ($datos2[0] * 60) + $datos2[1]; // Total de minutos registrados en el periodo correspondiente
