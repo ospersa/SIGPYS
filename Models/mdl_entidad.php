@@ -112,9 +112,9 @@
             $sql="INSERT INTO pys_entidades VALUES ('$codEntidad', '$nomEnti', '$nomCortoEnti', '$descEnti', 'PR0042', 'CAR032', '1');";
             $resultado = mysqli_query($connection, $sql);
             //insert tabla FacDEpto
-            $sql2="INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$codEntidad',  'FAC014', 'DP0027', '', '', '1', '1', '1')";
+            echo$sql2="INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$codEntidad',  'FAC014', 'DP0027', '', '', '1', '1', '1', '', '', '')";
             $resultado2 = mysqli_query($connection, $sql2);
-            ECHO $resultado;
+            ECHO "sdd".$resultado2;
             if ($resultado && $resultado2){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';

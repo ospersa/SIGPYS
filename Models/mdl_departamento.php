@@ -177,7 +177,7 @@ class Departamento {
            $nomFacultad = $datos2[0];
         }
         /*Código de inserción en la tabla pys_facdepto*/
-        $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
+        $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1', '', '', '');";
         $resultado3 = mysqli_query($connection, $sql3);
 
         if($resultado && $resultado2 && $resultado3){

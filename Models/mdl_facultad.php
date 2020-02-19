@@ -25,7 +25,7 @@
                 INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                 INNER JOIN pys_personas ON pys_facultades.coordFac = pys_personas.idPersona
                 INNER JOIN pys_cargos ON pys_facultades.cargoCoordFac = pys_cargos.idCargo
-                WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1'  AND pys_facdepto.facDeptoDepartamento ='' AND pys_personas.est = '1' AND pys_cargos.est = '1' 
+                WHERE pys_entidades.est = '1' AND pys_facultades.est = '1' AND pys_facdepto.estFacdeptoEnt = '1' AND pys_facdepto.estFacdeptoFac = '1'  AND pys_facdepto.facDeptoDepartamento ='No Aplica' AND pys_personas.est = '1' AND pys_cargos.est = '1' 
                 ORDER BY pys_facultades.nombreFac;";
             $resultado = mysqli_query($connection, $consulta);
             echo'
@@ -148,18 +148,19 @@
                     $sql = "INSERT INTO pys_facultades VALUES ('$countFac', '$nomFacultad', 'PR0042', 'CAR032', '1');";
                     $resultado = mysqli_query($connection, $sql);
                     /*Código de inserción en la tabla pys_facDepto*/	
-                    $sql1 = "INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$entidad', '$countFac', 'DP0027', '$nomFacultad', 'No Aplica', '1', '1', '1');";
-                    $resultado1 = mysqli_query($connection, $sql1);
+                    $sql1 = "INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$entidad', '$countFac', 'DP0027', '$nomFacultad', 'No Aplica', '1', '1', '1', '', '', '');";
+                    echo "sss".$resultado1 = mysqli_query($connection, $sql1);
+
                     if ($resultado && $resultado1) {
                         /** Si las inserciones son correctas, se hace COMMIT para guardar la información en BD */
                          mysqli_query($connection, "COMMIT;");
                         echo "<script> alert ('Se guardó correctamente la información');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+                        //echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
                     } else { 
                         /** Si se presentan errores, se realiza ROLLBACK para evitar daño en la información */
                         mysqli_query($connection, "ROLLBACK;");
                         echo "<script> alert('Ocurrió un error al intentar guardar el registro.');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
+                        //echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
                     } 
                 }
                 mysqli_close($connection);
