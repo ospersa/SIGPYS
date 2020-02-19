@@ -42,6 +42,7 @@
 
         public static function busqueda ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT idFteFin, nombre, sigla FROM pys_fuentesfinanciamiento WHERE estado = '1' AND (nombre LIKE '%$busqueda%' OR sigla LIKE '%$busqueda%') ORDER BY sigla;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
@@ -74,6 +75,8 @@
             mysqli_query($connection, "BEGIN;");
             if ($sigla != null && $sigla != " ") {
                 /** Verificación que la información no esté duplicada en la tabla */
+                $sigla = mysqli_real_escape_string($connection, $sigla);
+                $nombre = mysqli_real_escape_string($connection, $nombre);
                 $consulta = "SELECT idFteFin FROM pys_fuentesfinanciamiento WHERE sigla = '$sigla';";
                 $resultado = mysqli_query($connection, $consulta);
                 if ($registros = mysqli_num_rows($resultado) == 0) {
@@ -116,6 +119,8 @@
         public static function actualizarFuenteFinanciamiento ($id, $sigla, $nombre) {
             require('../Core/connection.php');
             mysqli_query($connection, "BEGIN;");
+            $sigla = mysqli_real_escape_string($connection, $sigla);
+            $nombre = mysqli_real_escape_string($connection, $nombre);
             /** Se verifica que la información halla sido modificada respecto a lo que se encuentra en la tabla */
             $consulta = "SELECT nombre, sigla FROM pys_fuentesfinanciamiento WHERE idFteFin = '$id';";
             $resultado = mysqli_query($connection, $consulta);

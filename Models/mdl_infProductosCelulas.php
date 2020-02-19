@@ -100,7 +100,7 @@ const STYLEBODY = ['font' => [
 
 Class InformeProductosCelulas {
 
-    public static function busqueda ($celula, $proyecto) {
+    public static function busqueda ($celula, $proyecto,  $fechaini, $fechafin) {
         require('../Core/connection.php');
         if ($celula == "none" && $proyecto == "all") {
             $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idCelula, pys_celulas.nombreCelula
@@ -208,13 +208,23 @@ Class InformeProductosCelulas {
                         $descripcion = $datos3['ObservacionAct'];
                         $estadoPS = $datos3['nombreEstSol'];
                         /** Consulta para obtener el tiempo registrado y el costo respectivo*/
-                        $consulta5 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
+                        if($fechaini != null && $fechafin != null){
+                            $consulta5 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
                             FROM pys_tiempos 
                             INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
                             INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
                             INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
                             WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
-                            AND pys_asignados.idAsig = '$idAsignado'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1';";
+                            AND pys_asignados.idAsig = '$idAsignado'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1' AND (fechTiempo >= '$fechaini' AND fechTiempo <= '$fechafin');";
+                        } else{
+                            $consulta5 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
+                                FROM pys_tiempos 
+                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
+                                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
+                                INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
+                                WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
+                                AND pys_asignados.idAsig = '$idAsignado'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1' ;";
+                        }
                         $resultado5 = mysqli_query($connection, $consulta5);
                         $registros5 = mysqli_num_rows($resultado5);
                         if ($registros5 > 0) {
@@ -291,7 +301,7 @@ Class InformeProductosCelulas {
         mysqli_close($connection);
     }
 
-    public static function descarga ($celula, $proyecto) {
+    public static function descarga ($celula, $proyecto, $fechaini, $fechafin) {
         require('../Core/connection.php');        
         if ($celula == "none" && $proyecto == "all") {
             $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idCelula, pys_celulas.nombreCelula
@@ -354,11 +364,14 @@ Class InformeProductosCelulas {
         $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(13);
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'Informe Productos/Servicio - Células');
+        if ($fechaini != null && $fechafin != null){
+            $sheet->setCellValue('A2', 'Desde: '.$fechaini.' Hasta: '.$fechafin);
+        }
         $sheet->mergeCells("A1:I1");
         $titulos=['Célula','Proyecto','Asesor/Gestor RED','Producto/Servicio','Descripción P/S','Asignados','Tiempo a Invertir','Tiempo Invertido','Ejecutado'];
-        $spreadsheet->getActiveSheet()->fromArray($titulos,null,'A3');
-        $spreadsheet->getActiveSheet()->getStyle('A3:I3')->applyFromArray(STYLETABLETITLE);
-        $filas = 4;
+        $spreadsheet->getActiveSheet()->fromArray($titulos,null,'A4');
+        $spreadsheet->getActiveSheet()->getStyle('A4:I4')->applyFromArray(STYLETABLETITLE);
+        $filas = 5;
         if ($registros > 0) {
             $datos = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
             foreach ($datos as $item){
@@ -417,13 +430,23 @@ Class InformeProductosCelulas {
                         $descripcion = $datos3['ObservacionAct'];
                         $estadoPS = $datos3['nombreEstSol'];
                         /** Consulta para obtener el tiempo registrado y el costo respectivo*/
-                        $consulta5 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
+                        if($fechaini != null && $fechafin != null){
+                            $consulta5 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
                             FROM pys_tiempos 
                             INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
                             INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
                             INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
                             WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
-                            AND pys_asignados.idAsig = '$idAsignado'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1';";
+                            AND pys_asignados.idAsig = '$idAsignado'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1' AND (fechTiempo >= '$fechaini' AND fechTiempo <= '$fechafin');";
+                        } else{
+                            $consulta5 = "SELECT pys_tiempos.horaTiempo AS horas, pys_tiempos.minTiempo AS minutos, pys_actsolicitudes.idSol, pys_salarios.salario
+                                FROM pys_tiempos 
+                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig 
+                                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
+                                INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
+                                WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
+                                AND pys_asignados.idAsig = '$idAsignado'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1' ;";
+                        }
                         $resultado5 = mysqli_query($connection, $consulta5);
                         $registros5 = mysqli_num_rows($resultado5);
                         if ($registros5 > 0) {
@@ -485,7 +508,7 @@ Class InformeProductosCelulas {
                     $filas += 1;
                 }
             }
-            $spreadsheet->getActiveSheet()->getStyle('A3:I'.($filas-1))->getBorders()->applyFromArray(STYLEBORDER);
+            $spreadsheet->getActiveSheet()->getStyle('A4:I'.($filas-1))->getBorders()->applyFromArray(STYLEBORDER);
         }
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="InformeProductosServicios-Celulas '.gmdate(' d M Y ').'.xlsx"');

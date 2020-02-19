@@ -187,10 +187,10 @@ class  PlaneacionAse{
             if ($totalTiempo > 720){
                 echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
-            }else{
+            }else{ 
                 $cant = count($productos);
                 for($i=0;$i<$cant ;$i++){
-                    if($productos[$i] != null){
+                    if($productos[$i] != null && $horas[$i] != null  && $min[$i] != null  && $obs[$i] != ''){
                         $consulta = PlaneacionAse::consultaAsig($productos[$i], $usuario);
                         $resultado = mysqli_query($connection, $consulta);
                         if (mysqli_num_rows($resultado) > 0 ) {
@@ -200,21 +200,24 @@ class  PlaneacionAse{
                                 $obser = mysqli_real_escape_string($connection, $obs[$i]);
                                 $consultaInsert = 'INSERT INTO pys_agenda  VALUES (null, '.$idAsig.', "'.$newFecha.'", "'.$obser.'", '.$horas[$i].', '.$min[$i].', now(), 1);';
                                 $resultadoInsert = mysqli_query($connection, $consultaInsert);
-                                $consultaplan = PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obser, $usuario, $newFecha, $periodo);
+                                $consultaplan = PlaneacionAse::guardarEnPlaneacion($idAsig, $horas[$i], $min[$i], $obs[$i], $usuario, $newFecha, $periodo);
                                 if($resultadoInsert && $consultaplan){
                                     $countSi += 1;
                                 }
                             }
                         }
-                    }    
+                    }
                 }
-                if ($count == $countSi){
+                if ($count == $countSi && $count >0){
                     echo "<script> alert ('Se guardó correctamente la información');</script>";
+                    echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
+                } else if($count==0){
+                    echo "<script> alert ('Existe algun campo vacio');</script>";
                     echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
                 } else {
                     echo "<script> alert ('No se guardó correctamente la información');</script>";
                     echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='.$fecha.'">';
-                } 
+                }
             } 
         }else {
             echo "<script> alert ('No se ha seleccionado ninguna solicitud');</script>";
@@ -257,11 +260,13 @@ class  PlaneacionAse{
                 $horaTotal = intval(( $minTotal/60 )+$horaTotal);
                 $minTotal = intval( $minTotal%60);
             } 
-            $obs = $observacion.'; '.$obser. ' -fecha: '.$fecha;
+            $observ = $observacion.'; '.$obser. ' -fecha: '.$fecha;
+            $obs = mysqli_real_escape_string($connection, $observ);
             $consultaUpdate = "UPDATE pys_asignaciones SET horasInvertir=".$horaTotal.", minutosInvertir =".$minTotal.",observacion ='".$obs."' WHERE idAsignacion=".$idAsignacion;
             return mysqli_query($connection, $consultaUpdate);
         } else {
-            $consultaInsert = "INSERT INTO pys_asignaciones VALUES($idAsignacionNew, $idDedicacion, $idAsig, $hora, $min, '$obser -fecha: $fecha', 1) ";
+            $obse = mysqli_real_escape_string($connection, $obser);
+            $consultaInsert = "INSERT INTO pys_asignaciones VALUES($idAsignacionNew, $idDedicacion, $idAsig, $hora, $min, '$obse -fecha: $fecha', 1) ";
             return mysqli_query($connection, $consultaInsert);
         }
         mysqli_close($connection);
@@ -316,6 +321,7 @@ class  PlaneacionAse{
     public static function mostrarAgenda ($fecha, $user){
         require('../Core/connection.php');
         include_once('mdl_tiempos.php');
+        $fecha = mysqli_real_escape_string($connection, $fecha);
         $json = array();
         $newFecha = date("Y-m-d", strtotime($fecha));
         $cont = 1;
@@ -482,6 +488,7 @@ class  PlaneacionAse{
         $resultado = mysqli_query($connection, $consulta);
         $tiempoReg = PlaneacionAse::validarHorasDia($fecha, $usuario, $hora, $min, $idAgenda);
         $totalTiempo = ($tiempoReg[0]*60) +$tiempoReg[1];
+        $obs = mysqli_real_escape_string($connection, $obs);
         if ($totalTiempo > 720 && $estado == 1 ){
             echo "<script> alert ('Hay mas de 12 horas Planeadas o Registradas para esta fecha');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/agenda.php?hoy='. date("d-m-Y", strtotime($fecha)).'">';
@@ -492,6 +499,7 @@ class  PlaneacionAse{
                 if($estado == 2){
                     $regTiempo = Tiempos::registrarTiempos($idSol, $usuario,  date("Y-m-d", strtotime($fecha)), $obs, $hora, $min, $sltFase,1);
                     if ($regTiempo[0] == true){
+                        
                         $consultaUpdate = "UPDATE pys_agenda SET estAgenda =$estado, notaAgenda='$obs', horaAgenda = $hora, minAgenda = $min  where idAgenda =$idAgenda";
                         $resultadoUpdate = mysqli_query($connection, $consultaUpdate);  
                     }

@@ -2,9 +2,8 @@
 
 class Visitante{
     public static function buscar($busqueda){
-
         require('../Core/connection.php');
-
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta="SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.idFrente, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy
         from pys_actualizacionproy
         where pys_actualizacionproy.est = '1' and (pys_actualizacionproy.codProy like '%".$busqueda."%')";
@@ -161,7 +160,7 @@ class Visitante{
         while ($result=mysqli_fetch_array($cs2)) {
             $idCM = $result['idCM'];
         }
-
+        $producto2 = mysqli_real_escape_string($connection, $producto2);
         /*Código de inserción en la tabla pys_solicitudes*/
         $sql="INSERT INTO pys_solicitudes VALUES ('$codsol', 'TSOL01', '', '', '$solicitante', '$solicitante', '$producto2', now(), '1')";
         $cs=mysqli_query($connection, $sql);
@@ -298,7 +297,7 @@ class Visitante{
         Universidad de los Andes<br />
         apoyoconectate@uniandes.edu.co
         ";
-        EnviarCorreo::enviarCorreoSolicitud($correos, $asunto, $cuerpo);
+        EnviarCorreo::enviarCorreos("", "", $correos, $asunto, $cuerpo);
 
     }
 

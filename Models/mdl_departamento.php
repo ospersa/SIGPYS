@@ -94,6 +94,7 @@ class Departamento {
 
     public static function busqueda($busqueda){
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta="SELECT pys_entidades.nombreEnt, pys_facultades.nombreFac, pys_departamentos.idDepto, pys_departamentos.nombreDepto, pys_departamentos.coordDepto, pys_departamentos.cargoCoordDepto, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_cargos.nombreCargo, pys_cargos.idCargo 
             FROM pys_departamentos
             INNER JOIN pys_facdepto ON pys_facdepto.idDepto = pys_departamentos.idDepto
@@ -164,7 +165,8 @@ class Departamento {
 		}
 		else{
 			$codFacDepto='FD'.substr((substr($max,2)+10001),1);		
-		}
+        }
+        $nomDepartamento = mysqli_real_escape_string($connection, $nomDepartamento);
         /*Código de inserción en la tabla pys_departamentos*/	
         $sql="INSERT INTO pys_departamentos VALUES ('$codDepto', '$nomDepartamento', 'PR0042', 'CAR032', '1');";
         $resultado = mysqli_query($connection, $sql);
@@ -175,7 +177,7 @@ class Departamento {
            $nomFacultad = $datos2[0];
         }
         /*Código de inserción en la tabla pys_facdepto*/
-        echo $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
+        $sql3="INSERT INTO pys_facdepto VALUES ('$codFacDepto', '$idEntidad', '$idFacultad', '$codDepto', '$nomFacultad', '$nomDepartamento', '1', '1', '1');";
         $resultado3 = mysqli_query($connection, $sql3);
 
         if($resultado && $resultado2 && $resultado3){
@@ -190,9 +192,11 @@ class Departamento {
 
     public static function actualizarDepartamento($idDepartamento2, $idEntidad, $idFacultad, $nomFacultad, $nomDepartamento){
         require('../Core/connection.php');
+        $nomDepartamento = mysqli_real_escape_string($connection, $nomDepartamento);
+        $nomFacultad = mysqli_real_escape_string($connection, $nomFacultad);
         $consulta = "UPDATE pys_departamentos SET nombreDepto = '$nomDepartamento' WHERE idDepto = '$idDepartamento2';";
         $resultado = mysqli_query($connection, $consulta);
-        echo $consulta = "UPDATE pys_facdepto SET idEnt = '$idEntidad', idFac = '$idFacultad', idDepto = '$idDepartamento2', facDeptoFacultad = '$nomFacultad', facDeptoDepartamento = '$nomDepartamento' WHERE idDepto = '$idDepartamento2';";
+        $consulta = "UPDATE pys_facdepto SET idEnt = '$idEntidad', idFac = '$idFacultad', idDepto = '$idDepartamento2', facDeptoFacultad = '$nomFacultad', facDeptoDepartamento = '$nomDepartamento' WHERE idDepto = '$idDepartamento2';";
         $resultado2 = mysqli_query($connection, $consulta);
         if($resultado && $resultado2){
             echo "<script> alert ('Se guardó correctamente la información');</script>";

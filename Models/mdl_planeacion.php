@@ -418,6 +418,7 @@ class Planeacion{
         } else if ($count > 0) {
             $idAsignacion = $count + 1;
         }
+        $observacion = mysqli_real_escape_string($connection, $observacion);
         $query = "INSERT INTO pys_asignaciones (idAsignacion, idDedicacion, idAsignado, horasInvertir, minutosInvertir, observacion, estadoAsignacion) VALUES ";
         for ($i = 0; $i < count($idAsignado); $i++) {
             $con2 = "SELECT * FROM pys_asignaciones WHERE idAsignado = $idAsignado[$i] AND idDedicacion = $idDedicacion;";
@@ -462,8 +463,9 @@ class Planeacion{
         mysqli_close($connection);
     }
 
-    public static function actualizarRegistro($idAsignado, $idDedicacion, $hrsInvertir, $mtsInvertir, $observacion) {
+    public static function actualizarRegistro($idAsignado, $idDedicacion, $hrsInvertir, $mtsInvertir, $ ) {
         require('../Core/connection.php');
+        $observacion = mysqli_real_escape_string($connection, $observacion);
         if ($hrsInvertir == null && $mtsInvertir == null && $observacion != null) {
             echo "<script> alert ('No puede dejar observaciones en los PS sin haber asignado tiempos.');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/planeacion.php">';

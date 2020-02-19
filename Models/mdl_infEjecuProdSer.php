@@ -93,7 +93,7 @@ const STYLEBODY = ['font' => [
 
     Class InformeEjecucion {
         
-        public static function busqueda ($proyecto, $fechaini, $fechafin) {
+        public static function busqueda ($proyecto, $frente, $fechaini, $fechafin) {
             $totPresupuesto = 0;
             $minutos = 0;
             $horas = 0;
@@ -107,10 +107,13 @@ const STYLEBODY = ['font' => [
             $horPer = 0;
             $minPer = 0;
             require('../Core/connection.php');
-            if ($proyecto == "sltProy"){
+            if ($proyecto == "sltProy" && $frente == null){
                 $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' ORDER BY codProy asc;";
-            } else {
+            } else if($frente != null && $proyecto == "" ){
+                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+                WHERE est = '1' AND idFrente = '$frente' ORDER BY codProy asc;";
+            }else {
                 $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' AND idProy='$proyecto' ORDER BY codProy asc;";
             }
@@ -272,13 +275,16 @@ const STYLEBODY = ['font' => [
             }
         }
 
-        public static function descarga ($proyecto, $fechaini, $fechafin) {
+        public static function descarga ($proyecto, $frente, $fechaini, $fechafin) {
             require('../Core/connection.php');
-            if ($proyecto == "sltProy"){
-                $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+            if ($proyecto == "sltProy" && $frente == null){
+                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' ORDER BY codProy asc;";
-            } else {
-                $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+            } else if($frente != null && $proyecto == "" ){
+                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+                WHERE est = '1' AND idFrente = '$frente' ORDER BY codProy asc;";
+            }else {
+                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' AND idProy='$proyecto' ORDER BY codProy asc;";
             }
             $resultado = mysqli_query($connection, $consulta);
@@ -499,6 +505,24 @@ const STYLEBODY = ['font' => [
                 $writer->save('php://output');
                 exit;  
             }
+            mysqli_close($connection);
+        }
+
+        public static function selectFrente () {
+            require('../Core/connection.php');
+            $consulta = "SELECT descripcionFrente, idFrente, nombreFrente FROM pys_frentes WHERE est = '1';";
+            $resultado = mysqli_query($connection, $consulta);
+            $string = "";
+            if (mysqli_num_rows($resultado) > 0) {
+                $string .= '  <select name="sltFrenteInf" id="sltFrenteInf">
+                            <option value=" " selected>Seleccione</option>';
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    $string .= '  <option value="'.$datos['idFrente'].'">'.$datos['nombreFrente'].' '.$datos['descripcionFrente'].'</option>';
+                }
+                $string .= '  </select>
+                        <label for="sltFrente">Frente</label>';
+            }
+            return $string;
             mysqli_close($connection);
         }
     }

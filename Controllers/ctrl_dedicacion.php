@@ -13,6 +13,7 @@ $idDedica2      = (isset($_POST['cod'])) ? $_POST['cod'] : null;
 /* Carga de información en el Modal */
 if($idDedica != null){
     $info = Dedicacion::onLoad($idDedica);
+    echo "s";
     $dedicacionSeg1 = $info['porcentajeDedicacion1'];
     $dedicacionSeg2 = $info['porcentajeDedicacion2'];
     $horasSeg1 = (($info['diasSegmento1'] * 8) * $dedicacionSeg1) / 100;

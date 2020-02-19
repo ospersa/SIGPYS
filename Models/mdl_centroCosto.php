@@ -41,6 +41,7 @@
 
         public static function busqueda ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT idCeco, ceco, nombre FROM pys_centrocostos WHERE estado = '1' AND (ceco LIKE '%$busqueda%' OR nombre LIKE '%$busqueda%') ORDER BY ceco;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
@@ -88,6 +89,8 @@
                         $idCeco = "CECO".substr(substr($max, 4) + 1001, 1);
                     }
                     /** Inserción de los datos en la tabla pys_centrocostos */
+                    $codigo = mysqli_real_escape_string($connection, $codigo);
+                    $nombre = mysqli_real_escape_string($connection, $nombre);
                     $consulta3 = "INSERT INTO pys_centrocostos VALUES ('$idCeco','$codigo', '$nombre', '1');";
                     $resultado3 = mysqli_query($connection, $consulta3);
                     if ($resultado3) {
@@ -120,7 +123,8 @@
             if ($ceco == $datos['ceco'] && $nombre == $datos['nombre']) {
                 echo "<script> alert('La información ingresada es igual. Registro no actualizado');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/centroCosto.php">';
-            } else {
+            } else {                
+                $nombre = mysqli_real_escape_string($connection, $nombre);
                 echo $consulta2 = "UPDATE pys_centrocostos SET ceco = '$ceco', nombre = '$nombre' WHERE idCeco = '$idCeco' AND estado = '1';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 if ($resultado2) {

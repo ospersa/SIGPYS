@@ -40,6 +40,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_fases WHERE est='1' AND nombreFase LIKE '%".$busqueda."%' ORDER BY nombreFase;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -79,6 +80,8 @@
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
             } else {
                 /** Verificación de información existente en la tabla, para evitar duplicidad */
+                $nomFase = mysqli_real_escape_string($connection, $nomFase);
+                $descFase = mysqli_real_escape_string($connection, $descFase);
                 $consulta = "SELECT * FROM pys_fases WHERE nombreFase = '$nomFase' AND descripcionFase = '$descFase' AND est = '1';";
                 $resultado = mysqli_query($connection, $consulta);
                 $registros = mysqli_num_rows($resultado);
@@ -99,14 +102,14 @@
                         $codFase = 'FS'.substr((substr($max,2)+10001),1);	
                     }		
                     $consulta1 = "INSERT INTO pys_fases VALUES ('$codFase', '$nomFase',  '$descFase', '1');";
-                    /* $resultado1 = mysqli_query($connection, $consulta1);
+                    $resultado1 = mysqli_query($connection, $consulta1);
                     if ($resultado1) {
                         echo "<script> alert ('Se guardó correctamente la información');</script>";
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
                     } else {
                         echo "<script> alert('Ocurrió un error al intentar guardar el registro.');</script>";
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/fases.php">';
-                    } */
+                    }
                 }
             }
             mysqli_close($connection);
@@ -114,6 +117,8 @@
 
         public static function actualizarFase($idFase2, $nomFase, $descFase){
             require('../Core/connection.php');
+            $nomFase = mysqli_real_escape_string($connection, $nomFase);
+            $descFase = mysqli_real_escape_string($connection, $descFase);
             $consulta = "UPDATE pys_fases SET nombreFase='$nomFase', descripcionFase='$descFase' WHERE idFase='$idFase2';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado){

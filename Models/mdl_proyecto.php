@@ -112,6 +112,7 @@ class Proyecto {
 
     public static function busqueda ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, pys_facdepto.facDeptoDepartamento, pys_tiposproy.nombreTProy, pys_frentes.idFrente, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_estadoproy.nombreEstProy, pys_etapaproy.nombreEtaProy, pys_proyectos.idProy, pys_actualizacionproy.proyecto, pys_actualizacionproy.codProy, pys_actualizacionproy.idEstProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.nombreCortoProy, pys_actualizacionproy.descripcionProy, pys_actualizacionproy.fechaIniProy, pys_actualizacionproy.fechaCierreProy, pys_actualizacionproy.idConvocatoria, pys_proyectos.fechaCreacionProy, pys_actualizacionproy.fechaActualizacionProy, pys_actualizacionproy.idResponRegistro, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actualizacionproy.presupuestoProy, pys_actualizacionproy.financia, pys_convocatoria.nombreConvocatoria, pys_actualizacionproy.fechaColciencias
             FROM pys_actualizacionproy
             INNER JOIN pys_estadoproy ON pys_estadoproy.idEstProy = pys_actualizacionproy.idEstProy
@@ -286,6 +287,7 @@ class Proyecto {
 
     public static function busquedaEstado ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT nombreEstProy, descripcionEstProy FROM pys_estadoproy WHERE est = '1' AND nombreEstProy LIKE '%$busqueda%';";
         $resultado = mysqli_query($connection, $consulta);
         $count=mysqli_num_rows($resultado);
@@ -314,6 +316,8 @@ class Proyecto {
 
     public static function registrarEstado ($nombre, $descripcion) {
         require('../Core/connection.php');
+        $nombre = mysqli_real_escape_string($connection, $nombre);
+        $descripcion = mysqli_real_escape_string($connection, $descripcion);
         $consulta = "SELECT COUNT(idEstProy), MAX(idEstProy) FROM pys_estadoproy;";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
@@ -545,6 +549,7 @@ class Proyecto {
 
     public static function busquedaEtapa ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda );
         $consulta = "SELECT pys_etapaproy.idEtaProy, pys_tiposproy.idTProy, pys_tiposproy.nombreTProy, pys_etapaproy.nombreEtaProy, pys_etapaproy.descripcionEtaProy FROM pys_etapaproy
             INNER JOIN pys_tiposproy ON pys_tiposproy.idTProy = pys_etapaproy.idTProy WHERE pys_etapaproy.est = '1' AND (pys_etapaproy.nombreEtaProy LIKE '%$busqueda%' OR pys_tiposproy.nombreTProy LIKE '%$busqueda%');";
         $resultado = mysqli_query($connection, $consulta);
@@ -578,7 +583,9 @@ class Proyecto {
 
     public static function registrarEtapa ($tipo, $nombre, $descripcion) {
         require('../Core/connection.php');
-        /** Contador para la tabla pys_etapaproy */
+        /** Contador para la tabla pys_etapaproy */        
+        $nombre = mysqli_real_escape_string($connection, $nombre);
+        $descripcion = mysqli_real_escape_string($connection, $descripcion);
         $consulta = "SELECT COUNT(idEtaProy), MAX(idEtaProy) FROM pys_etapaproy;";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
@@ -623,6 +630,8 @@ class Proyecto {
     public static function actualizarEtapa ($idEtapa, $tipoProy, $nombre, $descripcion) {
         require('../Core/connection.php');
         /** Consulta para saber si la información ingresada es la misma de la tabla */
+        $nombre = mysqli_real_escape_string($connection, $nombre);
+        $descripcion = mysqli_real_escape_string($connection, $descripcion);
         $consulta = "SELECT * FROM pys_etapaproy WHERE pys_etapaproy.est = '1' AND idEtaProy = '$idEtapa';";
         $resultado = mysqli_query($connection, $consulta);
         $infoDB = mysqli_fetch_array($resultado);
@@ -821,6 +830,7 @@ class Proyecto {
     public static function registrarTipo ($idFrente, $nombreTipo) {
         require('../Core/connection.php');
         /** Contador para la tabla pys_tiposproy */
+        $nombreTipo = mysqli_real_escape_string($connection, $nombreTipo);
         $duplicado = 0;
         $consulta = "SELECT COUNT(idTProy), MAX(idTProy) FROM pys_tiposproy;";
         $resultado = mysqli_query($connection, $consulta);
@@ -903,6 +913,7 @@ class Proyecto {
 
     public static function busquedaTipo ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT idTProy, nombreTProy, nombreFrente, descripcionFrente FROM pys_tiposproy
             INNER JOIN pys_frentes ON pys_frentes.idFrente = pys_tiposproy.idFrente
             WHERE (nombreTProy LIKE '%$busqueda%' OR nombreFrente LIKE '%$busqueda%' OR descripcionFrente LIKE '%$busqueda%')
@@ -937,6 +948,7 @@ class Proyecto {
     public static function actualizarTipo ($id, $frente, $nombre) {
         require('../Core/connection.php');
         $id = substr($id, 4);
+        $nombre = mysqli_real_escape_string($connection, $nombre);
         $consulta = "SELECT idFrente, nombreTProy FROM pys_tiposproy WHERE idTProy = '$id' AND est = '1';";
         $resultado = mysqli_query($connection, $consulta);
         $infoDB = mysqli_fetch_array($resultado);
@@ -1189,7 +1201,7 @@ class Proyecto {
                     </div>';
         } else {
             echo "<script> alert('No hay categorías registradas en la base de datos.');</script>";
-            //echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
         }
         echo '  <div class="input-field col l2 m2 s12">
                     <input id="txtSemAcom" name="txtSemAcom" type="number"></input>
@@ -1205,7 +1217,12 @@ class Proyecto {
 
     public static function registrarProyecto ($siglaFrente, $anio, $siglaCodProyecto, $tipoProy, $proyectoIntExt, $frente, $estadoPry, $etapaPry, $nombrePry, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCortoPry, $contextoPry, $fechIni, $fechFin, $usuario, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep) {
         require('../Core/connection.php');
-        mysqli_query($connection, "BEGIN;");
+        mysqli_query($connection, "BEGIN;");        
+        $nombrePry = mysqli_real_escape_string($connection, $nombrePry);
+        $nombreCortoPry = mysqli_real_escape_string($connection, $nombreCortoPry);
+        $contextoPry = mysqli_real_escape_string($connection, $contextoPry);
+        $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
+        $semanas = mysqli_real_escape_string($connection, $semanas);
         $codConectate = $siglaFrente.$anio.$siglaCodProyecto;
         if ($fechIni != "") {
             $fechIni = "'$fechIni'";
@@ -1339,6 +1356,7 @@ class Proyecto {
             echo "<script> alert ('No puede suprimir el registro porque el campo MOTIVO DE ANULACIÓN se encuentra VACÍO. Proyecto NO eliminado.');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
         } else {
+            $nota = mysqli_real_escape_string($connection, $nota);
             /** Verificación de los estados de las solicitudes relacionadas al proyecto que se encuentren abiertas. ESS006 = Terminado ESS007 = Cancelado */
             $consulta2 = "SELECT pys_cursosmodulos.idCM, pys_actsolicitudes.idSol, pys_actsolicitudes.idEstSol, pys_actsolicitudes.est 
                 FROM pys_proyectos
@@ -1379,6 +1397,11 @@ class Proyecto {
     public static function actualizarProyecto ($idProy, $entidad, $facultad, $departamento, $tipoProy, $tipoIntExt, $frente, $estProy, $etpProy, $codProy, $nomProy, $nomCortoProy, $descProy, $conv, $presupuesto, $financia, $fechaIni, $fechaFin, $persona, $fechaColciencias, $semanas, $celula, $fteFinancia, $centroCosto, $pep) {
         require('../Core/connection.php');
         mysqli_query($connection, "BEGIN;");
+        $nomProy = mysqli_real_escape_string($connection, $nomProy);
+        $nomCortoProy = mysqli_real_escape_string($connection, $nomCortoProy);
+        $descProy = mysqli_real_escape_string($connection, $descProy);
+        $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
+        $semanas = mysqli_real_escape_string($connection, $semanas);
         /** Obtenemos ID de la tabla pys_facdepto respecto al departamento */
         if ($departamento != null) {
             $consulta = "SELECT idFacDepto FROM pys_facdepto WHERE estFacdeptoDepto = '1' AND idDepto = '$departamento' AND idFac = '$facultad' AND idEnt = '$entidad';";

@@ -26,6 +26,11 @@ require('../Estructure/header.php');
 
 <div id="div_dinamico"></div>
 
+<div id="modalinfTiempos" class="modal">
+    <?php
+        require('modalinfTiempos.php');
+    ?>
+</div>
 <?php
 require('../Estructure/footer.php');
 ?>

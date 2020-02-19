@@ -37,6 +37,7 @@
 
         public static function busquedaServicios ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_servicios.idSer, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_servicios.nombreCorto, pys_servicios.descripcionSer, pys_servicios.productoOservicio, pys_costos.costo FROM pys_servicios
                 INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
                 INNER JOIN pys_costos ON pys_costos.idSer = pys_servicios.idSer
@@ -87,6 +88,9 @@
         public static function registrarServicio ($equipo, $nombre, $nombreCorto, $descripcion, $producto, $costo) {
             require('../Core/connection.php');
             /** Verificación campos vacíos */
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $nombreCorto = mysqli_real_escape_string($connection, $nombreCorto);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             if ($equipo == null || $nombre == null || $producto == null) {
                 echo '<script>alert("No se pudo guardar el registro porque hay algún campo vacío, por favor verifique.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/servicios.php">';
@@ -158,6 +162,9 @@
 
         public static function actualizarServicio ($idSer, $idEqu, $nombreSer, $nombreCorto, $descripcion, $costo){
             require('../Core/connection.php');
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $nombreCorto = mysqli_real_escape_string($connection, $nombreCorto);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             if($idSer != null || $idEqu != null || $nombreSer != null ||$producto != null){
                 $consulta = "UPDATE pys_servicios SET idEqu='$idEqu', nombreSer='$nombreSer', nombreCorto ='$nombreCorto', descripcionSer='$descripcion' WHERE idSer='$idSer'";
                 $resultado = mysqli_query($connection, $consulta);

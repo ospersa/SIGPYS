@@ -40,6 +40,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_equipos WHERE est='1' AND nombreEqu LIKE '%".$busqueda."%' ORDER BY nombreEqu;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -73,7 +74,7 @@
 
         public static function registrarEquipo($nomEquipo, $descEquipo){
             require('../Core/connection.php');
-            echo $consulta = "SELECT COUNT(idEqu), MAX(idEqu) FROM pys_equipos;";
+            $consulta = "SELECT COUNT(idEqu), MAX(idEqu) FROM pys_equipos;";
             $resultado = mysqli_query($connection, $consulta);
             while ($datos =mysqli_fetch_array($resultado)){
                 $count=$datos['COUNT(idEqu)'];
@@ -85,7 +86,9 @@
             else {
                 $codEquipo='EQU'.substr((substr($max,3)+1001),1);
             }		
-            echo $sql="INSERT INTO pys_equipos VALUES ('$codEquipo', '$nomEquipo',  '$descEquipo', '1');";
+            $nomEquipo = mysqli_real_escape_string($connection, $nomEquipo);
+            $descEquipo = mysqli_real_escape_string($connection, $descEquipo);
+            $sql="INSERT INTO pys_equipos VALUES ('$codEquipo', '$nomEquipo',  '$descEquipo', '1');";
             $resultado = mysqli_query($connection, $sql);
             if ($resultado){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
@@ -100,11 +103,18 @@
 
         public static function actualizarEquipo($idEquipo2, $nomEquipo, $descEquipo){
             require('../Core/connection.php');
+            $nomEquipo = mysqli_real_escape_string($connection, $nomEquipo);
+            $descEquipo = mysqli_real_escape_string($connection, $descEquipo);
             $consulta = "UPDATE pys_equipos SET nombreEqu='$nomEquipo', descripcionEqu='$descEquipo' WHERE idEqu='$idEquipo2';";
             $resultado = mysqli_query($connection, $consulta);
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            if ($resultado){
+                echo "<script> alert ('Se actualizó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            } else {
+                echo "<script> alert ('No se actualizó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            }
         }
 
         public static function suprimirEquipo($idEquipo2){
@@ -112,8 +122,13 @@
             $consulta = "UPDATE pys_equipos SET est = '0' WHERE idEqu='$idEquipo2';";
             $resultado = mysqli_query($connection, $consulta);
             mysqli_close($connection);
-            echo "<script> alert ('Se eliminó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            if ($resultado){
+                echo "<script> alert ('Se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            } else {
+                echo "<script> alert ('No se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/equipo.php">';
+            }
         }
 
         public static function selectEquipo ($idEquipo, $modal) {

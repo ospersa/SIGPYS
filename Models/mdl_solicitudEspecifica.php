@@ -54,6 +54,8 @@
             } else {
                 $fechaPrev = "'$fechaPrev'";
             }
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
+            $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
             /** Verificación de información recibida */
             if ($idSolIni == null || $tipoSol == null || $estadoSol == null || $idProy == null || $equipo == null || $descripcion == null) {
                 echo '<script>alert("No se pudo guardar el registro porque hay algún campo vacío, por favor verifique.")</script>';
@@ -103,6 +105,8 @@
 
         public static function actualizarSolicitudEspecifica ($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona) {
             require('../Core/connection.php');
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
+            $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
             /** Validación de datos vacíos */
             if ($solEsp == null || $tipoSol == null || $estSol == null || $persona == null || $idCM == null) {
                 echo '<script>alert("No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.")</script>';
@@ -335,7 +339,7 @@
             while($data = mysqli_fetch_array($result)){
                 $idUsuario = $data[0];
             };
-
+            $buscar = mysqli_real_escape_string($connection, $buscar);
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol
             FROM pys_solicitudes
             INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
@@ -676,6 +680,13 @@
     
         public static function guardarResultadoServicio ($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $otrosImpac, $urlResultado, $motivoAnulacion, $usuario, $duracionhora, $duracionmin){
             require('../Core/connection.php');
+            $observacion = mysqli_real_escape_string($connection, $observacion);
+            $estudiantesImpac = mysqli_real_escape_string($connection, $estudiantesImpac);
+            $docentesImpac = mysqli_real_escape_string($connection, $docentesImpac);
+            $urlResultado = mysqli_real_escape_string($connection, $urlResultado);
+            $motivoAnulacion = mysqli_real_escape_string($connection, $motivoAnulacion);
+            $duracionhora = mysqli_real_escape_string($connection, $duracionhora);
+            $duracionmin = mysqli_real_escape_string($connection, $duracionmin);
             $consulta = "SELECT count(idResultServ), Max(idResultServ) FROM pys_resultservicio";
             $resultado = mysqli_query($connection, $consulta);
             while ($datos=mysqli_fetch_array($resultado)){
@@ -714,6 +725,11 @@
 
         public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
+            $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
+            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+            $red = mysqli_real_escape_string($connection, $red);
+            $url = mysqli_real_escape_string($connection, $url);
+            $labor = mysqli_real_escape_string($connection, $labor);
             $countProd = SolicitudEspecifica::generarCodigoProducto();
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
             if ($fechaEntre != null){
@@ -748,6 +764,14 @@
                 $fechaEntre = "null";
            }
             require('../Core/connection.php');
+            $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
+            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+            $red = mysqli_real_escape_string($connection, $red);
+            $url = mysqli_real_escape_string($connection, $url);
+            $labor = mysqli_real_escape_string($connection, $labor);
+            $autores = mysqli_real_escape_string($connection, $autores);
+            $sinopsis = mysqli_real_escape_string($connection, $sinopsis);
+            $urlVimeo = mysqli_real_escape_string($connection, $urlVimeo);
             $countProd = SolicitudEspecifica::generarCodigoProducto();
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
             $consulta="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
@@ -766,6 +790,10 @@
 
         public static function actualizarResultadoServicio ($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $urlResultado, $usuario){
             require('../Core/connection.php');
+            $observacion = mysqli_real_escape_string($connection, $observacion);
+            $estudiantesImpac = mysqli_real_escape_string($connection, $estudiantesImpac);
+            $docentesImpac = mysqli_real_escape_string($connection, $docentesImpac);
+            $urlResultado = mysqli_real_escape_string($connection, $urlResultado);
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
             $consulta = "UPDATE pys_resultservicio SET idPlat = '$idPlat',  idSer ='$idSer', idClProd= '$idClProd', idTProd ='$idTipoPro', observacion= '$observacion', estudiantesImpac = '$estudiantesImpac', docentesImpac = '$docentesImpac', urlResultado = '$urlResultado', idResponRegistro = '$idPersona', fechaCreacion = now() WHERE idSol = '$idSol'";
             $resultado = mysqli_query($connection, $consulta);
@@ -782,6 +810,11 @@
 
         public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
+            $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
+            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+            $red = mysqli_real_escape_string($connection, $red);
+            $url = mysqli_real_escape_string($connection, $url);
+            $labor = mysqli_real_escape_string($connection, $labor);
             $consulta = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = 1";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
@@ -802,6 +835,14 @@
 
         public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg){
             require('../Core/connection.php');
+            $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
+            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+            $red = mysqli_real_escape_string($connection, $red);
+            $url = mysqli_real_escape_string($connection, $url);
+            $labor = mysqli_real_escape_string($connection, $labor);
+            $autores = mysqli_real_escape_string($connection, $autores);
+            $sinopsis = mysqli_real_escape_string($connection, $sinopsis);
+            $urlVimeo = mysqli_real_escape_string($connection, $urlVimeo);
             $consulta1 = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = 1";
             $resultado1 = mysqli_query($connection, $consulta1);
             $datos = mysqli_fetch_array($resultado1);

@@ -3,7 +3,7 @@
 
         public static function onLoad($idDedicacion){
             require('../Core/connection.php');
-            $consulta = "SELECT * 
+                return $consulta = "SELECT * 
                 FROM ((dbpys.pys_dedicaciones 
                 INNER JOIN dbpys.pys_periodos ON pys_periodos.idPeriodo = pys_dedicaciones.periodo_IdPeriodo)
                 INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)

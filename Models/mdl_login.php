@@ -4,6 +4,7 @@ class Login {
     
     public static function validar ($id, $user){
         require('../Core/connection.php');
+        $user = mysqli_real_escape_string($connection, $user);
         $json = array();
 		$consulta = "SELECT * FROM pys_login 
             INNER JOIN pys_personas ON pys_login.idPersona = pys_personas.idPersona

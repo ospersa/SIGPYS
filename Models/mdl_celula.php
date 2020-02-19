@@ -55,6 +55,7 @@
 
         public static function busqueda ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT * FROM pys_celulas WHERE estado = '1' AND nombreCelula LIKE '%$busqueda%' ORDER BY nombreCelula;";
             $resultado = mysqli_query($connection, $consulta);
             $personas = "";
@@ -111,6 +112,7 @@
                     $idCelula = "CEL".substr(substr($max, 3) + 1001, 1);
                 }
                 /** Verificación para que no se creen registros duplicados */
+                $nombreCelula = mysqli_real_escape_string($connection, $nombreCelula);
                 $consulta2 = "SELECT * FROM pys_celulas WHERE nombreCelula = '$nombreCelula';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 if ($registros = mysqli_num_rows($resultado2) == 0) {
@@ -202,6 +204,8 @@
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/celula.php">';
             } else {
                 if ($nombreCelula != $datos['nombreCelula'] ) {
+                    
+                    $nombreCelula = mysqli_real_escape_string($connection, $nombreCelula);
                     $consulta2 = "UPDATE pys_celulas SET nombreCelula = '$nombreCelula' WHERE idCelula = '$idCelula';";
                     $resultado2 = mysqli_query($connection, $consulta2);   
                 } 

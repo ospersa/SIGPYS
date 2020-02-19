@@ -76,6 +76,7 @@
 
         public static function busqueda($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_personas.idPersona, pys_personas.tipoPersona, pys_personas.identificacion, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres,
                 pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, 
                 pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo, pys_equipos.idEqu, pys_equipos.nombreEqu
@@ -513,6 +514,13 @@
 
         public static function registrarUsuario ($entidad, $facultad, $departamento, $cargo, $tipo, $identificacion, $nombres, $apellido1, $apellido2, $ciudad, $equipo, $mail, $fijo, $extension, $celular, $categoriaCargo) {
             require('../Core/connection.php');
+            $nombres = mysqli_real_escape_string($connection, $nombres);
+            $apellido1 = mysqli_real_escape_string($connection, $apellido1);
+            $apellido2 = mysqli_real_escape_string($connection, $apellido2);
+            $telefono = mysqli_real_escape_string($connection, $telefono);
+            $mail = mysqli_real_escape_string($connection, $mail);
+            $extension = mysqli_real_escape_string($connection, $extension);
+            $celular = mysqli_real_escape_string($connection, $celular);
             // Determinar el ID de persona a registrar en la tabla pys_personas
             $consulta1 = "SELECT count(idPersona), max(idPersona) FROM pys_personas;"; 
             $resultado1 = mysqli_query($connection, $consulta1);
@@ -579,6 +587,13 @@
 
         public static function actualizarUsuario($idPersona, $identificacion, $nombres, $apellido1, $apellido2, $entidad, $facultad, $departamento, $cargo, $tipo, $equipo, $ciudad, $correo, $telefono, $extension, $celular, $categoriaCargo) {
             require('../Core/connection.php');
+            $nombres = mysqli_real_escape_string($connection, $nombres);
+            $apellido1 = mysqli_real_escape_string($connection, $apellido1);
+            $apellido2 = mysqli_real_escape_string($connection, $apellido2);
+            $correo = mysqli_real_escape_string($connection, $correo);
+            $telefono = mysqli_real_escape_string($connection, $telefono);
+            $extension = mysqli_real_escape_string($connection, $extension);
+            $celular = mysqli_real_escape_string($connection, $celular);
             $consulta = "SELECT * FROM pys_personas WHERE idPersona = '$idPersona';";
             $resultado = mysqli_query($connection, $consulta);
             if ($departamento == "") {

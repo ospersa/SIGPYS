@@ -18,6 +18,7 @@ class Password {
 
     public static function busqueda($buscar){
         require('../Core/connection.php');
+        $buscar = mysqli_real_escape_string($connection, $buscar);
         $consulta = "SELECT * FROM pys_personas 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             INNER JOIN pys_perfil ON pys_login.idPerfil = pys_perfil.idPerfil
@@ -168,6 +169,7 @@ class Password {
             $codLogin='L'.substr((substr($max, 1)+100001), 1);
         }
         $hash = password_hash($userPass, PASSWORD_DEFAULT, [15]);
+        $userName = mysqli_real_escape_string($connection, $userName);
         //insert tabla Login
         $sql="INSERT INTO pys_login VALUES ('$codLogin', '$userPerfil', '$userId', '$userName', '$hash', '1');";
         $resultado2 = mysqli_query($connection, $sql);
@@ -184,6 +186,7 @@ class Password {
     public static function selectBuscarUsuario($buscar){
         require('../Core/connection.php');
         $select ="";
+        $buscar = mysqli_real_escape_string($connection, $buscar);
         $consulta = "SELECT * FROM pys_personas LEFT OUTER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
             WHERE pys_login.idPersona IS NULL AND pys_personas.est = 1 
             AND (apellido1 LIKE '%$buscar%' OR apellido2 LIKE '%$buscar%' OR nombres LIKE '%$buscar%' ) 
@@ -255,6 +258,7 @@ class Password {
     }
     public static function actualizar($id, $perfil, $user){
         require('../Core/connection.php');
+        $user = mysqli_real_escape_string($connection, $user);
         $consulta = "UPDATE pys_login SET  usrLogin = '$user', idPerfil = '$perfil' WHERE idLogin = '$id';";
         $resultado = mysqli_query($connection, $consulta);
         if ($resultado){

@@ -52,6 +52,7 @@ Class Salarios {
 
     public static function busqueda ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_salarios.idSalarios, pys_salarios.mes, pys_salarios.anio, pys_salarios.salario FROM pys_salarios
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_salarios.idPersona
             WHERE ((pys_personas.apellido1 LIKE '%$busqueda%') OR (pys_personas.apellido2 LIKE '%$busqueda%') OR (pys_personas.nombres LIKE '%$busqueda%') OR (pys_salarios.mes LIKE '%$busqueda%') OR (pys_salarios.anio LIKE '%$busqueda%')) AND pys_salarios.estSal='1'
@@ -95,6 +96,7 @@ Class Salarios {
     public static function registrarSalario ($idPersona, $salario, $vigIni, $vigFin) {
         if (($idPersona && $salario && $vigIni && $vigFin) != null) {
             require('../Core/connection.php');
+            $salario = mysqli_real_escape_string($connection, $salario);
             $consulta = "SELECT idSalarios FROM pys_salarios WHERE idPersona = '$idPersona' AND mes = '$vigIni' AND anio = '$vigFin' AND estSal = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
@@ -122,6 +124,7 @@ Class Salarios {
 
     public static function actualizarSalario ($idSalario, $salario, $vigIni, $vigFin) {
         require('../Core/connection.php');
+        $salario = mysqli_real_escape_string($connection, $salario);
         $consulta = "SELECT pys_salarios.salario, pys_salarios.mes, pys_salarios.anio 
             FROM pys_salarios
             WHERE idSalarios = '$idSalario';";

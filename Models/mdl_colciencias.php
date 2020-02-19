@@ -3,6 +3,7 @@
 
         public static function onLoadProyecto($idProy) {
             require('../Core/connection.php');
+            $idProy = mysqli_real_escape_string($connection, $idProy);
             $consulta = "SELECT * FROM pys_proyectos WHERE idProy = '$idProy' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);

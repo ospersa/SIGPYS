@@ -46,7 +46,8 @@
         }
 
         public static function busqueda($busqueda){
-            require('../Core/connection.php');
+            require('../Core/connection.php'); 
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_roles.idRol, pys_roles.nombreRol, pys_roles.descripcionRol, pys_tiproles.nombreTipRol FROM pys_tiproles 
                 INNER JOIN pys_roles ON pys_tiproles.idTipRol = pys_roles.tiproles_idTipRol WHERE pys_roles.est='1' AND pys_roles.nombreRol LIKE '%".$busqueda."%' ORDER BY pys_roles.nombreRol;";
             $resultado = mysqli_query($connection, $consulta);
@@ -83,6 +84,8 @@
 
         public static function registrarRol($tipRol, $nomRol, $descRol){
             require('../Core/connection.php');
+            $nomRol = mysqli_real_escape_string($connection, $nomRol);
+            $descRol = mysqli_real_escape_string($connection, $descRol);
             $consulta = "SELECT COUNT(idRol),MAX(idRol) FROM pys_roles;";
             $resultado = mysqli_query($connection, $consulta);
             while ($datos =mysqli_fetch_array($resultado)){
@@ -109,6 +112,8 @@
 
         public static function actualizarRol($idRol2, $tipRol, $nomRol, $descRol){
             require('../Core/connection.php');
+            $nomRol = mysqli_real_escape_string($connection, $nomRol);
+            $descRol = mysqli_real_escape_string($connection, $descRol);
             $consulta = "UPDATE pys_roles SET nombreRol = '$nomRol', descripcionRol = '$descRol', tiproles_idTipRol = '$tipRol' WHERE idRol = '$idRol2';";
             $resultado = mysqli_query($connection, $consulta);
             if($resultado){

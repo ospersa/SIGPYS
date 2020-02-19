@@ -71,6 +71,7 @@
 
         public static function cargaBusqueda($user, $buscar) {
             require('../Core/connection.php');
+            $buscar = mysqli_real_escape_string($connection, $buscar);
             require_once('mdl_solicitudEspecifica.php');
             $sql = "SELECT idPersona FROM pys_login where usrLogin = '$user';";
             $result = mysqli_query($connection, $sql);

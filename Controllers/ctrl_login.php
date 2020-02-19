@@ -21,6 +21,8 @@ $userPOST = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 //Pasamos el input del usuario a minúsculas para compararlo después con
 //el campo "usernamelowercase" de la base de datos
 $userPOSTMinusculas = strtolower($userPOST);
+$userPOSTMinusculas = mysqli_real_escape_string($connection, $userPOSTMinusculas);
+
 
 //Escribimos la consulta necesaria
 $consulta = "SELECT * FROM `pys_login` WHERE usrLogin ='".$userPOSTMinusculas."'";

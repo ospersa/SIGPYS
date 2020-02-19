@@ -45,6 +45,7 @@
 
         public static function busqueda($busqueda){
             require ('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo = '1' AND (inicioPeriodo LIKE '%$busqueda%' OR finPeriodo LIKE '%$busqueda%') ORDER BY idPeriodo DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -94,6 +95,8 @@
             else if ($count > 0) {
                 $codPeriodo = $count + 1;
             }
+            $diasSeg1 = mysqli_real_escape_string($connection, $diasSeg1);
+            $diasSeg2 = mysqli_real_escape_string($connection, $diasSeg2);
             $sql="INSERT INTO pys_periodos VALUES ('$codPeriodo', '$fechIni',  '$fechFin', '$diasSeg1','$diasSeg2',1);";
             $resultado = mysqli_query($connection, $sql);
             if ($resultado){
@@ -107,6 +110,8 @@
 
         public static function actualizarPeriodo ($idPeriodo, $fechaIni, $fechaFin, $diasSeg1, $diasSeg2){
             require ('../Core/connection.php');
+            $diasSeg1 = mysqli_real_escape_string($connection, $diasSeg1);
+            $diasSeg2 = mysqli_real_escape_string($connection, $diasSeg2);
             $consulta = "UPDATE pys_periodos SET inicioPeriodo = '$fechaIni', finPeriodo = '$fechaFin', diasSegmento1 = '$diasSeg1', diasSegmento2 = '$diasSeg2' WHERE idPeriodo = '$idPeriodo';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado){

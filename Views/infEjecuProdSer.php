@@ -16,7 +16,7 @@ require_once('../Controllers/ctrl_infEjecuProdSer.php');
                     <label for="txtFechFin">Fecha hasta</label>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id = "proyecInf" >
                 <div class="input-field col l2 m2 s12 offset-l2 offset-m1">
                     <input type="text" name="txtBusquedaProy" id="txtBusquedaProy"
                         placeholder="Ingrese el código del proyecto">
@@ -28,6 +28,12 @@ require_once('../Controllers/ctrl_infEjecuProdSer.php');
                     </select>
                     <label for="sltProyecto">Seleccione un proyecto</label>
                 </div>
+            </div>
+            <div class="row" id = "frenteInf" >
+                <div class="input-field col l2 m2 s12 offset-l2 offset-m1">
+                 <?php echo $frente?>
+                </div>
+                
             </div>
             <div class="row">
                 <div class="input-field col l2 m2 s12 offset-l4 offset-m4">

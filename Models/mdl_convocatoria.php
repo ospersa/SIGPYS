@@ -41,6 +41,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_convocatoria WHERE est='1' AND nombreConvocatoria LIKE '%".$busqueda."%' ORDER BY nombreConvocatoria;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -86,8 +87,10 @@
             }
             else {
                 $codConv='CV'.substr((substr($max,2)+10001),1);	
-            }		
-            $sql="INSERT INTO pys_convocatoria VALUES ('$codConv', '$nomConv',  '$descConv', '1');";
+            }	
+            $nomConv2 = mysqli_real_escape_string($connection, $nomConv);
+            $descConv2 = mysqli_real_escape_string($connection, $descConv);	
+            $sql="INSERT INTO pys_convocatoria VALUES ('$codConv', '$nomConv2',  '$descConv2', '1');";
             $resultado2 = mysqli_query($connection, $sql);
             if ($resultado && $resultado2){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
@@ -101,8 +104,10 @@
         }
 
         public static function actualizarConv($idConv2, $nomConv, $descConv){
-            require('../Core/connection.php');
-            $consulta = "UPDATE pys_convocatoria SET nombreConvocatoria='$nomConv', descrConvocatoria='$descConv' WHERE idConvocatoria='$idConv2';";
+            require('../Core/connection.php');            
+            $nomConv2 = mysqli_real_escape_string($connection, $nomConv);
+            $descConv2 = mysqli_real_escape_string($connection, $descConv);	
+            $consulta = "UPDATE pys_convocatoria SET nombreConvocatoria='$nomConv2', descrConvocatoria='$descConv2' WHERE idConvocatoria='$idConv2';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";

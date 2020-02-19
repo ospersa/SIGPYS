@@ -151,6 +151,10 @@
             require('../Core/connection.php');
             $string = "";
             $stringF = "";
+            $nota = mysqli_real_escape_string($connection, $nota);
+            $minutos = mysqli_real_escape_string($connection, $minutos);
+            $horas = mysqli_real_escape_string($connection, $horas);
+            $fecha = mysqli_real_escape_string($connection, $fecha);
             $resultado2 = false;
             if ($fecha != null && $nota != null && $horas != null && $minutos != null && $fase != null){
                 $fechaAct = date("Y-m-d");
@@ -213,16 +217,35 @@
             mysqli_close($connection);   
         }
 
-        public static function editarTiemposRe($id, $fecha, $tiempoH, $tiempoM, $fase, $nota){
+        public static function editarTiemposRe($id, $user, $fecha, $tiempoH, $tiempoM, $fase, $nota){
             require('../Core/connection.php');
-            $consulta = "UPDATE pys_tiempos SET fechTiempo = '$fecha', notaTiempo ='$nota', horaTiempo = '$tiempoH', minTiempo ='$tiempoM', idFase = '$fase' WHERE idTiempo = '$id'";
-            $resultado = mysqli_query($connection, $consulta);
-            if ($resultado) {                    
-                echo "<script> alert ('Se guardó correctamente la información');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
-            } else { 
-                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/misproductosservicios.php">';
+            $nota = mysqli_real_escape_string($connection, $nota);
+            $tiempoM = mysqli_real_escape_string($connection, $tiempoM);
+            $tiempoH = mysqli_real_escape_string($connection, $tiempoH);
+            $fecha = mysqli_real_escape_string($connection, $fecha);
+            $consultaTiempos = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos
+            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+            INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
+            INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
+            WHERE pys_tiempos.fechTiempo = '$fecha' AND pys_login.usrLogin = '$user' AND pys_tiempos.estTiempo = '1' AND idTiempo <> $id;";
+            $resultadoTiempos = mysqli_query($connection, $consultaTiempos);
+            $datos = mysqli_fetch_array($resultadoTiempos);
+            $hora = $datos['SUM(pys_tiempos.horaTiempo)'];
+            $min = $datos['SUM(pys_tiempos.minTiempo)'];
+            $total = (($hora + $tiempoH)*60) + $min + $tiempoM;
+            if ($total <= 720){
+                $consulta = "UPDATE pys_tiempos SET fechTiempo = '$fecha', notaTiempo ='$nota', horaTiempo = '$tiempoH', minTiempo ='$tiempoM', idFase = '$fase' WHERE idTiempo = '$id'";
+                $resultado = mysqli_query($connection, $consulta);
+                if ($resultado) {                    
+                    echo "<script> alert ('Se guardó correctamente la información');</script>";
+                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                } else { 
+                    echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                }
+            } else{
+                echo "<script> alert ('No se realizo el registro. Hay mas de 12 horas registradas');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);   
         }

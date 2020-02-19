@@ -51,6 +51,7 @@
 
         public static function busquedaTipos ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1' AND (nombreTSol LIKE '%$busqueda%' OR descripcionTSol LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
@@ -107,6 +108,7 @@
 
         public static function busquedaEstados ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT * FROM pys_estadosol WHERE est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
@@ -136,6 +138,8 @@
 
         public static function registrarEstadoSolicitud ($nombre, $descripcion) {
             require('../Core/connection.php');
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             if ($nombre == null || $nombre == " ") {
                 echo '<script>alert("No se pudo guardar el registro porque hay algún campo vacío, por favor verifique.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/estSolicitud.php">';
@@ -175,6 +179,8 @@
 
         public static function actualizarEstadoSolicitud ($cod, $nombre, $descripcion) {
             require('../Core/connection.php');
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             if ($nombre == null || $nombre == "" || $nombre == " ") { //Verificación de que no venga el campo de nombre vacío
                 echo '<script>alert("Existe algún campo vacío, el registro no fue modificado.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/estSolicitud.php">';
@@ -203,6 +209,8 @@
 
         public static function registrarTipoSolicitud ($nombreTip, $descripcionTip) {
             require('../Core/connection.php');
+            $nombreTip = mysqli_real_escape_string($connection, $nombreTip);
+            $descripcionTip = mysqli_real_escape_string($connection, $descripcionTip);
             if ($nombreTip == null || $nombreTip == " ") {
                 echo '<script>alert("No se pudo guardar el registro porque hay algún campo vacío, por favor verifique.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/tipSolicitud.php">';
@@ -247,6 +255,7 @@
                 $fechaPrevista = "'$fechaPrevista'";
             }
             require('../Core/connection.php');
+            $obs = mysqli_real_escape_string($connection, $obs);
             /** Se obtiene ID de la persona que está realizando el registro */
             $cons = "SELECT idPersona FROM pys_login WHERE usrLogin = '$registra' AND est = '1';";
             $res = mysqli_query($connection, $cons);
@@ -309,6 +318,8 @@
 
         public static function actualizarTipoSolicitud ($cod, $nombre, $descripcion) {
             require('../Core/connection.php');
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             if ($nombre == null || $nombre == "" || $nombre == " ") { //Verificación de que no venga el campo de nombre vacío
                 echo '<script>alert("Existe algún campo vacío, el registro no fue modificado.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/estSolicitud.php">';
@@ -352,6 +363,7 @@
                         $observacionForm .= $sp;
                     }
                 }
+                $obs = mysqli_real_escape_string($connection, $obs);
                 $consulta = "SELECT idEstSol, idSolicitante, fechPrev, ObservacionAct FROM pys_actsolicitudes WHERE idSol = '$idSol' AND est = '1';";
                 $resultado = mysqli_query($connection, $consulta);
                 $datos = mysqli_fetch_array($resultado);

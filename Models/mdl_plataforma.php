@@ -39,6 +39,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_plataformas WHERE est ='1' AND nombrePlt LIKE '%".$busqueda."%' ORDER BY nombrePlt;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -71,6 +72,7 @@
         public static function registrarPlataforma($nomPlataforma){
             require('../Core/connection.php');
             /** Verificación de campos vacíos */
+            $nomPlataforma = mysqli_real_escape_string($connection, $nomPlataforma);
             if ($nomPlataforma == null || $nomPlataforma == "" || $nomPlataforma == " ") {
                 echo "<script> alert('Existe algún campo vacío. Por favor intente nuevamente.');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/plataforma.php">';
@@ -111,7 +113,8 @@
 
         public static function actualizarPlataforma($idPlataforma2, $nomPlataforma){
             require('../Core/connection.php');
-            $consulta = "update pys_plataformas set nombrePlt='$nomPlataforma' where idPlat = '$idPlataforma2'";
+            $nomPlataforma = mysqli_real_escape_string($connection, $nomPlataforma);
+            $consulta = "UPDATE pys_plataformas SET nombrePlt='$nomPlataforma' WHERE idPlat = '$idPlataforma2'";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
@@ -126,7 +129,7 @@
 
         public static function suprimirPlataforma($idPlataforma2){
             require('../Core/connection.php');
-            $consulta = "update pys_plataformas set est = '0' where idPlat = '$idPlataforma2';";
+            $consulta = "UPDATE pys_plataformas SET est = '0' WHERE idPlat = '$idPlataforma2';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado){
                 echo "<script> alert ('Se eliminó correctamente la información');</script>";

@@ -4,6 +4,7 @@
 
         public static function selectProyectoUsuario ($busqueda, $user){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_actualizacionproy.idProy,pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy  FROM pys_asignados 
             INNER JOIN pys_proyectos on pys_proyectos.idProy = pys_asignados.idProy 
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy =pys_proyectos.idProy
@@ -30,6 +31,7 @@
 
         public static function cargarProyectosUser ($user, $cod, $busProy, $fechFin){
             require('../Core/connection.php');
+            $busProy = mysqli_real_escape_string($connection, $busProy);
             $resultado = "";
             $string = "";
             //valida los proyectos en los cuales es agigando como gestor o asesor RED.

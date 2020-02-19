@@ -76,7 +76,7 @@ if (isset($_POST['btnAsignar'])) {
     $mensaje .= $infoAsi.$nota.$msj2;
     $asunto = "Asignación formal solicitud / $codProy / $nombreEqu - $nombreSer"; 
     $ccemail= Asignados::correosResponsable($idSol2);
-    EnviarCorreo::enviarCorreoAsignados($correoSol, $ccemail, $asunto, $mensaje);    
+    EnviarCorreo::enviarCorreos($correoSol, "", $ccemail, $asunto, $mensaje);    
 }
 
 if (isset($_GET['id'])) {

@@ -499,7 +499,43 @@ $(document).ready(function () {
         pageNumbers: false,
     });
 
+    $('#sltFrenteInf').on('change',function(){
+        var selectValor = $(this).val();
+        if(selectValor !=  " "){
+            $('#proyecInf').addClass("hide")
+            inicializarCampos();
+        }else if(selectValor == " "){
+            console.log("selectValor");
+            $('#proyecInf').removeClass("hide")
+            inicializarCampos();
+        }
+        
+    });
+
+    $('#txtBusquedaProy').keyup('change',function(){
+        var selectValor = $(this).val();
+        if(selectValor !=  ""){
+            $('#frenteInf').addClass("hide")
+            inicializarCampos();
+        }else if(selectValor == ""){
+            console.log("selectValor");
+            $('#frenteInf').removeClass("hide")
+            inicializarCampos();
+        }
+        
+    });
+    
+
 });
+
+function cerrar() {
+    $.ajax({
+        beforeSend: function () {
+            $('#fondo').addClass("hide");
+            $('#editRegistro').addClass("hide");
+        }
+    });
+}; 
 
 function editarRegistro(idTiempo) {
     $.ajax({

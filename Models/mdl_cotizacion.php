@@ -34,6 +34,7 @@ Class Cotizacion {
 
     public static function busqueda($busqueda) {
         require ('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT idSolIni, idSolEsp, codProy, nombreProy, ObservacionAct, idCotizacion FROM pys_actsolicitudes 
             INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
@@ -86,7 +87,8 @@ Class Cotizacion {
     }
 
     public static function busquedaPendientes($busqueda) {
-        require ('../Core/connection.php');
+        require ('../Core/connection.php');        
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         echo "<script>$('#tblCotizaciones').empty();</script>";
         $consulta = "SELECT pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actsolicitudes.ObservacionAct, pys_solicitudes.idSolIni
         FROM pys_actsolicitudes
@@ -451,7 +453,7 @@ Class Cotizacion {
                 <a href='mailto:apoyoconectate@uniandes.edu.co'>apoyoconectate@uniandes.edu.co</a>
             </p>";
         }
-        $bool = EnviarCorreo::enviarCorreoCotizacion($solicita, $correo, $titulo, $mail);
+        $bool = EnviarCorreo::enviarCorreos($solicita, "", $correo, $titulo, $mail);
         if(($bool != NULL) or ($bool != 0)){
             $consulta3 = "UPDATE pys_cotizaciones SET fechaCorreo = now() WHERE idCotizacion = '$idCot';";
             $resultado3 = mysqli_query($connection, $consulta3);
@@ -487,6 +489,9 @@ Class Cotizacion {
         } else if ($datos['notaAprobacion'] == $nota && $enlace == "") {
             echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; //Se realiza redirección a la página anterior
         } else {
+            
+            $nota = mysqli_real_escape_string($connection, $nota);
+            $enlace = mysqli_real_escape_string($connection, $enlace);
             $consulta2 = "UPDATE pys_cotizaciones SET fechaAprobacion = now(), notaAprobacion = '$nota', enlaceAprobacion = '$enlace' WHERE idCotizacion = '$idCot';";
             $resultado2 = mysqli_query($connection, $consulta2);
             if ($resultado2) {

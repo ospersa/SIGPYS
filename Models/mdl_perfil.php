@@ -29,6 +29,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_perfil WHERE est = '1' AND nombrePerfil LIKE '%".$busqueda."%';";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -61,6 +62,8 @@
 
         public static function registrarPerfil($nomPerf, $descPerf){
             require('../Core/connection.php');
+            $nomPerf = mysqli_real_escape_string($connection, $nomPerf);
+            $descPerf = mysqli_real_escape_string($connection, $descPerf);
             $consulta = "SELECT COUNT(idPerfil),MAX(idPerfil) FROM pys_perfil;";
             $resultado = mysqli_query($connection, $consulta);
             while ($datos =mysqli_fetch_array($resultado)){

@@ -59,6 +59,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT pys_entidades.nombreEnt, pys_facultades.idFac, pys_facultades.nombreFac, pys_facultades.coordFac, pys_facultades.cargoCoordFac,  pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_cargos.nombreCargo, pys_cargos.idCargo 
                 FROM pys_facultades
                 INNER JOIN pys_facdepto ON pys_facdepto.idFac = pys_facultades.idFac 
@@ -109,6 +110,7 @@
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/facultad.php">';
             } else {
                 /** Verificación de información existente en la tabla, para evitar duplicidad */
+                $nomFacultad = mysqli_real_escape_string($connection, $nomFacultad);
                 $consulta = "SELECT * FROM pys_facdepto WHERE facDeptofacultad = '$nomFacultad' AND idEnt = '$entidad' AND estFacdeptoFac = '1';";
                 $resultado = mysqli_query($connection, $consulta);
                 $registros = mysqli_num_rows($resultado);
@@ -166,6 +168,7 @@
 
         public static function actualizarFacultad($idFacultad2, $entidad, $nomFacultad){
             require('../Core/connection.php');
+            $nomFacultad = mysqli_real_escape_string($connection, $nomFacultad);
             $consulta = "UPDATE pys_facultades SET nombreFac='$nomFacultad' WHERE idFac='$idFacultad2';";
             $resultado = mysqli_query($connection, $consulta);
             /*Código de actualización nombre facultad en la tabla pys_facdepto*/			

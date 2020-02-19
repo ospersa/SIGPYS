@@ -47,6 +47,7 @@
 
         public static function busqueda ($busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT idElemento, nombreElemento, codigoElemento, ceco
                 FROM pys_elementospep
                 INNER JOIN pys_centrocostos ON pys_centrocostos.idCeco = pys_elementospep.idCeco
@@ -84,6 +85,8 @@
             mysqli_query($connection, "BEGIN;");
             if ($nombrePep != null && $nombrePep != " " && $codigoPep != null && $codigoPep != " " && $idCeco != null) {
                 /** Verificación que la información no esté duplicada en la tabla */
+                $nombrePep = mysqli_real_escape_string($connection, $nombrePep);
+                $codigoPep = mysqli_real_escape_string($connection, $codigoPep);
                 $consulta = "SELECT nombreElemento, codigoElemento FROM pys_elementospep WHERE nombreElemento = '$nombrePep' OR codigoElemento = '$codigoPep';";
                 $resultado = mysqli_query($connection, $consulta);
                 if ($registros = mysqli_num_rows($resultado) == 0) {
@@ -124,6 +127,8 @@
         public static function actualizarElementoPep ($idElemento, $nombrePep, $codigoPep, $idCeco) {
             require('../Core/connection.php');
             mysqli_query($connection, "BEGIN;");
+            $nombrePep = mysqli_real_escape_string($connection, $nombrePep);
+            $codigoPep = mysqli_real_escape_string($connection, $codigoPep);
             /** Se verifica que la información halla sido modificada respecto a lo que se encuentra en la tabla */
             $consulta = "SELECT nombreElemento, codigoElemento, idCeco FROM pys_elementospep WHERE idElemento = '$idElemento' AND estado = '1';";
             $resultado = mysqli_query($connection, $consulta);

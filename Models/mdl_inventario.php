@@ -7,6 +7,7 @@
             $string = "";
             $modal = "";
             $estado="";
+            $descrip = mysqli_real_escape_string($connection, $descrip);
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct 
             FROM pys_actsolicitudes
             INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
@@ -248,6 +249,22 @@
         public static function ingresarInventario ($id,$crudoCarp, $crudoPeso, $proyectoCarp, $proyectoPeso, $finalCarp, $finalPeso, $recursoCarp, $recursoPeso, $documCarp, $documPeso, $rutaServidor, $diseñoCarp, $diseñoPeso,$soporteCarp, $soportePeso, $bservaciones, $idPerEnt, $idPerRec, $estadoInv){
             require('../Core/connection.php');
             $validacion = 0;
+            $crudoCarp = mysqli_real_escape_string($connection, $crudoCarp);
+            $crudoPeso = mysqli_real_escape_string($connection, $crudoPeso);
+            $proyectoCarp = mysqli_real_escape_string($connection, $proyectoCarp);
+            $proyectoPeso = mysqli_real_escape_string($connection, $proyectoPeso);
+            $finalCarp = mysqli_real_escape_string($connection, $finalCarp);
+            $finalPeso = mysqli_real_escape_string($connection, $finalPeso);
+            $recursoCarp = mysqli_real_escape_string($connection, $recursoCarp);
+            $recursoPeso = mysqli_real_escape_string($connection, $recursoPeso);
+            $documCarp = mysqli_real_escape_string($connection, $documCarp);
+            $documPeso = mysqli_real_escape_string($connection, $documPeso);
+            $rutaServidor = mysqli_real_escape_string($connection, $rutaServidor);
+            $diseñoCarp = mysqli_real_escape_string($connection, $diseñoCarp);
+            $diseñoPeso = mysqli_real_escape_string($connection, $diseñoPeso);
+            $soporteCarp = mysqli_real_escape_string($connection, $soporteCarp);
+            $soportePeso = mysqli_real_escape_string($connection, $soportePeso);
+            $bservaciones = mysqli_real_escape_string($connection, $bservaciones);
             $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$id."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
             $resultadoE = mysqli_query($connection, $consultaE);
             $datos2 = mysqli_fetch_array($resultadoE);
@@ -330,6 +347,22 @@
             
         public static function actualizarInventario ($id, $crudoCarp, $crudoPeso, $proyectoCarp, $proyectoPeso, $finalCarp, $finalPeso, $recursoCarp, $recursoPeso, $documCarp, $documPeso, $rutaServidor, $diseñoCarp, $diseñoPeso,$soporteCarp, $soportePeso, $bservaciones, $idPerEnt, $idPerRec, $estadoInv){
             require('../Core/connection.php');
+            $crudoCarp = mysqli_real_escape_string($connection, $crudoCarp);
+            $crudoPeso = mysqli_real_escape_string($connection, $crudoPeso);
+            $proyectoCarp = mysqli_real_escape_string($connection, $proyectoCarp);
+            $proyectoPeso = mysqli_real_escape_string($connection, $proyectoPeso);
+            $finalCarp = mysqli_real_escape_string($connection, $finalCarp);
+            $finalPeso = mysqli_real_escape_string($connection, $finalPeso);
+            $recursoCarp = mysqli_real_escape_string($connection, $recursoCarp);
+            $recursoPeso = mysqli_real_escape_string($connection, $recursoPeso);
+            $documCarp = mysqli_real_escape_string($connection, $documCarp);
+            $documPeso = mysqli_real_escape_string($connection, $documPeso);
+            $rutaServidor = mysqli_real_escape_string($connection, $rutaServidor);
+            $diseñoCarp = mysqli_real_escape_string($connection, $diseñoCarp);
+            $diseñoPeso = mysqli_real_escape_string($connection, $diseñoPeso);
+            $soporteCarp = mysqli_real_escape_string($connection, $soporteCarp);
+            $soportePeso = mysqli_real_escape_string($connection, $soportePeso);
+            $bservaciones = mysqli_real_escape_string($connection, $bservaciones);
             $consultaI ="SELECT pys_inventario.idInventario,  pys_actinventario.idProd
             FROM pys_inventario 
             INNER JOIN pys_productos ON pys_productos.idProd = pys_inventario.idProd 
@@ -503,6 +536,7 @@
 
         public static function selectPersona($cod,$busqueda) {
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $string ='';
             $consulta = "SELECT idPersona, apellido1, apellido2, nombres
                 FROM pys_personas
@@ -543,6 +577,7 @@
         public static function selectEquipo($busqueda) {
             require('../Core/connection.php');
             $string ="";
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT idEqu, nombreEqu
                 FROM pys_equipos
                 WHERE est = '1' AND (idEqu='EQU001' OR idEqu='EQU002' OR idEqu='EQU003' OR idEqu='EQU004') AND nombreEqu LIKE '%$busqueda%';";
@@ -565,6 +600,7 @@
         public static function selectProyecto($busqueda) {
             require('../Core/connection.php');
             $string = "";
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.idFrente, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy, pys_actualizacionproy.descripcionProy
                 FROM pys_actualizacionproy
                 WHERE pys_actualizacionproy.est = '1' AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%');";
@@ -587,6 +623,7 @@
         public static function selectProducto($busqueda) {
             require('../Core/connection.php');
             $string ="";
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT idSol FROM pys_actproductos
                 INNER JOIN pys_productos ON pys_actproductos.idProd = pys_productos.idProd
                 WHERE pys_actproductos.est = '1' AND pys_productos.est = '1' AND idSol LIKE '%$busqueda%';";

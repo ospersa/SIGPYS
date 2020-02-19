@@ -132,7 +132,7 @@ Class InformeNomima {
             INNER JOIN pys_convocatoria ON pys_convocatoria.idConvocatoria = pys_actualizacionproy.idConvocatoria
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
             WHERE pys_actualizacionproy.est = '1'
-            AND pys_asignados.est = '1'
+            AND pys_asignados.est <> '0'
             AND pys_tiempos.estTiempo = '1'
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
@@ -175,7 +175,7 @@ Class InformeNomima {
                     FROM pys_asignados 
                     INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
                     WHERE pys_asignados.idRol = 'ROL018' AND pys_asignados.idProy = '".$datos['idProy']."'
-                    AND pys_asignados.est = '1'
+                    AND pys_asignados.est <> '0'
                     AND pys_personas.est = '1'";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
@@ -243,7 +243,7 @@ Class InformeNomima {
                         AND pys_asignados.idProy = '".$datos['idProy']."'
                         AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodo' AND '$finPeriodo'
                         AND pys_tiempos.estTiempo = '1'
-                        AND pys_asignados.est = '1';";
+                        AND pys_asignados.est <> '0';";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     
                     
@@ -311,7 +311,7 @@ Class InformeNomima {
             INNER JOIN pys_convocatoria ON pys_convocatoria.idConvocatoria = pys_actualizacionproy.idConvocatoria
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
             WHERE pys_actualizacionproy.est = '1'
-            AND pys_asignados.est = '1'
+            AND pys_asignados.est <> '0'
             AND pys_tiempos.estTiempo = '1'
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
@@ -337,7 +337,7 @@ Class InformeNomima {
                     FROM pys_asignados 
                     INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
                     WHERE pys_asignados.idRol = 'ROL018' AND pys_asignados.idProy = '".$datos['idProy']."'
-                    AND pys_asignados.est = '1'
+                    AND pys_asignados.est <> '0'
                     AND pys_personas.est = '1'";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
@@ -394,7 +394,7 @@ Class InformeNomima {
                         AND pys_asignados.idProy = '".$datos['idProy']."'
                         AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodo' AND '$finPeriodo'
                         AND pys_tiempos.estTiempo = '1'
-                        AND pys_asignados.est = '1';";
+                        AND pys_asignados.est <> '0';";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     
                     while ($datos2 = mysqli_fetch_array($resultado2)) {
@@ -482,7 +482,7 @@ Class InformeNomima {
             INNER JOIN pys_convocatoria ON pys_convocatoria.idConvocatoria = pys_actualizacionproy.idConvocatoria
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
             WHERE pys_actualizacionproy.est = '1'
-            AND pys_asignados.est = '1'
+            AND pys_asignados.est <> '0'
             AND pys_tiempos.estTiempo = '1'
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
@@ -526,7 +526,7 @@ Class InformeNomima {
                     FROM pys_asignados 
                     INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
                     WHERE pys_asignados.idRol = 'ROL018' AND pys_asignados.idProy = '".$datos['idProy']."'
-                    AND pys_asignados.est = '1'
+                    AND pys_asignados.est <> '0'
                     AND pys_personas.est = '1'";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
@@ -595,7 +595,7 @@ Class InformeNomima {
                             AND pys_asignados.idProy = '".$datos['idProy']."'
                             AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-08' AND '$anio-$y2-15'
                             AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
+                            AND pys_asignados.est <> '0';";
                         $resultado2 = mysqli_query($connection, $consulta2);
                     } else if ($y == 12) {
                         $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
@@ -604,7 +604,7 @@ Class InformeNomima {
                             AND pys_asignados.idProy = '".$datos['idProy']."'
                             AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-16' AND '$anio-$y-31'
                             AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
+                            AND pys_asignados.est <> '0';";
                         $resultado2 = mysqli_query($connection, $consulta2);
                     } else {
                         $consulta2 = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
@@ -613,7 +613,7 @@ Class InformeNomima {
                             AND pys_asignados.idProy = '".$datos['idProy']."'
                             AND pys_tiempos.fechTiempo BETWEEN '$anio-$y-16' AND '$anio-$y2-15'
                             AND pys_tiempos.estTiempo = '1'
-                            AND pys_asignados.est = '1';";
+                            AND pys_asignados.est <> '0';";
                         $resultado2 = mysqli_query($connection, $consulta2);
                     }
                     

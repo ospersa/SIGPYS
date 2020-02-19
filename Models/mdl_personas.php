@@ -48,7 +48,7 @@ class Personas {
         $consulta = "SELECT * 
             FROM pys_personas 
             WHERE est = '1' 
-            AND ((idCargo = 'CAR010') OR (idCargo = 'CAR012') OR (idCargo = 'CAR013') OR (idCargo = 'CAR014') OR (idCargo = 'CAR015') OR (idCargo = 'CAR016') OR (idCargo = 'CAR017') OR (idCargo = 'CAR019') OR (idCargo = 'CAR027') OR (idCargo = 'CAR033') OR (idCargo = 'CAR035') OR (idCargo = 'CAR036'))
+            AND ((idCargo = 'CAR010') OR (idCargo = 'CAR012') OR (idCargo = 'CAR013') OR (idCargo = 'CAR014') OR (idCargo = 'CAR015') OR (idCargo = 'CAR016') OR (idCargo = 'CAR017') OR (idCargo = 'CAR019') OR (idCargo = 'CAR027') OR (idCargo = 'CAR033') OR (idCargo = 'CAR035') OR (idCargo = 'CAR036') OR (idCargo = 'CAR041')) 
             ORDER BY apellido1;";
         $resultado = mysqli_query($connection,$consulta);
         echo'   <table class="centered responsive-table">

@@ -42,6 +42,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_entidades WHERE est='1' AND (nombreEnt LIKE  '%".$busqueda."%' OR nombreCortoEnt LIKE  '%".$busqueda."%') ORDER BY nombreEnt;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -78,6 +79,9 @@
         public static function registrarEntidad($nomEnti, $nomCortoEnti, $descEnti){
             require('../Core/connection.php');
             $countFacDepto = "";
+            $nomEnti = mysqli_real_escape_string($connection, $nomEnti);
+            $nomCortoEnti = mysqli_real_escape_string($connection, $nomCortoEnti);
+            $descEnti = mysqli_real_escape_string($connection, $descEnti);
             //Contador tabla Entidades 
             $consulta = "SELECT COUNT(idEnt), MAX(idEnt) FROM pys_entidades;";
             $resultado = mysqli_query($connection, $consulta);
@@ -110,18 +114,22 @@
             //insert tabla FacDEpto
             $sql2="INSERT INTO pys_facdepto VALUES ('$countFacDepto', '$codEntidad',  'FAC014', 'DP0027', '', '', '1', '1', '1')";
             $resultado2 = mysqli_query($connection, $sql2);
+            ECHO $resultado;
             if ($resultado && $resultado2){
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';
             }else{
                 echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
-                 echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';
+                // echo '<meta http-equiv="Refresh" content="0;url=../Views/entidad.php">';
             }
             mysqli_close($connection);
         }
 
         public static function actualizarEntidad($idEnti2, $nomEnti, $nomCortoEnti, $descEnti){
             require('../Core/connection.php');
+            $nomEnti = mysqli_real_escape_string($connection, $nomEnti);
+            $nomCortoEnti = mysqli_real_escape_string($connection, $nomCortoEnti);
+            $descEnti = mysqli_real_escape_string($connection, $descEnti);
             $consulta = "UPDATE pys_entidades SET nombreEnt='$nomEnti', nombreCortoEnt='$nomCortoEnti', descripcionEnt='$descEnti' WHERE idEnt='$idEnti2';";
             $resultado = mysqli_query($connection, $consulta);
             if($resultado){

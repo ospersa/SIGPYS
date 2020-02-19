@@ -30,7 +30,7 @@ if (!empty($idTiempo)){
 }
 
 if (isset($_POST['btnActRegTiempo'])) {
-    Tiempos::editarTiemposRe($idTiempo, $date, $horas, $minutos, $idFaseEdit, $nota);
+    Tiempos::editarTiemposRe($idTiempo, $user, $date, $horas, $minutos, $idFaseEdit, $nota);
 } else if (isset($_POST['btnRegTiempo'])){
     $result = Tiempos::registrarTiempos($idSol2, $user, $fecha, $nota1, $horas1, $minutos1, $idFase, 0);
 }

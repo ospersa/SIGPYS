@@ -3,6 +3,7 @@
 
         public static function onLoadAsignacion ($idAsig) {
             require('../Core/connection.php');
+            $idAsig = mysqli_real_escape_string($connection, $idAsig);
             $consulta = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_fases.nombreFase, pys_asignados.maxhora, pys_asignados.maxmin, pys_asignados.est
                 FROM pys_asignados
                 INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
@@ -16,6 +17,7 @@
 
         public static function asignarPersonaProy ($idProy) {
             require('../Core/connection.php');
+            $idProy = mysqli_real_escape_string($connection, $idProy);
             $consulta = "SELECT pys_frentes.idFrente, pys_proyectos.idProy, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.nombreCortoProy, pys_actualizacionproy.descripcionProy
                 FROM pys_actualizacionproy
                 INNER JOIN pys_estadoproy ON pys_estadoproy.idEstProy = pys_actualizacionproy.idEstProy
@@ -359,6 +361,7 @@
 
         public static function eliminarAsignacion ($idAsig) {
             require('../Core/connection.php');
+            $idAsig = mysqli_real_escape_string($connection, $idAsig);
             $consulta = "UPDATE pys_asignados SET est = '0' WHERE idAsig = '$idAsig';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado) {
@@ -442,6 +445,7 @@
 
         public static function asignarPersonaSolIni ($idSolIni) {
             require('../Core/connection.php');
+            $idSolIni = mysqli_real_escape_string($connection, $idSolIni);
             $consulta = "SELECT pys_actsolicitudes.idSol, pys_frentes.descripcionFrente, pys_frentes.nombreFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actsolicitudes.ObservacionAct, pys_actualizacionproy.idProy
                 FROM pys_actsolicitudes
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
@@ -504,6 +508,7 @@
 
         public static function asignarPersonaSolEsp ($idSol) {
             require('../Core/connection.php');
+            $idSol = mysqli_real_escape_string($connection, $idSol);
             $consulta = "SELECT pys_actsolicitudes.idSol, pys_frentes.descripcionFrente, pys_frentes.nombreFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actsolicitudes.ObservacionAct, pys_actualizacionproy.idProy
                 FROM pys_actsolicitudes
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM

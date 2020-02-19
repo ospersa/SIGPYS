@@ -84,6 +84,7 @@ const STYLEBODY = ['font' => [
         
         public static function busqueda ($txtFechIni, $txtFechFin, $diasLab) {
             require('../Core/connection.php');
+            $diasLab = mysqli_real_escape_string($connection, $diasLab);
             $tabla ='
                 <h5><strong>Informe de ejecucion desde '.$txtFechIni.' hasta '.$txtFechFin.'</strong></h5>
                 <table class="table table-hover table-striped table-responsive-xl">
@@ -182,6 +183,7 @@ const STYLEBODY = ['font' => [
 
         public static function descarga ($txtFechIni, $txtFechFin, $diasLab) {
             require('../Core/connection.php');
+            $diasLab = mysqli_real_escape_string($connection, $diasLab);
             $consultaNombre = "SELECT idPersona, apellido1, apellido2, nombres FROM pys_personas WHERE est='1' AND idEquipo != 'EQU008' AND idEquipo != 'EQU007' AND idEquipo != 'EQU006' ORDER BY apellido1 ASC;";
             $resultadoNombre = mysqli_query($connection, $consultaNombre);
             $spreadsheet = new Spreadsheet();

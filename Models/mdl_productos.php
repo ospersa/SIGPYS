@@ -31,6 +31,7 @@ Class Producto {
 
     public static function busquedaTipoProductos ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_tiposproductos.idTProd, pys_tiposproductos.nombreTProd, pys_tiposproductos.descripcionTProd, pys_tiposproductos.costoSin, pys_tiposproductos.costoCon, pys_costos.costo, pys_costos.idClProd, pys_claseproductos.nombreClProd 
             FROM pys_tiposproductos
             INNER JOIN pys_servicios ON pys_tiposproductos.idSer = pys_servicios.idSer
@@ -80,6 +81,7 @@ Class Producto {
 
     public static function busquedaClaseProductos ($busqueda) {
         require('../Core/connection.php');
+        $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_claseproductos.idClProd, pys_claseproductos.nombreClProd, pys_claseproductos.nombreCortoClProd, pys_claseproductos.descripcionClProd, pys_costos.costo FROM pys_claseproductos
 		    INNER JOIN pys_servicios ON pys_claseproductos.idSer = pys_servicios.idSer
             INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
@@ -129,6 +131,8 @@ Class Producto {
             echo "<script> alert('Existe algún campo vacío. Registro no válido.');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/tipProductos.php">';
         } else {
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             /** Verificación de información existente en la tabla, para evitar duplicidad */
             $consulta = "SELECT idTProd FROM pys_tiposproductos WHERE idSer = '$servicio' AND nombreTProd = '$nombre' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
@@ -185,6 +189,8 @@ Class Producto {
             echo "<script> alert('Existe algún campo vacío. Registro no válido.');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/tipProductos.php">';
         } else {
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);            
             /** Verificación información existente en la tabla para evitar duplicidad */
             $consulta = "SELECT * FROM pys_tiposproductos WHERE idTProd = '$id';";
             $resultado = mysqli_query($connection, $consulta);
@@ -226,6 +232,9 @@ Class Producto {
             echo "<script> alert('Existe algún campo vacío. Registro no válido.');</script>";
             echo '<meta http-equiv="Refresh" content="0;url=../Views/claProductos.php">';
         } else {
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $nombreCorto = mysqli_real_escape_string($connection, $nombreCorto);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             /** Verificación información registrada en el tabla */
             $consulta = "SELECT idClProd FROM pys_claseproductos WHERE idSer = '$servicio' AND nombreClProd = '$nombre';";
             $resultado = mysqli_query($connection, $consulta);
@@ -276,6 +285,9 @@ Class Producto {
             echo '<meta http-equiv="Refresh" content="0;url=../Views/claProductos.php">';
         } else {
             /** Verificación información existente en la base de datos */
+            $nombre = mysqli_real_escape_string($connection, $nombre);
+            $nombreCorto = mysqli_real_escape_string($connection, $nombreCorto);
+            $descripcion = mysqli_real_escape_string($connection, $descripcion);
             $consulta = "SELECT pys_claseproductos.idSer, pys_claseproductos.nombreClProd, pys_claseproductos.nombreCortoClProd, pys_claseproductos.descripcionClProd, pys_costos.costo FROM pys_claseproductos 
                 INNER JOIN pys_costos ON pys_costos.idClProd = pys_claseproductos.idClProd
                 WHERE pys_claseproductos.idClProd = '$id' AND pys_costos.idTProd = '';";

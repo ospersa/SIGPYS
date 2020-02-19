@@ -49,8 +49,8 @@
                                     <th>Tiempo</th>
                                     <th>Nota</th>
                                     <th>Fase</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -89,6 +89,7 @@
                             $totmin = $totmin%60; 
                         }
                     }
+                    $idTiempo = $datos['idTiempo'];
                     $fecha = $datos['fechTiempo'];
                     $idSol = $datos['idSol'];
                     $codProy = $datos['codProy'];
@@ -116,6 +117,8 @@
                                 <td>'.$horaTiem.' Horas y '.$minTiem.' minutos </td>
                                 <td><p class="truncate">'.$notaTiempo.'</p></td>
                                 <td>'.$fase.'</td>
+                                <td><a href="#modalinfTiempos" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$idTiempo'".','."'modalinfTiempos.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
+                                <td><a href="#!" class="waves-effect waves-light" onclick="ocultarEditar(\''.$datos['idTiempo'].'\')" title="Suprimir"><i class="material-icons red-text">delete</i></a></td>
                                 </tr>';
                 }
                 $tabla .= '<tr>
@@ -164,6 +167,14 @@
             echo $tabla;
             echo '      </body>
                     </html>';
+        }
+
+        public static function llenarFormEditar($id){
+            require('../Core/connection.php');
+            $id = mysqli_real_escape_string($connection, $id);
+            $consulta = "SELECT * FROM pys_tiempos WHERE idTiempo = $id;";
+            $resultado = mysqli_query($connection, $consulta);
+            return $datos = mysqli_fetch_array($resultado);
         }
 
     }

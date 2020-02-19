@@ -40,6 +40,8 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT * FROM pys_cargos WHERE est='1' AND nombreCargo LIKE '%".$busqueda."%' ORDER BY nombreCargo;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
@@ -85,29 +87,49 @@
             else {
                 $codCargo='CAR'.substr((substr($max,3)+1001),1);	
             }		
+            $nomCargo = mysqli_real_escape_string($connection, $nomCargo);
+            $descCargo = mysqli_real_escape_string($connection, $descCargo);
+
             $sql="INSERT INTO pys_cargos VALUES ('$codCargo', '$nomCargo',  '$descCargo', '1');";
             $resultado = mysqli_query($connection, $sql);
-            mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            if($resultado){
+                echo "<script> alert ('Se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            } else{
+                echo "<script> alert ('No se guardó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            }
+                mysqli_close($connection);
         }
 
         public static function actualizarCargo($idCargo2, $nomCargo, $descCargo){
             require('../Core/connection.php');
-            $consulta = "UPDATE pys_cargos SET nombreCargo='$nomCargo', descripcionCargo='$descCargo' WHERE idCargo='$idCargo2';";
+            $nomCargo = mysqli_real_escape_string($connection, $nomCargo);
+            $descCargo = mysqli_real_escape_string($connection, $descCargo);
+            $consulta = "UPDATE pys_cargos SET nombreCargo='$nomCargo2', descripcionCargo='$descCargo' WHERE idCargo='$idCargo';";
             $resultado = mysqli_query($connection, $consulta);
+            if($resultado){
+                echo "<script> alert ('Se actualizó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            } else{
+                echo "<script> alert ('No se actualizó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se guardó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
         }
 
         public static function suprimirCargo($idCargo2){
             require('../Core/connection.php');
             $consulta = "UPDATE pys_cargos SET est = '0' WHERE idCargo='$idCargo2';";
             $resultado = mysqli_query($connection, $consulta);
+            if($resultado){
+                echo "<script> alert ('Se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            }else{
+                echo "<script> alert ('No se eliminó correctamente la información');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
+            }
             mysqli_close($connection);
-            echo "<script> alert ('Se eliminó correctamente la información');</script>";
-            echo '<meta http-equiv="Refresh" content="0;url=../Views/cargo.php">';
         }
     }
 

@@ -34,6 +34,12 @@
         <div class="divider"></div>
     </li>
     <li>
+        <a href="infMisTiempos.php">Mis Tiempos</a>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li>
         <a class="dropdown-trigger" href="#!" data-target="gestores">Gestor/Asesor RED
             <i class="material-icons right">arrow_drop_down</i>
         </a>

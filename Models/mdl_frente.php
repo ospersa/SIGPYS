@@ -54,6 +54,7 @@
 
         public static function busqueda($busqueda){
             require('../Core/connection.php');
+            $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta="SELECT pys_frentes.idFrente, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_cargos.nombreCargo 
                 FROM pys_frentes
                 INNER JOIN pys_personas ON pys_frentes.coordFrente = pys_personas.idPersona
@@ -103,6 +104,8 @@
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/frentes.php">';
             } else {
                 /** Verificación de información en la tabla para evitar duplicidad */
+                $nomFrente = mysqli_real_escape_string($connection, $nomFrente);
+                $descFrente = mysqli_real_escape_string($connection, $descFrente);
                 $consulta = "SELECT * FROM pys_frentes WHERE nombreFrente = '$nomFrente' AND coordFrente = '$coorFrente' AND est = '1';";
                 $resultado = mysqli_query($connection, $consulta);
                 $registros = mysqli_num_rows($resultado);
@@ -137,6 +140,8 @@
 
         public static function actualizarFrente($idFrente2, $nomFrente, $descFrente, $coorFrente){
             require('../Core/connection.php');
+            $nomFrente = mysqli_real_escape_string($connection, $nomFrente);
+            $descFrente = mysqli_real_escape_string($connection, $descFrente);
             $consulta = "UPDATE pys_frentes SET nombreFrente='$nomFrente', descripcionFrente='$descFrente', coordFrente='$coorFrente' WHERE idFrente='$idFrente2';";
             $resultado = mysqli_query($connection, $consulta);
             if($resultado){
