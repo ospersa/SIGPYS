@@ -48,7 +48,7 @@ class Personas {
         $consulta = "SELECT * 
             FROM pys_personas 
             WHERE est = '1' 
-            AND ((idCargo = 'CAR010') OR (idCargo = 'CAR012') OR (idCargo = 'CAR013') OR (idCargo = 'CAR014') OR (idCargo = 'CAR015') OR (idCargo = 'CAR016') OR (idCargo = 'CAR017') OR (idCargo = 'CAR019') OR (idCargo = 'CAR027') OR (idCargo = 'CAR033') OR (idCargo = 'CAR035') OR (idCargo = 'CAR036') OR (idCargo = 'CAR041')) 
+            AND ((idCargo = 'CAR010') OR (idCargo = 'CAR012') OR (idCargo = 'CAR013') OR (idCargo = 'CAR014') OR (idCargo = 'CAR015') OR (idCargo = 'CAR016') OR (idCargo = 'CAR017') OR (idCargo = 'CAR019') OR (idCargo = 'CAR027') OR (idCargo = 'CAR033') OR (idCargo = 'CAR035') OR (idCargo = 'CAR036') OR (idCargo = 'CAR041'))
             ORDER BY apellido1;";
         $resultado = mysqli_query($connection,$consulta);
         echo'   <table class="centered responsive-table">
@@ -92,9 +92,9 @@ class Personas {
     public static function completarInfo($idPeriodo){
         require('../Core/connection.php');
         $consulta = "SELECT * 
-            FROM ((dbpys.pys_dedicaciones 
-            INNER JOIN dbpys.pys_periodos ON pys_periodos.idPeriodo = pys_dedicaciones.periodo_IdPeriodo)
-            INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            FROM ((pys_dedicaciones 
+            INNER JOIN pys_periodos ON pys_periodos.idPeriodo = pys_dedicaciones.periodo_IdPeriodo)
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
             WHERE periodo_IdPeriodo = $idPeriodo 
             AND estadoDedicacion = '1';";
         $resultado = mysqli_query($connection, $consulta);
@@ -146,8 +146,8 @@ class Personas {
     public static function selectPersonas($idPeriodo){
         require('../Core/connection.php');
         $consulta = "SELECT idPersona, apellido1, apellido2, nombres
-            FROM (dbpys.pys_dedicaciones 
-            INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            FROM (pys_dedicaciones 
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
             WHERE periodo_IdPeriodo = '$idPeriodo' AND estadoDedicacion = '1' AND totalHoras != '0';";
         $resultado = mysqli_query($connection, $consulta);
         echo '  <select name="sltPersona" id="sltPersona">
@@ -164,8 +164,8 @@ class Personas {
     public static function selectPersonas2($idPeriodo){
         require('../Core/connection.php');
         $consulta = "SELECT idPersona, apellido1, apellido2, nombres
-            FROM (dbpys.pys_dedicaciones 
-            INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            FROM (pys_dedicaciones 
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
             WHERE periodo_IdPeriodo = '$idPeriodo' AND estadoDedicacion = '1' AND totalHoras != '0';";
         $resultado = mysqli_query($connection, $consulta);
         $string ='  <select name="sltPersona" class="inactivate" searchable="Ingrese un término de búsqueda" id="sltPersona" >
@@ -183,8 +183,8 @@ class Personas {
     public static function selectPersonasPlaneacion($idPeriodo){
         require('../Core/connection.php');
         $consulta = "SELECT idPersona, apellido1, apellido2, nombres
-            FROM (dbpys.pys_dedicaciones 
-            INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            FROM (pys_dedicaciones 
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
             WHERE periodo_IdPeriodo = '$idPeriodo' AND estadoDedicacion = '1';";
         $resultado = mysqli_query($connection, $consulta);
         echo '  <div class="input-field select-plugin">
@@ -203,8 +203,8 @@ class Personas {
     public static function validarPersonas($idPeriodo){
         require('../Core/connection.php');
         $consulta = "SELECT count(idDedicacion)
-            FROM (dbpys.pys_dedicaciones 
-            INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            FROM (pys_dedicaciones 
+            INNER JOIN pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
             WHERE periodo_IdPeriodo = '$idPeriodo' AND estadoDedicacion = '1';";
         $resultado = mysqli_query($connection, $consulta);
         $count = mysqli_num_rows($resultado);

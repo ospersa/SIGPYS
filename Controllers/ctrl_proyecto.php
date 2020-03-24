@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION['usuario'])) {
+    session_start();
+}
 /** Carga del Modelo */
 include_once('../Models/mdl_proyecto.php');
 
@@ -91,7 +94,6 @@ if ($id) {
 
 /** Procesamiento de peticiones para registro desde los formularios de proyectos */
 if (isset($_POST['btnRegistrarProy'])) {
-    session_start();
     $usserName      = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     $tipoProy       = (isset($_POST['sltTipoProy3'])) ? $_POST['sltTipoProy3'] : null;
     $celula         = (isset($_POST['sltCelula'])) ? $_POST['sltCelula'] : null;
@@ -113,7 +115,6 @@ if (isset($_POST['txt-search'])) {
 
 /** Procesamiento de peticiones para actualización de datos desde los formularios de proyectos */
 if ($val) {
-    session_start();
     $persona = $_SESSION['usuario'];
     if ($val == '1') {
         Proyecto::actualizarEtapa($idProy, $tipoProy, $nombreEta, $descripcionEta);

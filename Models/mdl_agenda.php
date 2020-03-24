@@ -24,17 +24,17 @@ class  PlaneacionAse{
         $diff = $fechafin - $fechaini;
         $diasFalt = (( ( $diff / 60 ) / 60 ) / 24);
         $string = "";
-        for($i=1;$i<$diaIni;$i++){
-            $string .= '<div class="col s2 m2 l2">
+        for($i=0;$i<$diaIni;$i++){
+            $string .= '<div>
             <div class="card">
                 <div class="card-content grey" type="button">
-                    <h6 class="card-stats-number transparent-text">--00</h6>
+                    <h6 class="card-stats-number transparent-text">00-00-0000</h6>
                 </div>
             </div>
         </div>';
         }
         
-        for($i=0;$i<=$diasFalt;$i++){
+        for($i=1;$i<=$diasFalt;$i++){
             $fechaDia = date("d-m-Y", strtotime( '+'.$i.' day', $fechaini ));
             $diafech = date('w', strtotime($fechaDia));
             $conteo = self::ValidacionPlaneacionDia($fechaDia, $usuario);
@@ -58,32 +58,22 @@ class  PlaneacionAse{
                 $color = 'teal lighten-5 w';
                 $letra = "black";
             }
-            if($diafech != 0 && $diafech != 7){
-            $string .= '
-            <div class="col s2 m2 l2">
-                <div class="card">
-                    <div class="fechPer card-content '.$color.' '.$letra.'-text" type="button" onclick ="cargarResAgenda(\''.$fechaDia.'\',$(this))">
-                    <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
-                    </div>
-                </div>
-            </div>';
-            } else if($diafech == 7){
                 $string .= '
-            <div class="col s2 m2 l2">
-                <div class="card">
-                    <div class="card-content grey white-text" type="button">
-                    <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
+                <div>
+                    <div class="card">
+                        <div class="fechPer card-content '.$color.' '.$letra.'-text" type="button" onclick ="cargarResAgenda(\''.$fechaDia.'\',$(this))">
+                        <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
+                        </div>
                     </div>
-                </div>
-            </div>';
-            }
+                </div>';
+            
         }
         if($diaFin !=0){
-            for($j=$diaFin+1;$j<7;$j++){
-                $string .= '<div class="col s2 m2 l2">
+            for($j=$diaFin+1;$j<=7;$j++){
+                $string .= '<div>
                 <div class="card">
                     <div class="card-content grey " type="button">
-                        <h6 class="card-stats-number transparent-text ">--00</h6>
+                        <h6 class="card-stats-number transparent-text ">00-00-0000</h6>
                     </div>
                 </div>
             </div>';
@@ -117,7 +107,7 @@ class  PlaneacionAse{
         require('../Core/connection.php');
         $string = "";
         $numero = 1;
-        $consulta = "SELECT pys_actsolicitudes.idSol, pys_solicitudes.descripcionSol FROM pys_solicitudes 
+        $consulta = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_solicitudes.descripcionSol FROM pys_solicitudes 
         INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
         INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
         INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
@@ -129,8 +119,8 @@ class  PlaneacionAse{
         if (mysqli_num_rows($resultado) > 0 ) {
             while ($datos = mysqli_fetch_array($resultado)) {
                 $idSol = $datos['idSol'];
-                $descripcionSol = $datos['descripcionSol'];
-                $hDispo =PlaneacionAse::horasDisponibles($idSol, $user, $periodo);
+                $descripcionSol = $datos['ObservacionAct'];
+                $hDispo =PlaneacionAse::horasDisponibles($idSol, $user);
                 if ($hDispo ==0){
                     $hDispo ='0';
                 }
@@ -281,7 +271,7 @@ class  PlaneacionAse{
          
     }
 
-    public static function horasDisponibles($idSol, $usuario, $periodo){
+    public static function horasDisponibles($idSol, $usuario){
         require('../Core/connection.php');
         $horaAge = 0;
         $minutosAge = 0;
@@ -476,7 +466,7 @@ class  PlaneacionAse{
     Estado 2 son las actividades ya registradas en tiempos
     Estado 3 son las actividades Canceladas y no registradas en tiempos
     */
-
+                    
     public static function cambiarEstadoAgenda($fecha, $usuario, $idSol, $idAgenda, $hora, $min, $obs, $estado, $sltFase, $fechaCambio){
         require('../Core/connection.php');
         $resultadoUpdate = false;
@@ -651,7 +641,7 @@ class  PlaneacionAse{
     }
 
     
-    public static function registrarTiemposAge($idAgenda, $fase, $fecha, $usuario){
+    public static function registrarTiemposAge($idAgenda, $fase, $usuario){
         require('../Core/connection.php');   
         $json = array();   
         if($idAgenda != [] && $fase != [] ){

@@ -36,6 +36,12 @@ require('../Controllers/ctrl_restriccionMenu.php');
     <li>
         <div class="divider"></div>
     </li>
+    <li>
+        <a href="infMisTiempos.php">Mis Tiempos</a>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
     <?php 
     if($validar == true){
         echo '

@@ -183,9 +183,9 @@
         <li>
             <a href="infEjecuciones.php">Ejecuciones</a>
         </li>
-        <!--<li>
+        <li>
         <a href="infEjecuProdSer.php">Ejecuciones Productos/Servicios</a>
-    </li>-->
+    </li>
         <li>
             <a href="infNomina.php">Nómina</a>
         </li>

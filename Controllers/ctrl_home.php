@@ -1,8 +1,9 @@
 <?php
 /* Inicializar variables de sesión */
-if(!isset($_SESSION)) { 
+if (!isset($_SESSION['usuario'])) {
     session_start();
 }
+
 $usuario    = $_SESSION['usuario'];
 $perfil     = $_SESSION['perfil'];
 /* Inclusión del Modelo */
@@ -14,7 +15,6 @@ $chart      = (isset($_POST['action'])) ? $_POST['action'] : null;
 
 /* Carga de información en el Modal */
 
-      
 /* Procesamiento peticiones al controlador */
 $agenda = Home::agendaDia($usuario);
 $solicitudes = Home::solicitudesAsig($usuario);

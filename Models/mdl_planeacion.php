@@ -463,7 +463,7 @@ class Planeacion{
         mysqli_close($connection);
     }
 
-    public static function actualizarRegistro($idAsignado, $idDedicacion, $hrsInvertir, $mtsInvertir, $ ) {
+    public static function actualizarRegistro($idAsignado, $idDedicacion, $hrsInvertir, $mtsInvertir, $observacion ) {
         require('../Core/connection.php');
         $observacion = mysqli_real_escape_string($connection, $observacion);
         if ($hrsInvertir == null && $mtsInvertir == null && $observacion != null) {

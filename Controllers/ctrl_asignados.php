@@ -1,4 +1,7 @@
 <?php
+if(!isset($_SESSION)) { 
+    session_start();
+}
 /*Inclusión del Modelo */
 include_once('../Models/mdl_asignados.php');
 include_once('../Models/mdl_enviarEmail.php');
@@ -54,7 +57,6 @@ if (isset($_GET['cod1'])) {
 }
 
 if (isset($_POST['btnAsignar'])) {
-    session_start();
     $registra   = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
     $rol        = (isset($_POST['sltRol'])) ? $_POST['sltRol'] : null;
     $persona    = (isset($_POST['sltPersona'])) ? $_POST['sltPersona'] : null;

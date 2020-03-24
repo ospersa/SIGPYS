@@ -25,7 +25,7 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Port       = 587;                                    
 
                 //Recipients
-                $mail->setFrom('produccionysoporte@gmail.com', 'Conecta-Te');
+                $mail->setFrom('produccionysoporte@gmail.com', 'Conecta-TE : PyS');
                 if( $solicitante != null){
                     $mail->addAddress($solicitante, ''); 
                     foreach($arrayccEmail as $item) {

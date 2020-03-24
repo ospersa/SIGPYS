@@ -17,3 +17,4 @@ mysqli_close($connection);
 //Redireccionamos a el index
 header("Location: /");
 die();
+?>

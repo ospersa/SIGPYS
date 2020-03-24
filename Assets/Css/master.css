@@ -379,13 +379,22 @@ td:hover .truncate, .trunca:hover .truncate {
     font-size: 15px; }
 
 .dia {
-  width: 100%;
-  padding: 10px 15px !important;
+  table-layout: fixed;
+  width: 50px;
+  padding: 10px 10px !important;
   text-align: center;
   font-size: 100%;
   background: teal; }
   .dia h6 {
     color: white; }
+
+.tablaAgenda {
+  border-collapse: inherit; }
+
+.tdAgenda {
+  width: 1.7px;
+  text-align: center;
+  font-size: 100%; }
 
 .btnmas {
   display: -webkit-box;
@@ -490,3 +499,26 @@ td:hover .truncate, .trunca:hover .truncate {
   bottom: 10px;
   position: fixed;
   right: 20px; }
+
+div#card-stats {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex; }
+  div#card-stats > div {
+    min-width: 14%; }
+  div#card-stats ~ .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap; }
+    div#card-stats ~ .row > div {
+      min-width: 14%;
+      max-width: 14%; }
+      div#card-stats ~ .row > div h6 {
+        font-size: 13px; }

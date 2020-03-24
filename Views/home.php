@@ -1,9 +1,8 @@
-<div class="home">
 <?php
 require('../Estructure/header.php');
 require('../Controllers/ctrl_home.php');
 ?>
-
+<div class="home">
 <div class="row">
 	<div class=" col l9 m9 s12 ">
 		<div class="col l12 m12 s12 ">
@@ -105,7 +104,9 @@ require('../Controllers/ctrl_home.php');
 		</div>
 	</div>
 </div>
+
+</div>
+
 <?php
 require('../Estructure/footer.php');
 ?>
-</div>

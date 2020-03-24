@@ -1,8 +1,8 @@
 <?php
-/* Inicializar variables de sesión */
-if(!isset($_SESSION)) { 
+if (!isset($_SESSION['usuario'])) {
     session_start();
 }
+
 /* Inclusión del Modelo */
 include_once "../Models/mdl_agenda.php";
 include_once "../Models/mdl_personas.php";
@@ -29,8 +29,8 @@ $usuario    = $_SESSION['usuario'];
 $registrados = "";        
 
 /*
-cod = 1 si se va ha realizar el registro de tiempo
-cod = 2 si se va ha cancelar la actividad en la agenda
+cod = 1 si se va a realizar el registro de tiempo
+cod = 2 si se va a cancelar la actividad en la agenda
 */
 
 
@@ -63,8 +63,7 @@ else if (isset($_POST['btnActAgenda'])){
     PlaneacionAse::cambiarEstadoAgenda(date("Y-m-d", strtotime($fecha)), $usuario, $idSol, $idAgenda, $horas, $min, $obser, 3, $sltFase, $fechaCambio);
 }
 else if (isset($_POST['idAgenda']) && isset($_POST['sltFaseEdit'])){
-   return $registrado = PlaneacionAse::registrarTiemposAge($idAgenda, $sltFase, $fecha, $usuario);
+   return $registrado = PlaneacionAse::registrarTiemposAge($idAgenda, $sltFase, $usuario);
     $_SESSION['registrado']= $registrado;
 }  
-
 ?>

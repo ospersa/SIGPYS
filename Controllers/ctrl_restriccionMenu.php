@@ -1,6 +1,6 @@
 <?php
 /* Inicializar variables de sesión */
-if(!isset($_SESSION)) { 
+if(!isset($_SESSION['usuario'])) { 
     session_start();
 }
 

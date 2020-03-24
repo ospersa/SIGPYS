@@ -1,5 +1,5 @@
 <?php
-if(!isset($_SESSION)) { 
+if(!isset($_SESSION['usuario'])) { 
     session_start();
 }
 include_once('../Models/mdl_terminacionProductoServicio.php');

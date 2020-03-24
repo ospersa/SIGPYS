@@ -1,10 +1,10 @@
 <?php
+if(!isset($_SESSION['usuario'])){ 
+    session_start();
+}
 /* Inclusión del Modelo */
 include_once('../Models/mdl_solicitudEspecifica.php');
 include_once('../Models/mdl_tiempos.php');
-if(!isset($_SESSION)){ 
-    session_start();
-}
 /* Inicialización variables*/
 $user           = $_SESSION['usuario'];
 $idSolEsp       = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;

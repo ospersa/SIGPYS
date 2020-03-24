@@ -344,7 +344,7 @@ Class Cotizacion {
     public static function enviarCorreoCotizacion($solEsp, $solIni, $codProy, $nomProy, $obsProd, $obsProdCot, $valCot, $obsSol, $idProy, $idCot, $totRec, $accion) {
         require('../Core/connection.php');
         require('../Models/mdl_enviarEmail.php');
-        $consulta = "SELECT * FROM dbpys.pys_actsolicitudes 
+        $consulta = "SELECT * FROM pys_actsolicitudes 
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_actsolicitudes.idSolicitante
             WHERE idSol = '$solIni'
             AND pys_actsolicitudes.est = '1'
@@ -352,7 +352,7 @@ Class Cotizacion {
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
         $copia = "apoyoconectate@uniandes.edu.co;";
-        $consulta2 = "SELECT pys_personas.correo FROM dbpys.pys_asignados 
+        $consulta2 = "SELECT pys_personas.correo FROM pys_asignados 
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
             WHERE idProy = '$idProy' AND (idRol = 'ROL024' OR idRol = 'ROL025')
             AND pys_personas.est = '1'
@@ -513,7 +513,7 @@ Class Cotizacion {
 
     public static function obtenerPersonaRegistra($usuario) {
         require('../Core/connection.php');
-        $consulta = "SELECT idPersona FROM dbpys.pys_login WHERE usrLogin = '$usuario';";
+        $consulta = "SELECT idPersona FROM pys_login WHERE usrLogin = '$usuario';";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
         return $datos;

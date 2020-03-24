@@ -19,7 +19,7 @@
                 <table class="left responsive-table">
                     <thead>
                         <tr>
-                            th>Empresa</th>
+                            <th>Empresa</th>
                             <th>Facultad</th>
                             <th>Departamento</th>
                             <th>Director Departamento</th>

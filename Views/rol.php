@@ -43,3 +43,4 @@ require_once('../Controllers/ctrl_rol.php');
 </div>
 <?php
 require('../Estructure/footer.php');
+?>

@@ -6,7 +6,7 @@
         <h4>Editar tiempo resgistrado</h4>
     </div>
     <div class="row">
-        <form id="edit" action="../Controllers/ctrl_regtime.php" method="post">
+        <form id="editTiempo" action="../Controllers/ctrl_infMisTiempos.php" method="post">
             <input id="idTiempo" name="idTiempo" value="<?php echo $idTiempo?>" type="hidden">
             <div class="input-field col s12 m2 l2">
                 <input id="dateEdit" name="dateEdit" type="text" value='<?php echo $fechTiempo?>' class="datepicker">
@@ -29,7 +29,7 @@
                 <label class="active" for="notaTEdit">Nota:</label>
             </div>
             <div class="input-field col s12">
-                <button class="btn waves-effect waves-light" type="submit" name="btnActRegTiempo">Actualizar</button>
+                <button class="btn waves-effect waves-light" type="submit" onclick="actTiempo();" name="btnActRegTiempo">Actualizar</button>
             </div>
         </form>
     </div>

@@ -1,10 +1,10 @@
 <?php
+if(!isset($_SESSION['usuario'])){ 
+    session_start();
+}
 /* Inclusión del Modelo */
 include_once('../Models/mdl_inventario.php');
 include_once('../Models/mdl_solicitudEspecifica.php');
-if(!isset($_SESSION)){ 
-    session_start();
-}
 /* Inicialización variables*/
 $usuario    = $_SESSION['usuario'];
 $perfil = $_SESSION['perfil'];

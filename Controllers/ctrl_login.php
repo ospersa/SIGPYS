@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION['usuario'])) {
+	session_start();
+}
 //Conectamos a la base de datos
 require('../Core/connection.php');
 include_once('../Models/mdl_login.php');
@@ -61,8 +64,7 @@ if ($invitado == 1){
 		}
 	} 
 	if(($userBD == $userPOSTMinusculas) && $validacion){ //Comprobamos si los datos son correctos
-		if(!isset($_SESSION)){ 	
-			session_start();
+		if(!isset($_SESSION['usuario'])){
 			$_SESSION['invitado'] = '';
 			$_SESSION['usuario'] = $userBD;
 			$_SESSION['estado'] = 'Autenticado';
@@ -82,6 +84,4 @@ if ($invitado == 1){
 		</script> Error');
 	}
 }
-
-
-
+?>

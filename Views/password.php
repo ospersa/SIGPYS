@@ -65,3 +65,4 @@ require('../Controllers/ctrl_password.php');
 </div>
 <?php
 require('../Estructure/footer.php');
+?>

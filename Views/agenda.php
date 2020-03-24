@@ -19,24 +19,29 @@ if( !empty( $hoy ) ){
             <div class="card">
                 <div class="card-content">
                     <div id="card-stats" class="row">
-                        <div class="dia col s2 m2 l2">
-                            <h6>Lunes</h6>
+                        <div class="dia ">
+                        <h6>Lunes</h6>
                         </div>
-                        <div class="dia col s2 m2 l2">
-                            <h6>Martes</h6>
+                        <div class="dia ">
+                        <h6> Martes</h6>
                         </div>
-                        <div class="dia col s2 m2 l2">
-                            <h6>Miércoles</h6>
+                        <div class="dia ">
+                        <h6>Miércoles</h6>
                         </div>
-                        <div class="dia col s2 m2 l2">
-                            <h6>Jueves</h6>
+                        <div class="dia ">
+                        <h6>Jueves</h6>
                         </div>
-                        <div class="dia col s2 m2 l2">
+                        <div class="dia ">
                             <h6>Viernes</h6>
                         </div>
-                        <div class="dia col s2 m2 l2">
+                        <div class="dia ">
                             <h6>Sabado</h6>
                         </div>
+                        <div class="dia ">
+                            <h6>Domingo</h6>
+                        </div>
+                    </div>
+                    <div class="row">
                         <?php echo $panel;?>
                     </div>
                 </div>

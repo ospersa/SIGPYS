@@ -468,8 +468,9 @@ td, .trunca {
 }
 
 .dia{
-    width: 100%;
-    padding: 10px 15px !important;
+    table-layout: fixed;
+    width: 50px;
+    padding: 10px 10px !important;
     text-align: center;
     font-size: 100%;
     background: teal;
@@ -479,6 +480,18 @@ td, .trunca {
     }
         
 }
+
+.tablaAgenda{
+    border-collapse: inherit;
+    
+}
+
+.tdAgenda{
+    width: 1.7px;
+    text-align: center;
+    font-size: 100%;
+}
+
 .btnmas{
     display: flex;
     justify-content: space-between !important;
@@ -551,4 +564,22 @@ td, .trunca {
     position: fixed;
     right: 20px;
     
+}
+
+div#card-stats {
+    display: flex;
+    & > div {
+        min-width: 14%;
+    }
+    &~.row {
+        display: flex;
+        flex-wrap: wrap;
+        & > div {
+            min-width: 14%;
+            max-width: 14%;
+            h6 {
+                font-size: 13px;
+            }
+        }
+    }
 }

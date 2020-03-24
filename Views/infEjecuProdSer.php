@@ -15,6 +15,10 @@ require_once('../Controllers/ctrl_infEjecuProdSer.php');
                     <input type="text" name="txtFechFin" id="txtFechFin" class="datepicker" placeholder="aaaa/mm/dd">
                     <label for="txtFechFin">Fecha hasta</label>
                 </div>
+                <div class="input-field col l2 m12 s12 ">
+                    <input id="diasLab" name="diasLab" type="number" value="" min="0" >
+                    <label class="active" for="diasLab">Días laborales del mes</label>
+                </div>
             </div>
             <div class="row" id = "proyecInf" >
                 <div class="input-field col l2 m2 s12 offset-l2 offset-m1">

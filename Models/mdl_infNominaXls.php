@@ -402,11 +402,11 @@ Class InformeNomima {
                         $minutosPeriodo = $hrsPeriodo * 60; // Total de minutos a trabajar en un periodo (160 horas)
                         $porcentaje = ($totalMinutos / $minutosPeriodo);
                         $porcentajeAcum += $porcentaje;
-                        array_push($informacion, $porcentaje);
+                        array_push($informacion, number_format($porcentaje,2));
                     }
                     //
                 }
-                $promedio = ($porcentajeAcum/$mes);
+                $promedio = (number_format($porcentajeAcum/$mes,2));
                 $totalHoras = $totalMinutos / 60;
                 array_push($informacion,$promedio);
                 array_push($informacion,number_format($totalHoras, 2));
@@ -415,7 +415,7 @@ Class InformeNomima {
             }
             $col = count($informacion)+64;
             $sheet->setCellValue('A1', 'Informe de Nomina');
-        $sheet->mergeCells("A1:".chr($col)."1");
+            $sheet->mergeCells("A1:".chr($col)."1");
         
             $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(STYLETABLETI);
             $spreadsheet->getActiveSheet()->getStyle('A3:'.chr($col).'3')->applyFromArray(STYLETABLETITLE);    

@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION['usuario'])) {
+    session_start();
+}
 /* Inclusión del Modelo */
 include_once('../Models/mdl_solicitudInicial.php');
 
@@ -44,7 +47,6 @@ if (isset($_REQUEST['id'])) {
 
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['btnRegistrarSolIni']) && !isset($_POST['val']) && !isset($_POST['cod'])) {
-    session_start();
     $solicitud = $_POST['txtIdSol'];
     $idTipo = $_POST['txtIdTipSol'];
     $idEstado = $_POST['txtIdEstSol'];

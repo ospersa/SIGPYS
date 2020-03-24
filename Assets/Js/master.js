@@ -15,7 +15,8 @@ $('.modal').on('change', function () {
 $(document).ready(function () {
     let path = window.location.pathname;
     let comp = path.split("/")
-    if (comp[3] == 'home.php') {
+    if (comp[2] == 'home.php') {
+        $('main').css('background-color','#2D3340')
         if ($('#chartSolicitud')) {
             chartSolicitud();
         }
@@ -525,6 +526,15 @@ $(document).ready(function () {
         
     });
     
+    $('#txtDesc').mouseenter(function(){
+        $('#txtDesc').removeClass("truncate");
+        
+    });
+
+    $('#txtDesc').mouseleave(function(){
+        $('#txtDesc').addClass("truncate");
+        
+    });
 
 });
 
@@ -558,6 +568,8 @@ function editarRegistro(idTiempo) {
 };
 
 function ocultarEditar(id) {
+    let path = window.location.pathname;
+    let comp = path.split("/")
     var mensaje = confirm("¿Esta seguro de eliminar el Registro?");
     //Detectamos si el usuario acepto el mensaje
     if (mensaje) {
@@ -569,14 +581,16 @@ function ocultarEditar(id) {
             },
             success: function (data) {
                 alert(data);
-                location.reload();
+                if (comp[2] == 'infMisTiempos.php') {
+                    buscar('../Controllers/ctrl_infMisTiempos.php');
+                } else{
+                    location.reload();
+                }
             }
         });
     }
 
 }
-
-
 
 function confirPassword(val1, val2, boton) {
     val1 = $(val1).val();
@@ -697,9 +711,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[3] == 'agenda.php') {
+    if (comp[2] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[3] == 'agendaAdmin.php') {
+    } else if (comp[2] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();
@@ -1615,6 +1629,21 @@ function mostrardivVisit() {
     });
 }
 
+function actTiempo(){
+    $("#editTiempo").submit(function(e){
+        e.preventDefault();
+    });
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_infMisTiempos.php',
+        data: $("#editTiempo").serialize(),
+        success: function (data) {
+            alert(data);
+            buscar('../Controllers/ctrl_infMisTiempos.php');
+            $("#modalinfTiempos").modal('close')
+        }
+    });
+}
 
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {

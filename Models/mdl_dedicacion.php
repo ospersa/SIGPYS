@@ -3,10 +3,10 @@
 
         public static function onLoad($idDedicacion){
             require('../Core/connection.php');
-                return $consulta = "SELECT * 
-                FROM ((dbpys.pys_dedicaciones 
-                INNER JOIN dbpys.pys_periodos ON pys_periodos.idPeriodo = pys_dedicaciones.periodo_IdPeriodo)
-                INNER JOIN dbpys.pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
+            $consulta = "SELECT * 
+                FROM ((pys_dedicaciones 
+                INNER JOIN pys_periodos ON pys_periodos.idPeriodo = pys_dedicaciones.periodo_IdPeriodo)
+                INNER JOIN pys_personas ON pys_personas.idPersona = pys_dedicaciones.persona_IdPersona)
                 WHERE estadoDedicacion='1' and idDedicacion ='".$idDedicacion."';";
             $resultado = mysqli_query($connection, $consulta);
             $datos =mysqli_fetch_array($resultado);

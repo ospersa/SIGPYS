@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION['usuario'])) {
+    session_start();
+}
 /* Carga del Modelo */
 include_once("../Models/mdl_solicitud.php");
 
@@ -41,7 +44,6 @@ if (isset($_POST['btnActEstSol'])) { // Actualización de estado de solicitud
 
 /* Petición de actualización de solicitud inicial */
 if (isset($_POST['btnActualizarSolIni'])) {
-    session_start();
     $idSolicitud = $_POST['txtIdSol'];
     $estSolicitud = $_POST['sltEstadoSolicitud'];
     $observacion = $_POST['txtObservacion2'];

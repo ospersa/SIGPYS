@@ -223,6 +223,12 @@
             $tiempoM = mysqli_real_escape_string($connection, $tiempoM);
             $tiempoH = mysqli_real_escape_string($connection, $tiempoH);
             $fecha = mysqli_real_escape_string($connection, $fecha);
+            $fechaAct = date("Y-m-d");
+            $consultaP = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
+            $resultadoP = mysqli_query($connection, $consultaP);
+            $datos = mysqli_fetch_array($resultadoP);
+            $inicioPer = $datos['inicioPeriodo'];
+            $finPer = $datos['finPeriodo'];
             $consultaTiempos = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos
             INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
             INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
@@ -233,19 +239,25 @@
             $hora = $datos['SUM(pys_tiempos.horaTiempo)'];
             $min = $datos['SUM(pys_tiempos.minTiempo)'];
             $total = (($hora + $tiempoH)*60) + $min + $tiempoM;
-            if ($total <= 720){
-                $consulta = "UPDATE pys_tiempos SET fechTiempo = '$fecha', notaTiempo ='$nota', horaTiempo = '$tiempoH', minTiempo ='$tiempoM', idFase = '$fase' WHERE idTiempo = '$id'";
-                $resultado = mysqli_query($connection, $consulta);
-                if ($resultado) {                    
-                    echo "<script> alert ('Se guardó correctamente la información');</script>";
-                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
-                } else { 
-                    echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+            if ($inicioPer <= $fecha && $finPer >= $fecha){
+                if ($total <= 720){
+                    $consulta = "UPDATE pys_tiempos SET fechTiempo = '$fecha', notaTiempo ='$nota', horaTiempo = '$tiempoH', minTiempo ='$tiempoM', idFase = '$fase' WHERE idTiempo = '$id'";
+                    $resultado = mysqli_query($connection, $consulta);
+                    if ($resultado) {                    
+                        echo "<script> alert ('Se guardó correctamente la información');</script>";
+                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                    } else { 
+                        echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+                    }
+                } else{
+                    echo "<script> alert ('No se realizo el registro. Hay mas de 12 horas registradas');</script>";
                     echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
                 }
-            } else{
-                echo "<script> alert ('No se realizo el registro. Hay mas de 12 horas registradas');</script>";
+            } else {
+                echo "<script> alert ('El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente.');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
+
             }
             mysqli_close($connection);   
         }

@@ -1,7 +1,7 @@
 <?php
-//Iniciamos la sesión
-session_start();
-
+if (!isset($_SESSION['usuario'])) {
+    session_start();
+}
 //Pedimos el archivo que controla la duración de las sesiones
 require('../Core/sessions.php');
 ?>

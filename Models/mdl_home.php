@@ -43,7 +43,7 @@
                                     <p class="left-align black-text">Tiempo: '.$horaAgenda.' Horas '.$minAgenda.' Minutos  </p>
                                 </div>
                                 <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                                    <p class="left-align black-text">Actividad:'.$notaAgenda.'</p>
+                                    <p class="left-align black-text">Actividad: '.$notaAgenda.'</p>
                                 </div>
                                 
                             </div>

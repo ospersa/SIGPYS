@@ -1,7 +1,9 @@
 <?php
+if (!isset($_SESSION['usuario'])) {
+    session_start();
+}
 /* Inclusión del Modelo */
 include_once('../Models/mdl_solicitudEspecifica.php');
-//session_start();
 
 /* Inicialización variables*/
 $search             = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
@@ -33,7 +35,6 @@ if (isset($_POST['txt-search'])) {
 }
 
 if (isset($_POST['btnRegistrarSolEsp'])) {
-    session_start();
     $idSolIni = $_POST['txtIdSol'];
     $tipoSol = $_POST['txtIdTipoSol'];
     $estadoSol = $_POST['txtIdEstadoSol'];
@@ -69,7 +70,6 @@ if (isset($_REQUEST['id'])) {
 }
 
 if (isset($_POST['btnActualizarSolEsp'])) {
-    session_start();
     $solIni = $_POST['txtSolIni'];
     $solEsp = $_POST['txtSolEsp'];
     $tipoSol = $_POST['txtIdTipoSol'];

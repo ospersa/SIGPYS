@@ -93,7 +93,7 @@ const STYLEBODY = ['font' => [
 
     Class InformeEjecucion {
         
-        public static function busqueda ($proyecto, $frente, $fechaini, $fechafin) {
+        public static function busqueda ($proyecto, $frente, $fechaini, $fechafin, $diasLab) {
             $totPresupuesto = 0;
             $minutos = 0;
             $horas = 0;
@@ -130,7 +130,8 @@ const STYLEBODY = ['font' => [
                     <th>Producto/servicio</th>
                     <th>Presupuesto Producto/servicio</th>
                     <th>Asignado</th>
-                    <th>Tiempo invertido</th>
+                    <th>Tiempo invertido (Horas)</th>
+                    <th>Porcentaje invertido</th>
                     <th>Valor Producto/Servicio</th>
                     </tr>
                 </thead>
@@ -163,7 +164,7 @@ const STYLEBODY = ['font' => [
                         $sql2="SELECT pys_asignados.idAsig, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idPersona
                         FROM pys_asignados
                         INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
-                        WHERE pys_asignados.est = '1' AND  pys_asignados.idSol='$fila1[0]'
+                        WHERE  (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_asignados.idSol='$fila1[0]'
                         ORDER BY pys_personas.apellido1;";
                         $cs2=mysqli_query($connection, $sql2);
                         while ($fila2 = mysqli_fetch_array($cs2)) {
@@ -212,8 +213,16 @@ const STYLEBODY = ['font' => [
                                 $valorTot = $tiempo * $valorMin;
                                 $valTot = $valTot + $valorTot;
                             }
+                            $tiem = round($hor+($minu/60),2);
+                            if($diasLab != null){
+                                $horasMes = $diasLab*8;
+                                $porcen = ($tiem/$horasMes)*100;
+                            } else {
+                                $porcen = intval(0);
+                            }
                             echo'
-                                <td>'.$hor.' Horas y '.$minu.' Minutos </td>
+                                <td>'.$tiem.'</td>
+                                <td>'.round($porcen, 2).'%</td>
                                 <td>$ '.round($valTot, 2).'</td>
                                 </tr>';
                             $minTot = $minTot + $minu;
@@ -241,6 +250,7 @@ const STYLEBODY = ['font' => [
                             $hor = 0;
                             $valorTot = 0;
                             $valTot = 0;
+                            
                         }
                         echo'
                         <tr>
@@ -275,16 +285,16 @@ const STYLEBODY = ['font' => [
             }
         }
 
-        public static function descarga ($proyecto, $frente, $fechaini, $fechafin) {
+        public static function descarga ($proyecto, $frente, $fechaini, $fechafin, $diasLab) {
             require('../Core/connection.php');
             if ($proyecto == "sltProy" && $frente == null){
-                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+                $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' ORDER BY codProy asc;";
             } else if($frente != null && $proyecto == "" ){
-                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+                $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' AND idFrente = '$frente' ORDER BY codProy asc;";
             }else {
-                $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
+                $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
                 WHERE est = '1' AND idProy='$proyecto' ORDER BY codProy asc;";
             }
             $resultado = mysqli_query($connection, $consulta);
@@ -313,8 +323,9 @@ const STYLEBODY = ['font' => [
                 $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(46);
                 $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
                 $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(39);
-                $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(22);
-                $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(22);
+                $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+                $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+                $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(22);
                 $sheet = $spreadsheet->getActiveSheet();
                 $sheet->setCellValue('A1', 'Informe Ejecuciones Productos/Servicios');
                 if ($fechaini != null && $fechafin != null){
@@ -322,9 +333,9 @@ const STYLEBODY = ['font' => [
                 }
                 $sheet->mergeCells("A1:J1");
                 $sheet->mergeCells("A4:J4");
-                $titulos=['Proyecto', 'Cod. Producto/servicio', 'Estado', 'Producto/servicio','Presupuesto Producto/servicio', 'Asignado', 'Tiempo invertido', 'Valor Producto/Servicio'];
+                $titulos=['Proyecto', 'Cod. Producto/servicio', 'Estado', 'Producto/servicio','Presupuesto Producto/servicio', 'Asignado', 'Tiempo invertido (Horas)', 'Porcentaje invertido', 'Valor Producto/Servicio'];
                 $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
-                $spreadsheet->getActiveSheet()->getStyle('A6:H6')->applyFromArray(STYLETABLETITLE);
+                $spreadsheet->getActiveSheet()->getStyle('A6:I6')->applyFromArray(STYLETABLETITLE);
                 $fila = 7;
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $totPresupuesto = 0;
@@ -340,6 +351,7 @@ const STYLEBODY = ['font' => [
                     $horPer = 0;
                     $minPer = 0;
                     $valTotProy = 0;
+                    $porcenTotal = 0;
                     $proy = $datos['codProy'].' '.$datos['nombreProy'];
                     $spreadsheet->getActiveSheet()->setCellValue('A'.$fila, $proy);
                     $idProy = $datos['idProy'];
@@ -362,111 +374,128 @@ const STYLEBODY = ['font' => [
                             $nombreEstSol = $datos1['nombreEstSol'];
                             $totPresupuesto += $datos1['presupuesto'];
                             $filaSol = $fila;
-                            $producto =['P'.$idSol, $nombreEstSol, $ObservacionAct, $presupuesto];
-                            $spreadsheet->getActiveSheet()->fromArray($producto,null,'B'.$fila);
                             $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
                             $consulta2 = "SELECT pys_asignados.idAsig, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idPersona
                             FROM pys_asignados
                             INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
-                            WHERE pys_asignados.est = '1' AND  pys_asignados.idSol='$idSol'
+                            WHERE  (pys_asignados.est = '1' OR pys_asignados.est = '2') AND  pys_asignados.idSol='$idSol'
                             ORDER BY pys_personas.apellido1;";
                             $resultado2 = mysqli_query($connection, $consulta2);
-                            while ($datos2 = mysqli_fetch_array($resultado2)) {
-                                $nombre = $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres'];
-                                $idAsig = $datos2['idAsig'];
-                                $idPersona = $datos2['idPersona'];
-                                if ($fechaini != null && $fechafin != null){
-                                    $consulta3="SELECT SUM(horaTiempo) AS horas, SUM(minTiempo) AS minutos, fechTiempo  FROM pys_tiempos
-                                    WHERE estTiempo = '1' AND idAsig = '$idAsig' AND (fechTiempo >= '$fechaini' AND fechTiempo <= '$fechafin')
-                                    GROUP BY fechTiempo;";    
-                                } else {
-                                    $consulta3="SELECT SUM(horaTiempo) AS horas, SUM(minTiempo) AS minutos, fechTiempo  FROM pys_tiempos
-                                    WHERE estTiempo = '1' AND idAsig = '$idAsig' GROUP BY fechTiempo;";  
-                                }
-                                $resultado3 = mysqli_query($connection, $consulta3);
-                                while ($datos3 = mysqli_fetch_array($resultado3)) {
-                                    $fechTiempo = $datos3['fechTiempo'];
-                                    $minutos = $datos3['minutos'] + $minutos ;
-                                    $horas = $datos3['horas'] + $horas;
-                                    if ($minutos>= 60) {
-                                        $horas = ($minutos / 60) + $horas;
-                                        $minutos = $minutos % 60;
-                                        $horas = intval($horas);
-                                        $minutos = intval($minutos);
+                            if(mysqli_num_rows($resultado2)> 0){
+                                $producto =['P'.$idSol, $nombreEstSol, $ObservacionAct, $presupuesto];
+                                $spreadsheet->getActiveSheet()->fromArray($producto,null,'B'.$fila);
+                                while ($datos2 = mysqli_fetch_array($resultado2)) {
+                                    $nombre = $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres'];
+                                    $idAsig = $datos2['idAsig'];
+                                    $idPersona = $datos2['idPersona'];
+                                    if ($fechaini != null && $fechafin != null){
+                                        $consulta3="SELECT SUM(horaTiempo) AS horas, SUM(minTiempo) AS minutos, fechTiempo  FROM pys_tiempos
+                                        WHERE estTiempo = '1' AND idAsig = '$idAsig' AND (fechTiempo >= '$fechaini' AND fechTiempo <= '$fechafin')
+                                        GROUP BY fechTiempo;";    
+                                    } else {
+                                        $consulta3="SELECT SUM(horaTiempo) AS horas, SUM(minTiempo) AS minutos, fechTiempo  FROM pys_tiempos
+                                        WHERE estTiempo = '1' AND idAsig = '$idAsig' GROUP BY fechTiempo;";  
                                     }
-                                    $consulta4="SELECT salario
-                                    FROM pys_salarios
-                                    WHERE estSal = '1' AND idPersona='$idPersona' AND( mes <= '$fechTiempo' AND anio >= '$fechTiempo') ;";
-                                    $resultado4=mysqli_query($connection, $consulta4);
+                                    $resultado3 = mysqli_query($connection, $consulta3);
+                                    while ($datos3 = mysqli_fetch_array($resultado3)) {
+                                        $fechTiempo = $datos3['fechTiempo'];
+                                        $minutos = $datos3['minutos'] + $minutos ;
+                                        $horas = $datos3['horas'] + $horas;
+                                        if ($minutos>= 60) {
+                                            $horas = ($minutos / 60) + $horas;
+                                            $minutos = $minutos % 60;
+                                            $horas = intval($horas);
+                                            $minutos = intval($minutos);
+                                        }
+                                        $consulta4="SELECT salario
+                                        FROM pys_salarios
+                                        WHERE estSal = '1' AND idPersona='$idPersona' AND( mes <= '$fechTiempo' AND anio >= '$fechTiempo') ;";
+                                        $resultado4=mysqli_query($connection, $consulta4);
+    
+                                        while ($datos4 = mysqli_fetch_array($resultado4)) {
+                                            $valorMin = ($datos4['salario']/60);
+                                        }
+                                        $tiempo = ($horas*60) + $minutos;
+                                        $minu = $minutos + $minu;
+                                        $hor = $horas + $hor;
+                                        if ($minu > '59') {
+                                            $hor = ($minu / 60) + $hor;
+                                            $minu = $minu % 60;
+                                            $hor = intval($hor);
+                                            $minu = intval($minu);
+                                        }
+                                        $minutos = 0;
+                                        $horas = 0;
+                                        $valorTot = $tiempo * $valorMin;
+                                        $valTot = $valTot + $valorTot;
+                                    }
+                                    if($valTot == ""){
+                                        $valTot = number_format($valTot,2);
+                                    }
+                                    $tiem = $hor+($minu/60);
+                                    if($diasLab != null){
+                                        $horasMes = $diasLab*8;
+                                        $porcen = ($tiem/$horasMes)*100;
+                                    } else {
+                                        $porcen = intval(0);
+                                    }
+                                    $persona = [$nombre, number_format($tiem,2), number_format($porcen,2), $valTot];
+                                    $spreadsheet->getActiveSheet()->fromArray($persona,null,'F'.$fila);
+                                    $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                                    $spreadsheet->getActiveSheet()->getStyle('I'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
+                                    $minTot = $minTot + $minu;
+                                    $horasTot = $horasTot + $hor;
+                                    if ($minTot>=60) {
+                                        $horasTot = ($minTot / 60) + $horasTot;
+                                        $minTot = $minTot % 60;
+                                        $horasTot = intval($horasTot);
+                                        $minTot = intval($minTot);
+                                    }
+                                    $total = $valTot + $total;
+                                    $min = 0;
+                                    $valorMin = 0;
+                                    $horPer = $hor + $horPer;
+                                    $minPer = $minu + $minPer;
+                                    if ($minPer>=60) {
+                                        $horPer = ($minPer / 60) + $horPer;
+                                        $minPer = $minPer % 60;
+                                        $horPer = intval($horPer);
+                                        $minPer = intval($minPer);
+                                    }
+                                    $valPer = $valTot + $valPer;
+                                    $dif = $datos1[2] - $valPer;
+                                    $minu = 0;
+                                    $hor = 0;
+                                    $valTot = 0;
+                                    $valorTot = 0;
+                                    $fila += 1;
+                                    $cont += 1;
+                                }
+                                $tiem = round($horPer+($minPer/60),2);
+                                    $horasMes = $diasLab*8;
+                                    $porcen = $tiem/$horasMes;
+                                    $porcenTotal += $porcen;
 
-                                    while ($datos4 = mysqli_fetch_array($resultado4)) {
-                                        $valorMin = ($datos4['salario']/60);
-                                    }
-                                    $tiempo = ($horas*60) + $minutos;
-                                    $minu = $minutos + $minu;
-                                    $hor = $horas + $hor;
-                                    if ($minu > '59') {
-                                        $hor = ($minu / 60) + $hor;
-                                        $minu = $minu % 60;
-                                        $hor = intval($hor);
-                                        $minu = intval($minu);
-                                    }
-                                    $minutos = 0;
-                                    $horas = 0;
-                                    $valorTot = $tiempo * $valorMin;
-                                    $valTot = $valTot + $valorTot;
-                                }
-                                $tiempo = $hor.' Horas y '.$minu.' Minutos';
-                                $persona = [$nombre, $tiempo, round($valTot, 2)];
-                                $spreadsheet->getActiveSheet()->fromArray($persona,null,'F'.$fila);
-                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
-                                $minTot = $minTot + $minu;
-                                $horasTot = $horasTot + $hor;
-                                if ($minTot>=60) {
-                                    $horasTot = ($minTot / 60) + $horasTot;
-                                    $minTot = $minTot % 60;
-                                    $horasTot = intval($horasTot);
-                                    $minTot = intval($minTot);
-                                }
-                                $total = $valTot + $total;
-                                $min = 0;
-                                $valorMin = 0;
-                                $horPer = $hor + $horPer;
-                                $minPer = $minu + $minPer;
-                                if ($minPer>=60) {
-                                    $horPer = ($minPer / 60) + $horPer;
-                                    $minPer = $minPer % 60;
-                                    $horPer = intval($horPer);
-                                    $minPer = intval($minPer);
-                                }
-                                $valPer = $valTot + $valPer;
-                                $dif = $datos1[2] - $valPer;
-                                $minu = 0;
-                                $hor = 0;
-                                $valTot = 0;
-                                $valorTot = 0;
-                                $fila += 1;
-                                $cont += 1;
+                                $totales=['Total ', number_format($horPer+($minPer/60),2),number_format($porcen,2), $valPer] ;
+                                $diferencia=['Diferencia', '', '', $dif] ;
+                                $spreadsheet->getActiveSheet()->fromArray($totales,null,'F'.$fila);
+                                $spreadsheet->getActiveSheet()->fromArray($diferencia,null,'F'.($fila+1));
+                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                                $spreadsheet->getActiveSheet()->getStyle('I'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
+                                $spreadsheet->getActiveSheet()->getStyle('I'.($fila+1))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
+                                $spreadsheet->getActiveSheet()->getStyle('F'.$fila.':I'.($fila+1))->applyFromArray(STYLETABLETITLESUB);
+                                $sheet->mergeCells("F".($fila+1).":H".($fila+1));
+                                $sheet->mergeCells("B".$filaSol.":B".($fila+1));
+                                $sheet->mergeCells("C".$filaSol.":C".($fila+1));
+                                $sheet->mergeCells("D".$filaSol.":D".($fila+1));
+                                $sheet->mergeCells("E".$filaSol.":E".($fila+1));
+                                $fila += 2;
+                                $cont += 2;
+                                $horPer = 0;
+                                $minPer = 0;
+                                $porcen = 0;
+                                $valPer = 0;
                             }
-                            $tiempoInvertido=['Tiempo invertido', '', $horPer.' horas y '.$minPer.' min'] ;
-                            $costoTotal=['Costo total Producto/Servicio', '', round($valPer, 2)] ;
-                            $diferencia=['Diferencia', '', round($dif, 2)] ;
-                            $spreadsheet->getActiveSheet()->fromArray($tiempoInvertido,null,'F'.$fila);
-                            $spreadsheet->getActiveSheet()->fromArray($costoTotal,null,'F'.($fila+1));
-                            $spreadsheet->getActiveSheet()->fromArray($diferencia,null,'F'.($fila+2));
-                            $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
-                            $spreadsheet->getActiveSheet()->getStyle('H'.($fila+1))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
-                            $spreadsheet->getActiveSheet()->getStyle('H'.($fila+2))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
-                            $spreadsheet->getActiveSheet()->getStyle('F'.$fila.':H'.($fila+2))->applyFromArray(STYLETABLETITLESUB);
-                            $sheet->mergeCells("F".$fila.":G".$fila);
-                            $sheet->mergeCells("F".($fila+1).":G".($fila+1));
-                            $sheet->mergeCells("F".($fila+2).":G".($fila+2));
-                            $sheet->mergeCells("B".$filaSol.":B".($fila+2));
-                            $sheet->mergeCells("C".$filaSol.":C".($fila+2));
-                            $sheet->mergeCells("D".$filaSol.":D".($fila+2));
-                            $sheet->mergeCells("E".$filaSol.":E".($fila+2));
-                            $fila += 3;
-                            $cont += 3;
                         }
                         $valTotProy =  $totPresupuesto - round($total, 2);
                         $sheet->mergeCells("A".$filaIni.":A".($fila-1));
@@ -474,25 +503,25 @@ const STYLEBODY = ['font' => [
                         $sheet->mergeCells("B".$fila.":E".$fila);
                         $fila+= 1;
                     }
-                    $presupuestoLis = ['Presupuesto de proyecto:', $totPresupuesto];
-                    $tiempoTra = ['Tiempo trabajado:',  $horasTot.' Horas y '.$minTot.' Minutos'];
-                    $valorTotalPS = ['Valor total de productos/servicios', round($total, 2)]; 
-                    $diferenciaLis = ['Diferencia:', $valTotProy];
+                    $tiempoT= $horasTot+($minTot/60);
+                    $presupuestoLis = ['Presupuesto de proyecto:', $totPresupuesto];                                                                        
+                    $tiempoTra = ['Total:', $tiempoT, $porcenTotal, $total]; 
+                    $diferenciaLis = ['Diferencia:', '','', $valTotProy];
                     $spreadsheet->getActiveSheet()->fromArray($presupuestoLis,null,'F'.$fila);
                     $spreadsheet->getActiveSheet()->fromArray($tiempoTra,null,'F'.($fila+1));
-                    $spreadsheet->getActiveSheet()->fromArray($valorTotalPS,null,'F'.($fila+2));
-                    $spreadsheet->getActiveSheet()->fromArray($diferenciaLis,null,'F'.($fila+3));
+                    $spreadsheet->getActiveSheet()->fromArray($diferenciaLis,null,'F'.($fila+2));
+                    $spreadsheet->getActiveSheet()->getStyle('H'.($fila+1))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                    $spreadsheet->getActiveSheet()->getStyle('I'.($fila+1))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
                     $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
-                    $spreadsheet->getActiveSheet()->getStyle('G'.($fila+3))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
-                    $sheet->mergeCells("B".$fila.":E".$fila);
-                    $sheet->mergeCells("B".($fila+1).":E".($fila+1));
-                    $sheet->mergeCells("B".($fila+2).":E".($fila+2));
-                    $sheet->mergeCells("B".($fila+3).":E".($fila+3));
-                    $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':H'.($fila+3))->applyFromArray(STYLETABLETITLESUB2);
-                    $fila += 4;  
+                    $spreadsheet->getActiveSheet()->getStyle('I'.($fila+2))->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_ACCOUNTING_USD);
+                    $sheet->mergeCells("A".$fila.":E".$fila);
+                    $sheet->mergeCells("A".($fila+1).":E".($fila+1));
+                    $sheet->mergeCells("A".($fila+2).":E".($fila+2));
+                    $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':I'.($fila+2))->applyFromArray(STYLETABLETITLESUB2);
+                    $fila += 3;  
                 }
-                $spreadsheet->getActiveSheet()->getStyle('A6:H'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                $spreadsheet->getActiveSheet()->getStyle('A6:H'.($fila-1))->applyFromArray(STYLEBODY);
+                $spreadsheet->getActiveSheet()->getStyle('A6:I'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                $spreadsheet->getActiveSheet()->getStyle('A6:I'.($fila-1))->applyFromArray(STYLEBODY);
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="Informe de supervisión '.gmdate(' d M Y ').'.xlsx"');
                 header('Cache-Control: max-age=0');

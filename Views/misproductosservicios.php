@@ -40,3 +40,4 @@ require('../Estructure/header.php');
 
 <?php
 require('../Estructure/footer.php');
+?>

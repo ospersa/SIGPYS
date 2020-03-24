@@ -531,6 +531,10 @@
                                     <label for="txtCodSol">Código Solicitud Específica</label>
                                 </div>
                                 <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
+                                    <label class ="active" for="txtDesc">Descripcion Solicitud Especifica</label>
+                                    <p id="txtDesc" class= "truncate">'.$datos['ObservacionAct'].'</p>
+                                </div>
+                                <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
                                     <input type="text" name="txtFrente" id="txtFrente" value="'.$datos['nombreFrente']." - ".$datos['descripcionFrente'].'" readonly>
                                     <label for="txtFrente">Frente</label>
                                 </div>

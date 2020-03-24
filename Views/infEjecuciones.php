@@ -18,7 +18,7 @@ require('../Estructure/header.php');
                     <label for="txtFechFin">Fecha final</label>
                 </div>
                 <div class="input-field col l2 m12 s12 offset-m5 offset-l5">
-                    <input id="diasLab" name="diasLab" type="number" value="" min="0" >
+                    <input id="diasLab" name="diasLab" type="number" value="" min="0" required >
                     <label class="active" for="diasLab">Días laborales del mes</label>
                 </div>
                 <div class="input-field col l2 m2 s12 offset-l4 offset-m4">

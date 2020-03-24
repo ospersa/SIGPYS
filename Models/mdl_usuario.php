@@ -7,7 +7,7 @@
                 pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, 
                 pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_entidades.idEnt, pys_facdepto.idFac
                 FROM pys_personas               
-                INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+                INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                 INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                 INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                 INNER JOIN pys_equipos ON pys_personas.idEquipo = pys_equipos.idEqu
@@ -25,7 +25,7 @@
                 pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, 
                 pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo, pys_equipos.idEqu, pys_equipos.nombreEqu
                 FROM pys_personas               
-                INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+                INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                 INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                 INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                 INNER JOIN pys_equipos ON pys_personas.idEquipo = pys_equipos.idEqu
@@ -227,7 +227,7 @@
                     echo "<script> alert ('No hay países registrados en la base de datos');</script>";
                 }
             } else {
-                $consulta2 = "SELECT paises.Codigo, ciudades.Ciudad FROM dbpys.pys_personas
+                $consulta2 = "SELECT paises.Codigo, ciudades.Ciudad FROM pys_personas
                     INNER JOIN ciudades ON ciudades.idCiudades = pys_personas.Ciudades_idCiudades
                     INNER JOIN paises ON paises.Codigo = ciudades.Paises_Codigo
                     WHERE pys_personas.idPersona = '$idPersona';";
@@ -448,7 +448,7 @@
         public static function selectCiudades ($idPais) {
             require('../Core/connection.php');
             if (substr($idPais, 0, 2) == "PR") {
-                $consulta = "SELECT ciudades.idCiudades, ciudades.Paises_Codigo FROM dbpys.pys_personas
+                $consulta = "SELECT ciudades.idCiudades, ciudades.Paises_Codigo FROM pys_personas
                     INNER JOIN ciudades ON ciudades.idCiudades = pys_personas.Ciudades_idCiudades
                     WHERE pys_personas.idPersona = '$idPais';";
                 $resultado = mysqli_query($connection, $consulta);

@@ -33,3 +33,4 @@ require('../Estructure/header.php');
 </div>
 <?php
 require('../Estructure/footer.php');
+?>

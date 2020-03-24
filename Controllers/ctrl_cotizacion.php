@@ -1,4 +1,7 @@
 <?php
+if(!isset($_SESSION['usuario'])) {
+    session_start();
+}
 /* Inclusión del Modelo */
 include_once "../Models/mdl_cotizacion.php";
 include_once "../Models/mdl_asignados.php";
@@ -52,7 +55,6 @@ if (isset($_POST['enviar'])){
     $solicitante    = (isset($_POST['txtVal'])) ? $_POST['txtVal'] : null;
     $result = Cotizacion::guardarCotizacion($solEsp, $valCot, $obsSol, $obsPys, $obsProd, $solicitante);
 } else if (isset($_POST['btnAsignar'])) {
-    session_start();
     $solicitante    = $_POST['txtVal'];
     $usuario = $_SESSION['usuario'];
     $registra = Cotizacion::obtenerPersonaRegistra($usuario);

@@ -176,6 +176,46 @@
             $resultado = mysqli_query($connection, $consulta);
             return $datos = mysqli_fetch_array($resultado);
         }
+        public static function editarTiemposInfo($id, $user, $fecha, $tiempoH, $tiempoM, $fase, $nota){
+            require('../Core/connection.php');
+            $nota = mysqli_real_escape_string($connection, $nota);
+            $tiempoM = mysqli_real_escape_string($connection, $tiempoM);
+            $tiempoH = mysqli_real_escape_string($connection, $tiempoH);
+            $fecha = mysqli_real_escape_string($connection, $fecha);
+            $fechaAct = date("Y-m-d");
+            $consultaP = "SELECT `inicioPeriodo`, `finPeriodo` FROM pys_periodos WHERE `estadoPeriodo` = 1 AND (`inicioPeriodo` <= '$fechaAct') AND (`finPeriodo` >= '$fechaAct'); "; 
+            $resultadoP = mysqli_query($connection, $consultaP);
+            $datos = mysqli_fetch_array($resultadoP);
+            $inicioPer = $datos['inicioPeriodo'];
+            $finPer = $datos['finPeriodo'];
+            $consultaTiempos = "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos
+            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+            INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
+            INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
+            WHERE pys_tiempos.fechTiempo = '$fecha' AND pys_login.usrLogin = '$user' AND pys_tiempos.estTiempo = '1' AND idTiempo <> $id;";
+            $resultadoTiempos = mysqli_query($connection, $consultaTiempos);
+            $datos = mysqli_fetch_array($resultadoTiempos);
+            $hora = $datos['SUM(pys_tiempos.horaTiempo)'];
+            $min = $datos['SUM(pys_tiempos.minTiempo)'];
+            $total = (($hora + $tiempoH)*60) + $min + $tiempoM;
+            if ($inicioPer <= $fecha && $finPer >= $fecha){
+                if ($total <= 720){
+                    $consulta = "UPDATE pys_tiempos SET fechTiempo = '$fecha', notaTiempo ='$nota', horaTiempo = '$tiempoH', minTiempo ='$tiempoM', idFase = '$fase' WHERE idTiempo = '$id'";
+                    $resultado = mysqli_query($connection, $consulta);
+                    if ($resultado ){
+                        return "Se guardó correctamente la información";
+                    }else{
+                        return "Ocurrió un error al intentar actualizar el registro";
+                    }
+                } else{
+                    return "No se realizo el registro. Hay mas de 12 horas registradas";
+                }
+            } else{
+                return "El tiempo no puede ser guardado. Verifique que la fecha se encuentra dentro del periodo vigente.";
+
+            }
+            mysqli_close($connection);   
+        }
 
     }
 ?>

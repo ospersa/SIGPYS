@@ -1,6 +1,6 @@
 <?php
 /* Inicializar variables de sesión */
-if(!isset($_SESSION)) { 
+if(!isset($_SESSION['usuario'])) { 
     session_start();
 }
 
@@ -140,3 +140,4 @@ if (isset($_POST['btnInactivar'])) {
         SolicitudEspecifica::actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura);
     }
 }
+?>

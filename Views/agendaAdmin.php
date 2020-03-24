@@ -57,3 +57,4 @@ include_once('../Controllers/ctrl_agendaAdmin.php');
 
 <?php
 require('../Estructure/footer.php');
+?>

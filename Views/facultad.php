@@ -39,3 +39,4 @@ require_once('../Controllers/ctrl_facultad.php');
 </div>
 <?php
 require('../Estructure/footer.php');
+?>
