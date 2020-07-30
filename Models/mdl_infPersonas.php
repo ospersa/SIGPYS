@@ -172,7 +172,7 @@ const STYLEBODY = ['font' => [
                         pys_personas.nombres, pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt,
                         pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo
                         FROM pys_personas
-                        INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+                        INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                         INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                         INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                         WHERE pys_personas.est = '1' 
@@ -204,7 +204,7 @@ const STYLEBODY = ['font' => [
                     pys_personas.nombres, pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt,
                     pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo
                     FROM pys_personas
-                    INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+                    INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                     INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                     INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                     WHERE pys_personas.est = '1' 
@@ -307,7 +307,7 @@ const STYLEBODY = ['font' => [
                         pys_personas.nombres, pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt,
                         pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo
                         FROM pys_personas
-                        INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+                        INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                         INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                         INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                         WHERE pys_personas.est = '1' 
@@ -331,7 +331,7 @@ const STYLEBODY = ['font' => [
                     pys_personas.nombres, pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt,
                     pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo
                     FROM pys_personas
-                    INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+                    INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                     INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                     INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                     WHERE pys_personas.est = '1' 

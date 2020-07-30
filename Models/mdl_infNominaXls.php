@@ -134,6 +134,7 @@ Class InformeNomima {
             WHERE pys_actualizacionproy.est = '1'
             AND pys_asignados.est <> '0'
             AND pys_tiempos.estTiempo = '1'
+            AND pys_tiempos.idFase <> 'FS0012'
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
             AND pys_personas.est = '1'
@@ -243,6 +244,7 @@ Class InformeNomima {
                         AND pys_asignados.idProy = '".$datos['idProy']."'
                         AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodo' AND '$finPeriodo'
                         AND pys_tiempos.estTiempo = '1'
+                        AND pys_tiempos.idFase <> 'FS0012'
                         AND pys_asignados.est <> '0';";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     
@@ -313,6 +315,7 @@ Class InformeNomima {
             WHERE pys_actualizacionproy.est = '1'
             AND pys_asignados.est <> '0'
             AND pys_tiempos.estTiempo = '1'
+            AND pys_tiempos.idFase <> 'FS0012'
             AND pys_frentes.est = '1'
             AND pys_convocatoria.est = '1'
             AND pys_personas.est = '1'
@@ -338,7 +341,7 @@ Class InformeNomima {
                     INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
                     WHERE pys_asignados.idRol = 'ROL018' AND pys_asignados.idProy = '".$datos['idProy']."'
                     AND pys_asignados.est <> '0'
-                    AND pys_personas.est = '1'";
+                    AND pys_personas.est = '1';";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
                 $nombreProfesor = $datos3['apellido1']." ".$datos3['apellido2']." ".$datos3['nombres'];
@@ -394,6 +397,7 @@ Class InformeNomima {
                         AND pys_asignados.idProy = '".$datos['idProy']."'
                         AND pys_tiempos.fechTiempo BETWEEN '$inicioPeriodo' AND '$finPeriodo'
                         AND pys_tiempos.estTiempo = '1'
+                        AND pys_tiempos.idFase <> 'FS0012'
                         AND pys_asignados.est <> '0';";
                     $resultado2 = mysqli_query($connection, $consulta2);
                     

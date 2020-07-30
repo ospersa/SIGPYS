@@ -498,7 +498,9 @@ const STYLEBODY = ['font' => [
                             }
                         }
                         $valTotProy =  $totPresupuesto - round($total, 2);
-                        $sheet->mergeCells("A".$filaIni.":A".($fila-1));
+                        if($filaIni<$fila-1){
+                            $sheet->mergeCells("A".$filaIni.":A".($fila-1));
+                        }
                     } else {
                         $sheet->mergeCells("B".$fila.":E".$fila);
                         $fila+= 1;

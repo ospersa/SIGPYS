@@ -17,15 +17,15 @@ use PHPMailer\PHPMailer\Exception;
                 //Server settings
                 $mail->SMTPDebug = 2;                      
                 $mail->isSMTP();                                            
-                $mail->Host       = 'smtp.gmail.com';                    
+                $mail->Host       = 'smtp.hostinger.co';                    
                 $mail->SMTPAuth   = true;                                   
-                $mail->Username   = 'produccionysoporte@gmail.com';       
-                $mail->Password   = '12345Feapys';                            
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          
+                $mail->Username   = 'produccionysoporte@sigpys.tk';       
+                $mail->Password   = '12345Fea$';                            
+                $mail->SMTPSecure = 'PHPMailer::ENCRYPTION_STARTTLS';          
                 $mail->Port       = 587;                                    
 
                 //Recipients
-                $mail->setFrom('produccionysoporte@gmail.com', 'Conecta-TE : PyS');
+                $mail->setFrom('produccionysoporte@sigpys.tk', 'Conecta-TE : PyS');
                 if( $solicitante != null){
                     $mail->addAddress($solicitante, ''); 
                     foreach($arrayccEmail as $item) {

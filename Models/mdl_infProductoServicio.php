@@ -725,7 +725,9 @@
             mysqli_close($connection);
         }
 
-        public static function descarga ($fechaInicial, $fechaFinal, $historico, $proyecto) {
+        public static function descarga ($fechaInicial, $fechaFinal, $historico, $proyecto, $terminados) {
+            set_time_limit(0);
+            $condicionTerminados = ($terminados != null) ? " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') " : "";
             require('../Core/connection.php');   
             /** Verificación de las fechas */
             if ($fechaInicial != null || $fechaFinal != null) {
@@ -745,8 +747,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
-                    AND pys_solicitudes.fechSol >= '2019/01/01'
+                    ".$condicionTerminados." AND pys_solicitudes.fechSol >= '2019/01/01'
                     GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial == null && $fechaFinal == null && $historico != null && $proyecto == null) {
                 /** Todos los proyectos */
@@ -756,9 +757,8 @@
                     INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
-                    AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
-                    GROUP BY pys_actualizacionproy.codProy;";
+                    AND pys_actualizacionproy.est = '1' 
+                    ".$condicionTerminados." GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial != null && $fechaFinal != null && $historico == null && $proyecto == null) {
                 /** Proyectos con solicitudes en un fecha específica */
                 $consulta = "SELECT pys_cursosmodulos.idProy
@@ -768,8 +768,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
-                    AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
+                    ".$condicionTerminados." AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
                     GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial == null && $fechaFinal == null && $historico == null && $proyecto != null) {
                 $consulta = "SELECT pys_cursosmodulos.idProy 
@@ -779,8 +778,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol 
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
-                    AND (pys_solicitudes.fechSol >= '2019/01/01') 
+                    ".$condicionTerminados." AND (pys_solicitudes.fechSol >= '2019/01/01') 
                     AND pys_cursosmodulos.estProy = '1'
                     AND pys_cursosmodulos.idProy = '$proyecto'
                     GROUP BY pys_actualizacionproy.codProy;";
@@ -792,8 +790,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol 
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
-                    AND pys_cursosmodulos.estProy = '1'
+                    ".$condicionTerminados." AND pys_cursosmodulos.estProy = '1'
                     AND pys_cursosmodulos.idProy = '$proyecto'
                     GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial != null && $fechaFinal != null && $historico == null && $proyecto != null) {
@@ -804,8 +801,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
-                    AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
+                    ".$condicionTerminados." AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
                     AND pys_cursosmodulos.idProy = '$proyecto'
                     GROUP BY pys_actualizacionproy.codProy;";
             }
@@ -866,9 +862,8 @@
                         INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
                         INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                         WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
-                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
-                        .$fecha.
-                        " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' 
+                        ".$fecha. $condicionTerminados." AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
                         AND pys_actsolicitudes.presupuesto <> '0'
                         ORDER BY pys_actsolicitudes.idSol ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
@@ -881,9 +876,7 @@
                         INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                         WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
                         AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
-                        .$fecha.
-                        " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
-                        AND pys_actsolicitudes.presupuesto = '0'
+                        .$fecha. $condicionTerminados." AND pys_actsolicitudes.presupuesto = '0'
                         ORDER BY pys_actsolicitudes.idSol;";
                     $resultado3 = mysqli_query($connection, $consulta3);
                     $registros3 = mysqli_num_rows($resultado3);
@@ -901,8 +894,7 @@
                                 INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
                                 INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
                                 WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
-                                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
-                                AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
+                                ".$condicionTerminados." AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
                                 ORDER BY pys_asignados.idSol;";
                             $resultado4 = mysqli_query($connection, $consulta4);
                             while ($datos4 = mysqli_fetch_array($resultado4)) {
@@ -944,8 +936,7 @@
                                 INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
                                 INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
                                 WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
-                                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
-                                AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
+                                ".$condicionTerminados." AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
                                 ORDER BY pys_asignados.idSol;";
                             $resultado4 = mysqli_query($connection, $consulta4);
                             while ($datos4 = mysqli_fetch_array($resultado4)) {
@@ -981,7 +972,7 @@
                         $sheet->mergeCells("B".($filatitulo-1).":I".($filatitulo-1)); 
                         $spreadsheet->getActiveSheet()->getStyle('A'.($filatitulo-1).':I'.($filatitulo-1))->applyFromArray(STYLETABLETITLE);
             
-                        $sheet->setCellValue('A'.$filatitulo, $idProy.'-'.$nombreProyecto);  
+                        $sheet->setCellValue('A'.$filatitulo, $nombreProyecto);  
                         $spreadsheet->getActiveSheet()->getStyle('A'.$filatitulo)->applyFromArray(STYLEBODY);
                         $titulos = ['Cód. Producto/Servicio', 'Estado Producto/Servicio', 'Descripción Producto/Servicio', 'Fecha Creación', 'Fecha Actualización', 'Presupuesto', 'Ejecutado', 'Diferencia'];
                     $spreadsheet->getActiveSheet()->getStyle('B'.$filatitulo.':I'.$filatitulo)->applyFromArray(STYLETABLETITLESUB);
@@ -1025,9 +1016,10 @@
         }
 
 
-        public static function busqueda ($fechaInicial, $fechaFinal, $historico, $proyecto) {
+        public static function busqueda ($fechaInicial, $fechaFinal, $historico, $proyecto, $terminados) {
+            set_time_limit(0);
             require('../Core/connection.php');
-            
+            $condicionTerminados = ($terminados != null) ? " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') " : "";
             /** Verificación de las fechas */
             if ($fechaInicial != null || $fechaFinal != null) {
                 if ($fechaInicial != null && $fechaFinal == null) {
@@ -1047,7 +1039,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    ".$condicionTerminados."
                     AND pys_solicitudes.fechSol >= '2019/01/01'
                     GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial == null && $fechaFinal == null && $historico != null && $proyecto == null) {
@@ -1059,7 +1051,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    ".$condicionTerminados."
                     GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial != null && $fechaFinal != null && $historico == null && $proyecto == null) {
                 /** Proyectos con solicitudes en un fecha específica */
@@ -1070,7 +1062,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    ".$condicionTerminados."
                     AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
                     GROUP BY pys_actualizacionproy.codProy;";
             } else if ($fechaInicial == null && $fechaFinal == null && $historico == null && $proyecto != null) {
@@ -1081,7 +1073,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol 
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                    ".$condicionTerminados."
                     AND (pys_solicitudes.fechSol >= '2019/01/01') 
                     AND pys_cursosmodulos.estProy = '1'
                     AND pys_cursosmodulos.idProy = '$proyecto'
@@ -1094,7 +1086,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol 
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                    ".$condicionTerminados."
                     AND pys_cursosmodulos.estProy = '1'
                     AND pys_cursosmodulos.idProy = '$proyecto'
                     GROUP BY pys_actualizacionproy.codProy;";
@@ -1106,7 +1098,7 @@
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '' 
                     AND pys_actualizacionproy.est = '1'
-                    AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                    ".$condicionTerminados."
                     AND (pys_solicitudes.fechSol >= '$fechaInicial' AND pys_solicitudes.fechSol <= '$fechaFinal')
                     AND pys_cursosmodulos.idProy = '$proyecto'
                     GROUP BY pys_actualizacionproy.codProy;";
@@ -1138,9 +1130,9 @@
                         INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
                         INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                         WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
-                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
-                        .$fecha.
-                        " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1'
+                        ".$fecha.
+                        $condicionTerminados."
                         AND pys_actsolicitudes.presupuesto <> '0'
                         ORDER BY pys_actsolicitudes.idSol ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
@@ -1152,9 +1144,9 @@
                         INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol 
                         INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                         WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' 
-                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' "
-                        .$fecha.
-                        " AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006')
+                        AND pys_actsolicitudes.idSolicitante='' AND pys_actualizacionproy.idProy ='$idProy' AND pys_estadosol.est = '1' 
+                        ".$fecha.
+                        $condicionTerminados."
                         AND pys_actsolicitudes.presupuesto = '0'
                         ORDER BY pys_actsolicitudes.idSol;";
                     $resultado3 = mysqli_query($connection, $consulta3);
@@ -1172,7 +1164,7 @@
                                 INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
                                 INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
                                 WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
-                                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                                ".$condicionTerminados."
                                 AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
                                 ORDER BY pys_asignados.idSol;";
                             $resultado4 = mysqli_query($connection, $consulta4);
@@ -1213,7 +1205,7 @@
                                 INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
                                 INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND (pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo)
                                 WHERE pys_tiempos.estTiempo = '1' AND (pys_asignados.est = '1' OR pys_asignados.est = '2') 
-                                AND (pys_actsolicitudes.idEstSol = 'ESS001' OR pys_actsolicitudes.idEstSol = 'ESS006') 
+                                ".$condicionTerminados."
                                 AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol = '$idSol'  AND pys_salarios.estSal = '1' AND pys_actsolicitudes.est = '1'
                                 ORDER BY pys_asignados.idSol;";
                             $resultado4 = mysqli_query($connection, $consulta4);

@@ -17,7 +17,7 @@ if($archivo != "index.php"){
     session_unset();
     session_destroy();
     session_start();
-    header('Location: /SIGPYS/');
+    header('Location: /');
   };
 }else{
   if (isset($_SESSION['ultima_actividad']) && ($hora - $_SESSION['ultima_actividad']) > $duracion) {

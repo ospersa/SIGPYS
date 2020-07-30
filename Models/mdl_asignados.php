@@ -23,7 +23,7 @@
                 INNER JOIN pys_estadoproy ON pys_estadoproy.idEstProy = pys_actualizacionproy.idEstProy
                 INNER JOIN pys_etapaproy ON pys_etapaproy.idEtaProy = pys_actualizacionproy.idEtaProy
                 INNER JOIN pys_proyectos ON pys_proyectos.idProy = pys_actualizacionproy.idProy
-                INNER JOIN pys_tiposProy ON pys_actualizacionproy.idTProy = pys_tiposproy.idTProy
+                INNER JOIN pys_tiposproy ON pys_actualizacionproy.idTProy = pys_tiposproy.idTProy
                 INNER JOIN pys_frentes ON pys_actualizacionproy.idFrente = pys_frentes.idFrente
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
                 INNER JOIN pys_personas ON pys_actualizacionproy.idResponRegistro = pys_personas.idPersona

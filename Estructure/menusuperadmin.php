@@ -202,9 +202,9 @@
     <li>
         <a href="infProyectos.php">Proyectos</a>
     </li>
-  <!--   <li>
-        <a href="#!">Supervisión</a>
-    </li> -->
+    <li>
+        <a href="infSupervision.php">Supervisión</a>
+    </li> 
     <li>
         <a href="infMisTiempos.php">Mis Tiempos</a>
     </li>

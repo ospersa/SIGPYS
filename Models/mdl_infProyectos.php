@@ -118,7 +118,7 @@ const STYLEBODY = ['font' => [
 			INNER JOIN pys_estadoproy ON pys_estadoproy.idEstProy = pys_actualizacionproy.idEstProy
 			INNER JOIN pys_etapaproy ON pys_etapaproy.idEtaProy = pys_actualizacionproy.idEtaProy
 			INNER JOIN pys_proyectos ON pys_proyectos.idProy = pys_actualizacionproy.idProy
-			INNER JOIN pys_tiposProy ON pys_actualizacionproy.idTProy = pys_tiposproy.idTProy
+			INNER JOIN pys_tiposproy ON pys_actualizacionproy.idTProy = pys_tiposproy.idTProy
 			INNER JOIN pys_frentes ON pys_actualizacionproy.idFrente = pys_frentes.idFrente 
 			INNER JOIN pys_personas ON pys_actualizacionproy.idResponRegistro = pys_personas.idPersona
 			INNER JOIN pys_facdepto ON pys_actualizacionproy.idFacDepto=pys_facdepto.idFacDepto
@@ -219,7 +219,7 @@ const STYLEBODY = ['font' => [
 			INNER JOIN pys_estadoproy ON pys_estadoproy.idEstProy = pys_actualizacionproy.idEstProy
 			INNER JOIN pys_etapaproy ON pys_etapaproy.idEtaProy = pys_actualizacionproy.idEtaProy
 			INNER JOIN pys_proyectos ON pys_proyectos.idProy = pys_actualizacionproy.idProy
-			INNER JOIN pys_tiposProy ON pys_actualizacionproy.idTProy = pys_tiposproy.idTProy
+			INNER JOIN pys_tiposproy ON pys_actualizacionproy.idTProy = pys_tiposproy.idTProy
 			INNER JOIN pys_frentes ON pys_actualizacionproy.idFrente = pys_frentes.idFrente 
 			INNER JOIN pys_personas ON pys_actualizacionproy.idResponRegistro = pys_personas.idPersona
 			INNER JOIN pys_facdepto ON pys_actualizacionproy.idFacDepto=pys_facdepto.idFacDepto
@@ -289,9 +289,7 @@ const STYLEBODY = ['font' => [
 					}
                     $fila+= 1;
                 }
-                 
             }
-
                 $spreadsheet->getActiveSheet()->getStyle('A4:Q'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                 $spreadsheet->getActiveSheet()->getStyle('A4:Q'.($fila-1))->applyFromArray(STYLEBODY);
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

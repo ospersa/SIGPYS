@@ -78,10 +78,10 @@
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_personas.idPersona, pys_personas.tipoPersona, pys_personas.identificacion, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres,
-                pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, 
-                pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo, pys_equipos.idEqu, pys_equipos.nombreEqu
-                FROM pys_personas               
-                INNER JOIN pys_cargos ON pys_personas.idCargo = pys_Cargos.idCargo
+            pys_personas.correo, pys_personas.telefono, pys_personas.extension, pys_personas.celular, pys_entidades.nombreEnt, pys_facdepto.idFacDepto, pys_facdepto.facDeptoFacultad, 
+            pys_facdepto.facDeptoDepartamento, pys_cargos.idCargo, pys_cargos.nombreCargo, pys_equipos.idEqu, pys_equipos.nombreEqu
+            FROM pys_personas            
+                INNER JOIN pys_cargos ON pys_personas.idCargo = pys_cargos.idCargo
                 INNER JOIN pys_facdepto ON pys_personas.idFacDepto=pys_facdepto.idFacDepto
                 INNER JOIN pys_entidades ON pys_facdepto.idEnt = pys_entidades.idEnt
                 INNER JOIN pys_equipos ON pys_personas.idEquipo = pys_equipos.idEqu

@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario']) && !isset($_POST['invitado'])) {
 	session_start();
 }
 //Conectamos a la base de datos

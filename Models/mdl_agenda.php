@@ -19,12 +19,12 @@ class  PlaneacionAse{
         $datos = mysqli_fetch_array($resultado);
         $fechaini = strtotime($datos['inicioPeriodo']);
         $fechafin = strtotime($datos['finPeriodo']);
-        $diaIni = date('w',$fechaini);
+        $diaIni = (date('w',$fechaini)==0)? 7: date('w',$fechaini);
         $diaFin = date('w',$fechafin);
         $diff = $fechafin - $fechaini;
         $diasFalt = (( ( $diff / 60 ) / 60 ) / 24);
         $string = "";
-        for($i=0;$i<$diaIni;$i++){
+        for($i=1;$i<$diaIni;$i++){
             $string .= '<div>
             <div class="card">
                 <div class="card-content grey" type="button">
@@ -34,7 +34,7 @@ class  PlaneacionAse{
         </div>';
         }
         
-        for($i=1;$i<=$diasFalt;$i++){
+        for($i=0;$i<=$diasFalt;$i++){
             $fechaDia = date("d-m-Y", strtotime( '+'.$i.' day', $fechaini ));
             $diafech = date('w', strtotime($fechaDia));
             $conteo = self::ValidacionPlaneacionDia($fechaDia, $usuario);
@@ -494,7 +494,6 @@ class  PlaneacionAse{
                         $resultadoUpdate = mysqli_query($connection, $consultaUpdate);  
                     }
                 } else if ($estado == 1){
-                    echo "fechaCambio".$fechaCambio;
                     if ($fechaCambio != null){
                         $fechCambio = date("Y-m-d", strtotime($fechaCambio));
                         $tiempoCambio = PlaneacionAse::validarHorasDia($fechCambio, $usuario, $hora, $min, $idAgenda);

@@ -15,7 +15,7 @@ $('.modal').on('change', function () {
 $(document).ready(function () {
     let path = window.location.pathname;
     let comp = path.split("/")
-    if (comp[2] == 'home.php') {
+    if (comp[3] == 'home.php') {
         $('main').css('background-color','#2D3340')
         if ($('#chartSolicitud')) {
             chartSolicitud();
@@ -581,7 +581,7 @@ function ocultarEditar(id) {
             },
             success: function (data) {
                 alert(data);
-                if (comp[2] == 'infMisTiempos.php') {
+                if (comp[3] == 'infMisTiempos.php') {
                     buscar('../Controllers/ctrl_infMisTiempos.php');
                 } else{
                     location.reload();
@@ -711,9 +711,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[2] == 'agenda.php') {
+    if (comp[3] == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[2] == 'agendaAdmin.php') {
+    } else if (comp[3] == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();

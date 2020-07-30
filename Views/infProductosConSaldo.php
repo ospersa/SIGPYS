@@ -7,11 +7,11 @@ require_once('../Controllers/ctrl_infProductoServicio.php');
     <div class="row">
         <form action="../Controllers/ctrl_infProductoServicio.php" method="post" id="form">
             <div class="row">
-                <div class="input-field col l3 m3 s12 offset-l2 offset-m2">
+                <div class="input-field col l2 m2 s12 offset-l2 offset-m2">
                     <input type="text" name="txtFechIni" id="txtFechIni" class="datepicker" placeholder="aaaa/mm/dd">
                     <label for="txtFechIni">Fecha desde</label>
                 </div>
-                <div class="input-field col l3 m3 s12">
+                <div class="input-field col l2 m2 s12">
                     <input type="text" name="txtFechFin" id="txtFechFin" class="datepicker" placeholder="aaaa/mm/dd">
                     <label for="txtFechFin">Fecha hasta</label>
                 </div>
@@ -20,6 +20,14 @@ require_once('../Controllers/ctrl_infProductoServicio.php');
                         <label>
                             <input type="checkbox" name="chkHistorico" id="check" />
                             <span>Histórico</span>
+                        </label>
+                    </p>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <p>
+                        <label>
+                            <input type="checkbox" name="chkTerminados" />
+                            <span>Solo P/S Terminados</span>
                         </label>
                     </p>
                 </div>
