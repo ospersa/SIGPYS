@@ -208,6 +208,9 @@
     <li>
         <a href="infMisTiempos.php">Mis Tiempos</a>
     </li>
+    <li>
+        <a href="infNotasTiempos.php">Proyecto/Producto - Notas</a>
+    </li>
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
     <li>

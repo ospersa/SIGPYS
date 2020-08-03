@@ -361,6 +361,27 @@ $(document).ready(function () {
             }
         })
     })
+    /* Busqueda de proyecto en informe notas de tiempos */
+    $('#txtBusquedaProyInf').keyup(function () {
+        consulta = $('#txtBusquedaProyInf').val();
+        $.ajax({
+            type: "POST",
+            url: "../Controllers/ctrl_infNotasTiempos.php",
+            data: "b=" + consulta,
+            dataType: "html",
+            beforeSend: function () {
+                $('#sltProyecto').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function () {
+                alert("Error: No se puede realizar la busqueda en este momento");
+            },
+            success: function (data) {
+                $("#sltProyecto").empty();
+                $("#sltProyecto").append(data);
+                $('select').formSelect();
+            }
+        })
+    })
     /* */
     $('#txtBusquedaProyUsu').keyup(function () {
         consulta = $('#txtBusquedaProyUsu').val();
@@ -1210,6 +1231,7 @@ function buscar(url) {
             $('#div_dinamico').html("<div class='row'><div class='col l6 m6 s12 offset-l3 offset-m3'><div class='progress'><div class='indeterminate'></div></div><p class='center-align'>Cargando...</p></div></div>");
         },
         success: function (data) {
+            console.log($('form').serialize())
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
         }
