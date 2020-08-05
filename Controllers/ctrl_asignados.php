@@ -78,7 +78,11 @@ if (isset($_POST['btnAsignar'])) {
     $mensaje .= $infoAsi.$nota.$msj2;
     $asunto = "Asignación formal solicitud / $codProy / $nombreEqu - $nombreSer"; 
     $ccemail= Asignados::correosResponsable($idSol2);
-    EnviarCorreo::enviarCorreos($correoSol, "", $ccemail, $asunto, $mensaje);    
+    $envioCorreo =EnviarCorreo::enviarCorreos($correoSol, "", $ccemail, $asunto, $mensaje);
+    if($envioCorreo == true){
+        echo '<script>alert("Se envio correctamente el correo.")</script>'; 
+        echo '<meta http-equiv="Refresh" content="0;url=../Views/asignados.php?cod3='.$idSol2.'">';
+    }    
 }
 
 if (isset($_GET['id'])) {
