@@ -491,9 +491,9 @@ td:hover .truncate, .trunca:hover .truncate {
   border-bottom: 1px solid #cfd8dc; }
 
 .botonGuardar {
-  top: 0;
+  top: 20%;
   position: fixed;
-  right: 20%; }
+  left: 50%; }
 
 .botonRegistrarT {
   bottom: 10px;

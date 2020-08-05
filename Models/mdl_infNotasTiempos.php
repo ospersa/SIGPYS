@@ -44,23 +44,19 @@
         public static function busqueda ($proyecto, $solicitud, $fechaini, $fechafin, $diasLab) {
             $minutos = 0;
             $horas = 0;
-            $sumH = 0;
-            $sumM = 0;
+            $totalH = 0;
+            $totalM = 0;
             $porcen = 0;
-            $tiempoTotal = 0;
-            $sumHP = 0;
-            $sumMP = 0;
-            $tiempoTotalP = 0;
-            $sumHPro = 0;
-            $sumMPro = 0;
-            $tiempoTotalPro = 0;
+            $totalHPro = 0;
+            $totalMPro = 0;
+            $tabla ="";
             require('../Core/connection.php');
             $sql = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
             WHERE est = '1' AND idProy='$proyecto' ORDER BY codProy asc;";
             $cs = mysqli_query($connection, $sql);
             $registros = mysqli_num_rows($cs);
             if ($registros > 0) {
-                echo'
+                $tabla .='
                 <table class="responsive-table" border="1">
                 <thead>
                     <tr class="teal lighten-4">
@@ -72,6 +68,7 @@
                     <th>Fecha</th>
                     <th>Tiempo Registrado (Horas)</th>
                     <th>Nota</th>
+                    <th>Porcentaje</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,6 +97,7 @@
                         INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
                         WHERE  (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_asignados.idSol='$fila1[0]'
                         ORDER BY pys_personas.apellido1;";
+                        $solTiempo= false;
                         $cs2=mysqli_query($connection, $sql2);
                         while ($fila2 = mysqli_fetch_array($cs2)) {
                             if ($fechaini != null && $fechafin != null){
@@ -111,12 +109,20 @@
                             }
                             $cs3=mysqli_query($connection, $sql3);
                             if( mysqli_num_rows($cs3)>0){
+                                $solTiempo= true;
                                 while ($fila3 = mysqli_fetch_array($cs3)) {
                                     $minutos = $fila3['minTiempo'];
                                     $horas = $fila3['horaTiempo'];
                                     $fechTiempo = $fila3['fechTiempo'];
                                     $notaTiempo = $fila3['notaTiempo'];
-                                    echo'
+                                    $tiempo= ($minutos / 60) + $horas;
+                                    if($diasLab != null){                            
+                                        $horasMes = $diasLab*8;
+                                        $porcen = ($tiempo/$horasMes)*100;
+                                    } else {
+                                        $porcen = intval(0);
+                                    }
+                                    $tabla .='
                                     <tr>
                                     <td>'.$fila['codProy'].' '.$fila['nombreProy'].'</td>
                                     <td>P'.$fila1['idSol'].'</td>
@@ -126,26 +132,86 @@
                                     <td>'.$fechTiempo.'</td>
                                     <td>'.$horas.'Horas '.$minutos.'Minutos</td>
                                     <td> <p class= "truncate">'.$notaTiempo.'</p></td>
+                                    <td>'.round($porcen,2).'%</td>
                                     </tr>';
-                                    $sumH+=$horas;
-                                    $sumM+=$minutos;
-                                    $tiempoTotal=$sumH = ($sumM / 60) + $sumH;
+                                    $totalH += $horas;
+                                    $totalM += $minutos;
                                 }
-                                
                             }
-                              
+                        }                        
+
+                        if ($totalM>= 60) {
+                            $totalH = ($totalM / 60) + $totalH;
+                            $totalM = $totalM % 60;
+                            $totalH = intval($totalH);
+                            $totalM = intval($totalM);
                         }
+                        $tiempo= ($totalM / 60) + $totalH;
+                        if($diasLab != null){                            
+                            $horasMes = $diasLab*8;
+                            $porcenS = ($tiempo/$horasMes)*100;
+                        } else {
+                            $porcenS = intval(0);
+                        }
+                        if($solTiempo == true){
+
+                            $tabla .='
+                            <tr>
+                            <td>'.$fila['codProy'].' '.$fila['nombreProy'].'</td>
+                            <td>P'.$fila1['idSol'].'</td>
+                            <td>'.$fila1['nombreEstSol'].'</td>
+                            <td > <p class= "truncate">'.$fila1['ObservacionAct'].'</p></td>
+                            <td><b>Total:</b></td>
+                            <td></td>
+                            <td>'.$totalH.'Horas '.$totalM.'Minutos</td>
+                            <td></td>
+                            <td>'.round($porcenS,2).'%</td>
+                            </tr>';
+                        } 
+                            $totalHPro += $totalH;
+                            $totalMPro += $totalM;
+                        $totalH = 0;
+                        $totalM = 0;
                         
+                    
+                    }
+                    if($solicitud == ""){
+
+                        if ($totalMPro>= 60) {
+                            $totalHPro = ($totalMPro / 60) + $totalHPro;
+                            $totalMPro = $totalMPro % 60;
+                            $totalHPro = intval($totalHPro);
+                            $totalMPro = intval($totalMPro);
+                        }
+                        $tiempo= ($totalMPro / 60) + $totalHPro;
+                        if($diasLab != null){                            
+                            $horasMes = $diasLab*8;
+                            $porcenS = ($tiempo/$horasMes)*100;
+                        } else {
+                            $porcenS = intval(0);
+                        }
+                        $tabla .='
+                        <tr>
+                        <td>'.$fila['codProy'].' '.$fila['nombreProy'].'</td>
+                        <td></td>
+                        <td><b>Total:</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>'.$totalHPro.'Horas '.$totalMPro.'Minutos</td>
+                        <td></td>
+                        <td>'.round($porcenS,2).'%</td>
+                        </tr>';
+                        $totalHPro = 0;
+                        $totalMPro = 0;
                     }
                 }
-                
-                echo'
-                
+                $tabla .='
                 </tbody>
                 </table>
-                
                 ';
             }
+            echo $tabla;
         }
         
         public static function descarga ($proyecto, $solicitud, $fechaini, $fechafin, $diasLab) {
@@ -263,7 +329,7 @@
                                     $estado = $fila1['nombreEstSol'];
                                     $obs = $fila1['ObservacionAct'];
                                     $pers = $fila2['apellido1'].' '.$fila2['apellido2'].' '.$fila2['nombres'];
-                                    $tiempo=$horas = ($minutos / 60) + $horas;
+                                    $tiempo=($minutos / 60) + $horas;
                                     if($diasLab != null){                            
                                         $horasMes = $diasLab*8;
                                         $porcen = $tiempo/$horasMes;

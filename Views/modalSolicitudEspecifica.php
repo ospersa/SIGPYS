@@ -1,7 +1,7 @@
 <div class="modal-content center-align">
     <h4>Editar Producto/Servicio</h4>
     <div class="row">
-        <form id="actForm" action="../Controllers/ctrl_solicitudEspecifica.php" method="post" class="col l12 m12 s12">
+        <form id="actFormSolEs" action="../Controllers/ctrl_solicitudEspecifica.php" method="post" class="col l12 m12 s12">
             <input id="cod" name="cod" type="hidden">
             <input id="val" name="val" type="hidden">
             <?php
@@ -60,7 +60,7 @@
                 <label for="txtUltActualizacion" class="active">Última actualización</label>
             </div>
             <div class="input-field col l12 m12 s12">
-                    <button class="btn waves-effect waves-light" type="submit" name="btnActualizarSolEsp">Actualizar</button>
+                    <button class="btn waves-effect waves-light" type="submit" onclick="actSolEsp();" name="btnActualizarSolEsp">Actualizar</button>
             </div>
         </form>
     </div>

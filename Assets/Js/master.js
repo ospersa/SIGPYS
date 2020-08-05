@@ -771,6 +771,7 @@ function cargarResAgenda(fecha, elem) {
             } else{
                 elem.removeClass('teal accent-4').addClass(' blue  darken-4 ');
             }
+            console.log(data);
             $('#fechaA').text(fecha);
             $('#fechaDia').val(fecha);
             $('#div_dinamico1').html(data);
@@ -1231,7 +1232,6 @@ function buscar(url) {
             $('#div_dinamico').html("<div class='row'><div class='col l6 m6 s12 offset-l3 offset-m3'><div class='progress'><div class='indeterminate'></div></div><p class='center-align'>Cargando...</p></div></div>");
         },
         success: function (data) {
-            console.log($('form').serialize())
             $('#div_dinamico').html(data);
             $('#div_dinamico').slideDown("slow");
         }
@@ -1663,6 +1663,39 @@ function actTiempo(){
             alert(data);
             buscar('../Controllers/ctrl_infMisTiempos.php');
             $("#modalinfTiempos").modal('close')
+        }
+    });
+}
+function actSolEsp(){
+    $("#actFormSolEs").submit(function(e){
+        e.preventDefault();
+    });
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_solicitudEspecifica.php',
+        data: $("#actFormSolEs").serialize(),
+        success: function (data) {
+            console.log("data")
+            console.log($("#actFormSolEs").serialize())
+            alert(data);
+            buscarEst('../Controllers/ctrl_solicitudEspecifica.php', $("#cod").val());
+            $("#modalSolicitudEspecifica").modal('close')
+        }
+    });
+}
+function buscarEst(url,cod) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            'txt-search': cod
+        },
+        beforeSend: function () {
+            $('#div_dinamico').html("<div class='row'><div class='col l6 m6 s12 offset-l3 offset-m3'><div class='progress'><div class='indeterminate'></div></div><p class='center-align'>Cargando...</p></div></div>");
+        },
+        success: function (data) {
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
         }
     });
 }

@@ -47,7 +47,7 @@
             mysqli_close($connection);
         }
 
-        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $estadoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra) {
+        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $estadoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,$irPresu) {
             require('../Core/connection.php');
             if ($fechaPrev == null) {
                 $fechaPrev = "'NULL'";
@@ -93,7 +93,11 @@
                 if ($resultado3 && $resultado4) {
                     mysqli_query($connection, "COMMIT;");
                     echo '<script>alert("Se guardó correctamente la información.")</script>';
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$idSolIni.'">';
+                    if($irPresu == 1){
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$idSolIni.'">';
+                    }else if($irPresu == 2){
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/cotizador.php?cod='.$idSolIni.'&val='.$idProy.'">';
+                    }
                 } else {
                     mysqli_query($connection, "ROLLBACK;");
                     echo '<script>alert("Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.")</script>';
@@ -109,8 +113,8 @@
             $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
             /** Validación de datos vacíos */
             if ($solEsp == null || $tipoSol == null || $estSol == null || $persona == null || $idCM == null) {
-                echo '<script>alert("No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                echo 'No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.';
+                /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
             } else {
                 $solEsp = substr($solEsp, 1);
                 /** Obtención del ID de la persona que realiza la actualización */
@@ -128,15 +132,15 @@
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
                 if ($datos3['ObservacionAct'] == $descripcion && $datos3['idSer'] == $servicio && $datos3['idEstSol'] == $estSol && $datos3['presupuesto'] == $presupuesto && $datos3['fechPrev'] == $fechaPrev) {
-                    echo '<script>alert("La información ingresada es la misma. El registro no fue modificado.")</script>';
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                    echo 'La información ingresada es la misma. El registro no fue modificado.';
+                   /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                 } else {
                     /** Verificación del cambio de estado de la solicitud específica; ESS006 = Terminado; ESS007 = Cancelado */
                     if ($estSol != "ESS006" && $estSol != "ESS007") {
                         /** Verificación del estado de la solicitud inicial */
                         if ($estSolIni == "ESS006" || $estSolIni == "ESS007") {
-                            echo '<script>alert("La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.")</script>';
-                            echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                            echo 'La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.';
+                          /*   echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                         } else {
                             mysqli_query($connection, "BEGIN;");
                             /** Insert de los datos en la tabla pys_actsolicitudes */
@@ -151,18 +155,18 @@
                             $resultado6 = mysqli_query($connection, $consulta6);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
-                                echo '<script>alert("Solicitud específica P'.$solEsp.', actualizada correctamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Solicitud específica P'.$solEsp.', actualizada correctamente.';
+                               /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             } else {
                                 mysqli_query($connection, "ROLLBACK;");
-                                echo '<script>alert("Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.';
+                                /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             }
                         }
                     } else {
                         if ($estSolIni == "ESS006" || $estSolIni == "ESS007") {
-                            echo '<script>alert("La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.")</script>';
-                            echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                            echo 'La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.';
+                           /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                         } else {
                             mysqli_query($connection, "BEGIN;");
                             /** Insert de los datos en la tabla pys_actsolicitudes */
@@ -177,12 +181,12 @@
                             $resultado6 = mysqli_query($connection, $consulta6);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
-                                echo '<script>alert("Solicitud específica P'.$solEsp.', actualizada correctamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Solicitud específica P'.$solEsp.', actualizada correctamente.';
+                              /*   echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             } else {
                                 mysqli_query($connection, "ROLLBACK;");
-                                echo '<script>alert("Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.';
+                               /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             }
                         }
                     }
@@ -369,7 +373,7 @@
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
-                                        <th>Modificar tiempos</th>
+                                        <th>Más información</th>
                                         <th>Información Producto/Servicio</th>
                                         <th>Marcar como terminado</th>
                                     </tr>

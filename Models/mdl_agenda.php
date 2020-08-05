@@ -135,10 +135,13 @@ class  PlaneacionAse{
                         </label>
                         <p>
                     </div>
-                    <div class="input-field col l2 m2 s12 offset-l1 offset-m1">
+                    <div class="input-field col l4 m4 s12">
+                        <label class="active">'.$descripcionSol.'</label>
+                    </div>
+                    <div class="input-field col l2 m2 s12">
                         <label class="active">Horas disponibles: '.$hDispo.' h</label>
                     </div>
-                    <div class="input-field col l1 m1 s12 offset-l1 offset-m1">
+                    <div class="input-field col l1 m1 s12">
                         <input type="number" class="validate" name ="horas[]" id="horas'.$long.'--'.$numero.'" value="0" min="0" max="12" disabled>
                         <label for="horas" class="active">Horas</label>
                     </div>
@@ -150,9 +153,7 @@ class  PlaneacionAse{
                         <textarea name="obser[]" id="obser'.$long.'--'.$numero.'" class="materialize-textarea" disabled></textarea>
                         <label for="obser" class="active">Actividad</label>
                     </div>
-                    <div class="input-field col l1 m1 s12">
-                        <a class="teal-text text-accent-4 tooltipped" data-position="left" data-tooltip="'.$descripcionSol.'"><i class="material-icons small">info_outline</i></a>
-                    </div> 
+                     
                 </div>
                 <div class="divider"> </div>
             </div>';

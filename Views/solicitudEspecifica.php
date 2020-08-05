@@ -40,8 +40,7 @@ if ($idInicial != "") {
                                 </ul>
                             </div>
                             <div class="input-field col l2 m2 s12 offset-l3 offset-m3">
-                                <input type="number" min="0" name="txtPresupuesto" id="txtPresupuesto" placeholder="0">
-                                <label for="txtPresupuesto" class="active">Presupuesto <strong>P/S</strong></label>
+                                <input type="number" min="0" name="txtPresupuesto" id="txtPresupuesto" placeholder="0" hidden>
                             </div>
                             <div class="input-field col l1 m1 s12">
                                 <input type="number" min="0" name="txtHora" id="txtHora" placeholder="0">
@@ -63,8 +62,9 @@ if ($idInicial != "") {
                                 <textarea name="txtDescripcion" id="txtDescripcion" class="materialize-textarea" required></textarea>
                                 <label for="txtDescripcion">Descripción del Producto/Servicio</label>
                             </div>
-                            <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
+                            <div class="input-field col l5 m5 s12 offset-l3 offset-m3">
                                 <button class="btn waves-effect waves-light" type="submit" name="btnRegistrarSolEsp">Registrar</button>
+                                <button class="btn waves-effect waves-light" type="submit" name="btnRegistrarSolEspPres">Registrar y Presupuestar</button>
                             </div>
                         </div>
                     </form>

@@ -104,16 +104,13 @@
             $dat = mysqli_num_rows($resultado);
             if( $dat > 0){                
                 $string = '
-                <table class="left responsive-table">
+                <table class="responsive-table  left">
                     <thead>
                         <tr>
                             <th>Fecha</th>
                             <th>Tiempo</th>
                             <th>Fase</th>
                             <th>Nota</th>
-                            <th>Editar</th>
-                            <th>Suprimir</th>
-                            
                         </tr>
                     </thead>
                     <tbody>';
@@ -132,9 +129,7 @@
                             <td>'.$hora.'h '.$minutos.'m </td>
                             <td>'.$datos['nombreFase'].'</td>
                             <td><p class = "truncate">'.$datos['notaTiempo'].'</p></td>
-                            <td><a href="#!" class="waves-effect waves-light" onclick ="editarRegistro(\''.$datos[0].'\')"title="Editar"><i class="material-icons teal-text">edit</i></a></td>
-                            <td><a href="#!" class="waves-effect waves-light" onclick ="ocultarEditar(\''.$datos[0].'\')"title="Suprimir"><i class="material-icons red-text">delete</i></a></td>
-                    </tr>';
+                         </tr>';
                 }    
                 $string .= "
                     </tbody>
