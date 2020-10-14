@@ -47,7 +47,7 @@
             mysqli_close($connection);
         }
 
-        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $estadoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra) {
+        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $estadoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,$irPresu) {
             require('../Core/connection.php');
             if ($fechaPrev == null) {
                 $fechaPrev = "'NULL'";
@@ -93,7 +93,11 @@
                 if ($resultado3 && $resultado4) {
                     mysqli_query($connection, "COMMIT;");
                     echo '<script>alert("Se guardó correctamente la información.")</script>';
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$idSolIni.'">';
+                    if($irPresu == 1){
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$idSolIni.'">';
+                    }else if($irPresu == 2){
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/cotizador.php?cod='.$idSolIni.'&val='.$idProy.'">';
+                    }
                 } else {
                     mysqli_query($connection, "ROLLBACK;");
                     echo '<script>alert("Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.")</script>';
@@ -109,8 +113,8 @@
             $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
             /** Validación de datos vacíos */
             if ($solEsp == null || $tipoSol == null || $estSol == null || $persona == null || $idCM == null) {
-                echo '<script>alert("No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                echo 'No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.';
+                /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
             } else {
                 $solEsp = substr($solEsp, 1);
                 /** Obtención del ID de la persona que realiza la actualización */
@@ -128,15 +132,15 @@
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
                 if ($datos3['ObservacionAct'] == $descripcion && $datos3['idSer'] == $servicio && $datos3['idEstSol'] == $estSol && $datos3['presupuesto'] == $presupuesto && $datos3['fechPrev'] == $fechaPrev) {
-                    echo '<script>alert("La información ingresada es la misma. El registro no fue modificado.")</script>';
-                    echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                    echo 'La información ingresada es la misma. El registro no fue modificado.';
+                   /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                 } else {
                     /** Verificación del cambio de estado de la solicitud específica; ESS006 = Terminado; ESS007 = Cancelado */
                     if ($estSol != "ESS006" && $estSol != "ESS007") {
                         /** Verificación del estado de la solicitud inicial */
                         if ($estSolIni == "ESS006" || $estSolIni == "ESS007") {
-                            echo '<script>alert("La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.")</script>';
-                            echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                            echo 'La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.';
+                          /*   echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                         } else {
                             mysqli_query($connection, "BEGIN;");
                             /** Insert de los datos en la tabla pys_actsolicitudes */
@@ -151,18 +155,18 @@
                             $resultado6 = mysqli_query($connection, $consulta6);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
-                                echo '<script>alert("Solicitud específica P'.$solEsp.', actualizada correctamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Solicitud específica P'.$solEsp.', actualizada correctamente.';
+                               /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             } else {
                                 mysqli_query($connection, "ROLLBACK;");
-                                echo '<script>alert("Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.';
+                                /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             }
                         }
                     } else {
                         if ($estSolIni == "ESS006" || $estSolIni == "ESS007") {
-                            echo '<script>alert("La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.")</script>';
-                            echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                            echo 'La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.';
+                           /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                         } else {
                             mysqli_query($connection, "BEGIN;");
                             /** Insert de los datos en la tabla pys_actsolicitudes */
@@ -177,12 +181,12 @@
                             $resultado6 = mysqli_query($connection, $consulta6);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
-                                echo '<script>alert("Solicitud específica P'.$solEsp.', actualizada correctamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Solicitud específica P'.$solEsp.', actualizada correctamente.';
+                              /*   echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             } else {
                                 mysqli_query($connection, "ROLLBACK;");
-                                echo '<script>alert("Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.")</script>';
-                                echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">';
+                                echo 'Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.';
+                               /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             }
                         }
                     }
@@ -369,7 +373,7 @@
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
-                                        <th>Modificar tiempos</th>
+                                        <th>Más información</th>
                                         <th>Información Producto/Servicio</th>
                                         <th>Marcar como terminado</th>
                                     </tr>
@@ -428,10 +432,14 @@
         public static function registrarInfoPyS($idSol, $idUsuario){
             require('../Core/connection.php');
             $string = "";
-            $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
+            //Camio realizado para registrar video de mooc
+            $consulta1 = "SELECT pys_asignados.idAsig
+            FROM pys_asignados 
+            WHERE pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            /* $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
             FROM pys_tiempos 
             INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
-            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';"; */
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
             $consulta2 = "SELECT * FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
@@ -495,10 +503,13 @@
         public static function marcarTerminado($idSol, $idUsuario){
             require('../Core/connection.php');
             $string = "";
-            $consulta = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
+            $consulta = "SELECT pys_asignados.idAsig
+            FROM pys_asignados 
+            WHERE  pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            /* $consulta = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
             FROM pys_tiempos 
             INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
-            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='". */$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
             $resultado = mysqli_query($connection, $consulta);
             $tiempos = mysqli_num_rows($resultado);
             while ($datos = mysqli_fetch_array($resultado)) {
@@ -517,13 +528,15 @@
             } else {
                 $color = "red";
             }
-            if( $tiempos > 0 && $asignados > 1){
+            /* if( $tiempos > 0 && $asignados > 1){
                 $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
             } else if ($tiempos > 0 && $asignados == 1 && ($validarLLeno==1 || $validarLLenoPro == 1) ){
                 $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">done</i></a>';
             } else {
                 $string .= '';
-            }
+            } */
+            //Cambio realizado para ser registrado 
+            $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
             return $string;
             mysqli_close($connection);
         }
@@ -726,7 +739,6 @@
         public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
@@ -765,7 +777,7 @@
            }
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
@@ -811,7 +823,7 @@
         public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
@@ -836,7 +848,7 @@
         public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);

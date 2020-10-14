@@ -3,7 +3,7 @@ require('../Estructure/header.php');
 ?>
 
 <div id="container" class="center-align">
-    <h4>INFORME DE TIEMPOS - PRODUCTO/SERVICIO</h4>
+    <h4>INFORME EJECUCIONES TIEMPOS PS</h4>
     <div class="row">
         <form action="../Controllers/ctrl_infTiempos.php" method="POST">
             <div class="row">

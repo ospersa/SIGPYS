@@ -11,6 +11,7 @@ if ($idInicial != "") {
     $cargaEspecificas = SolicitudEspecifica::cargaEspecificas($idInicial, 1);
     $string = ' <div class="row">
                     <form action="../Controllers/ctrl_solicitudEspecifica.php" method="post" autocomplete="off">
+                        <input type="text" name="txtPresupuesto" id="txtPresupuesto" hidden>
                         <div class="row">
                             <div class="input-field col l2 m2 s12 offset-l3 offset-m3">
                                 <input readonly type="text" name="txtIdSol" id="txtIdSol" value="'.$idInicial.'" >
@@ -39,11 +40,7 @@ if ($idInicial != "") {
                                     </li>
                                 </ul>
                             </div>
-                            <div class="input-field col l2 m2 s12 offset-l3 offset-m3">
-                                <input type="number" min="0" name="txtPresupuesto" id="txtPresupuesto" placeholder="0">
-                                <label for="txtPresupuesto" class="active">Presupuesto <strong>P/S</strong></label>
-                            </div>
-                            <div class="input-field col l1 m1 s12">
+                            <div class="input-field col l1 m1 s12 offset-l3 offset-m3">
                                 <input type="number" min="0" name="txtHora" id="txtHora" placeholder="0">
                                 <label for="txtHora">Horas</label>
                             </div>
@@ -55,16 +52,17 @@ if ($idInicial != "") {
                                 <input type="text" class="datepicker" name="txtFechaPrevista" id="txtFechaPrevista" placeholder="dd/mm/aaaa" title="Fecha para entrega del producto / servicio">
                                 <label for="txtFechaPrevista">Fecha prevista entrega</label>
                             </div>
-                            <div class="input-field col l2 m2 s12 offset-l3 offset-m3">'
+                            <div class="input-field col l2 m2 s12">'
                                 .$selectEquipo.
                             '</div>
-                            <div id="sltServicio" class="input-field col l4 m4 s12"></div>
+                            <div id="sltServicio" class="input-field col l4 m4 s12 offset-l3 offset-m3"></div>
                             <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
                                 <textarea name="txtDescripcion" id="txtDescripcion" class="materialize-textarea" required></textarea>
-                                <label for="txtDescripcion">Descripción del Producto/Servicio</label>
+                                <label for="txtDescripcion">Descripción del Producto/Servicio*</label>
                             </div>
-                            <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
+                            <div class="input-field col l5 m5 s12 offset-l3 offset-m3">
                                 <button class="btn waves-effect waves-light" type="submit" name="btnRegistrarSolEsp">Registrar</button>
+                                <button class="btn waves-effect waves-light" type="submit" name="btnRegistrarSolEspPres">Registrar y Presupuestar</button>
                             </div>
                         </div>
                     </form>

@@ -189,10 +189,10 @@ const STYLEBODY = ['font' => [
             $spreadsheet = new Spreadsheet();
             $spreadsheet->getProperties()->setCreator('Conecta-TE')
                 ->setLastModifiedBy('Conecta-TE')
-                ->setTitle('Informe de Ejecución')
-                ->setSubject('Informe de Ejecución')
-                ->setDescription('Informe de Ejecución')
-                ->setKeywords('Informe de Ejecución')
+                ->setTitle('Informe de Ejecuciones generales P&S')
+                ->setSubject('Informe de Ejecuciones generales P&S')
+                ->setDescription('Informe de Ejecuciones generales P&S')
+                ->setKeywords('Informe de Ejecuciones generales P&S')
                 ->setCategory('Test result file');
             $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-Ejecución');
             $spreadsheet->addSheet($myWorkSheet, 0);
@@ -209,7 +209,7 @@ const STYLEBODY = ['font' => [
             $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(15);
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(15);
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1', 'Informe de Ejecución');
+            $sheet->setCellValue('A1', 'Informe de Ejecuciones generales P&S');
             $sheet->setCellValue('A2', 'Desde: '.$txtFechIni.' Hasta: '.$txtFechFin);                
             $sheet->mergeCells("A1:E1");
             $sheet->mergeCells("A2:E2"); 
@@ -292,7 +292,7 @@ const STYLEBODY = ['font' => [
             $spreadsheet->getActiveSheet()->getStyle('A4:E'.($filas-1))->getBorders()->applyFromArray(STYLEBORDER);
             $spreadsheet->getActiveSheet()->getStyle('A4:E'.($filas-1))->applyFromArray(STYLEBODY);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Informe de Ejecución '.gmdate(' d M Y ').'.xlsx"');
+            header('Content-Disposition: attachment;filename="Informe de Ejecuciones generales P&S '.gmdate(' d M Y ').'.xlsx"');
             header('Cache-Control: max-age=0');
             header('Cache-Control: max-age=1');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

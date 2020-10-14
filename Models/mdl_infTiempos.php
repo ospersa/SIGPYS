@@ -194,10 +194,10 @@ const STYLEBODYBORDERRIGHT= ['right'=>[
             $spreadsheet = new Spreadsheet();
             $spreadsheet->getProperties()->setCreator('Conecta-TE')
                 ->setLastModifiedBy('Conecta-TE')
-                ->setTitle('Informe de Tiempos - Productos/Servicios')
-                ->setSubject('Informe de Tiempos - Productos/Servicios')
-                ->setDescription('Informe de Tiempos - Productos/Servicios')
-                ->setKeywords('Informe de Tiempos - Productos/Servicios')
+                ->setTitle('Informe de Ejecuciones tiempos')
+                ->setSubject('Informe de Ejecuciones tiempos')
+                ->setDescription('Informe de Ejecuciones tiempos')
+                ->setKeywords('Informe de Ejecuciones tiempos')
                 ->setCategory('Test result file');
             $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-tiempos-productos-servicios');
             $spreadsheet->addSheet($myWorkSheet, 0);
@@ -220,7 +220,7 @@ const STYLEBODYBORDERRIGHT= ['right'=>[
             $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(12);
             $spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(11);
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1', 'Informe de Tiempos - Productos/Servicios');
+            $sheet->setCellValue('A1', 'Informe de Ejecuciones tiempos');
             $sheet->mergeCells("A1:N1"); 
             /**Titulos tabla */
             $titulos = ['Frente', 'Cod. Proyecto', 'Nombre Proyecto', 'Célula', 'Cod. Producto/Servicio', 'Estado Producto/Servicio', 'Equipo', 'Servicio', 'Descripción Producto/servicio', 'Fecha Creación', 'Fecha Estimada entrega', 'Tiempo Invertido en el Periodo', 'Tiempo Total a Dedicar P/S', 'Tiempo Total Invertido P/S'];
@@ -288,7 +288,7 @@ const STYLEBODYBORDERRIGHT= ['right'=>[
             }
             $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':N'.$fila)->getBorders()->applyFromArray(STYLEBODYBORDERBOTTOM);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="InformeTiempos-ProductosServicios '.gmdate(' d M Y ').'.xlsx"');
+            header('Content-Disposition: attachment;filename="InformeEjecucionesTiempos '.gmdate(' d M Y ').'.xlsx"');
             header('Cache-Control: max-age=0');
             header('Cache-Control: max-age=1');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

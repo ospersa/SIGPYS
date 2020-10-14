@@ -303,10 +303,10 @@ const STYLEBODY = ['font' => [
                 $spreadsheet = new Spreadsheet();
                 $spreadsheet->getProperties()->setCreator('Conecta-TE')
                     ->setLastModifiedBy('Conecta-TE')
-                    ->setTitle('Informe de supervisión')
-                    ->setSubject('Informe de supervisión')
-                    ->setDescription('Informe de supervisión')
-                    ->setKeywords('Informe de supervisión')
+                    ->setTitle('Informe de ejecuciones por proyecto')
+                    ->setSubject('Informe de ejecuciones por proyecto')
+                    ->setDescription('Informe de ejecuciones por proyecto')
+                    ->setKeywords('Informe de ejecuciones por proyecto')
                     ->setCategory('Test result file');
                 $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-Ejecuciones');
                 $spreadsheet->addSheet($myWorkSheet, 0);
@@ -327,8 +327,8 @@ const STYLEBODY = ['font' => [
                 $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(20);
                 $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(22);
                 $sheet = $spreadsheet->getActiveSheet();
-                $sheet->setCellValue('A1', 'Informe Ejecuciones Productos/Servicios');
-                if ($fechaini != null && $fechafin != null){
+                $sheet->setCellValue('A1', 'Informe Ejecuciones por proyecto');
+                if ($fechaini != ""  && $fechafin != ""){
                     $sheet->setCellValue('A4', 'Desde: '.$fechaini.' Hasta: '.$fechafin);
                 }
                 $sheet->mergeCells("A1:J1");
@@ -388,7 +388,7 @@ const STYLEBODY = ['font' => [
                                     $nombre = $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres'];
                                     $idAsig = $datos2['idAsig'];
                                     $idPersona = $datos2['idPersona'];
-                                    if ($fechaini != null && $fechafin != null){
+                                    if ($fechaini != "" && $fechafin != ""){
                                         $consulta3="SELECT SUM(horaTiempo) AS horas, SUM(minTiempo) AS minutos, fechTiempo  FROM pys_tiempos
                                         WHERE estTiempo = '1' AND idAsig = '$idAsig' AND (fechTiempo >= '$fechaini' AND fechTiempo <= '$fechafin')
                                         GROUP BY fechTiempo;";    
@@ -472,10 +472,13 @@ const STYLEBODY = ['font' => [
                                     $cont += 1;
                                 }
                                 $tiem = round($horPer+($minPer/60),2);
+                                if($diasLab != null){
                                     $horasMes = $diasLab*8;
                                     $porcen = $tiem/$horasMes;
                                     $porcenTotal += $porcen;
-
+                                } else {
+                                    $porcen = intval(0);
+                                }
                                 $totales=['Total ', number_format($horPer+($minPer/60),2),number_format($porcen,2), $valPer] ;
                                 $diferencia=['Diferencia', '', '', $dif] ;
                                 $spreadsheet->getActiveSheet()->fromArray($totales,null,'F'.$fila);
@@ -525,7 +528,7 @@ const STYLEBODY = ['font' => [
                 $spreadsheet->getActiveSheet()->getStyle('A6:I'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                 $spreadsheet->getActiveSheet()->getStyle('A6:I'.($fila-1))->applyFromArray(STYLEBODY);
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Informe de supervisión '.gmdate(' d M Y ').'.xlsx"');
+                header('Content-Disposition: attachment;filename="Informe de ejecuciones por proyecto '.gmdate(' d M Y ').'.xlsx"');
                 header('Cache-Control: max-age=0');
                 header('Cache-Control: max-age=1');
                 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

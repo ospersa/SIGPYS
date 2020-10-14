@@ -297,7 +297,11 @@ class Visitante{
         Universidad de los Andes<br />
         apoyoconectate@uniandes.edu.co
         ";
-        EnviarCorreo::enviarCorreos("", "", $correos, $asunto, $cuerpo);
+        $envioCorreo = EnviarCorreo::enviarCorreos("", "", $correos, $asunto, $cuerpo);
+        if($envioCorreo == true){
+            echo '<script>alert("Se envio correctamente el correo.")</script>'; 
+            echo '<meta http-equiv="Refresh" content="0;url=../Views/visitante.php">';
+        }  
 
     }
 

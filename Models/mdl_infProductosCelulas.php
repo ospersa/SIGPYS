@@ -339,12 +339,12 @@ Class InformeProductosCelulas {
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getProperties()->setCreator('Conecta-TE')
             ->setLastModifiedBy('Conecta-TE')
-            ->setTitle('Informe de Tiempos - Productos/Servicios')
-            ->setSubject('Informe de Tiempos - Productos/Servicios')
-            ->setDescription('Informe de Tiempos - Productos/Servicios')
-            ->setKeywords('Informe de Tiempos - Productos/Servicios')
+            ->setTitle('Informe de Ejecución por célula')
+            ->setSubject('Informe de Ejecución por célula')
+            ->setDescription('Informe de Ejecución por célula')
+            ->setKeywords('Informe de Ejecución por célula')
             ->setCategory('Test result file');
-        $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-celulas-productos-servicios');
+        $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-ejecucion-celula-');
         $spreadsheet->addSheet($myWorkSheet, 0);
         $sheetIndex = $spreadsheet->getIndex($spreadsheet->getSheetByName('Worksheet'));
         $spreadsheet->removeSheetByIndex($sheetIndex);
@@ -363,7 +363,7 @@ Class InformeProductosCelulas {
         $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(14);
         $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(13);
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Informe Productos/Servicio - Células');
+        $sheet->setCellValue('A1', 'Informe Ejecución por célula');
         if ($fechaini != null && $fechafin != null){
             $sheet->setCellValue('A2', 'Desde: '.$fechaini.' Hasta: '.$fechafin);
         }
@@ -511,7 +511,7 @@ Class InformeProductosCelulas {
             $spreadsheet->getActiveSheet()->getStyle('A4:I'.($filas-1))->getBorders()->applyFromArray(STYLEBORDER);
         }
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="InformeProductosServicios-Celulas '.gmdate(' d M Y ').'.xlsx"');
+        header('Content-Disposition: attachment;filename="InformeEjecucionCelula '.gmdate(' d M Y ').'.xlsx"');
         header('Cache-Control: max-age=0');
         header('Cache-Control: max-age=1');
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past

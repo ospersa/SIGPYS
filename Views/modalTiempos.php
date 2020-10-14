@@ -1,4 +1,4 @@
-<h4>Modificación de tiempos</h4>
+<h4>Más Información</h4>
 <div class="row">
     <div class="col s12 my-2">
         <ul class="tabs teal lighten-2">

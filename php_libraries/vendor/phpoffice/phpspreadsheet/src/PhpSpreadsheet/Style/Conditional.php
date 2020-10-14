@@ -206,7 +206,7 @@ class Conditional implements IComparable
      *
      * @param string $pValue Condition
      *
-     * @return Conditional
+     * @return 
      */
     public function addCondition($pValue)
     {

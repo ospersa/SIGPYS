@@ -46,7 +46,21 @@ if (isset($_POST['btnRegistrarSolEsp'])) {
     $fechaPrev = $_POST['txtFechaPrevista'];
     $descripcion = $_POST['txtDescripcion'];
     $registra = $_SESSION['usuario'];
-    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra);
+    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,1);
+}
+if (isset($_POST['btnRegistrarSolEspPres'])) {
+    $idSolIni = $_POST['txtIdSol'];
+    $tipoSol = $_POST['txtIdTipoSol'];
+    $estadoSol = $_POST['txtIdEstadoSol'];
+    $idProy = $_POST['txtIdProy'];
+    $presupuesto = $_POST['txtPresupuesto'];
+    $horas = $_POST['txtHora']." horas y ".$_POST['txtMinuto']." minutos";
+    $equipo = $_POST['sltEquipo'];
+    $servicio = $_POST['sltServicio'];
+    $fechaPrev = $_POST['txtFechaPrevista'];
+    $descripcion = $_POST['txtDescripcion'];
+    $registra = $_SESSION['usuario'];
+    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,2);
 }
 
 if (isset($_REQUEST['id'])) {
@@ -69,7 +83,7 @@ if (isset($_REQUEST['id'])) {
     $idCM = $info['idCM'];
 }
 
-if (isset($_POST['btnActualizarSolEsp'])) {
+if (isset($_POST['txtSolIni']) && isset($_POST['txtSolEsp']) && isset($_POST['txtIdTipoSol']) && isset($_POST['txtTipoSol']) && isset($_POST['sltEstadoSolicitud']) && isset($_POST['txtPresupuesto']) && isset($_POST['txtHoras']) ) {
     $solIni = $_POST['txtSolIni'];
     $solEsp = $_POST['txtSolEsp'];
     $tipoSol = $_POST['txtIdTipoSol'];
@@ -81,7 +95,7 @@ if (isset($_POST['btnActualizarSolEsp'])) {
     $fechaPrev = $_POST['txtFechaPrev'];
     $descripcion = $_POST['txtObservacion'];
     $persona = $_SESSION['usuario'];
-    SolicitudEspecifica::actualizarSolicitudEspecifica($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona);
+    return SolicitudEspecifica::actualizarSolicitudEspecifica($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona);
 }
 
 

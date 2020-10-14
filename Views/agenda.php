@@ -62,15 +62,11 @@ if( !empty( $hoy ) ){
                                     <a class="sumarDiv btn btn-floating waves-effect waves-light teal tooltipped"
                                         data-position="top" data-tooltip="Añadir Actividad" onclick="duplicarDiv()"><i
                                             class="material-icons">add</i></a>
-                                    <button id="btn-guardar" class="btn waves-effect waves-light" type="submit"
-                                        name="btnGuardar">Guardar</button>
+                                    <button id="btn-guardar" class="btn waves-effect btn-floating btn-large teal white-text waves-light botonGuardar tooltipped" type="submit"
+                                        name="btnGuardar" data-position="left" data-tooltip="Guardar Planeacion"><i class="large material-icons white-text">save</i></button>
                                 </div>
                                 <input type="hidden" class="validate" name="fecha" id="fechaDia" value="">
-                                <script>
-                                    window.addEventListener("scroll", function (e) {
-                                        $("#btn-guardar").addClass("botonGuardar");
-                                    });
-                                </script>
+                               
                                 <div id="div_dinamico1"></div>
 
                             </form>
@@ -93,8 +89,8 @@ if( !empty( $hoy ) ){
     </div>
 </div>
 
-<div class="input-field col l4 m4 s12 botonRegistrarT ">
-    <button data-target="modalAgenda" class=" btn btn-large btn-floating modal-trigger waves-effect teal white-text tooltipped" name="btnRegTiempo"
+<div class="input-field col l4 m4 s12  ">
+    <button data-target="modalAgenda" class="botonRegistrarT btn btn-large btn-floating waves-effect teal white-text modal-trigger tooltipped disabled" name="btnRegTiempo"
     id="btnRegTiempo" data-position="left" data-tooltip="Registrar tiempo"><i class="large material-icons white-text">timer</i></button>
 </div>
 <div id="modalAgenda" class="modal">

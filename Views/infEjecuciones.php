@@ -3,7 +3,7 @@ require('../Estructure/header.php');
 ?>
 
 <div id="content" class="center-align">
-    <h4>INFORME EJECUCIONES</h4>
+    <h4>INFORME EJECUCIONES GENERALES P&S</h4>
     <div class="row">
         <form action="../Controllers/ctrl_infEjecuciones.php" method="post" id="form">
             <div class="row">
