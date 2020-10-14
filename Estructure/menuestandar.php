@@ -196,7 +196,7 @@ require('../Controllers/ctrl_restriccionMenu.php');
         <a href="infPlaneacion.php">Planeación</a>
     </li>
     <li>
-        <a href="infProductosCelulas.php">Productos/Servicios - Células</a>
+        <a href="infProductosCelulas.php">Ejecución por célula</a>
     </li>
     <!--<li>
         <a href="#!">Productos/Servicios</a>
@@ -207,9 +207,6 @@ require('../Controllers/ctrl_restriccionMenu.php');
     <li>
         <a href="#!">Supervisión</a>
     </li>-->
-    <li>
-        <a href="infMisTiempos.php">Mis Tiempos</a>
-    </li>
     <li>
         <a href="infNotasTiempos.php">Proyecto/Producto - Notas</a>
     </li>

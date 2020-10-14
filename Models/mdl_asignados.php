@@ -288,7 +288,7 @@
                     while ($datos2 = mysqli_fetch_array($resultado)) {
                         $fecha = $datos2['fechAsig']; // Tomamos la fecha de asignación al producto para calcular el salario
                         if ($fecha == null) { // Si está en blanco procedemos a tomar la fecha de la Solicitud Específica
-                            $consFechSolEsp = "SELECT fechSol FROM pys_solicitudes WHERE idSol = '$solEsp';";
+                            $consFechSolEsp = "SELECT fechSol FROM pys_solicitudes WHERE idSol = '$id';";
                             $resFechSolEsp = mysqli_query($connection, $consFechSolEsp);
                             $fechSolEsp = mysqli_fetch_array($resFechSolEsp);
                             $fecha = date("Y-m-d",strtotime($fechSolEsp['fechSol']));

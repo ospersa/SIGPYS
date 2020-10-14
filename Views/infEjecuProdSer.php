@@ -3,7 +3,7 @@ require('../Estructure/header.php');
 require_once('../Controllers/ctrl_infEjecuProdSer.php');
 ?>
 <div id="container" class="center-align">
-    <h4>INFORME DE EJECUCIONES - PRODUCTOS/SERVICIOS</h4>
+    <h4>INFORME DE EJECUCIONES POR PROYECTO</h4>
     <div class="row">
         <form action="../Controllers/ctrl_infEjecuProdSer.php" method="post" id="form">
             <div class="row">

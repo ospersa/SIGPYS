@@ -163,7 +163,7 @@
                             <td > <p class= "truncate">'.$fila1['ObservacionAct'].'</p></td>
                             <td><b>Total:</b></td>
                             <td></td>
-                            <td>'.$totalH.'Horas '.$totalM.'Minutos</td>
+                            <td>'.$totalH.' Horas '.$totalM.' Minutos</td>
                             <td></td>
                             <td>'.round($porcenS,2).'%</td>
                             </tr>';
@@ -406,7 +406,7 @@
             if (mysqli_num_rows($resultado) > 0) {
                 $string .= ' ';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    $string .= '  <option value="'.$datos[0].'">'.$datos[0].' - '.$datos[1].'</option>';
+                    $string .= '  <option value="'.$datos[0].'">P'.$datos[0].' - '.$datos[1].'</option>';
                 }
                 $string .= '  </select>
                         <label for="stlSolicitud">Producto/Servicio</label>';

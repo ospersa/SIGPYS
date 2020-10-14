@@ -4,6 +4,7 @@
         <form id="actFormSolEs" action="../Controllers/ctrl_solicitudEspecifica.php" method="post" class="col l12 m12 s12">
             <input id="cod" name="cod" type="hidden">
             <input id="val" name="val" type="hidden">
+            <input id="valbus" name="valbus" type="hidden">
             <?php
             require_once('../Controllers/ctrl_solicitudEspecifica.php');
             require_once('../Controllers/ctrl_solicitud.php');

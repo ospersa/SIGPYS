@@ -432,10 +432,14 @@
         public static function registrarInfoPyS($idSol, $idUsuario){
             require('../Core/connection.php');
             $string = "";
-            $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
+            //Camio realizado para registrar video de mooc
+            $consulta1 = "SELECT pys_asignados.idAsig
+            FROM pys_asignados 
+            WHERE pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            /* $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
             FROM pys_tiempos 
             INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
-            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';"; */
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
             $consulta2 = "SELECT * FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
@@ -499,10 +503,13 @@
         public static function marcarTerminado($idSol, $idUsuario){
             require('../Core/connection.php');
             $string = "";
-            $consulta = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
+            $consulta = "SELECT pys_asignados.idAsig
+            FROM pys_asignados 
+            WHERE  pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            /* $consulta = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
             FROM pys_tiempos 
             INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
-            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='". */$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
             $resultado = mysqli_query($connection, $consulta);
             $tiempos = mysqli_num_rows($resultado);
             while ($datos = mysqli_fetch_array($resultado)) {
@@ -521,13 +528,15 @@
             } else {
                 $color = "red";
             }
-            if( $tiempos > 0 && $asignados > 1){
+            /* if( $tiempos > 0 && $asignados > 1){
                 $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
             } else if ($tiempos > 0 && $asignados == 1 && ($validarLLeno==1 || $validarLLenoPro == 1) ){
                 $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">done</i></a>';
             } else {
                 $string .= '';
-            }
+            } */
+            //Cambio realizado para ser registrado 
+            $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
             return $string;
             mysqli_close($connection);
         }
@@ -730,7 +739,6 @@
         public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
@@ -769,7 +777,7 @@
            }
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
@@ -815,7 +823,7 @@
         public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
@@ -840,7 +848,7 @@
         public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $fechaEntre = mysqli_real_escape_string($connection, $fechaEntre);
+           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);

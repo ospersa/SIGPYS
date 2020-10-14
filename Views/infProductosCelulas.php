@@ -4,7 +4,7 @@ require_once('../Controllers/ctrl_infProductosCelulas.php');
 ?>
 
 <div id="container" class="center-align">
-    <h4>INFORME PRODUCTO/SERVICIO - CÉLULAS</h4>
+    <h4>INFORME EJECUCIÓN POR CÉLULA</h4>
     <div class="row">
         <form action="../Controllers/ctrl_infProductosCelulas.php" method="post">
             <div class="row">

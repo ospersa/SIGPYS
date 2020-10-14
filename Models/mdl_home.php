@@ -200,10 +200,10 @@
         public static function productosInventario(){
             require('../Core/connection.php');
             $json = array();
-            $consulta = "SELECT SUM(idInventario), estadoInv FROM pys_actinventario WHERE est = 1 GROUP by estadoInv ";
+            $consulta = "SELECT COUNT(idInventario), estadoInv FROM pys_actinventario WHERE est = 1 GROUP by estadoInv ";
             $resultado = mysqli_query($connection, $consulta);
             while($datos = mysqli_fetch_array($resultado) ){
-                $cant = $datos['SUM(idInventario)'];
+                $cant = $datos['COUNT(idInventario)'];
                 $estadoInv = $datos['estadoInv'];
                 $json[]     = array(
                     'label' => $estadoInv,

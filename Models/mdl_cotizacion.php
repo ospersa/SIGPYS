@@ -354,7 +354,7 @@ Class Cotizacion {
         $copia = "apoyoconectate@uniandes.edu.co;";
         $consulta2 = "SELECT pys_personas.correo FROM pys_asignados 
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
-            WHERE idProy = '$idProy' AND (idRol = 'ROL024' OR idRol = 'ROL025')
+            WHERE idProy = '$idProy' AND (idRol = 'ROL024' OR idRol = 'ROL025') AND idSol=''
             AND pys_personas.est = '1'
             AND pys_asignados.est = '1';";
         $resultado2 = mysqli_query($connection, $consulta2);

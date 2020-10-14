@@ -811,10 +811,10 @@
                 $spreadsheet = new Spreadsheet();
                 $spreadsheet->getProperties()->setCreator('Conecta-TE')
                     ->setLastModifiedBy('Conecta-TE')
-                    ->setTitle('Informe de Ejecución - Productos/Servicios')
-                    ->setSubject('Informe de Ejecución - Productos/Servicios')
-                    ->setDescription('Informe de Ejecución - Productos/Servicios')
-                    ->setKeywords('Informe de Ejecución - Productos/Servicios')
+                    ->setTitle('Informe de Presupuesto - ejecutado.')
+                    ->setSubject('Informe de Presupuesto - ejecutado.')
+                    ->setDescription('Informe de Presupuesto - ejecutado.')
+                    ->setKeywords('Informe de Presupuesto - ejecutado.')
                     ->setCategory('Test result file');
                     
             $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-Ejecucion');
@@ -836,7 +836,7 @@
                 $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(13);
                 $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(13);
                 $sheet = $spreadsheet->getActiveSheet();
-                $sheet->setCellValue('A1', 'Informe de Ejecuciones - Productos/Servicios');
+                $sheet->setCellValue('A1', 'Informe de Presupuesto - ejecutado');
                 $sheet->mergeCells("A1:I1"); 
                 $fila = 4;  
                 $datos = mysqli_fetch_all($resultado,MYSQLI_ASSOC);
@@ -1000,7 +1000,7 @@
             }
             
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="InformeEjecucion-ProductosServicios.xlsx"');
+            header('Content-Disposition: attachment;filename="InformePresupuesto-ejecutado ' . gmdate('D, d M Y H:i:s') . '.xlsx"');
             header('Cache-Control: max-age=0');
             header('Cache-Control: max-age=1');
 

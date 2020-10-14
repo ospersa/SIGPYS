@@ -15,7 +15,7 @@ use PHPMailer\PHPMailer\Exception;
 
             try {
                 //Server settings
-                $mail->SMTPDebug = 2;                      
+                $mail->SMTPDebug = 0;    //igual a 2 para que muestre el codigo de envio y 0 para que no muestre nada                  
                 $mail->isSMTP();                                            
                 $mail->Host       = 'smtp.hostinger.co';                    
                 $mail->SMTPAuth   = true;                                   

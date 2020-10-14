@@ -32,7 +32,7 @@ if (!empty($_POST['txtFechIni']) && !empty($_POST['txtFechFin']) && !isset($_POS
     $notaTiempo = $info["notaTiempo"];
     $fase       = Tiempos::selectFase($info["idFase"]);
 } else {
-   return InformeMisTiempos::editarTiemposInfo($idTiempo, $user, $date, $horas, $minutos, $idFaseEdit, $nota, $fechIni, $fechFin);
+   echo InformeMisTiempos::editarTiemposInfo($idTiempo, $user, $date, $horas, $minutos, $idFaseEdit, $nota, $fechIni, $fechFin);
 }
 
 

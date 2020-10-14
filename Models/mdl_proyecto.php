@@ -15,7 +15,7 @@ class Proyecto {
                             <th>Cod. Conecta-TE</th>
                             <th>Proyecto</th>
                             <th>Convocatoria</th>
-                            <th>Nombre Corto</th>
+                            <th>Diposnible SAP</th>
                             <th>Presupuesto</th>
                             <th>Inicio</th>
                             <th>Cierre</th>
@@ -44,6 +44,7 @@ class Proyecto {
         $resultado = mysqli_query($connection, $consulta);
         while ($datos = mysqli_fetch_array($resultado)) {
             $presupuesto = ($datos['presupuestoProy'] == '') ? 0 : $datos['presupuestoProy'];
+            $nombreCortoProy = ($datos['nombreCortoProy'] == '') ? 0 : $datos['nombreCortoProy'];
             echo "      <tr>
                             <td>".$datos['nombreEnt']."</td>
                             <td>".$datos['facDeptoFacultad']." - ".$datos['facDeptoDepartamento']."</td>
@@ -53,7 +54,7 @@ class Proyecto {
                             <td>".$datos['codProy']."</td>
                             <td>".$datos['nombreProy']."</td>
                             <td>".$datos['nombreConvocatoria']."</td>
-                            <td>".$datos['nombreCortoProy']."</td>
+                            <td>$ ".$nombreCortoProy."</td>
                             <td>$ ".number_format($presupuesto, '0', ',', '.')."</td>
                             <td>".$datos['fechaIniProy']."</td>
                             <td>".$datos['fechaCierreProy']."</td>
@@ -147,7 +148,7 @@ class Proyecto {
                     <th>Cod. Conecta-TE</th>
                     <th>Proyecto</th>
                     <th>Convocatoria</th>
-                    <th>Nombre Corto</th>
+                    <th>Diposnible SAP</th>
                     <th>Presupuesto</th>
                     <th>Inicio</th>
                     <th>Cierre</th>
@@ -162,6 +163,7 @@ class Proyecto {
             <tbody>';
             while ($datos = mysqli_fetch_array($resultado)) {
                 $presupuesto = ($datos['presupuestoProy'] == '') ? 0 : $datos['presupuestoProy'];
+                $nombreCortoProy = ($datos['nombreCortoProy'] == '') ? 0 : $datos['nombreCortoProy'];
                 echo "      <tr>
                                 <td>".$datos['nombreEnt']."</td>
                                 <td>".$datos['facDeptoFacultad']." - ".$datos['facDeptoDepartamento']."</td>
@@ -171,7 +173,7 @@ class Proyecto {
                                 <td>".$datos['codProy']."</td>
                                 <td>".$datos['nombreProy']."</td>
                                 <td>".$datos['nombreConvocatoria']."</td>
-                                <td>".$datos['nombreCortoProy']."</td>
+                                <td>$ ".$nombreCortoProy."</td>
                                 <td>$ ".number_format($presupuesto, '0', '.', ',')."</td>
                                 <td>".$datos['fechaIniProy']."</td>
                                 <td>".$datos['fechaCierreProy']."</td>
@@ -1163,8 +1165,8 @@ class Proyecto {
                     <label for="txtNomProy" class="active">Nombre del Proyecto</label>
                 </div>
                 <div class="input-field col l3 m3 s12 offset-l3 offset-m3">
-                    <input name="txtNomCorProy" id="txtNomCorProy" value="">
-                    <label for="txtNomCorProy" class="active">Nombre Corto</label>
+                    <input name="txtNomCorProy" id="txtNomCorProy" type="number" value="">
+                    <label for="txtNomCorProy" class="active">Disponible SAP $</label>
                 </div>
                 <div class="input-field col l3 m3 s12">
                     <textarea name="txtContProy" id="txtContProy" class="materialize-textarea"></textarea>

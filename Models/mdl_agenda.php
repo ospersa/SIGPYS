@@ -677,6 +677,22 @@ class  PlaneacionAse{
         mysqli_close($connection);
     }
 
+    public static function tiemposRegistrar($fecha, $usuario){
+        require('../Core/connection.php');   
+        $newFecha = date("Y-m-d", strtotime($fecha));
+        $consulta ="SELECT idAgenda FROM pys_agenda 
+        INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
+        INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+        WHERE ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_login.est=1 AND pys_agenda.fechAgenda ='$newFecha' AND pys_login.usrLogin='$usuario 'AND estAgenda='1'";
+
+        $resultado = mysqli_query($connection, $consulta);
+        if(mysqli_num_rows($resultado) >=1){
+            echo 1;
+        } else{
+            echo 0;
+        }
+    }
+
 
 }
 ?>

@@ -15,7 +15,7 @@ $('.modal').on('change', function () {
 $(document).ready(function () {
     let path = window.location.pathname;
     let comp = path.split("/")
-    if (comp[3] == 'home.php') {
+    if (comp.pop() == 'home.php') {
         $('main').css('background-color','#2D3340')
         if ($('#chartSolicitud')) {
             chartSolicitud();
@@ -106,7 +106,7 @@ $(document).ready(function () {
     });
 
     $('#btnRegTiempo').click(function(){
-        var fecha = $("#fecha").val();
+        var fecha = $("#fechaDia").val();
         $('.modal').modal({
             onOpenStart: modalAgenda(fecha),
             onOpenEnd: inicializarCampos(),
@@ -527,7 +527,6 @@ $(document).ready(function () {
             $('#proyecInf').addClass("hide")
             inicializarCampos();
         }else if(selectValor == " "){
-            console.log("selectValor");
             $('#proyecInf').removeClass("hide")
             inicializarCampos();
         }
@@ -540,7 +539,6 @@ $(document).ready(function () {
             $('#frenteInf').addClass("hide")
             inicializarCampos();
         }else if(selectValor == ""){
-            console.log("selectValor");
             $('#frenteInf').removeClass("hide")
             inicializarCampos();
         }
@@ -556,6 +554,7 @@ $(document).ready(function () {
         $('#txtDesc').addClass("truncate");
         
     });
+    $('#fechaA')
 
 });
 
@@ -602,7 +601,7 @@ function ocultarEditar(id) {
             },
             success: function (data) {
                 alert(data);
-                if (comp[3] == 'infMisTiempos.php') {
+                if (comp.pop() == 'infMisTiempos.php') {
                     buscar('../Controllers/ctrl_infMisTiempos.php');
                 } else{
                     location.reload();
@@ -732,9 +731,9 @@ function cargarResAgenda(fecha, elem) {
     let path = window.location.pathname;
     let comp = path.split("/")
     let url = "";
-    if (comp[3] == 'agenda.php') {
+    if (comp.pop() == 'agenda.php') {
         url = '../Controllers/ctrl_agenda.php';
-    } else if (comp[3] == 'agendaAdmin.php') {
+    } else if (comp.pop() == 'agendaAdmin.php') {
         url = '../Controllers/ctrl_agendaAdmin.php';
     }
     let idper = $('#sltPersona').val();
@@ -771,17 +770,33 @@ function cargarResAgenda(fecha, elem) {
             } else{
                 elem.removeClass('teal accent-4').addClass(' blue  darken-4 ');
             }
-            console.log(data);
             $('#fechaA').text(fecha);
             $('#fechaDia').val(fecha);
             $('#div_dinamico1').html(data);
             $('#div_dinamico').slideDown("slow");
             planeacionDia(fecha, idper, url);
+            ifRegistrarTiempo(fecha)
             inicializarCampos();
         }
     });
 };
+function ifRegistrarTiempo(fecha){
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_agenda.php',
+        data: {
+            dateRegistrado: fecha,
+        },
+        success: function (data) {
+            if (data==1){
+                $('#btnRegTiempo').removeClass('disabled');  
+            } else if (data==0) {
+                $('#btnRegTiempo').addClass('disabled');
+            }
+        }
+    });
 
+}
 function planeacionDia(fecha, idper, url){
     var string = "";
     $.ajax({
@@ -881,44 +896,45 @@ function modalAgenda(fecha){
             $('#modalA').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
         },
         success: function (data) {
-            if (data !=""){
-                let tasks = JSON.parse(data);              
-                string += `
-                <input id="fecha" name="fecha" value="`+fecha+`" type="hidden">
-                <table class="left responsive-table">
-                <thead>
-                    <tr>
-                        <th>Producto/Servicio</th>
-                        <th>Descripción del Producto/Servicio</th>
-                        <th>Actividad</th>
-                        <th>Tiempo</th>
-                        <th>Fase</th>
-                        <th>Registrar</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-                tasks.forEach(task => {
-                    if (task.estAgenda == 1){
+            if (data !="[]"){
+                let tasks = JSON.parse(data);     
                     string += `
+                    <input id="fecha" name="fecha" value="`+fecha+`" type="hidden">
+                    <table class="left responsive-table">
+                    <thead>
                         <tr>
-                        <td>P${task.idSol}</td>
-                            <td><p class="truncate">${task.descripcionSol}</p></td>
-                            <td><p class="truncate">${task.notaAgenda}</p></td>
-                            <td>${task.horaAgenda} h ${task.minAgenda} m </td>
-                            <td>${task.fase}</td>
-                            <td><p>
-                            <label>
-                              <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />
-                              <span></span>
-                            </label></td>
-                        </tr>`;
-                    }
-                });
-                string += `
+                            <th>Producto/Servicio</th>
+                            <th>Descripción del Producto/Servicio</th>
+                            <th>Actividad</th>
+                            <th>Tiempo</th>
+                            <th>Fase</th>
+                            <th>Registrar</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                    tasks.forEach(task => {
+                        if (task.estAgenda == 1){
+                        string += `
+                            <tr>
+                            <td>P${task.idSol}</td>
+                                <td><p class="truncate">${task.descripcionSol}</p></td>
+                                <td><p class="truncate">${task.notaAgenda}</p></td>
+                                <td>${task.horaAgenda} h ${task.minAgenda} m </td>
+                                <td>${task.fase}</td>
+                                <td><p>
+                                <label>
+                                <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />
+                                <span></span>
+                                </label></td>
+                            </tr>`;
+                        }
+                    });
+                    string += `
                     </tbody>
                     </table>`;
                     $('#modalA').html(string);
                     inicializarCampos();
+                
             } else{
                 $('#modalA').html("No se ha registrado ningun Producto/Servicio para este día");
             }
@@ -1083,6 +1099,8 @@ function suprimir(value, url) {
 function envioData(valor, dir) {
     $('.modal-content').load(dir + "?id=" + valor, function () {
         $('#cod').val(valor);
+        textbus = $("#txt-search").val();
+        $('#valbus').val(textbus);
         $("select").formSelect();
         inicializarCampos();
         var textareas = $(".textarea");
@@ -1675,10 +1693,8 @@ function actSolEsp(){
         url: '../Controllers/ctrl_solicitudEspecifica.php',
         data: $("#actFormSolEs").serialize(),
         success: function (data) {
-            console.log("data")
-            console.log($("#actFormSolEs").serialize())
             alert(data);
-            buscarEst('../Controllers/ctrl_solicitudEspecifica.php', $("#cod").val());
+            buscarEst('../Controllers/ctrl_solicitudEspecifica.php', $("#valbus").val());
             $("#modalSolicitudEspecifica").modal('close')
         }
     });

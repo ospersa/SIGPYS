@@ -170,10 +170,10 @@
 </ul>
 <ul id="informes" class="dropdown-content teal darken-1">
     <li>
-        <a href="infEjecuciones.php">Ejecuciones</a>
+        <a href="infEjecuciones.php">Ejecuciones generales P&S</a>
     </li>
     <li>
-        <a href="infEjecuProdSer.php">Ejecuciones Productos/Servicios</a>
+        <a href="infEjecuProdSer.php">Ejecuciones por proyecto</a>
     </li>
     <li>
         <a href="infNomina.php">Nómina</a>
@@ -188,13 +188,13 @@
         <a href="infInventario.php">Inventario</a>
     </li>
     <li>
-        <a href="infProductosConSaldo.php">Productos/Servicios - Ejecución</a>
+        <a href="infProductosConSaldo.php">Presupuesto - ejecutado</a>
     </li>
     <li>
-        <a href="infProductosCelulas.php">Productos/Servicios - Células</a>
+        <a href="infProductosCelulas.php">Ejecución por célula</a>
     </li>
     <li>
-        <a href="infTiempos.php">Productos/Servicios - Tiempos</a>
+        <a href="infTiempos.php">Ejecuciones tiempos PS</a>
     </li>
     <!--<li>
         <a href="#!">P/S con Saldo Negativo</a>
@@ -206,10 +206,10 @@
         <a href="infSupervision.php">Supervisión</a>
     </li> 
     <li>
-        <a href="infMisTiempos.php">Mis Tiempos</a>
+        <a href="infNotasTiempos.php">Proyecto/Producto - Notas</a>
     </li>
     <li>
-        <a href="infNotasTiempos.php">Proyecto/Producto - Notas</a>
+        <a href="infSemaforo.php">Semáforo</a>
     </li>
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
