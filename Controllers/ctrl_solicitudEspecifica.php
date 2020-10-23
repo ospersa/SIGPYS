@@ -45,8 +45,9 @@ if (isset($_POST['btnRegistrarSolEsp'])) {
     $servicio = $_POST['sltServicio'];
     $fechaPrev = $_POST['txtFechaPrevista'];
     $descripcion = $_POST['txtDescripcion'];
+    $txtRegistrarT = (isset($_POST['txtRegistrarT'])) ? $_POST['txtRegistrarT'] : 0;
     $registra = $_SESSION['usuario'];
-    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,1);
+    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,1, $txtRegistrarT);
 }
 if (isset($_POST['btnRegistrarSolEspPres'])) {
     $idSolIni = $_POST['txtIdSol'];
@@ -59,8 +60,9 @@ if (isset($_POST['btnRegistrarSolEspPres'])) {
     $servicio = $_POST['sltServicio'];
     $fechaPrev = $_POST['txtFechaPrevista'];
     $descripcion = $_POST['txtDescripcion'];
+    $txtRegistrarT = (isset($_POST['txtRegistrarT'])) ? $_POST['txtRegistrarT'] : 0;
     $registra = $_SESSION['usuario'];
-    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,2);
+    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,2, $txtRegistrarT);
 }
 
 if (isset($_REQUEST['id'])) {
@@ -81,6 +83,7 @@ if (isset($_REQUEST['id'])) {
     $ultActualizacion = $info['fechAct'];
     $idTipoSol = $info['idTSol'];
     $idCM = $info['idCM'];
+    $RegistraTiempo = ($info['registraTiempo']==1? 'checked="checked"':'');
 }
 
 if (isset($_POST['txtSolIni']) && isset($_POST['txtSolEsp']) && isset($_POST['txtIdTipoSol']) && isset($_POST['txtTipoSol']) && isset($_POST['sltEstadoSolicitud']) && isset($_POST['txtPresupuesto']) && isset($_POST['txtHoras']) ) {
@@ -94,8 +97,9 @@ if (isset($_POST['txtSolIni']) && isset($_POST['txtSolEsp']) && isset($_POST['tx
     $servicio = $_POST['sltServicio'];
     $fechaPrev = $_POST['txtFechaPrev'];
     $descripcion = $_POST['txtObservacion'];
+    $txtRegistrarT = (isset($_POST['txtRegistrarT'])) ? $_POST['txtRegistrarT'] : 0;
     $persona = $_SESSION['usuario'];
-    return SolicitudEspecifica::actualizarSolicitudEspecifica($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona);
+    return SolicitudEspecifica::actualizarSolicitudEspecifica($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona, $txtRegistrarT);
 }
 
 

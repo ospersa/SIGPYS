@@ -114,7 +114,7 @@ class  PlaneacionAse{
         INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
         INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
         INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
-        WHERE pys_solicitudes.idTSol = 'TSOL02' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005') AND pys_solicitudes.est = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto' ";
+        WHERE pys_solicitudes.idTSol = 'TSOL02' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005') AND pys_solicitudes.est = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto' AND pys_actsolicitudes.registraTiempo=1";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             while ($datos = mysqli_fetch_array($resultado)) {

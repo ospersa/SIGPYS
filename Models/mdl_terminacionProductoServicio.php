@@ -10,7 +10,7 @@
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy =pys_proyectos.idProy
             INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_proyectos.est=1 AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%');";
+            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_proyectos.est=1 AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%') GROUP BY pys_actualizacionproy.idProy;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 && $busqueda != null) {
             echo '  <select name="sltProy" id="sltProy" >';
@@ -40,11 +40,11 @@
             INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
             INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
             INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
-            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu        
+            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
             INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
             INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-            WHERE pys_login.usrLogin = '$user' AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actualizacionproy.est=1  AND pys_asignados.idSol='' AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  ";
+            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_asignados.idSol='' AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  ";
             if ($cod == 1 ){
                 $consulta .= "AND pys_actualizacionproy.idProy ='$busProy' ";
             } else if($cod == 3){
@@ -52,7 +52,7 @@
             }else if ($cod == 2 ){
                 $consulta .= "AND pys_actsolicitudes.fechPrev <='$fechFin' ";
             } 
-            $consulta .= "ORDER BY pys_solicitudes.fechSol  ASC";
+            $consulta .= "ORDER BY pys_solicitudes.fechSol  DESC";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 ){
                 $string = ' <table class="responsive-table left" id="terminar">
@@ -90,21 +90,28 @@
                     WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
                     $resultadoProd = mysqli_query($connection, $consultaProd);
                     $nomProduc = "";
-                    if ($resultadoProd == TRUE ){
-                        $datosProd = mysqli_fetch_array($resultadoProd);
-                        $nomProduc = $datosProd['nombreProd'];
-                    }
-                    if ($data2['est'] == 1){
+                    if(mysqli_num_rows($resultadoProd)<1){
                         $color = "red";
                         $modal = "!";
                         $onclick = "";
                         $mjsTooltip ="Faltan requisitos para terminar el Producto o Servicio";
-                    } else if ($data2['est'] == 2){
-                        $color = "teal";
-                        $modal = "modalTerminarProSer";
-                        $onclick ='onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
-                        $mjsTooltip = "Terminar Producto o Servicio";
-                    }
+                    } else{
+                        if ($resultadoProd == TRUE ){
+                            $datosProd = mysqli_fetch_array($resultadoProd);
+                            $nomProduc = $datosProd['nombreProd'];
+                        }
+                        if ($data2['est'] == 1){
+                            $color = "red";
+                            $modal = "!";
+                            $onclick = "";
+                            $mjsTooltip ="Faltan requisitos para terminar el Producto o Servicio";
+                        } else if ($data2['est'] == 2){
+                            $color = "teal";
+                            $modal = "modalTerminarProSer";
+                            $onclick ='onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
+                            $mjsTooltip = "Terminar Producto o Servicio";
+                        }
+                    
                     $string .= '<tr>
                             <td>'.$codProy.'</td>
                             <td>'.$nombreProy.'</td>
@@ -117,7 +124,8 @@
                             <td>'.$fechSol.'</td>
                             <td><a href="#modalTerminarProSer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
                             <td><a href="#'.$modal.'" data-position="right" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
-                        </tr>';     
+                        </tr>'; 
+                    }    
                 }
                 $string .= '    </tbody>
                                 </table>';
@@ -190,7 +198,7 @@
                 if ($resultado1 == TRUE && $registro1 > 0 ){
                     $nomProduc  = (empty($datos1['nombreProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreProd'].' </p>' ;
                     $fechaEntre = (empty($datos1['fechEntregaProd'])) ? $vacio : '<p class="left-align">'.$datos1['fechEntregaProd'].' </p>' ;
-                    $RED        = (empty($datos1['fechEntregaProd'])) ? $vacio : '<p class="left-align">'.$datos1['fechEntregaProd'].' </p>' ;
+                    $RED        = (empty($datos1['descripcionProd'])) ? $vacio : '<p class="left-align">'.$datos1['descripcionProd'].' </p>' ;
                     $plat       = (empty($datos1['nombrePlt'])) ? $vacio : '<p class="left-align">'.$datos1['nombrePlt'].' </p>' ;
                     $clase      = (empty($datos1['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreClProd'].' </p>' ;
                     $tipo       = (empty($datos1['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreTProd'].' </p>' ;
@@ -218,7 +226,7 @@
                     }
                     $string .='
                     <div class="input-field col l5 m12 s12 ">
-                        <label for="txtRED" class="active">¿Es una RED?:</label>
+                        <label for="txtRED" class="active">¿Es un RED?:</label>
                         '.$RED.'
                     </div>
                     <div class="input-field col l5 m12 s12 offset-l1 ">
@@ -234,11 +242,11 @@
                         '.$tipo.'
                     </div>
                     <div class="input-field col l11 m12 s12 ">
-                        <label for="url" class="active">URL store easy Conecta-TE :</label>
+                        <label for="url" class="active">URL store easy Conecta-TE:</label>
                         '.$url.'
                     </div>
                     <div class="input-field col l11 m12 s12  left-align">
-                        <label for="labor" class="active">Labor :</label>
+                        <label for="labor" class="active">Observaciones:</label>
                         '.$labor.'
                     </div>
                     ';
