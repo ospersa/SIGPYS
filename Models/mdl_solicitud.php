@@ -404,7 +404,7 @@
                         }
                     }
                     $string .= "</select>
-                                <label for='sltEstadoSolicitud'>Estado solicitud</label>";
+                                <label for='sltEstadoSolicitud'>Estado Producto/Servicio</label>";
                 }
             }
             return $string;

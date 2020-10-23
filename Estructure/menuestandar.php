@@ -159,6 +159,12 @@ require('../Controllers/ctrl_restriccionMenu.php');
         <li>
             <a href="agendaAdmin.php">Todas las Agendas</a>
         </li>
+        <li>
+            <a href="solicitudEspecifica.php">Productos/Servicios</a>
+        </li>
+        <li>
+            <a href="solicitudInicial.php">Solicitud inicial</a>
+        </li>
     </ul>';
     }
     ?>

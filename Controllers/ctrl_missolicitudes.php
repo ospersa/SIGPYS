@@ -51,7 +51,7 @@ if (!empty($_REQUEST['cod'])) {
 if (!$id && !isset($_POST['dato1']) && !isset($_POST['btnActServicio']) && !isset($_POST['btnGuaSopo']) && !isset($_POST['btnGuaReal'])) {
     SolicitudEspecifica::cargaEspecificasUsuario( $search, 2, $usuario);
 } else if (isset($_POST['dato1']) && isset($_POST['dato2']) && !isset($_POST['btnActServicio']) && !isset($_POST['btnGuaSopo'])){
-     echo Producto::selectTipoProducto($sltClase2, $idSer2, null);
+     echo SolicitudEspecifica::selectTipoProducto($sltClase2, $idSer2, null);
 }
 
 if($id) {
@@ -70,9 +70,9 @@ if($id) {
     $solEspecifica  = $info['ObservacionAct'];
     $fechaPrev      = $info['fechPrev'];
     $idSer          = $info['idSer'];
-    $sltPlata       = Plataforma::selectPlataforma (null);
+    $sltPlata       = SolicitudEspecifica::selectPlataforma (null);
     $sltRED         = SolicitudEspecifica::selectRED (null);
-    $sltClase       = Producto::selectClaseConTipo ($idSer,null);
+    $sltClase       = SolicitudEspecifica::selectClaseConTipo ($idSer,null);
     $tiempoTotal    = SolicitudEspecifica::totalTiempo ($idSol);
     $hora           = $tiempoTotal[0];
     $min            = $tiempoTotal[1];
@@ -86,9 +86,9 @@ if($id) {
         $docentesImpac      = $info2['docentesImpac'];
         $url                = $info2['urlResultado'];
         $tipo               = $info2['idTProd'];
-        $sltPlata           = Plataforma::selectPlataforma ($plat);
-        $sltClase           = Producto::selectClaseConTipo ($idSer,$clase);
-        $sltTipo            = Producto::selectTipoProducto($clase, $idSer, $tipo);
+        $sltPlata           = SolicitudEspecifica::selectPlataforma ($plat);
+        $sltClase           = SolicitudEspecifica::selectClaseConTipo ($idSer,$clase);
+        $sltTipo            = SolicitudEspecifica::selectTipoProducto($clase, $idSer, $tipo);
             
     } else if ($validarPro == True){
         $info2      = SolicitudEspecifica::cargarInformacionProducto($id);
@@ -106,9 +106,9 @@ if($id) {
         $autores    = $info2['autorExterno'];
         $fechaEntre = $info2['fechEntregaProd'];
         $sltRED     = SolicitudEspecifica::selectRED ($RED);
-        $sltPlata   = Plataforma::selectPlataforma ($plat);
-        $sltClase   = Producto::selectClaseConTipo ($idSer,$clase);
-        $sltTipo    = Producto::selectTipoProducto($clase, $idSer, $tipo);
+        $sltPlata   = SolicitudEspecifica::selectPlataforma ($plat);
+        $sltClase   = SolicitudEspecifica::selectClaseConTipo ($idSer,$clase);
+        $sltTipo    = SolicitudEspecifica::selectTipoProducto($clase, $idSer, $tipo);
     }
 }
 

@@ -52,13 +52,21 @@
                 <textarea name="txtObservacion" id="txtObservacion" class="materialize-textarea textarea"><?php echo $observacion;?></textarea>
                 <label for="txtObservacion" class="active">Descripción Producto/Servicio</label>
             </div>
-            <div class="input-field col l6 m6 s12">
+            <div class="input-field col l4 m4 s12">
                 <input type="text" name="txtFechCreación" id="txtFechCreación" value ="<?php echo $fechCreacion; ?>" readonly>
                 <label for="txtFechCreación" class="active">Fecha creación</label>
             </div>
-            <div class="input-field col l6 m6 s12">
+            <div class="input-field col l4 m4 s12">
                 <input type="text" name="txtUltActualizacion" id="txtUltActualizacion" value ="<?php echo $ultActualizacion;?>" readonly>
                 <label for="txtUltActualizacion" class="active">Última actualización</label>
+            </div>
+            <div class="input-field col l4 m4 s12">
+            <p>
+                <label>
+                    <input class="filled-in" name="txtRegistrarT" id="txtRegistrarT" type="checkbox" <?php echo $RegistraTiempo;?>/>
+                    <span>Habilitar registrar tiempos (No para productos MOOCs)</span>
+                </label>
+            </p>
             </div>
             <div class="input-field col l12 m12 s12">
                     <button class="btn waves-effect waves-light" type="submit" onclick="actSolEsp();" name="btnActualizarSolEsp">Actualizar</button>

@@ -166,7 +166,7 @@ class Visitante{
         $cs=mysqli_query($connection, $sql);
 
         //Código de inserción en la tabla pys_actsolicitudes
-        $sql1="INSERT INTO pys_actsolicitudes VALUES (0, 'ESS003', '$codsol', '$idCM', 'SER047', '$solicitante', '$solicitante', null, now(), '$producto2','0','0','1')";
+        $sql1="INSERT INTO pys_actsolicitudes VALUES (0, 'ESS003', '$codsol', '$idCM', 'SER047', '$solicitante', '$solicitante', null, now(), '$producto2','0','0','1','1')";
         $cs1=mysqli_query($connection, $sql1);
 
         if ($cs && $cs1) {

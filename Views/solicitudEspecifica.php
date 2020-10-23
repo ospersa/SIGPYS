@@ -41,11 +41,11 @@ if ($idInicial != "") {
                                 </ul>
                             </div>
                             <div class="input-field col l1 m1 s12 offset-l3 offset-m3">
-                                <input type="number" min="0" name="txtHora" id="txtHora" placeholder="0">
+                                <input type="number" min="0" name="txtHora" id="txtHora" placeholder="0" value="0">
                                 <label for="txtHora">Horas</label>
                             </div>
                             <div class="input-field col l1 m1 s12">
-                                <input type="number" max="59" min="0" name="txtMinuto" id="txtMinuto" placeholder="0">
+                                <input type="number" max="59" min="0" name="txtMinuto" id="txtMinuto" placeholder="0" value="0">
                                 <label for="txtMinuto">Minutos</label>
                             </div>
                             <div class="input-field col l2 m2 s12">
@@ -56,6 +56,14 @@ if ($idInicial != "") {
                                 .$selectEquipo.
                             '</div>
                             <div id="sltServicio" class="input-field col l4 m4 s12 offset-l3 offset-m3"></div>
+                            <div class="input-field col l4 m4 s12 offset-l2 offset-m2">
+                                <p>
+                                    <label>
+                                        <input class="filled-in" name="txtRegistrarT" id="txtRegistrarT" type="checkbox"/>
+                                        <span>Habilitar registrar tiempos (No para productos MOOCs)</span>
+                                    </label>
+                                </p>
+                                </div>
                             <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
                                 <textarea name="txtDescripcion" id="txtDescripcion" class="materialize-textarea" required></textarea>
                                 <label for="txtDescripcion">Descripción del Producto/Servicio*</label>

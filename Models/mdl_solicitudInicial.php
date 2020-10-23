@@ -47,7 +47,7 @@ Class SolicitudInicial {
                                 <th>Estado Sol.Inicial</th>
                                 <th>Código Proyecto Conecta-TE</th>
                                 <th>Proyecto</th>
-                                <th>Registró</th>
+                                
                                 <th>Solicitante</th>
                                 <th>Descripción Sol. Inicial</th>
                                 <th>Fecha Prevista para Entrega</th>
@@ -64,8 +64,8 @@ Class SolicitudInicial {
                                 <td>'.$datos['idSol'].'</td>
                                 <td>'.$datos['nombreEstSol'].'</td>
                                 <td>'.$datos['codProy'].'</td>
-                                <td>'.$datos['nombreProy'].'</td>
-                                <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>';
+                                <td>'.$datos['nombreProy'].'</td>'
+                                ;
                 /** Validación del nombre del solicitante */
                 $consulta2 = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres 
                     FROM pys_personas

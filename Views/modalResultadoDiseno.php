@@ -57,7 +57,7 @@
             </div>
             <div class="input-field col l11 m12 s12  left-align">
                 <textarea name="labor" id="labor" class="materialize-textarea"><?php echo $labor;?></textarea>
-                <label for="labor" class="active">Labor realizada:</label>
+                <label for="labor" class="active">Observaciones:</label>
             </div>
         </div>
         <div class="input-field col l6 m12 s12 offset-l3 ">
