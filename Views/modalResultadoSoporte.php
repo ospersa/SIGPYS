@@ -29,11 +29,11 @@
             </div>
             <div class="input-field col l5 m12 s12 ">
                 <input type="text" name="nomProd" id="nomProd" value="<?php echo $nomProduc;?>">
-                <label for="nomProd" class="active">Nombre Producto*</label>
+                <label for="nomProd" class="active">Nombre Producto</label>
             </div>
             <div class="input-field col l5 m12 s12 offset-l1 ">
                 <input class="datepicker" type="text" name="txtfechEntr" id="txtfechEntr"  value="<?php echo $fechaEntre;?>">
-                <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente*</label>
+                <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente</label>
             </div>
             <div class="input-field col l5 m12 s12 ">
                 <?php echo $sltRED;?>

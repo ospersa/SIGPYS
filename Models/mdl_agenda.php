@@ -4,11 +4,15 @@ class  PlaneacionAse{
 
     public static function onPeriodoActual() {
         require('../Core/connection.php');
-        $fechaAct = $newFecha = date("Y/m/d");
+        $fechaAct = date("Y/m/d");
         $consulta ="SELECT idPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fechaAct' AND '$fechaAct'<= finPeriodo;";
         $resultado = mysqli_query($connection, $consulta);
-        $datos = mysqli_fetch_array($resultado);
-        return $datos['idPeriodo'];
+        if(mysqli_num_rows($resultado)>0){
+            $datos = mysqli_fetch_array($resultado);
+            return $datos['idPeriodo'];
+        }else{
+            return false;
+        }
         mysqli_close($connection);
     }
 

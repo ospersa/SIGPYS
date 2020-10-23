@@ -29,11 +29,11 @@
             </div>
             <div class="input-field col l5 m12 s12 ">
                 <input type="text" name="nomProd" id="nomProd" value="<?php echo $nomProduc;?>" >
-                <label for="nomProd" class="active">Nombre Producto*</label>
+                <label for="nomProd" class="active">Nombre Producto</label>
             </div>
             <div class="input-field col l5 m12 s12 offset-l1 ">
                 <input class="datepicker" type="text" name="txtfechEntr" id="txtfechEntr"  value="<?php echo $fechaEntre;?>" >
-                <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente*</label>
+                <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente</label>
             </div>
             <div class="input-field col l11 m12 s12  left-align">
                 <textarea name="sinopsis" id="sinopsis" class="materialize-textarea"><?php echo $sinopsis;?></textarea>
@@ -61,7 +61,7 @@
             </div>
             <div class="input-field col l11 m12 s12  left-align">
                 <textarea name="autores" id="autores" class="materialize-textarea"><?php echo $autores;?></textarea>
-                <label for="autores" class="active">Autores*:</label>
+                <label for="autores" class="active">Autores:</label>
             </div>
             <div class="input-field col l11 m12 s12 ">
                 <input type="text" name="url" id="url" value="<?php echo $url;?>">
