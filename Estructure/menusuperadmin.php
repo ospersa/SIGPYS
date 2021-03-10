@@ -223,6 +223,9 @@
         <a href="ResultadoSoporte.php">Productos de soporte</a>
     </li>
     <li>
+        <a href="productosInfo.php">Productos Información</a>
+    </li>
+    <li>
         <a href="claProductos.php">Clases de productos</a>
     </li>
     <li>

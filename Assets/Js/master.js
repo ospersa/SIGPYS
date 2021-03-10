@@ -1098,6 +1098,7 @@ function suprimir(value, url) {
 /*------- Inicio envio de datos a modal -------*/
 function envioData(valor, dir) {
     $('.modal-content').load(dir + "?id=" + valor, function () {
+        console.log(valor);
         $('#cod').val(valor);
         textbus = $("#txt-search").val();
         $('#valbus').val(textbus);

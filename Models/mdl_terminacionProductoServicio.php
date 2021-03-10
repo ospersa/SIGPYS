@@ -44,7 +44,7 @@
             INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
             INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_asignados.idSol='' AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  ";
+            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1 ";
             if ($cod == 1 ){
                 $consulta .= "AND pys_actualizacionproy.idProy ='$busProy' ";
             } else if($cod == 3){
@@ -52,7 +52,7 @@
             }else if ($cod == 2 ){
                 $consulta .= "AND pys_actsolicitudes.fechPrev <='$fechFin' ";
             } 
-            $consulta .= "ORDER BY pys_solicitudes.fechSol  DESC";
+            $consulta .= "GROUP BY pys_solicitudes.idSol ORDER BY pys_solicitudes.fechSol  DESC";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 ){
                 $string = ' <table class="responsive-table left" id="terminar">
@@ -393,7 +393,7 @@
             INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             INNER JOIN pys_roles ON  pys_asignados.idRol= pys_roles.idRol
-            WHERE pys_login.usrLogin = '$usuario' AND (pys_asignados.idRol= 'ROL024' OR pys_asignados.idRol= 'ROL025') AND pys_actualizacionproy.est=1  AND pys_asignados.idSol='' AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  AND pys_solicitudes.idSol ='$id'";
+            WHERE pys_login.usrLogin = '$usuario' AND (pys_asignados.idRol= 'ROL024' OR pys_asignados.idRol= 'ROL025') AND pys_actualizacionproy.est=1 AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  AND pys_solicitudes.idSol ='$id'";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             return $datos;      
@@ -419,10 +419,11 @@
             $ObservacionAct= $datos ['ObservacionAct'];
             $presupuesto= $datos ['presupuesto'];
             $horas= $datos ['horas'];
+            $registrar =$datos['registraTiempo'];
             $est= $datos ['est'];
             $consulta1 = "UPDATE pys_actsolicitudes SET est=2 WHERE idSol='$idSol' AND est=1; ";
             $resultado1 = mysqli_query($connection, $consulta1);
-            echo $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL,'ESS006', '$idSol','$idCM', '$idSer', '$idPersona', '$idSolicitante', null, now(), '$ObservacionAct', $presupuesto, '$horas', '$est')";
+            $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL,'ESS006', '$idSol','$idCM', '$idSer', '$idPersona', '$idSolicitante', null, now(), '$ObservacionAct', $presupuesto, '$horas','$registrar', '$est')";
             $resultado2 = mysqli_query($connection, $consulta2);
             mysqli_close($connection);
             if ($resultado && $resultado1 && $resultado2){

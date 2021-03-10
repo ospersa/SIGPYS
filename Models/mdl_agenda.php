@@ -695,8 +695,9 @@ class  PlaneacionAse{
         } else{
             echo 0;
         }
+        mysqli_close($connection);
     }
-
+    
 
 }
 ?>
