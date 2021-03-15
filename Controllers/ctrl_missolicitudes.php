@@ -40,6 +40,7 @@ $autores            = (isset($_POST['autores'])) ? $_POST['autores'] : null;
 $urlVimeo           = (isset($_POST['urlV'])) ? $_POST['urlV'] : null;
 $minDura            = (isset($_POST['minutosDura'])) ? $_POST['minutosDura'] : null;
 $segDura            = (isset($_POST['segundosDura'])) ? $_POST['segundosDura'] : null;
+$actualizarEstado   = (isset($_POST['actualizarEstado'])) ? $_POST['actualizarEstado'] : null;
 $prep               = null;
 $usuario            = $_SESSION['usuario'];
 
@@ -48,7 +49,7 @@ if (!empty($_REQUEST['cod'])) {
     $idAsig = $_REQUEST['cod'];
 }
 
-if (!$id && !isset($_POST['dato1']) && !isset($_POST['btnActServicio']) && !isset($_POST['btnGuaSopo']) && !isset($_POST['btnGuaReal'])) {
+if (!$id && !isset($_POST['dato1']) && !isset($_POST['btnActServicio']) && !isset($_POST['btnGuaSopo']) && !isset($_POST['btnGuaReal']) && !isset($actualizarEstado)) {
     SolicitudEspecifica::cargaEspecificasUsuario( $search, 2, $usuario);
 } else if (isset($_POST['dato1']) && isset($_POST['dato2']) && !isset($_POST['btnActServicio']) && !isset($_POST['btnGuaSopo'])){
      echo SolicitudEspecifica::selectTipoProducto($sltClase2, $idSer2, null);
@@ -139,5 +140,11 @@ if (isset($_POST['btnInactivar'])) {
     } else{
         SolicitudEspecifica::actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura);
     }
+}
+
+if ($actualizarEstado == 1) {
+    $idProductoServicio = $_POST['productoServicio'];
+    $idEstado = $_POST['estado'];
+    SolicitudEspecifica::actualizarEstadoSolicitud($idProductoServicio, $idEstado);
 }
 ?>

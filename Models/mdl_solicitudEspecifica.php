@@ -347,55 +347,54 @@
                 $idUsuario = $data[0];
             };
             $buscar = mysqli_real_escape_string($connection, $buscar);
-            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_estadosol.idEstSol, pys_actproductos.nombreProd
             FROM pys_solicitudes
             INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
-            inner JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
-            inner JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
-            inner JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
-            inner JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
-            inner JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
-            inner JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
-            inner JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
-            inner JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            inner JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
-            inner JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
+            INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+            INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
+            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+            INNER JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
+            INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
+            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+            INNER JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
+            INNER JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
+            LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol
+            LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
 	        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '1' AND   pys_asignados.idPersona = '".$idUsuario."' AND pys_solicitudes.idTSol = 'TSOL02' AND ((pys_estadosol.idEstSol != 'ESS001') AND (pys_estadosol.idEstSol != 'ESS006') AND (pys_estadosol.idEstSol != 'ESS007')) AND ((pys_actualizacionproy.codProy like '%".$buscar."%') or (pys_actualizacionproy.nombreProy like '%$buscar%') or(pys_solicitudes.idSol like '%$buscar%')) 
             ORDER BY pys_actsolicitudes.idSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
-                $string = ' <table class="responsive-table  left">
+                $string = ' <table class="responsive-table left mis-solicitudes">
                                 <thead>
                                     <tr>
-                                        <th>Código solicitud</th>
                                         <th>Producto/Servicio</th>
                                         <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
-                                        <th>Equipo -- Servicio</th>
+                                        <th>Nombre producto</th>
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Fecha prevista entrega</th>
-                                        <th>Fecha creación</th>
-                                        <th>Más información</th>
-                                        <th>Información Producto/Servicio</th>
-                                        <th>Marcar como terminado</th>
+                                        <th>Estado</th>
+                                        <th>Metadata</th>
+                                        <th>Detalles</th>
                                     </tr>
                                 </thead>
                                 <tbody>';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
                     $string .= '    <tr>
-                                        <td>'.$datos['idSolIni'].'</td>
                                         <td>P'.$datos['idSol'].'</td>
                                         <td>'.$datos['codProy'].'</td>
                                         <td>'.$datos['nombreProy'].'</td>
-                                        <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
+                                        <td>'.$datos['nombreProd'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
                                         <td>'.$datos['fechPrev'].'</td>
-                                        <td>'.$datos['fechSol'].'</td>
-                                        <td>'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).'</td>
-                                        <td>'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
-                                        <td>'.SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>
+                                        <td>'.SolicitudEspecifica::selectEstadoProductoServicio($idSol, $datos['idEstSol']).'</td>
+                                        <td class="center">'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
+                                        <td class="center">'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).
+                                        SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>
                                     </tr>';
                 }
                 $string .= '    </tbody>
@@ -424,9 +423,9 @@
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
             if ( $registros1 > 0){
-                $string = '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Ya ha registrado tiempos" onclick="envioData(\'TIE'.$idSol.'\',\'modalResultadoServicio.php\');"><i class="material-icons teal-text">timer</i></a>';
+                $string = '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="left" data-tooltip="Ya ha registrado tiempos" onclick="envioData(\'TIE'.$idSol.'\',\'modalResultadoServicio.php\');"><i class="material-icons teal-text">timer</i></a>';
             } else {
-                $string = '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Aun no ha registrado tiempos"  onclick="envioData(\'TIE'.$idSol.'\',\'modalResultadoServicio.php\');"><i class="material-icons red-text">timer</i></a>';
+                $string = '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="left" data-tooltip="Aun no ha registrado tiempos"  onclick="envioData(\'TIE'.$idSol.'\',\'modalResultadoServicio.php\');"><i class="material-icons red-text">timer</i></a>';
             }
             mysqli_close($connection);
             return $string;
@@ -451,10 +450,10 @@
             $validarLLenoSer = SolicitudEspecifica::validarResultadoServicio($idSol); 
             if ($validarLLenoSer == 1){
                 $color = "teal";
-                $tooltips = 'data-position="right" data-tooltip="Editar resultado de servicio"';
+                $tooltips = 'data-position="left" data-tooltip="Editar resultado de servicio"';
             } else {
                 $color = "red";
-                $tooltips = 'data-position="right" data-tooltip="Agregar resultado de servicio"';
+                $tooltips = 'data-position="left" data-tooltip="Agregar resultado de servicio"';
             }
             if ( $registros1 > 0){
                 if ($datos2['productoOservicio'] == 'SI') {
@@ -463,10 +462,10 @@
                         $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
                         if ($validarLLenoPro == 1){
                             $color = "teal";
-                            $tooltips = 'data-position="right" data-tooltip="Editar resultado de Producto"';
+                            $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
                         } else {
                             $color = "red";
-                            $tooltips = 'data-position="right" data-tooltip="Agregar resultado de Producto"';
+                            $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
                         }
                         $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'REA'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
                     } else if ($datos2['idEqu'] == 'EQU002') {
@@ -474,10 +473,10 @@
                         $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
                         if ($validarLLenoPro == 1){
                             $color = "teal";
-                            $tooltips = 'data-position="right" data-tooltip="Editar resultado de Producto"';
+                            $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
                         } else {
                             $color = "red";
-                            $tooltips = 'data-position="right" data-tooltip="Agregar resultado de Producto"';
+                            $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
                         }
                         $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'DIS'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
                     } else if ($datos2['idEqu'] == 'EQU003') {
@@ -485,10 +484,10 @@
                         $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
                         if ($validarLLenoPro == 1){
                             $color = "teal";
-                            $tooltips = 'data-position="right" data-tooltip="Editar resultado de Producto"';
+                            $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
                         } else {
                             $color = "red";
-                            $tooltips = 'data-position="right" data-tooltip="Agregar resultado de Producto"';
+                            $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
                         }
                         $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'SOP'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
                     }
@@ -539,7 +538,7 @@
                 $string .= '';
             } */
             //Cambio realizado para ser registrado 
-            $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="right" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
+            $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="left" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
             return $string;
             mysqli_close($connection);
         }
@@ -911,10 +910,14 @@
         public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor){
             require('../Core/connection.php');
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-           
             $red = mysqli_real_escape_string($connection, $red);
             $url = mysqli_real_escape_string($connection, $url);
             $labor = mysqli_real_escape_string($connection, $labor);
+            if ($fechaEntre != null){
+                $fechaEntre ="'".$fechaEntre."'";   
+           } else {
+                $fechaEntre = "null";
+           }
             $consulta = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = 1";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
@@ -922,7 +925,7 @@
             $consulta1 = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = 1";
             $resultado1 = mysqli_query($connection, $consulta1);
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', '$fechaEntre', now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0',DEFAULT , '', '', '1')";
+            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0',DEFAULT , '', '', '1')";
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
@@ -1009,6 +1012,48 @@
                 return True;
             }else{
                 return False;
+            }
+            mysqli_close($connection);
+        }
+
+        public static function selectEstadoProductoServicio ($idSol, $idEstado) {
+            require('../Core/connection.php');
+            $query = 'SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = "1" AND idEstSol != "ESS001" AND idEstSol != "ESS006" AND idEstSol != "ESS007" ORDER BY nombreEstSol;';
+            $result = mysqli_query($connection, $query);
+            $rows = mysqli_num_rows($result);
+            if ($rows > 0) {
+                if ($idEstado != null) {
+                    $select = '<div class="input-field col s12">';
+                    $select .= '    <select class="browser-default" name="sltEstadoSolicitud" id="sltEstadoSolicitud'.$idSol.'" onchange="actualizaEstadoProductoServicio(\''.$idSol.'\',\'#sltEstadoSolicitud'.$idSol.'\',\'../Controllers/ctrl_missolicitudes.php\')">';
+                    while ($datos = mysqli_fetch_array($result)) {
+                        if ($datos['idEstSol'] == $idEstado) {
+                            $select .= "<option value='".$datos['idEstSol']."' selected>".$datos['nombreEstSol']."</option>";
+                        } else {
+                            $select .= "<option value='".$datos['idEstSol']."'>".$datos['nombreEstSol']."</option>";
+                        }
+                    }
+                    $select .= '    </select>';
+                    $select .= '</div>';
+                }
+            }
+            mysqli_close($connection);
+            return $select;
+        }
+
+        public static function actualizarEstadoSolicitud ($idSol, $idEst) {
+            require('../Core/connection.php');
+            $query0 = "SELECT idPersona FROM pys_login WHERE usrLogin = '".$_SESSION['usuario']."';";
+            $result0 = mysqli_query($connection, $query0);
+            $data0 = mysqli_fetch_array($result0);
+            $user = $data0[0];
+            if (!empty($user)) {
+                $query1 = "UPDATE pys_actsolicitudes SET idEstSol = '$idEst', idPersona = '$user', fechAct = NOW() WHERE idSol = '$idSol' AND est = '1';";
+                $result1 = mysqli_query($connection, $query1);
+                if ($result1) {
+                    echo "P$idSol actualizado correctamente";
+                } else {
+                    echo "No se pudo actualizar el estado";
+                }
             }
             mysqli_close($connection);
         }
