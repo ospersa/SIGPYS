@@ -166,6 +166,9 @@ if (isset($_POST['btnInactivar'])) {
     if($sltTipoContenido == ''){
         $sltTipoContenido = 1;
     }
+    if($idPlat == ''){
+        $idPlat = PLT009;
+    }
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
         SolicitudEspecifica::guardarResultadoRealizacion ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);
