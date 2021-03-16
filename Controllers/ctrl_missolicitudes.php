@@ -114,13 +114,16 @@ if($id) {
         $autores            = $info2['autorExterno'];
         $fechaEntre         = $info2['fechEntregaProd'];
         $palabrasClave      = $info2['palabrasClave'];
+        $idioma             = $info2['idioma'];
+        $formato            = $info2['formato'];
+        $tipoContenido      = $info2['tipoContenido'];
         $sltRED             = SolicitudEspecifica::selectRED ($RED);
         $sltPlata           = SolicitudEspecifica::selectPlataforma ($plat);
         $sltClase           = SolicitudEspecifica::selectClaseConTipo ($idSer,$clase);
         $sltTipo            = SolicitudEspecifica::selectTipoProducto($clase, $idSer, $tipo);
-        $sltIdioma          = SolicitudEspecifica::selectIdioma ($sltIdioma);
-        $sltFormato         = SolicitudEspecifica::selectFormato ($sltFormato);
-        $sltTipoContenido   = SolicitudEspecifica::selectTipoContenido ($sltTipoContenido);
+        $sltIdioma          = SolicitudEspecifica::selectIdioma ($idioma);
+        $sltFormato         = SolicitudEspecifica::selectFormato ($formato);
+        $sltTipoContenido   = SolicitudEspecifica::selectTipoContenido ($tipoContenido);
     }
 }
 
