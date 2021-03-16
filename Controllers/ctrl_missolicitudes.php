@@ -138,6 +138,15 @@ if (isset($_POST['btnInactivar'])) {
         SolicitudEspecifica::actualizarResultadoServicio($idSol, $idPlat, $idSer, $idClProd,$idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $url, $usuario);
     }
 } else if (isset($_POST['btnGuaSopo']) ){
+    if($sltIdioma == ''){
+        $sltIdioma = 0;
+    }
+    if($sltFormato == ''){
+        $sltFormato = 0;
+    }
+    if($sltTipoContenido == ''){
+        $sltTipoContenido = 0;
+    }
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
         SolicitudEspecifica::guardarResultadoSoporte ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);
@@ -145,6 +154,15 @@ if (isset($_POST['btnInactivar'])) {
         SolicitudEspecifica::actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);
     }
 } else if (isset($_POST['btnGuaReal'])){
+    if($sltIdioma == ''){
+        $sltIdioma = 0;
+    }
+    if($sltFormato == ''){
+        $sltFormato = 0;
+    }
+    if($sltTipoContenido == ''){
+        $sltTipoContenido = 0;
+    }
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
         SolicitudEspecifica::guardarResultadoRealizacion ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);

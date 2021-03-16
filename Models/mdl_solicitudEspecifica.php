@@ -992,7 +992,7 @@
             $consulta1 = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = 1";
             $resultado1 = mysqli_query($connection, $consulta1);
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0',DEFAULT , '', '', '1' '$idioma', '$formato', '$tipoContenido')";
+            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0',DEFAULT , '', '', '1', '$idioma', '$formato', '$tipoContenido')";
             $resultado2 = mysqli_query($connection, $consulta2);
             if($resultado && $resultado1 && $resultado2){
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
