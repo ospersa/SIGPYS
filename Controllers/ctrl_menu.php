@@ -11,6 +11,7 @@ if ($perfil == 'PERF01') {
     require('../Estructure/menuestandar.php');
 } elseif ($perfil == 'PERF04') {
     require('../Estructure/menuvisitante.php');
+} elseif ($perfil == 'PERF06') {
+    require('../Estructure/menucontratista.php');
 }
-
 ?>
