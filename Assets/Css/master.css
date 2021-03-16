@@ -522,3 +522,9 @@ div#card-stats {
       max-width: 14%; }
       div#card-stats ~ .row > div h6 {
         font-size: 13px; }
+
+table.mis-solicitudes {
+  font-size: 0.9em; }
+  table.mis-solicitudes select {
+    border-color: rgba(0, 137, 123, 0.3);
+    border-radius: 5px; }

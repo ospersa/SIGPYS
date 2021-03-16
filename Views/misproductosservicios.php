@@ -24,7 +24,7 @@ require('../Estructure/header.php');
     </div>
 </div>
 <div class="row">
-    <div id="div_dinamico" name="div_dinamico" class="col l10 m10 s12 offset-l1 offset-m1">
+    <div id="div_dinamico" name="div_dinamico" class="col l12 m12 s12">
         <?php
             include_once ('../Controllers/ctrl_missolicitudes.php');
         ?>

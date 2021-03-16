@@ -1754,3 +1754,20 @@ function inicializarCampos() {
     }
 
 }
+
+function actualizaEstadoProductoServicio (idProductoServicio, idEstado, dir) {
+    console.log("El estado es: " + $(idEstado).val())
+    $.ajax({
+        type: "POST",
+        url: dir,
+        data: {
+            productoServicio: idProductoServicio,
+            estado: $(idEstado).val(),
+            actualizarEstado: 1
+        },
+        success: function (data) {
+            console.log(data);
+            M.toast({html: data, classes: 'rounded'});
+        }
+    })
+}
