@@ -703,8 +703,9 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if( $datos['idPlat'] == $cod){
                         $string .= '  <option selected value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
+                    }else{
+                        $string .= '  <option value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
                     }
-                    $string .= '  <option value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
                 }
                 $string .= '  </select>
                         <label for="sltPlataforma">Plataforma</label>';
@@ -725,8 +726,9 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if( $datos['idIdiomas'] == $cod){
                         $string .= '  <option selected value="'.$datos['idIdiomas'].'">'.$datos['idiomaNombre'].'</option>';
+                    }else{
+                        $string .= '  <option value="'.$datos['idIdiomas'].'">'.$datos['idiomaNombre'].'</option>';
                     }
-                    $string .= '  <option value="'.$datos['idIdiomas'].'">'.$datos['idiomaNombre'].'</option>';
                 }
                 $string .= '  </select>
                         <label for="sltIdioma">Idioma</label>';
@@ -746,8 +748,9 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if( $datos['idFormatos'] == $cod){
                         $string .= '  <option selected value="'.$datos['idFormatos'].'">'.$datos['formatoNombre'].'</option>';
+                    }else{
+                        $string .= '  <option value="'.$datos['idFormatos'].'">'.$datos['formatoNombre'].'</option>';
                     }
-                    $string .= '  <option value="'.$datos['idFormatos'].'">'.$datos['formatoNombre'].'</option>';
                 }
                 $string .= '  </select>
                         <label for="sltFormato">Formato</label>';
@@ -767,8 +770,9 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if( $datos['idtiposContenido'] == $cod){
                         $string .= '  <option selected value="'.$datos['idtiposContenido'].'">'.$datos['tipoContenidoNombre'].'</option>';
+                    }else{
+                        $string .= '  <option value="'.$datos['idtiposContenido'].'">'.$datos['tipoContenidoNombre'].'</option>';
                     }
-                    $string .= '  <option value="'.$datos['idtiposContenido'].'">'.$datos['tipoContenidoNombre'].'</option>';
                 }
                 $string .= '  </select>
                         <label for="sltTipoContenido">Tipo de contenido</label>';
