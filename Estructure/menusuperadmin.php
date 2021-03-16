@@ -211,6 +211,9 @@
     <li>
         <a href="infSemaforo.php">Semáforo</a>
     </li>
+    <li>
+        <a href="infSeguimiento.php">Seguimiento</a>
+    </li>
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
     <li>
