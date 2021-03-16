@@ -23,12 +23,14 @@ ADD COLUMN `idioma` INT NULL AFTER `est`,
 ADD COLUMN `formato` INT NULL AFTER `idioma`,
 ADD COLUMN `tipoContenido` INT NULL AFTER `formato`;
 
+INSERT INTO `u424725676_dbpys`.`idiomas` (`idiomaNombre`) VALUES ('No aplica');
 INSERT INTO `u424725676_dbpys`.`idiomas` (`idiomaNombre`) VALUES ('Español');
 INSERT INTO `u424725676_dbpys`.`idiomas` (`idiomaNombre`) VALUES ('Ingles');
 
-INSERT INTO `u424725676_dbpys`.`formatos` (`formatoNombre`) VALUES ('MP3');
+INSERT INTO `u424725676_dbpys`.`formatos` (`formatoNombre`) VALUES ('No aplica');
 INSERT INTO `u424725676_dbpys`.`formatos` (`formatoNombre`) VALUES ('MP4');
 INSERT INTO `u424725676_dbpys`.`formatos` (`formatoNombre`) VALUES ('JPG');
 INSERT INTO `u424725676_dbpys`.`formatos` (`formatoNombre`) VALUES ('PDF');
+INSERT INTO `u424725676_dbpys`.`formatos` (`formatoNombre`) VALUES ('MP3');
 
 INSERT INTO `u424725676_dbpys`.`tiposcontenido` (`tipoContenidoNombre`) VALUES ('No Aplica');

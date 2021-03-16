@@ -139,13 +139,13 @@ if (isset($_POST['btnInactivar'])) {
     }
 } else if (isset($_POST['btnGuaSopo']) ){
     if($sltIdioma == ''){
-        $sltIdioma = 0;
+        $sltIdioma = 1;
     }
     if($sltFormato == ''){
-        $sltFormato = 0;
+        $sltFormato = 1;
     }
     if($sltTipoContenido == ''){
-        $sltTipoContenido = 0;
+        $sltTipoContenido = 1;
     }
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
@@ -155,13 +155,13 @@ if (isset($_POST['btnInactivar'])) {
     }
 } else if (isset($_POST['btnGuaReal'])){
     if($sltIdioma == ''){
-        $sltIdioma = 0;
+        $sltIdioma = 1;
     }
     if($sltFormato == ''){
-        $sltFormato = 0;
+        $sltFormato = 1;
     }
     if($sltTipoContenido == ''){
-        $sltTipoContenido = 0;
+        $sltTipoContenido = 1;
     }
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
