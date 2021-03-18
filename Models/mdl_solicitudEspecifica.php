@@ -1091,7 +1091,7 @@
         public static function selectEstadoProductoServicio ($idSol, $idEstado,$idEquipo) {
             require('../Core/connection.php');
             $select='';
-            echo $query = 'SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = "1" AND idEstSol != "ESS001" AND idEstSol != "ESS006" AND idEstSol != "ESS007"  AND descripcionEstSol ="'.$idEquipo.'" ORDER BY nombreEstSol;';
+            $query = 'SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = "1" AND idEstSol != "ESS001" AND idEstSol != "ESS006" AND idEstSol != "ESS007"  AND descripcionEstSol ="'.$idEquipo.'" ORDER BY nombreEstSol;';
             $result = mysqli_query($connection, $query);
             $rows = mysqli_num_rows($result);
             if ($rows > 0) {
