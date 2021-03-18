@@ -4,16 +4,18 @@ if (!isset($_SESSION['usuario'])) {
 }
 /* Carga del Modelo */
 include_once("../Models/mdl_solicitud.php");
+include_once("../Models/mdl_equipo.php");
 
 /* Inicialización de variables */
 $nombreEst          = (isset($_POST['txtNomEst'])) ? $_POST['txtNomEst'] : null;
-$descripcionEst     = (isset($_POST['txtDescEst'])) ? $_POST['txtDescEst'] : null;
+$descripcionEst     = (isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
 $nombreTip          = (isset($_POST['txtNomTip'])) ? $_POST['txtNomTip'] : null;
 $descripcionTip     = (isset($_POST['txtDescTip'])) ? $_POST['txtDescTip'] : null;
 $id                 = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $val                = (isset($_POST['val'])) ? $_POST['val'] : null;
 $cod                = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-
+/* Cargar Select equipo vista Estado de solicitud */
+$selectEquipo       =  Equipo::selectEquipo(null,null);
 /* Peticiones de registro de información en Estados de solicitud o Tipos de solicitud */
 if (isset($_POST['btnRegistrarEst'])) {
     Solicitud::registrarEstadoSolicitud($nombreEst, $descripcionEst);
@@ -27,7 +29,7 @@ if ($id) {
     if ($prep == 'ESS') {
         $info = Solicitud::onLoadEstadoSolicitud($id);
         $nombreEst = $info['nombreEstSol'];
-        $descripcionEst = $info['descripcionEstSol'];
+        $descripcionEst = Equipo::selectEquipo($info['descripcionEstSol'],null);
     } else if ($prep == "TSO") {
         $info = Solicitud::onLoadTipoSolicitud($id);
         $nombreTip = $info['nombreTSol'];

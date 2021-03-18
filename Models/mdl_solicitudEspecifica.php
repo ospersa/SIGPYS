@@ -347,7 +347,7 @@
                 $idUsuario = $data[0];
             };
             $buscar = mysqli_real_escape_string($connection, $buscar);
-            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_estadosol.idEstSol, pys_actproductos.nombreProd
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.idEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_estadosol.idEstSol, pys_actproductos.nombreProd
             FROM pys_solicitudes
             INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
             INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
@@ -391,7 +391,7 @@
                                         <td>'.$datos['nombreProd'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
                                         <td>'.$datos['fechPrev'].'</td>
-                                        <td>'.SolicitudEspecifica::selectEstadoProductoServicio($idSol, $datos['idEstSol']).'</td>
+                                        <td>'.SolicitudEspecifica::selectEstadoProductoServicio($idSol, $datos['idEstSol'],$datos['idEqu']).'</td>
                                         <td class="center">'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
                                         <td class="center">'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).
                                         SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>
@@ -1088,9 +1088,10 @@
             mysqli_close($connection);
         }
 
-        public static function selectEstadoProductoServicio ($idSol, $idEstado) {
+        public static function selectEstadoProductoServicio ($idSol, $idEstado,$idEquipo) {
             require('../Core/connection.php');
-            $query = 'SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = "1" AND idEstSol != "ESS001" AND idEstSol != "ESS006" AND idEstSol != "ESS007" ORDER BY nombreEstSol;';
+            $select='';
+            echo $query = 'SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = "1" AND idEstSol != "ESS001" AND idEstSol != "ESS006" AND idEstSol != "ESS007"  AND descripcionEstSol ="'.$idEquipo.'" ORDER BY nombreEstSol;';
             $result = mysqli_query($connection, $query);
             $rows = mysqli_num_rows($result);
             if ($rows > 0) {

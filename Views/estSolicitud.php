@@ -1,5 +1,6 @@
 <?php
 require('../Estructure/header.php');
+require('../Controllers/ctrl_solicitud.php'); 
 ?>
 
 <div class="row search">
@@ -20,8 +21,7 @@ require('../Estructure/header.php');
         </div>
         <div class="row">
             <div class="input-field col l6 m6 s12 offset-l3 offset-m3">
-                <textarea name="txtDescEst" id="txtDescEst" class="materialize-textarea"></textarea>
-                <label for="txtDescEst" class="active">Descripción estado de solicitud</label>
+            <?php echo $selectEquipo; ?>    
             </div>
         </div>
         <div class="row">
