@@ -12,8 +12,7 @@
 					<label for="txtNomEst" class="active">Nombre Estado Solicitud*</label>
 				</div>
                 <div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-					<input id="txtDescEst" name="txtDescEst" type="text" value="<?php echo $descripcionEst;?>">
-					<label for="txtDescEst" class="active">Descripción Estado Solicitud*</label>
+					<?php echo $descripcionEst;?>
 				</div>
                 <div class="row">
                     <button class="btn waves-effect waves-light" type="submit" name="btnActEstSol">Actualizar</button>

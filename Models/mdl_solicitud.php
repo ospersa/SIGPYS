@@ -81,22 +81,32 @@
 
         public static function busquedaTotalEstados () {
             require('../Core/connection.php');
-            $consulta = "SELECT * FROM pys_estadosol WHERE est = '1';";
+            $consulta = "SELECT * FROM pys_estadosol 
+            WHERE pys_estadosol.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             if ($registros = mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Estado de Solicitud</th>
-                                    <th>Descripción</th>
+                                    <th>Equipo</th>
                                     <th>Editar</th>
                                 </tr>
                             </thead>
                             <tbody>';
                 while ($datos = mysqli_fetch_array($resultado)) {
+                    $equipo= $datos['descripcionEstSol'];
+                    $consulta1 = "SELECT nombreEqu  FROM pys_equipos
+                        WHERE est = '1' and idEqu='$equipo';";
+                    $resultado1 = mysqli_query($connection, $consulta1);
+                    if (mysqli_num_rows($resultado1) > 0) {
+                        while ($datos1 = mysqli_fetch_array($resultado1)) {
+                        $equipo =$datos1['nombreEqu'];
+                        }
+                    }
                     echo '      <tr>
                                     <td>'.$datos['nombreEstSol'].'</td>
-                                    <td>'.$datos['descripcionEstSol'].'</td>
+                                    <td>'.$equipo.'</td>
                                     <td><a href="#modalEstSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
@@ -109,22 +119,32 @@
         public static function busquedaEstados ($busqueda) {
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
-            $consulta = "SELECT * FROM pys_estadosol WHERE est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%');";
+            $consulta = "SELECT * FROM pys_estadosol 
+            WHERE pys_estadosol.est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table left">
                             <thead>
                                 <tr>
                                     <th>Estado de Solicitud</th>
-                                    <th>Descripción</th>
+                                    <th>Equipo</th>
                                     <th>Editar</th>
                                 </tr>
                             </thead>
                             <tbody>';
                 while ($datos = mysqli_fetch_array($resultado)) {
+                    $equipo= $datos['descripcionEstSol'];
+                    $consulta1 = "SELECT nombreEqu  FROM pys_equipos
+                        WHERE est = '1' and idEqu='$equipo';";
+                    $resultado1 = mysqli_query($connection, $consulta1);
+                    if (mysqli_num_rows($resultado1) > 0) {
+                        while ($datos1 = mysqli_fetch_array($resultado1)) {
+                        $equipo =$datos1['nombreEqu'];
+                        }
+                    }
                     echo '      <tr>
                                     <td>'.$datos['nombreEstSol'].'</td>
-                                    <td>'.$datos['descripcionEstSol'].'</td>
+                                    <td>'.$equipo.'</td>
                                     <td><a href="#modalEstSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
@@ -156,7 +176,7 @@
                     $idEstado = 'ESS'.substr((substr($max,3)+1001),1);
                 }
                 /** Validación para evitar que se creen registros duplicados */
-                $consulta2 = "SELECT * FROM pys_estadosol WHERE nombreEstSol = '$nombre' AND est = '1';";
+                $consulta2 = "SELECT * FROM pys_estadosol WHERE nombreEstSol = '$nombre' AND  descripcionEstSol = '$descripcion' AND est = '1';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 if ($registros = mysqli_num_rows($resultado2) > 0) {
                     echo '<script>alert("Ya existe un registro igual o similar a este. No se guardó la información.")</script>';
