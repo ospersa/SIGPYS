@@ -556,6 +556,8 @@ $(document).ready(function () {
     });
     $('#fechaA')
 
+    $('.fixed-action-btn').floatingActionButton();
+
 });
 
 function cerrar() {

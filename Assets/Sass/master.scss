@@ -589,4 +589,27 @@ table.mis-solicitudes {
         border-color: rgba(#00897b, 0.3);
         border-radius: 5px;
     }
+    .head-table {
+        display: flex;
+        align-items: center;
+    }
+    thead {
+        th {
+            &:nth-child(1) {
+                width: 20%;
+            }
+            &:nth-child(2) {
+                width: 20%;
+            }
+            &:nth-child(3) {
+                width: 10%;
+            }
+            &:nth-child(4) {
+                width: 20%;
+            }
+            &:nth-child(5) {
+                width: 20%;
+            }
+        }
+    }
 }

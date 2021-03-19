@@ -367,15 +367,13 @@
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
-                $string = ' <table class="responsive-table left mis-solicitudes">
+                $string = ' <table class="responsive-table highlight left mis-solicitudes">
                                 <thead>
                                     <tr>
-                                        <th>Producto/Servicio</th>
-                                        <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
-                                        <th>Nombre producto</th>
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Fecha prevista entrega</th>
+                                        <th>Producto/Servicio <br> <span class="teal-text">P&S</span></th>
                                         <th>Estado</th>
                                         <th>Metadata</th>
                                         <th>Detalles</th>
@@ -385,12 +383,10 @@
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
                     $string .= '    <tr>
-                                        <td>P'.$datos['idSol'].'</td>
-                                        <td>'.$datos['codProy'].'</td>
-                                        <td>'.$datos['nombreProy'].'</td>
-                                        <td>'.$datos['nombreProd'].'</td>
+                                        <td>'.$datos['codProy'].' - '.$datos['nombreProy'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
                                         <td>'.$datos['fechPrev'].'</td>
+                                        <td><span class="teal-text"><strong>Código: P'.$datos['idSol'].'</strong></span><br> <strong>Nombre: </strong> '.$datos['nombreProd'].'</td>
                                         <td>'.SolicitudEspecifica::selectEstadoProductoServicio($idSol, $datos['idEstSol'],$datos['idEqu']).'</td>
                                         <td class="center">'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
                                         <td class="center">'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).
