@@ -118,7 +118,9 @@ class  PlaneacionAse{
         INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
         INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
         INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
-        WHERE pys_solicitudes.idTSol = 'TSOL02' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005') AND pys_solicitudes.est = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto' AND pys_actsolicitudes.registraTiempo=1";
+        WHERE pys_solicitudes.idTSol = 'TSOL02' 
+        AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007'
+        AND pys_solicitudes.est = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto' AND pys_actsolicitudes.registraTiempo=1;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             while ($datos = mysqli_fetch_array($resultado)) {
@@ -611,7 +613,10 @@ class  PlaneacionAse{
         INNER JOIN pys_solicitudes AS solicitudInicial ON solicitudInicial.idSol = solicitudEspecifica.idSolIni 
         INNER JOIN pys_personas ON pys_personas.idPersona = solicitudInicial.idSolicitante 
         INNER JOIN pys_roles ON pys_roles.idRol = pys_asignados.idRol 
-        WHERE pys_asignados.idPersona = '$idPer' AND pys_actsolicitudes.idSolicitante = '' AND pys_asignados.est = '1' AND pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND solicitudInicial.est = '1' AND solicitudEspecifica.est = '1' AND (pys_actsolicitudes.idEstSol = 'ESS002' OR pys_actsolicitudes.idEstSol = 'ESS003' OR pys_actsolicitudes.idEstSol = 'ESS004' OR pys_actsolicitudes.idEstSol = 'ESS005')  GROUP BY pys_actualizacionproy.codProy
+        WHERE pys_asignados.idPersona = '$idPer' 
+        AND pys_actsolicitudes.idSolicitante = '' AND pys_asignados.est = '1' AND pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND solicitudInicial.est = '1' AND solicitudEspecifica.est = '1' 
+        AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007'
+        GROUP BY pys_actualizacionproy.codProy
         ORDER BY `pys_actualizacionproy`.`codProy` ASC
         ";
         $resultado = mysqli_query($connection, $consulta);
