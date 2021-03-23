@@ -265,7 +265,7 @@ Class SolicitudInicial {
         while ($datos = mysqli_fetch_array($resultado)) {
             $array1 = ['nombreTipo' => $datos['nombreTSol'], 'idTipo' => $datos['idTSol']];
         }
-        $consulta2 = "SELECT nombreEstSol, idEstSol FROM pys_estadosol WHERE est = '1' AND idEstSol = 'ESS003';";
+        $consulta2 = "SELECT nombreEstSol, idEstSol FROM pys_estadosol WHERE est = '1' AND nombreEstSol = 'Por iniciar';";
         $resultado2 = mysqli_query($connection, $consulta2);
         while ($datos2 = mysqli_fetch_array($resultado2)){
             $array2 = ['nombreEstado' => $datos2['nombreEstSol'], 'idEstado' => $datos2['idEstSol']];
