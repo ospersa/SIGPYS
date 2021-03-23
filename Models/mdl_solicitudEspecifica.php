@@ -47,7 +47,7 @@
             mysqli_close($connection);
         }
 
-        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $estadoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,$irPresu, $RegistrarT) {
+        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,$irPresu, $RegistrarT) {
             require('../Core/connection.php');
             if ($fechaPrev == null) {
                 $fechaPrev = "'NULL'";
@@ -57,7 +57,7 @@
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
             $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
             /** Verificación de información recibida */
-            if ($idSolIni == null || $tipoSol == null || $estadoSol == null || $idProy == null || $equipo == null || $descripcion == null) {
+            if ($idSolIni == null || $tipoSol == null || $idProy == null || $equipo == null || $descripcion == null) {
                 echo '<script>alert("No se pudo guardar el registro porque hay algún campo vacío, por favor verifique.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$idSolIni.'">';
             } else {
@@ -83,6 +83,18 @@
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
                 $idCM = $datos2['idCM'];
+                /** Consulta del estado iniciado dependiendo del equipo seleccionado */
+                $consulta5 = "SELECT idEstSol FROM pys_estadosol WHERE descripcionEstSol = '$equipo' AND nombreEstSol LIKE '%por iniciar%';";
+                $resultado5 = mysqli_query($connection, $consulta5);
+                $datos5 = mysqli_fetch_array($resultado5);
+                if ($datos5[0] != '') {
+                    $estadoSol = $datos5[0];
+                } else {
+                    $consulta6 = "SELECT idEstSol FROM pys_estadosol WHERE nombreEstSol = 'Por iniciar';";
+                    $resultado6 = mysqli_query($connection, $consulta6);
+                    $datos6 = mysqli_fetch_array($resultado6);
+                    $estadoSol = $datos6[0];
+                }
                 /** Preparación de los datos para que en caso de falla poder realizar ROLLBACK */
                 mysqli_query($connection, "BEGIN;");
                 /** Insert de los datos en la tabla pys_solicitudes */
