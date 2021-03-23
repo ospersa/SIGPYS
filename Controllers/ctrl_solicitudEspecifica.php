@@ -37,7 +37,6 @@ if (isset($_POST['txt-search'])) {
 if (isset($_POST['btnRegistrarSolEsp'])) {
     $idSolIni = $_POST['txtIdSol'];
     $tipoSol = $_POST['txtIdTipoSol'];
-    $estadoSol = $_POST['txtIdEstadoSol'];
     $idProy = $_POST['txtIdProy'];
     $presupuesto = $_POST['txtPresupuesto'];
     $horas = $_POST['txtHora']." horas y ".$_POST['txtMinuto']." minutos";
@@ -47,12 +46,11 @@ if (isset($_POST['btnRegistrarSolEsp'])) {
     $descripcion = $_POST['txtDescripcion'];
     $txtRegistrarT = (isset($_POST['txtRegistrarT'])) ? $_POST['txtRegistrarT'] : 0;
     $registra = $_SESSION['usuario'];
-    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,1, $txtRegistrarT);
+    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,1, $txtRegistrarT);
 }
 if (isset($_POST['btnRegistrarSolEspPres'])) {
     $idSolIni = $_POST['txtIdSol'];
     $tipoSol = $_POST['txtIdTipoSol'];
-    $estadoSol = $_POST['txtIdEstadoSol'];
     $idProy = $_POST['txtIdProy'];
     $presupuesto = $_POST['txtPresupuesto'];
     $horas = $_POST['txtHora']." horas y ".$_POST['txtMinuto']." minutos";
@@ -62,7 +60,7 @@ if (isset($_POST['btnRegistrarSolEspPres'])) {
     $descripcion = $_POST['txtDescripcion'];
     $txtRegistrarT = (isset($_POST['txtRegistrarT'])) ? $_POST['txtRegistrarT'] : 0;
     $registra = $_SESSION['usuario'];
-    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $estadoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,2, $txtRegistrarT);
+    SolicitudEspecifica::registrarSolicitudEspecifica($idSolIni, $tipoSol, $idProy, 0, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,2, $txtRegistrarT);
 }
 
 if (isset($_REQUEST['id'])) {
