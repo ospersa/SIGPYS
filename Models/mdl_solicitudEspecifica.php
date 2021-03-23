@@ -84,13 +84,13 @@
                 $datos2 = mysqli_fetch_array($resultado2);
                 $idCM = $datos2['idCM'];
                 /** Consulta del estado iniciado dependiendo del equipo seleccionado */
-                $consulta5 = "SELECT idEstSol FROM pys_estadosol WHERE descripcionEstSol = '$equipo' AND nombreEstSol LIKE '%por iniciar%';";
+                $consulta5 = "SELECT idEstSol FROM pys_estadosol WHERE descripcionEstSol = '$equipo' AND nombreEstSol LIKE '%por iniciar%' AND est = '1';";
                 $resultado5 = mysqli_query($connection, $consulta5);
                 $datos5 = mysqli_fetch_array($resultado5);
                 if ($datos5[0] != '') {
                     $estadoSol = $datos5[0];
                 } else {
-                    $consulta6 = "SELECT idEstSol FROM pys_estadosol WHERE nombreEstSol = 'Por iniciar';";
+                    $consulta6 = "SELECT idEstSol FROM pys_estadosol WHERE nombreEstSol = 'Por iniciar' AND est = '1';";
                     $resultado6 = mysqli_query($connection, $consulta6);
                     $datos6 = mysqli_fetch_array($resultado6);
                     $estadoSol = $datos6[0];
