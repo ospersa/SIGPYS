@@ -6,13 +6,14 @@ require_once('../Models/mdl_infSeguimientoEstado.php');
 $busqueda    = (empty($_POST['txtBusquedaProy'])) ? null : $_POST['txtBusquedaProy'] ;
 $proyecto    = (empty($_POST['sltProy'])) ? null : $_POST['sltProy'] ;
 $frenteinf   = (empty($_POST['sltFrenteInf'])) ? null : $_POST['sltFrenteInf'] ;
+$estado   = (empty($_POST['estado'])) ? null : $_POST['estado'] ;
 $frente = InformeSeguimientoEstados::selectFrente();
 
 
 
 /* Verificación de envío de formulario para descarga del informe */
 if (isset($_POST['btnDescargar'])) {
-    InformeSeguimientoEstados::descarga ($proyecto, $frenteinf);
+    InformeSeguimientoEstados::descarga ($proyecto, $frenteinf,$estado);
 }
 
 

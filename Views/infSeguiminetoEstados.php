@@ -27,8 +27,17 @@ require_once('../Controllers/ctrl_infSeguimientoEstados.php');
                     <label for="sltProyecto">Seleccione un proyecto</label>
                 </div>
             </div>
+            <div class ="row">
+                <div class="input-field col l2 m12 s12 offset-l2 offset-m1">
+                    <p>
+                    <label>
+                        <input type="checkbox" id="estado" class="filled-in" name ="estado" data-checked="false">
+                        <span>Incluir Productos/servicios Terminados</span>
+                    </label>
+                    <p>
+                </div>
+            </div>
             <div class="row">
-                
                 <div class="input-field col l2 m2 s12 offset-l4 offset-m4">
                     <button class="btn waves-effect waves-light" type="submit" name="btnDescargar"
                         id="btnDescargar">Guardar</button>

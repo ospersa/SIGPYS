@@ -94,7 +94,7 @@ const STYLEBODY = ['font' => [
     Class InformeSeguimientoEstados {
       
 
-        public static function descarga ($proyecto, $frente) {
+        public static function descarga ($proyecto, $frente, $estado) {
             require('../Core/connection.php');
             if ($proyecto == "sltProy" && $frente == null){
                 $consulta = "SELECT codProy, nombreProy, idProy FROM  pys_actualizacionproy
@@ -148,14 +148,13 @@ const STYLEBODY = ['font' => [
                 $spreadsheet->getActiveSheet()->getColumnDimension('T')->setWidth(35);
                 $spreadsheet->getActiveSheet()->getColumnDimension('U')->setWidth(35);
                 $spreadsheet->getActiveSheet()->getColumnDimension('V')->setWidth(35);
-                $spreadsheet->getActiveSheet()->getColumnDimension('W')->setWidth(35);
                 $sheet = $spreadsheet->getActiveSheet();
                 $sheet->setCellValue('A1', 'Informe de seguimiento de estados y metadata');
                 $sheet->mergeCells("A1:J1");
                 $sheet->mergeCells("A4:J4");
-                $titulos=['Código del proyecto', 'Código solicitud','Descripcion de la solicitud','fecha estimada de entrega','Estado','Responsable P&S','Código del recurso','Tipo de recurso','Plataforma','Clase del producto','Tipo de producto','Nombre del producto','Descripción del producto','Link producto','urlservidor','varios','Duracion Minutos','Durcion Segundos','sinopsis','Autor Externo','Idioma','Formato','Tipo Contenido'];
+                $titulos=['Código/Nombre del proyecto', 'Código solicitud','Descripcion de la solicitud','fecha estimada de entrega','Estado','Responsable P&S','Tipo de recurso','Plataforma','Clase del producto','Tipo de producto','Nombre del producto','Descripción del producto','Link producto','urlservidor','varios','Duracion Minutos','Durcion Segundos','sinopsis','Autor Externo','Idioma','Formato','Tipo Contenido'];
                 $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
-                $spreadsheet->getActiveSheet()->getStyle('A6:W6')->applyFromArray(STYLETABLETITLE);
+                $spreadsheet->getActiveSheet()->getStyle('A6:V6')->applyFromArray(STYLETABLETITLE);
                 $fila = 7;
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $codProy = $datos['codProy'];
@@ -169,7 +168,13 @@ const STYLEBODY = ['font' => [
                     INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
                     INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
                     INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
-                    WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' AND pys_actsolicitudes.idSolicitante='' AND (pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_actsolicitudes.idEstSol !='ESS007') AND pys_actualizacionproy.idProy ='$idProy' ORDER BY pys_actsolicitudes.idSol;";
+                    WHERE pys_actsolicitudes.est ='1' AND pys_cursosmodulos.estProy='1' AND pys_actualizacionproy.est='1' AND pys_actsolicitudes.idSolicitante=''";
+                    if ($estado !=null){
+                        $consulta1.=" AND pys_actsolicitudes.idEstSol !='ESS007'";
+                    }else{
+                        $consulta1.=" AND (pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_actsolicitudes.idEstSol !='ESS007')";
+                    }
+                    $consulta1 .=" AND pys_actualizacionproy.idProy ='$idProy' ORDER BY pys_actsolicitudes.idSol;";
                     $resultado1=mysqli_query($connection, $consulta1);
                     $registros1 = mysqli_num_rows($resultado1);
                     if ($registros1 > 0) {
@@ -319,14 +324,14 @@ const STYLEBODY = ['font' => [
                                 }
                             }
                             
-                            $data=[$codProy,'P'.$idSol,$ObservacionAct, $fechPrev,$nombreEstSol,$personasAsig,$idProd,$nombreTProd,$nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd,$observacionesProd,$urlVimeo,$urlservidor,$varios,$duracionmin,$durcionseg, $sinopsis,$autorExterno,$idiomaNombre,$formatoNombre,$tipoContenido];
+                            $data=[$codProy.' - '.$nombreProy,'P'.$idSol,$ObservacionAct, $fechPrev,$nombreEstSol,$personasAsig,$nombreTProd,$nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd,$observacionesProd,$urlVimeo,$urlservidor,$varios,$duracionmin,$durcionseg, $sinopsis,$autorExterno,$idiomaNombre,$formatoNombre,$tipoContenido];
                             $spreadsheet->getActiveSheet()->fromArray($data, null, 'A'.$fila);
                             $fila +=1;
                         }
                     }
                 }
-                $spreadsheet->getActiveSheet()->getStyle('A6:W'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                $spreadsheet->getActiveSheet()->getStyle('A6:W'.($fila-1))->applyFromArray(STYLEBODY);
+                $spreadsheet->getActiveSheet()->getStyle('A6:V'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                $spreadsheet->getActiveSheet()->getStyle('A6:V'.($fila-1))->applyFromArray(STYLEBODY);
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="Informe de ejecuciones por proyecto '.gmdate(' d M Y ').'.xlsx"');
                 header('Cache-Control: max-age=0');
