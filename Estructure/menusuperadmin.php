@@ -214,6 +214,9 @@
     <li>
         <a href="infSeguimiento.php">Seguimiento</a>
     </li>
+    <li>
+        <a href="infSeguiminetoEstados.php">Seguimiento Estados/Metadata</a>
+    </li>
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
     <li>

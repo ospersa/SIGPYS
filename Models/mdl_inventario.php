@@ -544,8 +544,11 @@
             if($cod == 1)  {
                 $consulta .= "AND (pys_personas.apellido1 LIKE '%$busqueda%' OR pys_personas.apellido2 LIKE '%$busqueda%' OR pys_personas.nombres LIKE '%$busqueda%')";
                 $string .='<select name="sltPersona" id="sltPersona">';
-            } else if ($cod == 3){
-                $consulta .=  " AND (idCargo = 'CAR018' OR idCargo = 'CAR017' OR idCargo = 'CAR019' OR idCargo = 'CAR039' OR idCargo = 'CAR035')";
+            } 
+            #cod =3 filtar solo los cargos que tienen personas del equipo de produccion y soporte P&S
+            #Utilizado para select en el modal inventario
+            else if ($cod == 3){
+                $consulta .=  " AND (idCargo = 'CAR019' OR idCargo = 'CAR017' OR idCargo = 'CAR012' OR idCargo = 'CAR014' OR idCargo = 'CAR015' OR idCargo = 'CAR016' OR idCargo = 'CAR035' OR idCargo = 'CAR036' OR idCargo = 'CAR037' OR idCargo = 'CAR038' OR idCargo = 'CAR039' OR idCargo = 'CAR041' OR idCargo = 'CAR045')";
             }
 
             $resultado = mysqli_query($connection, $consulta);
