@@ -34,8 +34,9 @@
             $busProy = mysqli_real_escape_string($connection, $busProy);
             $resultado = "";
             $string = "";
-            //valida los proyectos en los cuales es agigando como gestor o asesor RED.
-            $consulta = "SELECT  pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev FROM pys_actualizacionproy
+            //valida los proyectos en los cuales es asignado como gestor o asesor RED.
+            $consulta = "SELECT  pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado'
+            FROM pys_actualizacionproy
             INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
             INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
             INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
@@ -52,26 +53,26 @@
             }else if ($cod == 2 ){
                 $consulta .= "AND pys_actsolicitudes.fechPrev <='$fechFin' ";
             } 
-            $consulta .= "GROUP BY pys_solicitudes.idSol ORDER BY pys_solicitudes.fechSol  DESC";
+            $consulta .= "GROUP BY pys_solicitudes.idSol ORDER BY pys_solicitudes.fechSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 ){
                 $string = ' <table class="responsive-table left" id="terminar">
-                <thead>
-                    <tr>
-                        <th>Cód. proyecto en Conecta-TE</th>
-                        <th>Proyecto</th>
-                        <th>Código solicitud</th>
-                        <th>Producto/Servicio</th>
-                        <th>Equipo -- Servicio</th>
-                        <th>Descripción Producto/Servicio</th>
-						<th>Nombre Producto</th>
-                        <th>Fecha prevista entrega</th>
-                        <th>Fecha creación</th>
-                        <th>Información</th>
-                        <th>Terminar y enviar correo</th>
-                    </tr>
-                </thead>
-                <tbody>';
+                                <thead>
+                                    <tr>
+                                        <th>Cód. proyecto en Conecta-TE</th>
+                                        <th>Proyecto</th>
+                                        <th>Código solicitud</th>
+                                        <th>Producto/Servicio</th>
+                                        <th>Equipo -- Servicio</th>
+                                        <th>Descripción Producto/Servicio</th>
+                                        <th>Nombre Producto</th>
+                                        <th>Fecha prevista entrega</th>
+                                        <th>Fecha creación</th>
+                                        <th>Información</th>
+                                        <th>Terminar y enviar correo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
                 while ($data = mysqli_fetch_array($resultado)){
                     $codProy = $data['codProy'];
                     $nombreProy = $data['nombreProy'];
@@ -90,45 +91,45 @@
                     WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
                     $resultadoProd = mysqli_query($connection, $consultaProd);
                     $nomProduc = "";
-                    if(mysqli_num_rows($resultadoProd)<1){
+                    if ( mysqli_num_rows ( $resultadoProd ) < 1 ) {
                         $color = "red";
                         $modal = "!";
                         $onclick = "";
                         $mjsTooltip ="Faltan requisitos para terminar el Producto o Servicio";
-                    } else{
-                        if ($resultadoProd == TRUE ){
+                    } else {
+                        if ( $resultadoProd == TRUE ) {
                             $datosProd = mysqli_fetch_array($resultadoProd);
                             $nomProduc = $datosProd['nombreProd'];
                         }
-                        if ($data2['est'] == 1){
+                        if ( $data2['est'] == 1 ) {
                             $color = "red";
                             $modal = "!";
                             $onclick = "";
                             $mjsTooltip ="Faltan requisitos para terminar el Producto o Servicio";
-                        } else if ($data2['est'] == 2){
+                        } else if ( $data2['est'] == 2 ) {
                             $color = "teal";
                             $modal = "modalTerminarProSer";
                             $onclick ='onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
                             $mjsTooltip = "Terminar Producto o Servicio";
                         }
                     
-                    $string .= '<tr>
-                            <td>'.$codProy.'</td>
-                            <td>'.$nombreProy.'</td>
-                            <td>'.$idSolIni.'</td>
-                            <td>P'.$idSol.'</td>
-                            <td>'.$nombreEqu.' -- '.$nombreSer.'</td>
-                            <td><p class="truncate">'.$ObservacionAct.'</p></td>
-                            <td>'.$nomProduc.'</td>
-                            <td>'.$fechPrev.'</td>
-                            <td>'.$fechSol.'</td>
-                            <td><a href="#modalTerminarProSer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
-                            <td><a href="#'.$modal.'" data-position="right" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
-                        </tr>'; 
+                    }
+                    $string .= '    <tr>
+                                        <td>'.$codProy.'</td>
+                                        <td>'.$nombreProy.'</td>
+                                        <td>'.$idSolIni.'</td>
+                                        <td>P'.$idSol.'</td>
+                                        <td>'.$nombreEqu.' -- '.$nombreSer.'</td>
+                                        <td><p class="truncate">'.$ObservacionAct.'</p></td>
+                                        <td>'.$nomProduc.'</td>
+                                        <td>'.$fechPrev.'</td>
+                                        <td>'.$fechSol.'</td>
+                                        <td><a href="#modalTerminarProSer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
+                                        <td><a href="#'.$modal.'" data-position="right" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
+                                    </tr>'; 
                     }    
-                }
                 $string .= '    </tbody>
-                                </table>';
+                            </table>';
             } else{
                 $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda</h6></div>';
             }
