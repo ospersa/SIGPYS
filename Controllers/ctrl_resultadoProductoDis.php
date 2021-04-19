@@ -86,10 +86,14 @@ if ($id != null){
     $sinopsis               = $info2['sinopsis'];
     $autores                = $info2['autorExterno'];
     $fechaEntre             = $info2['fechEntregaProd'];
+    $palabrasClave          = $info2['palabrasClave'];
     $sltRED                 = SolicitudEspecifica::selectRED ($RED);
     $sltPlata               = Plataforma::selectPlataforma ($plat);
     $sltClase               = Producto::selectClaseConTipo ($idSer,$clase);
     $sltTipo                = Producto::selectTipoProducto($clase, $idSer, $tipo);
+    $sltIdioma              = SolicitudEspecifica::selectIdioma ($info2['idioma']);
+    $sltFormato             = SolicitudEspecifica::selectFormato ($info2['formato']);
+    $sltTipoContenido       = SolicitudEspecifica::selectTipoContenido ($info2['tipoContenido']);
 } else if ($busqueda != null){
     ResultadoProductoTer::cargaBusqueda($usuario, $busqueda, 2); 
 } else {

@@ -85,13 +85,6 @@ $(document).ready(function () {
         });
     });
     inicializarCampos();
-    $('.tabs').tabs();
-
-    $('.collapsible').collapsible();
-
-    $('.sidenav').sidenav();
-
-    $('select').formSelect();
 
     if ($(".dropdown-trigger")) {
         $(".dropdown-trigger").dropdown({
@@ -523,10 +516,10 @@ $(document).ready(function () {
 
     $('#sltFrenteInf').on('change',function(){
         var selectValor = $(this).val();
-        if(selectValor !=  " "){
+        if(selectValor !=  ""){
             $('#proyecInf').addClass("hide")
             inicializarCampos();
-        }else if(selectValor == " "){
+        }else if(selectValor == ""){
             $('#proyecInf').removeClass("hide")
             inicializarCampos();
         }
@@ -535,12 +528,13 @@ $(document).ready(function () {
 
     $('#txtBusquedaProy').keyup('change',function(){
         var selectValor = $(this).val();
-        if(selectValor !=  ""){
-            $('#frenteInf').addClass("hide")
+        if (selectValor !=  "") {
+            $('#frenteInf').css('opacity', '0')
             inicializarCampos();
-        }else if(selectValor == ""){
-            $('#frenteInf').removeClass("hide")
+        } else if (selectValor == "") {
+            $('#frenteInf').css('opacity', '1')
             inicializarCampos();
+            $('#sltProy').removeAttr('required')
         }
         
     });
@@ -1722,6 +1716,10 @@ function buscarEst(url,cod) {
 /** Función para inicializar los campos de materialize */
 function inicializarCampos() {
 
+    if ($('select').length > 0) {
+        $('select').formSelect();
+    }
+
     var collapsibles = $('.collapsible');
     if (collapsibles.length != 0) {
         $('.collapsible').collapsible();
@@ -1759,6 +1757,8 @@ function inicializarCampos() {
     if (tooltips.length != 0) {
         $('.tooltipped').tooltip();
     }
+
+    $('.sidenav').sidenav();
 
 }
 
