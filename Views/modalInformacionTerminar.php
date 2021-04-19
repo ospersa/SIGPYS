@@ -9,11 +9,11 @@
             <li class="indicator"></li>
         </ul>
     </div>
+    <div id="test1" class="col s12 tab-container">
+        <?php echo $tiempoInvertido;?>
+    </div>
+    <div id="test2" class="col s12 tab-container">
+        <?php echo $info;?>
+    </div>
 </div>
 
-<div id="test1" class="col s12 tab-container">
-    <?php echo $tiempoInvertido;?>
-</div>
-<div id="test2" class="col s12 tab-container">
-    <?php echo $info;?>
-</div>

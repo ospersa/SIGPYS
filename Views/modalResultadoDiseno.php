@@ -7,7 +7,7 @@
                 <label for="idSol" class="active">Solicitud Específica No:</label>
                 <p class="left-align">P<?php echo $idSol ;?></p>
             </div>
-            <div class="input-field col l8 m12 s12 ">
+            <div class="input-field col l9 m12 s12 ">
                 <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
                 <p class="left-align"><?php echo $idProy. " - ".$nomProy ;?></p>
             </div>
@@ -41,25 +41,29 @@
             <div class="input-field col l5 m12 s12 offset-l1 ">
                 <?php echo $sltPlata;?>
             </div>
-            <div class="row">
-                <div class="input-field col l5 m12 s12">
-                    <?php echo $sltClase;?>
-                </div>
-                <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
-                <?php 
-                if (!empty($tipo)){
-                    echo $sltTipo;
-                }
-                ?>
-                </div>
+            
+            <div class="input-field col l5 m12 s12">
+                <?php echo $sltClase;?>
             </div>
-            <div class="row">
-                <div class="input-field col l5 m12 s12 " id="sltModalIdioma">
-                    <?php echo $sltIdioma; ?>
-                </div>
-                <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalFormato">
-                    <?php echo $sltFormato; ?>
-                </div>
+            <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
+            <?php 
+            if ( !empty($tipo)){
+                echo $sltTipo;
+            } else {
+            ?>
+                <select>
+                    <option value="" disabled>Seleccione una clase de producto</option>
+                </select>
+                <label for="">Tipo de producto</label>
+            <?php 
+            }
+            ?>
+            </div>
+            <div class="input-field col l5 m12 s12 " id="sltModalIdioma">
+                <?php echo $sltIdioma; ?>
+            </div>
+            <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalFormato">
+                <?php echo $sltFormato; ?>
             </div>
             <div class="input-field col l5 m12 s12" id="sltModalTipoContenido">
             <?php echo $sltTipoContenido; ?>

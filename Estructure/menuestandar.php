@@ -86,7 +86,7 @@ require('../Controllers/ctrl_restriccionMenu.php');
             <i class="material-icons right">arrow_drop_down</i>
         </a>
     </li>
-<li>
+    <li>
         <div class="divider"></div>
     </li>
     
@@ -216,6 +216,11 @@ require('../Controllers/ctrl_restriccionMenu.php');
     <li>
         <a href="infNotasTiempos.php">Proyecto/Producto - Notas</a>
     </li>
+    <?php if ($validar): ?>
+    <li>
+        <a href="infSeguiminetoEstados.php">Seguimiento Estados/Metadata</a>
+    </li>
+    <?php endif; ?>
 </ul>
 <ul id="productos" class="dropdown-content teal darken-1">
 <li>

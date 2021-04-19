@@ -4,32 +4,32 @@
         public static function cargaUsuario ($user, $cod) {
             require('../Core/connection.php');
             require_once('mdl_solicitudEspecifica.php');
-            $sql = "SELECT idPersona FROM pys_login where usrLogin = '$user';";
+            $sql = "SELECT idPersona FROM pys_login WHERE usrLogin = '$user';";
             $result = mysqli_query($connection, $sql);
-            while($data = mysqli_fetch_array($result)){
+            while ( $data = mysqli_fetch_array($result) ) {
                 $idUsuario = $data[0];
-            };
-            if ($cod == 1){
-                $equipo = "EQU001";//Realizacion
+            }
+            if ($cod == 1) {
+                $equipo = "EQU001"; // Realización
                 $modal = "REA";
-            } else if ($cod == 2){
-                $equipo="EQU002";//Diseño
+            } else if ($cod == 2) {
+                $equipo="EQU002"; // Diseño
                 $modal = "DIS";
-            } else if ($cod == 3){
-                $equipo="EQU003";//Soporte
+            } else if ($cod == 3) {
+                $equipo="EQU003"; // Soporte
                 $modal = "SOP";
             }
-            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol
-            FROM pys_solicitudes
-            INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
-            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
-            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
-            INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
-            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            INNER JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
-            INNER JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
-	        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_personas.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '2' AND   pys_asignados.idPersona = '".$idUsuario."' AND pys_servicios.est = '1' AND pys_servicios.productoOservicio = 'SI' AND pys_servicios.idEqu ='$equipo' AND  pys_solicitudes.idTSol = 'TSOL02' AND ((pys_actsolicitudes.idEstSol != 'ESS001') AND (pys_actsolicitudes.idEstSol != 'ESS006') AND (pys_actsolicitudes.idEstSol != 'ESS007'))
-            ORDER BY pys_actsolicitudes.idSol DESC;";
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol
+                FROM pys_solicitudes
+                INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+                INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
+                INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+                INNER JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
+                INNER JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
+                WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_personas.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '2' AND pys_asignados.idPersona = '$idUsuario' AND pys_servicios.est = '1' AND pys_servicios.productoOservicio = 'SI' AND pys_servicios.idEqu = '$equipo' AND pys_solicitudes.idTSol = 'TSOL02' AND ((pys_actsolicitudes.idEstSol != 'ESS001') AND (pys_actsolicitudes.idEstSol != 'ESS006') AND (pys_actsolicitudes.idEstSol != 'ESS007'))
+                ORDER BY pys_actsolicitudes.idSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {

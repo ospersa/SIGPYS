@@ -3,7 +3,7 @@ require('../Estructure/header.php');
 ?>
 
 <div id="content" class="center-align">
-    <h4>Terminacion Productos/Servicios</h4>
+    <h4>Terminación Productos/Servicios</h4>
 </div>
 <div class="row">
     <form id="terminarSerPro">
@@ -34,7 +34,7 @@ require('../Estructure/header.php');
     </form>
 </div>
 <div class="row">
-    <div id="div_dinamico" class="col l10 m10 s12 offset-l1 offset-m1">
+    <div id="div_dinamico" class="col l12 m12 s12">
         <?php
             include_once('../Controllers/ctrl_terminacionProductoServicio.php');
         ?>

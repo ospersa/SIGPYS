@@ -386,7 +386,7 @@ Class Producto {
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
-            $select = '     <select name="sltClaseM" id="sltClaseM" onchange="cargaSelectTipProduc(\'#sltClaseM\',\''.$idServicio.'\',\'../Controllers/ctrl_missolicitudes.php\',\'#sltModalTipo\')" required>
+            $select = '     <select name="sltClaseM" id="sltClaseM" onchange="cargaSelectTipProduc(\'#sltClaseM\',\''.$idServicio.'\',\'../Controllers/ctrl_missolicitudes.php\',\'#sltModalTipo\')">
                                 <option value="">Seleccione</option>';
             while ($datos = mysqli_fetch_array($resultado)) {
                 if ($datos['idClProd'] == $idClase) {
@@ -403,9 +403,8 @@ Class Producto {
                             </select>
                             <label for="sltClaseM">Clase de producto*</label>';
         }
-
-        return $select;
         mysqli_close($connection);
+        return $select;
     }
 
     public static function selectTipoProducto($idClase, $idServicio, $codTipo){
