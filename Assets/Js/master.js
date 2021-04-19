@@ -85,13 +85,6 @@ $(document).ready(function () {
         });
     });
     inicializarCampos();
-    /* $('.tabs').tabs();
-
-    $('.collapsible').collapsible();
-
-    $('.sidenav').sidenav();
-
-    $('select').formSelect(); */
 
     if ($(".dropdown-trigger")) {
         $(".dropdown-trigger").dropdown({
@@ -1759,6 +1752,8 @@ function inicializarCampos() {
     if (tooltips.length != 0) {
         $('.tooltipped').tooltip();
     }
+
+    $('.sidenav').sidenav();
 
 }
 
