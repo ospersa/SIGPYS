@@ -9,7 +9,8 @@ include_once('../Models/mdl_proyecto.php');
 $id         = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $val        = (isset($_POST['val'])) ? $_POST['val'] : null;
 $idProy     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$search     = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$addSltArea = (isset($_POST['addSltAreaElem'])) ? $_POST['addSltAreaElem'] : null;
 
 /** Variables de formulario: etapa de proyectos */
 $nombreEta          = (isset($_POST['txtNomEta'])) ? $_POST['txtNomEta'] : null;
@@ -51,6 +52,7 @@ $fechFin                = (isset($_POST['txtFechFin'])) ? $_POST['txtFechFin'] :
 $semanas                = (isset($_POST['txtSemAcom'])) ? $_POST['txtSemAcom'] : null;
 $fechaColciencias       = (isset($_POST['txtFechColciencias'])) ? $_POST['txtFechColciencias'] : null;
 $fteFinancia            = (isset($_POST['sltFuenteFinanciamiento'])) ? $_POST['sltFuenteFinanciamiento'] : null;
+$areaConocimiento       = (isset($_POST['sltAreaConocimiento'])) ? $_POST['sltAreaConocimiento'] : null;
 
 /** Carga de información en Modales */
 if ($id) {
@@ -99,7 +101,7 @@ if (isset($_POST['btnRegistrarProy'])) {
     $celula         = (isset($_POST['sltCelula'])) ? $_POST['sltCelula'] : null;
     $centroCosto    = (isset($_POST['sltCeco'])) ? $_POST['sltCeco'] : null;
     $pep            = (isset($_POST['sltElementoPep'])) ? $_POST['sltElementoPep'] : null;
-    Proyecto::registrarProyecto($siglaFrente, $anio, $siglaProy, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $nombreProy, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCorto, $contexto, $fechIni, $fechFin, $usserName, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep);
+    Proyecto::registrarProyecto($siglaFrente, $anio, $siglaProy, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $nombreProy, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCorto, $contexto, $fechIni, $fechFin, $usserName, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep, $areaConocimiento);
 } else if (isset($_POST['btnRegistrarEst'])) {
     Proyecto::registrarEstado ($nombreEst, $descripcionEst);
 } else if (isset($_POST['btnRegistrarEta'])) {
@@ -107,6 +109,7 @@ if (isset($_POST['btnRegistrarProy'])) {
 } else if (isset($_POST['btnRegistrarTip'])) {
     Proyecto::registrarTipo ($frente, $nombreTip);
 }
+
 /* Peticion de busqueda de proyectos  */
 if (isset($_POST['txt-search'])) {
     $busqueda = ($search == null) ? Proyecto::busquedaTotalProyecto() : Proyecto::busqueda($search);
@@ -159,6 +162,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $ceco = $_POST['sltCeco2'];
         Proyecto::selectElementoPep($ceco);
     }
+}
+
+if($addSltArea != null) {
+    echo '  <div id="areaSlt'.$addSltArea.'">
+                <div class="input-field col l5 m5 s11 offset-l3 offset-m3 select-plugin">';
+                    Proyecto::selectAreaConocimiento(null, $addSltArea);
+    echo '      </div>
+                <div class="input-field col l1 m1 s1 center-align select-plugin">
+                    <a id="addSltAreaConocimiento" class="btn-floating btn-small waves-effect waves-light red" onclick="removeSltArea($(this))"><i class="material-icons">remove</i></a>
+                </div>
+            </div>';
+}
+
+if($areaConocimiento != null) {
+    var_dump($areaConocimiento);
 }
 
 ?>
