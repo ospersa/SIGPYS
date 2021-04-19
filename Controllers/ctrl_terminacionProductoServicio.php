@@ -21,23 +21,23 @@ $codProy         = (isset($_POST['codProy'])) ? $_POST['codProy']: null;
 $prep            = "";
 $datoPoS         = "";
 $cuerpo          = (isset($_POST['cuerpo'])) ? $_POST['cuerpo']: null;
-if (isset($_POST['btnTerEnvi'])){
+if (isset($_POST['btnTerEnvi'])) {
     $correo = Terminar::infoSolicitante($idSolIni);
     $asunto = $codProy." - Terminación ".$proOser. "P".$id2;
     $asesor = $usuario."@uniandes.edu.co";
     $cuerpoTotal = $cuerpo;
     if ( $observaciones != null){
-    $cuerpoTotal .='<strong>Observaciones: </strong>'.$observaciones.'<br><br>';
+        $cuerpoTotal .='<strong>Observaciones: </strong>'.$observaciones.'<br><br>';
     }
     $cuerpoTotal .= $nota. $datosEnvio;
     /* $sendEmail = EnviarCorreo::enviarCorreos($correo, $asesor, $ccemail, $asunto, $cuerpoTotal);
     if($sendEmail == true){ */
         Terminar::terminarProducto($id2);
  /*    }     */
-}else if (isset($_POST['b']) ) {
+} else if (isset($_POST['b']) ) {
     $busqueda = $_POST['b'];
     Terminar::selectProyectoUsuario($busqueda, $usuario);
-} else if($id != null) {
+} else if ($id != null) {
     $prep = substr($id, 0, 3);
     $id = substr($id, 3);
     $tiempoInvertido = Tiempos::OnloadTiempoInvertido($id);

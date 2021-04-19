@@ -220,20 +220,23 @@ Class SolicitudInicial {
             FROM pys_actualizacionproy
             WHERE pys_actualizacionproy.est = '1' AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%');";
         $resultado = mysqli_query($connection, $consulta);
-        if ($registros = mysqli_num_rows($resultado) > 0 && $busqueda != null) {
-            echo '  <select name="sltProy" id="sltProy" required>';
+        $registros = mysqli_num_rows($resultado);
+        $options = '';
+        $required = "required";
+        if ($registros > 0 && $busqueda != null) {
             while ($datos = mysqli_fetch_array($resultado)) {
                 $proyecto = $datos['codProy']." - ".$datos['nombreProy'];
-                echo '  <option value="'.$datos['idProy'].'">'.$proyecto.'</option>';
+                $options .= '<option value="'.$datos['idProy'].'">'.$proyecto.'</option>';
             }
-            echo '  </select>
-                    <label for="sltProy">Seleccione un proyecto</label>';
         } else {
-            echo '  <select name="sltProy" id="sltProy" required>
-                        <option value="" disabled>No hay resultados para la busqueda: '.$busqueda.'</option>
-                    </select>
-                    <label for="sltProy">Seleccione un proyecto</label>';
+            $required = "";
+            $options .= '<option value="" disabled>No hay resultados para la busqueda: '.$busqueda.'</option>';
         }
+        $select = ' <select name="sltProy" id="sltProy" '.$required.' >';
+        $select .= $options;
+        $select .= '</select>
+                    <label for="sltProy">Seleccione un proyecto</label>';
+        echo $select;
         mysqli_close($connection);
     }
     

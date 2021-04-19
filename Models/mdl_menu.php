@@ -9,13 +9,14 @@ class Menu {
         INNER JOIN pys_login ON pys_login.idPersona = pys_personas.idPersona
         WHERE pys_personas.est = 1 AND pys_login.est = 1 AND idCargo='CAR041' AND pys_login.usrLogin='$user'";
         $resultado = mysqli_query($connection, $consulta);
+        mysqli_close ($connection);
+
         if (mysqli_num_rows($resultado) > 0){
             return true;
         } else { 
             return false;
         }
 
-        mysqli_close ($connection);
     }
 
 

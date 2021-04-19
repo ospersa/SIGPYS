@@ -11,22 +11,22 @@
             INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_proyectos.est=1 AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%') GROUP BY pys_actualizacionproy.idProy;";
-        $resultado = mysqli_query($connection, $consulta);
-        if (mysqli_num_rows($resultado) > 0 && $busqueda != null) {
-            echo '  <select name="sltProy" id="sltProy" >';
-            while ($datos = mysqli_fetch_array($resultado)) {
-                $proyecto = $datos['codProy']." - ".$datos['nombreProy'];
-                echo '  <option value="'.$datos['idProy'].'">'.$proyecto.'</option>';
+            $resultado = mysqli_query($connection, $consulta);
+            if (mysqli_num_rows($resultado) > 0 && $busqueda != null) {
+                echo '  <select name="sltProy" id="sltProy" >';
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    $proyecto = $datos['codProy']." - ".$datos['nombreProy'];
+                    echo '  <option value="'.$datos['idProy'].'">'.$proyecto.'</option>';
+                }
+                echo '  </select>
+                        <label for="sltProy">Seleccione un proyecto</label>';
+            } else {
+                echo '  <select name="sltProy" id="sltProy" >
+                            <option value="" disabled>No hay resultados para la busqueda: '.$busqueda.'</option>
+                        </select>
+                        <label for="sltProy">Seleccione un proyecto</label>';
             }
-            echo '  </select>
-                    <label for="sltProy">Seleccione un proyecto</label>';
-        } else {
-            echo '  <select name="sltProy" id="sltProy" >
-                        <option value="" disabled>No hay resultados para la busqueda: '.$busqueda.'</option>
-                    </select>
-                    <label for="sltProy">Seleccione un proyecto</label>';
-        }
-        mysqli_close($connection);
+            mysqli_close($connection);
         }
 
         public static function cargarProyectosUser ($user, $cod, $busProy, $fechFin){
@@ -35,7 +35,7 @@
             $resultado = "";
             $string = "";
             //valida los proyectos en los cuales es asignado como gestor o asesor RED.
-            $consulta = "SELECT  pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado'
+            $consulta = "SELECT  pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol
             FROM pys_actualizacionproy
             INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
             INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
@@ -45,6 +45,7 @@
             INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
             INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+            INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
             WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1 ";
             if ($cod == 1 ){
                 $consulta .= "AND pys_actualizacionproy.idProy ='$busProy' ";
@@ -56,16 +57,14 @@
             $consulta .= "GROUP BY pys_solicitudes.idSol ORDER BY pys_solicitudes.fechSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 ){
-                $string = ' <table class="responsive-table left" id="terminar">
+                $string = ' <table class="responsive-table left" id="terminar" style="font-size: 0.9em;">
                                 <thead>
                                     <tr>
-                                        <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
-                                        <th>Código solicitud</th>
                                         <th>Producto/Servicio</th>
-                                        <th>Equipo -- Servicio</th>
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Nombre Producto</th>
+                                        <th>Estado</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
                                         <th>Información</th>
@@ -78,35 +77,60 @@
                     $nombreProy = $data['nombreProy'];
                     $idSol = $data['idSol'];
                     $idSolIni = $data['idSolIni'];
+                    $estadoSol = $data['nombreEstSol'];
                     $fechSol = $data['fechSol'];
                     $nombreEqu = $data['nombreEqu'];
                     $nombreSer = $data['nombreSer'];
                     $ObservacionAct = $data['ObservacionAct'];
                     $fechPrev = $data['fechPrev'];
-                    $consulta2 = "SELECT est FROM pys_asignados WHERE idSol= '$idSol' and est !=0 ;";
+                    $consulta2 = "SELECT est FROM pys_asignados WHERE idSol = '$idSol' AND est != '0' ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
-                    $data2 = mysqli_fetch_array($resultado2);
-                    $consultaProd = "SELECT * FROM pys_productos
-                    INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
-                    WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
+                    $pendientes = 0;
+                    while ($data2 = mysqli_fetch_array($resultado2)) {
+                        if ($data2['est'] == 1) {
+                            $pendientes++;
+                        }
+                    }
+                    $consultaProd = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave 
+                        FROM pys_productos
+                        INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
+                        LEFT JOIN idiomas ON idiomas.idIdiomas = pys_actproductos.idioma
+                        LEFT JOIN formatos ON formatos.idFormatos = pys_actproductos.formato
+                        LEFT JOIN tiposcontenido ON tiposcontenido.idtiposContenido = pys_actproductos.tipoContenido
+                        LEFT JOIN pys_plataformas AS plataforma_producto ON plataforma_producto.idPlat = pys_actproductos.idPlat AND plataforma_producto.est = '1'
+                        LEFT JOIN pys_claseproductos ON pys_claseproductos.idClProd = pys_actproductos.idClProd AND pys_claseproductos.est = '1'
+                        LEFT JOIN pys_tiposproductos ON pys_tiposproductos.idTProd = pys_actproductos.idTProd AND pys_tiposproductos.est = '1'
+                        WHERE idSol = '$idSol' AND pys_actproductos.est = '1' AND pys_productos.est = '1';";
                     $resultadoProd = mysqli_query($connection, $consultaProd);
-                    $nomProduc = "";
-                    if ( mysqli_num_rows ( $resultadoProd ) < 1 ) {
+                    $dataProd = mysqli_fetch_array($resultadoProd);
+                    $metadataRealizacion = ['nombreProd', 'fechEntregaProd', 'descripcionProd', 'plat_producto', 'nombreClProd', 'nombreTProd', 'urlservidor', 'urlVimeo', 'duracionmin', 'duracionseg', 'sinopsis', 'autorExterno', 'idiomaNombre', 'formatoNombre', 'tipoContenidoNombre', 'palabrasClave'];
+                    $metadataDiseno = ['nombreProd', 'fechEntregaProd', 'descripcionProd', 'plat_producto', 'nombreClProd', 'nombreTProd', 'idiomaNombre', 'formatoNombre', 'tipoContenidoNombre', 'palabrasClave', 'urlservidor'];
+                    $metapendiente = 0;
+                    if ($nombreEqu == 'Realización') {
+                        foreach ($metadataRealizacion as $meta) {
+                            if ( empty ($dataProd[$meta]) ) {
+                                $metapendiente ++;
+                            }
+                        }
+                    } else if ($nombreEqu == 'Diseño Gráfico') {
+                        foreach ($metadataDiseno as $meta) {
+                            if ( empty ($dataProd[$meta]) ) {
+                                $metapendiente ++;
+                            }
+                        }
+                    }
+                    if ( $metapendiente > 0 ) {
                         $color = "red";
                         $modal = "!";
                         $onclick = "";
-                        $mjsTooltip ="Faltan requisitos para terminar el Producto o Servicio";
+                        $mjsTooltip ="Metadata incompleta";
                     } else {
-                        if ( $resultadoProd == TRUE ) {
-                            $datosProd = mysqli_fetch_array($resultadoProd);
-                            $nomProduc = $datosProd['nombreProd'];
-                        }
-                        if ( $data2['est'] == 1 ) {
+                        if ( $pendientes > 0 ) {
                             $color = "red";
                             $modal = "!";
                             $onclick = "";
-                            $mjsTooltip ="Faltan requisitos para terminar el Producto o Servicio";
-                        } else if ( $data2['est'] == 2 ) {
+                            $mjsTooltip ="Hay $pendientes personas que no han terminado la labor";
+                        } else {
                             $color = "teal";
                             $modal = "modalTerminarProSer";
                             $onclick ='onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
@@ -115,162 +139,177 @@
                     
                     }
                     $string .= '    <tr>
-                                        <td>'.$codProy.'</td>
-                                        <td>'.$nombreProy.'</td>
-                                        <td>'.$idSolIni.'</td>
+                                        <td>'.$codProy.' - '.$nombreProy.'</td>
                                         <td>P'.$idSol.'</td>
-                                        <td>'.$nombreEqu.' -- '.$nombreSer.'</td>
                                         <td><p class="truncate">'.$ObservacionAct.'</p></td>
-                                        <td>'.$nomProduc.'</td>
+                                        <td>'.$dataProd['nombreProd'].'</td>
+                                        <td>'.$estadoSol.'</td>
                                         <td>'.$fechPrev.'</td>
                                         <td>'.$fechSol.'</td>
-                                        <td><a href="#modalTerminarProSer" data-position="right" class="modal-trigger tooltipped" data-tooltip="Mas información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
-                                        <td><a href="#'.$modal.'" data-position="right" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
+                                        <td><a href="#modalTerminarProSer" data-position="left" class="modal-trigger tooltipped" data-tooltip="Más información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
+                                        <td><a href="#'.$modal.'" data-position="left" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
                                     </tr>'; 
                     }    
                 $string .= '    </tbody>
                             </table>';
-            } else{
+            } else {
                 $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda</h6></div>';
             }
-            return $string;
             mysqli_close($connection);
+            return $string;
         }
 
-        public static function informacionProdSer($idSol){
+        public static function informacionProdSer ($idSol) {
             require('../Core/connection.php');
             require('../Models/mdl_solicitudEspecifica.php');
-            $string ="";
-            $vacio = '<p class="left-align red-text">Pendiente por diligenciar información </p>';
-            $consulta = "SELECT * FROM pys_actsolicitudes 
-            INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer 
-            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
-            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
-            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            WHERE idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1 AND pys_proyectos.est = 1 AND  pys_actsolicitudes.est = 1 AND  pys_equipos.est = 1;";
+            $string = "";
+            $vacio = '<p class="left-align red-text">Información pendiente</p>';
+            $consulta = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_servicios.productoOservicio, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_tiposproductos.descripcionTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposContenido.tipoContenidoNombre, pys_actproductos.palabrasClave, pys_estadosol.nombreEstSol
+                FROM pys_actsolicitudes 
+                INNER JOIN pys_servicios on pys_actsolicitudes.idSer = pys_servicios.idSer 
+                INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+                INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+                INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy AND pys_actualizacionproy.est = '1'
+                INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
+                LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol AND pys_productos.est = '1'
+                LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
+                LEFT JOIN pys_resultservicio ON pys_resultservicio.idSol = pys_actsolicitudes.idSol AND pys_resultservicio.est = '1'
+                LEFT JOIN pys_plataformas AS plataforma_producto ON plataforma_producto.idPlat = pys_actproductos.idPlat AND plataforma_producto.est = '1'
+                LEFT JOIN pys_plataformas AS plataforma_servicio ON plataforma_servicio.idPlat = pys_resultservicio.idPlat AND plataforma_servicio.est = '1'
+                LEFT JOIN idiomas ON idiomas.idIdiomas = pys_actproductos.idioma
+                LEFT JOIN formatos ON formatos.idFormatos = pys_actproductos.formato
+                LEFT JOIN tiposcontenido ON tiposcontenido.idtiposContenido = pys_actproductos.tipoContenido
+                LEFT JOIN pys_claseproductos ON pys_claseproductos.idClProd = pys_actproductos.idClProd AND pys_claseproductos.est = '1'
+                LEFT JOIN pys_tiposproductos ON pys_tiposproductos.idTProd = pys_actproductos.idTProd AND pys_tiposproductos.est = '1'
+                WHERE pys_actsolicitudes.idSol = '$idSol' AND pys_actsolicitudes.est = '1' AND pys_servicios.est = '1' AND pys_proyectos.est = '1' AND pys_actsolicitudes.est = '1' AND pys_equipos.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
-            $idEqu = $datos['idEqu'];
-            $nombreEqu = $datos['nombreEqu'];
-            $nombreSer = $datos['nombreSer'];
-            $observacionAct = $datos['ObservacionAct'];
-            $fechPrev = $datos['fechPrev'];
-            $idProy = $datos['idProy'];
-            $nombreProy = $datos['nombreProy'];
-            $tiempoTotal = SolicitudEspecifica::totalTiempo ($idSol);
-            $hora = $tiempoTotal[0];
-            $min = $tiempoTotal[1];
-            $string .='
-            <div class="row">
-                <div class="input-field col l3 m12 s12 ">
-                    <label for="idSol" class="active">Solicitud Específica No:</label>
-                    <p class="left-align">P'.$idSol.'</p>
-                </div>
-                <div class="input-field col l8 m12 s12 ">
-                    <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
-                    <p class="left-align">'.$idProy.' - '.$nombreProy.'</p>
-                </div>
-                <div class="input-field col l12 m12 s12 ">
-                    <label for="descSol" class="active">Descripción Solicitud Específica:</label>
-                    <p class="left-align">'.$observacionAct.'</p>
-                </div>
-                <div class="input-field col l3 m12 s12">
-                    <label for="duraSer" class="active">Fecha prevista de entrega al cliente:</label>
-                    <p class="left-align">'.$fechPrev.'</p>
-                </div>
-                <div class="input-field col l7 m12 s12 ">
-                    <label for="monEqu" class="active">Equipo - Servicio:</label>
-                    <p class="left-align">'.$nombreEqu.' - '.$nombreSer.'</p>
-                </div>
-                <div class="input-field col l2 m12 s12">
-                    <label for="duraSer" class="active">Duración del Servicio:</label>
-                    <p class="left-align">'.$hora.' h '.$min.' m</p>
-                </div>';
+            $idEqu              = $datos['idEqu'];
+            $nombreEqu          = $datos['nombreEqu'];
+            $nombreSer          = $datos['nombreSer'];
+            $observacionAct     = $datos['ObservacionAct'];
+            $estado             = $datos['nombreEstSol'];
+            $fechPrev           = $datos['fechPrev'];
+            $idProy             = $datos['codProy'];
+            $nombreProy         = $datos['nombreProy'];
+            $nomProduc          = (empty($datos['nombreProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreProd'].' </p>' ;
+            $fechaEntre         = (empty($datos['fechEntregaProd'])) ? $vacio : '<p class="left-align">'.$datos['fechEntregaProd'].' </p>' ;
+            $RED                = (empty($datos['descripcionProd'])) ? $vacio : '<p class="left-align">'.$datos['descripcionProd'].' </p>' ;
+            $plataformaProducto = (empty($datos['plat_producto'])) ? $vacio : '<p class="left-align">'.$datos['plat_producto'].' </p>' ;
+            $clase              = (empty($datos['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreClProd'].' </p>' ;
+            $tipo               = (empty($datos['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreTProd'].' - '.$datos['descripcionTProd'].' </p>' ;
+            $url                = (empty($datos['urlservidor'])) ? $vacio : '<p class="left-align">'.$datos['urlservidor'].' </p>' ;
+            $labor              = (empty($datos['observacionesProd'])) ? $vacio : '<p class="left-align">'.$datos['observacionesProd'].' </p>' ;
+            $urlVimeo           = (empty($datos['urlVimeo'])) ? $vacio : '<p class="left-align">'.$datos['urlVimeo'].' </p>' ;
+            $minDura            = (empty($datos['duracionmin']) && empty($datos['duracionseg']) ) ? $vacio : '<p class="left-align">'.$datos['duracionmin'].' m '.$datos['duracionseg'].' s </p>' ;
+            $sinopsis           = (empty($datos['sinopsis'])) ? $vacio : '<p class="left-align">'.$datos['sinopsis'].' </p>' ;
+            $autores            = (empty($datos['autorExterno'])) ? $vacio : '<p class="left-align">'.$datos['autorExterno'].' </p>' ;
+            $idioma             = (empty($datos['idiomaNombre'])) ? $vacio : '<p class="left-align">'.$datos['idiomaNombre'].' </p>' ;
+            $formato            = (empty($datos['formatoNombre'])) ? $vacio : '<p class="left-align">'.$datos['formatoNombre'].' </p>' ;
+            $tipoContenido      = (empty($datos['tipoContenidoNombre'])) ? $vacio : '<p class="left-align">'.$datos['tipoContenidoNombre'].' </p>' ;
+            $palabrasClave      = (empty($datos['palabrasClave'])) ? $vacio : '<p class="left-align">'.$datos['palabrasClave'].' </p>' ;
+            $tiempoTotal        = SolicitudEspecifica::totalTiempo ($idSol);
+            $hora               = $tiempoTotal[0];
+            $min                = $tiempoTotal[1];
+            $string .= '    <div class="col l12 m12 s12">
+                                <div class="input-field col l3 m12 s12 ">
+                                    <label for="idSol" class="active">Solicitud Específica No:</label>
+                                    <p class="left-align">P'.$idSol.'</p>
+                                </div>
+                                <div class="input-field col l9 m12 s12 ">
+                                    <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
+                                    <p class="left-align">'.$idProy.' - '.$nombreProy.'</p>
+                                </div>
+                                <div class="input-field col l8 m12 s12 ">
+                                    <label for="descSol" class="active">Descripción Solicitud Específica:</label>
+                                    <p class="left-align">'.$observacionAct.'</p>
+                                </div>
+                                <div class="input-field col l4 m12 s12 ">
+                                    <label for="descSol" class="active">Estado:</label>
+                                    <p class="left-align">'.$estado.'</p>
+                                </div>
+                                <div class="input-field col l3 m12 s12">
+                                    <label for="duraSer" class="active">Fecha prevista de entrega al cliente:</label>
+                                    <p class="left-align">'.$fechPrev.'</p>
+                                </div>
+                                <div class="input-field col l7 m12 s12 ">
+                                    <label for="monEqu" class="active">Equipo - Servicio:</label>
+                                    <p class="left-align">'.$nombreEqu.' - '.$nombreSer.'</p>
+                                </div>
+                                <div class="input-field col l2 m12 s12">
+                                    <label for="duraSer" class="active">Duración del Servicio:</label>
+                                    <p class="left-align">'.$hora.' h '.$min.' m</p>
+                                </div>';
             if ($datos['productoOservicio'] == 'SI') {
-                $consulta1 = "SELECT * FROM pys_productos
-                INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd   
-                INNER JOIN pys_plataformas ON pys_actproductos.idPlat = pys_plataformas.idPlat
-                INNER JOIN pys_claseproductos ON pys_actproductos.idClProd = pys_claseproductos.idClProd
-                INNER JOIN pys_tiposproductos ON pys_actproductos.idTProd = pys_tiposproductos.idTProd 
-                WHERE pys_productos.idSol = '$idSol' AND pys_productos.est = 1 AND pys_actproductos.est = 1 AND pys_plataformas.est = 1 AND pys_claseproductos.est= 1 AND pys_tiposproductos.est = 1 ";
-                $resultado1 = mysqli_query($connection, $consulta1);
-                $registro1 =  mysqli_num_rows($resultado1);
-                $datos1 = mysqli_fetch_array($resultado1);
-                if ($resultado1 == TRUE && $registro1 > 0 ){
-                    $nomProduc  = (empty($datos1['nombreProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreProd'].' </p>' ;
-                    $fechaEntre = (empty($datos1['fechEntregaProd'])) ? $vacio : '<p class="left-align">'.$datos1['fechEntregaProd'].' </p>' ;
-                    $RED        = (empty($datos1['descripcionProd'])) ? $vacio : '<p class="left-align">'.$datos1['descripcionProd'].' </p>' ;
-                    $plat       = (empty($datos1['nombrePlt'])) ? $vacio : '<p class="left-align">'.$datos1['nombrePlt'].' </p>' ;
-                    $clase      = (empty($datos1['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreClProd'].' </p>' ;
-                    $tipo       = (empty($datos1['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos1['nombreTProd'].' </p>' ;
-                    $url        = (empty($datos1['urlservidor'])) ? $vacio : '<p class="left-align">'.$datos1['urlservidor'].' </p>' ;
-                    $labor      = (empty($datos1['observacionesProd'])) ? $vacio : '<p class="left-align">'.$datos1['observacionesProd'].' </p>' ;
-                    $urlVimeo   = (empty($datos1['urlVimeo'])) ? $vacio : '<p class="left-align">'.$datos1['urlVimeo'].' </p>' ;
-                    $minDura    = (empty($datos1['duracionmin']) && empty($datos1['duracionseg']) ) ? $vacio : '<p class="left-align">'.$datos1['duracionmin'].' m '.$datos1['duracionseg'].' s </p>' ;
-                    $sinopsis   = (empty($datos1['sinopsis'])) ? $vacio : '<p class="left-align">'.$datos1['sinopsis'].' </p>' ;
-                    $autores    = (empty($datos1['autorExterno'])) ? $vacio : '<p class="left-align">'.$datos1['autorExterno'].' </p>' ;
-                    $string .='
-                    <div class="input-field col l5 m12 s12 ">
-                        <label for="nomProd" class="active">Nombre Producto:</label>
-                        '.$nomProduc.'
-                    </div>
-                    <div class="input-field col l5 m12 s12 offset-l1 ">
-                        <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
-                        '.$fechaEntre.'
-                    </div>';
-                    if ($idEqu == 'EQU001') {
-                        $string .='
-                    <div class="input-field col l11 m12 s12  left-align">
-                        <label for="sinopsis" class="active">Sinopsis:</label>
-                        '.$sinopsis.'
-                    </div>';
-                    }
-                    $string .='
-                    <div class="input-field col l5 m12 s12 ">
-                        <label for="txtRED" class="active">¿Es un RED?:</label>
-                        '.$RED.'
-                    </div>
-                    <div class="input-field col l5 m12 s12 offset-l1 ">
-                        <label for="plat" class="active">Plataforma:</label>
-                        '.$plat.'
-                    </div>
-                    <div class="input-field col l5 m12 s12">
-                        <label for="clase" class="active">Clase de Producto:</label>
-                        '.$clase.'
-                    </div>
-                    <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
-                        <label for="tipo" class="active">Tipo de Producto:</label>
-                        '.$tipo.'
-                    </div>
-                    <div class="input-field col l11 m12 s12 ">
-                        <label for="url" class="active">URL store easy Conecta-TE:</label>
-                        '.$url.'
-                    </div>
-                    <div class="input-field col l11 m12 s12  left-align">
-                        <label for="labor" class="active">Observaciones:</label>
-                        '.$labor.'
-                    </div>
-                    ';
-                    if ($idEqu == 'EQU001') {
-                        $string .='
-                    <div class="input-field col l11 m12 s12  left-align">
-                        <label for="autores" class="active">Autores:</label>
-                        '.$autores.'
-                    </div>
-                    <div class="input-field col l11 m12 s12 ">
-                        <label for="urlVimeo" class="active">URL álbum de Vimeo:</label>
-                        '.$urlVimeo.'
-                    </div>
-                    <div class="input-field col l12 m12 s12 ">
-                        <label for="urlVimeo" class="active">Duracion Video:</label>
-                        '.$minDura.'
-                        </div>
-                       ';
-                    } 
-                    $string .= '</div>';
-                } else {
-                    $string ='<div class="card-panel teal darken-1"><h6 class="white-text">No se ha completado la información de Terminación del producto </h6></div>';
-                } 
+                $string .='     <div class="input-field col l10 m12 s12 ">
+                                    <label for="nomProd" class="active">Nombre Producto:</label>
+                                    '.$nomProduc.'
+                                </div>
+                                <div class="input-field col l2 m12 s12">
+                                    <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
+                                    '.$fechaEntre.'
+                                </div>';
+                if ($idEqu == 'EQU001') {
+                    $string .=' <div class="input-field col l12 m12 s12  left-align">
+                                    <label for="sinopsis" class="active">Sinopsis:</label>
+                                    '.$sinopsis.'
+                                </div>';
+                }
+                $string .='     <div class="input-field col l5 m12 s12 ">
+                                    <label for="txtRED" class="active">¿Es un RED?:</label>
+                                    '.$RED.'
+                                </div>
+                                <div class="input-field col l5 m12 s12 offset-l1 ">
+                                    <label for="plat" class="active">Plataforma:</label>
+                                    '.$plataformaProducto.'
+                                </div>
+                                <div class="input-field col l5 m12 s12">
+                                    <label for="clase" class="active">Clase de Producto:</label>
+                                    '.$clase.'
+                                </div>
+                                <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
+                                    <label for="tipo" class="active">Tipo de Producto:</label>
+                                    '.$tipo.'
+                                </div>
+                                <div class="input-field col l4 m12 s12">
+                                    <label for="clase" class="active">Idioma:</label>
+                                    '.$idioma.'
+                                </div>
+                                <div class="input-field col l4 m12 s12" id="sltModalTipo">
+                                    <label for="tipo" class="active">Formato:</label>
+                                    '.$formato.'
+                                </div>
+                                <div class="input-field col l4 m12 s12" id="sltModalTipo">
+                                    <label for="tipo" class="active">Tipo Contenido:</label>
+                                    '.$tipoContenido.'
+                                </div>
+                                <div class="input-field col l12 m12 s12 ">
+                                    <label for="url" class="active">URL Storeeasy Conecta-TE:</label>
+                                    '.$url.'
+                                </div>
+                                <div class="input-field col l12 m12 s12  left-align">
+                                    <label for="labor" class="active">Observaciones:</label>
+                                    '.$labor.'
+                                </div>
+                                <div class="input-field col l12 m12 s12  left-align">
+                                    <label for="labor" class="active">Palabras clave:</label>
+                                    '.$palabrasClave.'
+                                </div>';
+                if ($idEqu == 'EQU001') {
+                    $string .=' <div class="input-field col l11 m12 s12  left-align">
+                                    <label for="autores" class="active">Autores:</label>
+                                    '.$autores.'
+                                </div>
+                                <div class="input-field col l11 m12 s12 ">
+                                    <label for="urlVimeo" class="active">URL álbum de Vimeo:</label>
+                                    '.$urlVimeo.'
+                                </div>
+                                <div class="input-field col l12 m12 s12 ">
+                                    <label for="urlVimeo" class="active">Duración Video:</label>
+                                    '.$minDura.'
+                                </div>';
+                }
             } else if ($datos['productoOservicio'] == 'NO'){
                 $consulta2 = "SELECT * FROM pys_resultservicio 
                 INNER JOIN pys_plataformas ON pys_resultservicio.idPlat = pys_plataformas.idPlat
@@ -279,7 +318,7 @@
                 WHERE pys_resultservicio.idSol = '$idSol' AND pys_resultservicio.est = 1 AND pys_plataformas.est = 1 AND pys_claseproductos.est= 1 AND pys_tiposproductos.est = 1;";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $registro2 =  mysqli_num_rows($resultado2);
-                if ($resultado2 == TRUE && $registro2 > 0){
+                /* if ($resultado2 == TRUE && $registro2 > 0){ */
                     $datos2 = mysqli_fetch_array($resultado2);
                     $plat               = (empty($datos2['nombrePlt'])) ? $vacio : '<p class="left-align">'.$datos2['nombrePlt'].' </p>' ;
                     $clase              = (empty($datos2['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos2['nombreClProd'].' </p>' ;
@@ -316,12 +355,12 @@
                     <div class="input-field col l6 m12 s12 offset-l1">
                         <label for="url" class="active">URL store easy Conecta-TE :</label>
                         '.$urlResultado.'
-                    </div>
-                </div>';
-                } else{
+                    </div>';
+                /* } else{
                     $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No se ha completado la información de Terminación del servicio </h6></div>';
-                }
+                } */
             }
+            $string .= '</div>';
             return $string;
             mysqli_close($connection);
         }

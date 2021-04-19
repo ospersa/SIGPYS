@@ -146,21 +146,21 @@
             $consulta = "SELECT * FROM pys_plataformas WHERE est = 1;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
-                $string = '  <select name="sltPlataforma" id="sltPlataforma" class="asignacion" required>
-                            <option value="" selected disabled>Seleccione</option>';
+                $string = '     <select name="sltPlataforma" id="sltPlataforma" class="asignacion">
+                                    <option value="" selected disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     if( $datos['idPlat'] == $cod){
-                        $string .= '  <option selected value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
+                        $string .= '<option selected value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
                     }
-                    $string .= '  <option value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
+                    $string .= '    <option value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
                 }
-                $string .= '  </select>
-                        <label for="sltPlataforma">Plataforma*</label>';
+                $string .= '    </select>
+                                <label for="sltPlataforma">Plataforma*</label>';
             } else {
                 echo "";
             }
-            return $string;
             mysqli_close($connection);
+            return $string;
         }
     }
 
