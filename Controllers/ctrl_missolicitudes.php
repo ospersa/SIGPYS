@@ -75,6 +75,7 @@ if($id) {
     $solEspecifica      = $info['ObservacionAct'];
     $fechaPrev          = $info['fechPrev'];
     $idSer              = $info['idSer'];
+    $estado             = $info['nombreEstSol'];
     $sltPlata           = SolicitudEspecifica::selectPlataforma (null);
     $sltRED             = SolicitudEspecifica::selectRED (null);
     $sltClase           = SolicitudEspecifica::selectClaseConTipo ($idSer,null);
@@ -141,34 +142,27 @@ if (isset($_POST['btnInactivar'])) {
         SolicitudEspecifica::actualizarResultadoServicio($idSol, $idPlat, $idSer, $idClProd,$idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $url, $usuario);
     }
 } else if (isset($_POST['btnGuaSopo']) ){
-    if($sltIdioma == ''){
-        $sltIdioma = 1;
-    }
-    if($sltFormato == ''){
-        $sltFormato = 1;
-    }
-    if($sltTipoContenido == ''){
-        $sltTipoContenido = 1;
-    }
+    if ($sltIdioma == '')
+        $sltIdioma = 'null';
+    if ($sltFormato == '')
+        $sltFormato = 'null';
+    if ($sltTipoContenido == '')
+        $sltTipoContenido = 'null';
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
-    if ($compro == False){
+    if ($compro == False) {
         SolicitudEspecifica::guardarResultadoSoporte ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);
-    } else{
+    } else {
         SolicitudEspecifica::actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);
     }
 } else if (isset($_POST['btnGuaReal'])){
-    if($sltIdioma == ''){
-        $sltIdioma = 1;
-    }
-    if($sltFormato == ''){
-        $sltFormato = 1;
-    }
-    if($sltTipoContenido == ''){
-        $sltTipoContenido = 1;
-    }
-    if($idPlat == ''){
-        $idPlat = PLT009;
-    }
+    if ($sltIdioma == '')
+        $sltIdioma = 'null';
+    if ($sltFormato == '')
+        $sltFormato = 'null';
+    if ($sltTipoContenido == '')
+        $sltTipoContenido = 'null';
+    if ($idPlat == '')
+        $idPlat = 'PLT009';
     $compro = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
     if ($compro == False){
         SolicitudEspecifica::guardarResultadoRealizacion ($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor,$sinopsis, $autores, $urlVimeo, $minDura, $segDura, $palabrasClave, $sltIdioma, $sltFormato, $sltTipoContenido);

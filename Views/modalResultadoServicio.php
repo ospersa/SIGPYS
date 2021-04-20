@@ -1,4 +1,3 @@
-<div class="modal-content center-align">
 <?php 
 require_once('../Controllers/ctrl_missolicitudes.php');
 include_once('../Controllers/ctrl_regtime.php');
@@ -18,4 +17,3 @@ if ($prep == "GEN") {
     require('modalTerminar.php');
 }
 ?>
-</div>
