@@ -1074,6 +1074,28 @@ class Proyecto {
         mysqli_close($connection);
     }
 
+    public static function selectAreaConocimiento ($idAreaConocimiento, $addSltArea) {
+        if ($addSltArea == null) {
+            $addSltArea = 1;
+        }
+        require('../Core/connection.php');
+        $consulta = "SELECT idAreaConocimiento, areaNombre FROM pys_areaconocimiento;";
+        $resultado = mysqli_query($connection, $consulta);
+        if (mysqli_num_rows($resultado) > 0) {
+            echo '  <select name="sltAreaConocimiento[]" id="sltAreaConocimiento'.$addSltArea.'" data-elem="'.$addSltArea.'">';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                if ($datos['idAreaConocimiento'] == $idAreaConocimiento) {
+                    echo '  <option value="'.$datos['idAreaConocimiento'].'" selected>'.$datos['areaNombre'].'</option>';
+                } else {
+                    echo '  <option value="'.$datos['idAreaConocimiento'].'">'.$datos['areaNombre'].'</option>';
+                }
+            }
+            echo '  </select>
+                    <label for="sltAreaConocimiento">Area de conocimiento</label>';
+        }
+        mysqli_close($connection);
+    }
+
     public static function selectFuenteFinanciacion ($idProy) {
         require('../Core/connection.php');
         $consulta = "SELECT idFteFin, nombre, sigla FROM pys_fuentesfinanciamiento WHERE estado ='1';";
@@ -1214,10 +1236,23 @@ class Proyecto {
         Proyecto::selectFuenteFinanciacion(null);
         /** Se muestra el select para el centro de costos */
         Proyecto::selectCeco(null);
+
+        if($datos['idAreaConocimiento'] == null) {
+            echo '  <div id="multiselect">
+                        <div class="input-field col l5 m5 s11 offset-l3 offset-m3 select-plugin">';
+                            Proyecto::selectAreaConocimiento(null, null);
+            echo '      </div>
+                        <div class="input-field col l1 m1 s1 center-align select-plugin">
+                            <a id="addSltAreaConocimiento" class="btn-floating btn-small waves-effect waves-light" onclick="addSltArea()"><i class="material-icons">add</i></a>
+                        </div>
+                    </div>';
+        } else {
+            Proyecto::selectAreaConocimiento($idAreaConocimiento, null);
+        }
         mysqli_close($connection);
     }
 
-    public static function registrarProyecto ($siglaFrente, $anio, $siglaCodProyecto, $tipoProy, $proyectoIntExt, $frente, $estadoPry, $etapaPry, $nombrePry, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCortoPry, $contextoPry, $fechIni, $fechFin, $usuario, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep) {
+    public static function registrarProyecto ($siglaFrente, $anio, $siglaCodProyecto, $tipoProy, $proyectoIntExt, $frente, $estadoPry, $etapaPry, $nombrePry, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCortoPry, $contextoPry, $fechIni, $fechFin, $usuario, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep, $areasConocimiento) {
         require('../Core/connection.php');
         mysqli_query($connection, "BEGIN;");        
         $nombrePry = mysqli_real_escape_string($connection, $nombrePry);
@@ -1330,14 +1365,20 @@ class Proyecto {
                     $consulta10 = "INSERT INTO pys_cruceproypep VALUES (NULL, '$pep', '$codProy', NOW(), NULL, '1');";
                     $resultado10 = mysqli_query($connection, $consulta10);
 
-                    if ($resultado6 && $resultado8 && $resultado9 && $resultado10) {
+                    foreach ($areasConocimiento as $areaConocimiento ) {
+                        $consulta11 = "INSERT INTO areaconocimientohasproyectos VALUES ('$areaConocimiento','$codProy', 1)";
+                        echo $consulta11;
+                        $resultado11 = mysqli_query($connection, $consulta11);
+                    }
+
+                    if ($resultado6 && $resultado8 && $resultado9 && $resultado10 && $resultado11) {
                         mysqli_query($connection, "COMMIT;");
                         echo "<script> alert ('El registro se INSERTÓ correctamente');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
+                        //echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
                     } else {
                         mysqli_query($connection, "ROLLBACK;");
                         echo "<script> alert ('Se presentó un error al intentar guardar el registro.');</script>";
-                        echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
+                        //echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
                     }
                 }
 

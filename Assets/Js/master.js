@@ -1737,6 +1737,11 @@ function inicializarCampos() {
         $('select').formSelect();
     }
 
+    var select = $('select');
+    if (select.length != 0) {
+        $('select').formSelect();
+    }
+
     var textareas = $(".textarea");
     if (textareas.length != 0) {
         M.textareaAutoResize($(".textarea"));
@@ -1758,7 +1763,6 @@ function inicializarCampos() {
 }
 
 function actualizaEstadoProductoServicio (idProductoServicio, idEstado, dir) {
-    console.log("El estado es: " + $(idEstado).val())
     $.ajax({
         type: "POST",
         url: dir,
@@ -1768,8 +1772,30 @@ function actualizaEstadoProductoServicio (idProductoServicio, idEstado, dir) {
             actualizarEstado: 1
         },
         success: function (data) {
-            console.log(data);
             M.toast({html: data, classes: 'rounded'});
         }
     })
+}
+
+function addSltArea () {
+    let selects = $("#multiselect").find('select');
+    console.log(selects)
+    let elem = $(selects[0]).data('elem');
+    elem++;
+    $(selects[0]).data('elem',elem);
+
+    $.ajax({
+        type:       "POST",
+        url:        "../Controllers/ctrl_proyecto.php",
+        data:       { addSltAreaElem: elem },
+        success:    function (data) {
+            console.log(data);
+            $('#multiselect').append(data);
+            inicializarCampos();
+        }
+    })
+}
+
+function removeSltArea (element) {
+    $(element).parent().parent().remove();
 }
