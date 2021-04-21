@@ -264,6 +264,21 @@ class Proyecto {
         mysqli_close($connection);
     }
 
+    public static function areaConocimiento ($idProy) {
+        require('../Core/connection.php');
+        $areasRegistradas = [];
+        $consulta = "SELECT  areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento , areaconocimientohasproyectos.pys_proyectos_idProy, pys_areaconocimiento.areaNombre  FROM pys_areaconocimiento
+        INNER JOIN areaconocimientohasproyectos ON areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento = pys_areaconocimiento.idAreaConocimiento
+        INNER JOIN pys_proyectos ON  pys_proyectos.idProy = areaconocimientohasproyectos.pys_proyectos_idProy 
+        WHERE areaconocimientohasproyectos.areaEstado = '1' AND areaconocimientohasproyectos.pys_proyectos_idProy = '$idProy'";
+        $resultado = mysqli_query($connection, $consulta);
+        while ($datos = mysqli_fetch_array($resultado)) {
+            array_push($areasRegistradas, $datos);
+        }
+        return $areasRegistradas;
+        mysqli_close($connection);
+    } 
+
     public static function busquedaTotalEstado () {
         require('../Core/connection.php');
         $consulta = "SELECT nombreEstProy, descripcionEstProy FROM pys_estadoproy WHERE est = '1';";
@@ -1091,7 +1106,7 @@ class Proyecto {
                 }
             }
             echo '  </select>
-                    <label for="sltAreaConocimiento">Area de conocimiento</label>';
+                    <label for="sltAreaConocimiento">Área de conocimiento</label>';
         }
         mysqli_close($connection);
     }
@@ -1367,18 +1382,17 @@ class Proyecto {
 
                     foreach ($areasConocimiento as $areaConocimiento ) {
                         $consulta11 = "INSERT INTO areaconocimientohasproyectos VALUES ('$areaConocimiento','$codProy', 1)";
-                        echo $consulta11;
                         $resultado11 = mysqli_query($connection, $consulta11);
                     }
 
                     if ($resultado6 && $resultado8 && $resultado9 && $resultado10 && $resultado11) {
                         mysqli_query($connection, "COMMIT;");
                         echo "<script> alert ('El registro se INSERTÓ correctamente');</script>";
-                        //echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
                     } else {
                         mysqli_query($connection, "ROLLBACK;");
                         echo "<script> alert ('Se presentó un error al intentar guardar el registro.');</script>";
-                        //echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
+                        echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
                     }
                 }
 
@@ -1423,7 +1437,9 @@ class Proyecto {
                 /** Código para desactivación en la tabla pys_cursosmodulos */
                 $consulta5 = "UPDATE pys_cursosmodulos SET estProy = '0' WHERE idProy = '$idProy';";
                 $resultado5 = mysqli_query($connection, $consulta5);
-                if ($resultado3 && $resultado4 && $resultado5) {
+                $consulta6 = "UPDATE areaconocimientohasproyectos SET areaEstado = '0' WHERE idProy = '$idProy';";
+                $resultado6 = mysqli_query($connection, $consulta6);
+                if ($resultado3 && $resultado4 && $resultado5 && $resultado6) {
                     mysqli_query($connection, "COMMIT;");
                     echo "<script> alert ('El proyecto se SUPRIMIÓ correctamente.');</script>";
                     echo '<meta http-equiv="Refresh" content="0;url=../Views/proyecto.php">';
@@ -1437,7 +1453,7 @@ class Proyecto {
         mysqli_close($connection);
     }
 
-    public static function actualizarProyecto ($idProy, $entidad, $facultad, $departamento, $tipoProy, $tipoIntExt, $frente, $estProy, $etpProy, $codProy, $nomProy, $nomCortoProy, $descProy, $conv, $presupuesto, $financia, $fechaIni, $fechaFin, $persona, $fechaColciencias, $semanas, $celula, $fteFinancia, $centroCosto, $pep) {
+    public static function actualizarProyecto ($idProy, $entidad, $facultad, $departamento, $tipoProy, $tipoIntExt, $frente, $estProy, $etpProy, $codProy, $nomProy, $nomCortoProy, $descProy, $conv, $presupuesto, $financia, $fechaIni, $fechaFin, $persona, $fechaColciencias, $semanas, $celula, $fteFinancia, $centroCosto, $pep, $areasConocimiento) {
         require('../Core/connection.php');
         mysqli_query($connection, "BEGIN;");
         $nomProy = mysqli_real_escape_string($connection, $nomProy);
@@ -1498,7 +1514,8 @@ class Proyecto {
                                                                                 $datosDB['semAcompanamiento'] == $semanas &&
                                                                                     $datosDB['idFteFin'] == $fteFinancia &&
                                                                                         $datosDB['idCelula'] == $celula &&
-                                                                                            $datosDB2['idElemento'] == $pep) {
+                                                                                            $datosDB2['idElemento'] == $pep &&
+                                                                                                $areasConocimiento == null) {
                     echo "<script> alert('La información ingresada es la misma. El registro NO fue actualizado.');</script>";
                     echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
             } else {
@@ -1579,7 +1596,12 @@ class Proyecto {
                             $resultado9 = mysqli_query($connection, $consulta9);
                         }
 
-                        if ($resultado3 && $resultado5 && $resultado6 && $resultado9) {
+                        foreach ($areasConocimiento as $areaConocimiento ) {
+                            $consulta11 = "INSERT INTO areaconocimientohasproyectos VALUES ('$areaConocimiento','$idProy', 1)";
+                            $resultado11 = mysqli_query($connection, $consulta11);
+                        }
+
+                        if ($resultado3 && $resultado5 && $resultado6 && $resultado9 && $resultado11) {
                             if (mysqli_query($connection, "COMMIT;")) {
                                 echo "<script> alert('El registro se ACTUALIZÓ correctamente.');</script>";
                                 echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la p�gina anterior
@@ -1621,7 +1643,12 @@ class Proyecto {
                         $resultado9 = mysqli_query($connection, $consulta9);
                     }
 
-                    if ($resultado3 && $resultado5 && $resultado6 && $resultado9) {
+                    foreach ($areasConocimiento as $areaConocimiento ) {
+                        $consulta11 = "INSERT INTO areaconocimientohasproyectos VALUES ('$areaConocimiento','$idProy', 1)";
+                        $resultado11 = mysqli_query($connection, $consulta11);
+                    }
+
+                    if ($resultado3 && $resultado5 && $resultado6 && $resultado9 && $resultado11) {
                         if (mysqli_query($connection, "COMMIT;")) {
                             echo "<script> alert('El registro se ACTUALIZÓ correctamente.');</script>";
                             echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
@@ -1637,7 +1664,23 @@ class Proyecto {
         mysqli_close($connection);
     }
 
+    public static function removeAreaConocimiento ($idAreaConocimiento, $idProy) {
+        require('../Core/connection.php');
+        $response = [];
+        $consulta = "UPDATE areaconocimientohasproyectos SET areaEstado = '0' WHERE pys_proyectos_idProy  = '$idProy' AND pys_areaconocimiento_idAreaConocimiento = '$idAreaConocimiento';";
+        $resultado = mysqli_query($connection, $consulta);
+        if ($resultado) {
+            if (mysqli_query($connection, "COMMIT;")) {
+                array_push($response,'Correcto','Registró actualizado.');
+            }                            
+        } else {
+            if (mysqli_query($connection, "ROLLBACK;")) {
+                array_push($response,'Error','Registró no actualizado.');
+            }
+        }
+        return json_encode($response);
+        mysqli_close($connection);
+    }
 }
-
 
 ?>

@@ -2,8 +2,8 @@
     <h4>Editar/Eliminar Proyecto</h4>
     <div class="row">
         <form id="actForm" action="../Controllers/ctrl_proyecto.php" method="post" class="col l12 m12 s12">
-            <input id="cod" name="cod" hidden>
-			<input id="val" name="val" hidden>
+            <input id="cod" name="cod" type="hidden">
+			<input id="val" name="val" type="hidden">
             <?php
                 include_once('../Models/mdl_proyecto.php');
                 require('../Controllers/ctrl_proyecto.php');
@@ -101,6 +101,18 @@
                     <?php echo Proyecto::selectCeco($idProy);?>
                 </div>
                 <div id="divInfo4" class="input-field col l6 m6 s12"><?php Proyecto::selectElementoPep($idProy);?></div>
+            </div>
+            <div id="multiselect" class="row">
+                <div class="input-field col l11 m11 s11 select-plugin">
+                    <?php Proyecto::selectAreaConocimiento(null, null); ?>
+                </div>
+                <div class="input-field col l1 m1 s1 center-align select-plugin">
+                    <a id="addSltAreaConocimiento" class="btn-floating btn-small waves-effect waves-light" onclick="addSltArea()"><i class="material-icons">add</i></a>
+                </div>
+            </div>
+            <div class="row">
+                <h5 class="text-center" >Áreas de conocimiento registradas</h5>
+                <?php echo $areasConocimientoModal; ?>
             </div>
             <div class="row">
                 <div class="input-field col l12 m12 s12">

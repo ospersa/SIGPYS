@@ -1094,7 +1094,6 @@ function suprimir(value, url) {
 /*------- Inicio envio de datos a modal -------*/
 function envioData(valor, dir) {
     $('.modal-content').load(dir + "?id=" + valor, function () {
-        console.log(valor);
         $('#cod').val(valor);
         textbus = $("#txt-search").val();
         $('#valbus').val(textbus);
@@ -1779,7 +1778,6 @@ function actualizaEstadoProductoServicio (idProductoServicio, idEstado, dir) {
 
 function addSltArea () {
     let selects = $("#multiselect").find('select');
-    console.log(selects)
     let elem = $(selects[0]).data('elem');
     elem++;
     $(selects[0]).data('elem',elem);
@@ -1789,13 +1787,30 @@ function addSltArea () {
         url:        "../Controllers/ctrl_proyecto.php",
         data:       { addSltAreaElem: elem },
         success:    function (data) {
-            console.log(data);
             $('#multiselect').append(data);
             inicializarCampos();
         }
     })
 }
 
-function removeSltArea (element) {
-    $(element).parent().parent().remove();
+function removeSltArea (element, idArea) {
+    if (idArea == null) {
+        $(element).parent().parent().remove();
+    } else {
+        var idProy = $('#cod').val();
+        $.ajax({
+            type:       "POST",
+            url:        "../Controllers/ctrl_proyecto.php",
+            data:       { removeSltAreaElem: idArea, areaIdProy: idProy },
+            success:    function (data) {
+                let datos = JSON.parse(data);
+                if (datos[0] == 'Correcto') {
+                    $(element).parent().parent().remove();
+                    M.toast({html: datos[1]})
+                } else {
+                    M.toast({html: datos[1]})
+                }
+            }
+        })
+    }
 }
