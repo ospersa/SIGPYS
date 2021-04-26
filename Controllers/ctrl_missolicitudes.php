@@ -87,6 +87,7 @@ if($id) {
     $sltIdioma              = SolicitudEspecifica::selectIdioma (null);
     $sltFormato             = SolicitudEspecifica::selectFormato (null);
     $sltTipoContenido       = SolicitudEspecifica::selectTipoContenido (null);
+    $sltAreaConocimiento    = SolicitudEspecifica::selectAreaConocimiento ($proyId, null);
 
 
     if ($validarSer == True){

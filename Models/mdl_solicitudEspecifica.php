@@ -928,6 +928,9 @@
         }
 
         public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
+            if($areaConocimiento == null || $areaConocimiento == '') {
+                $areaConocimiento = 0;
+            }
             require('../Core/connection.php');
             $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
             $red            = mysqli_real_escape_string($connection, $red);
@@ -955,6 +958,9 @@
         }
 
         public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
+            if($areaConocimiento == null || $areaConocimiento == '') {
+                $areaConocimiento = 0;
+            }
             require('../Core/connection.php');
             $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
             $red            = mysqli_real_escape_string($connection, $red);
@@ -985,6 +991,9 @@
         }
 
         public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores,  $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento) {
+            if($areaConocimiento == null || $areaConocimiento == '') {
+                $areaConocimiento = 0;
+            }
             require('../Core/connection.php');
             $min = ($min == "") ? "null" : $min;
             $seg = ($seg == "") ? "null" : $seg;
@@ -1017,6 +1026,7 @@
         }
 
         public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento) {
+            $areaConocimiento = 0;
             require('../Core/connection.php');
             $min = ($min == "") ? "null" : $min;
             $seg = ($seg == "") ? "null" : $seg;

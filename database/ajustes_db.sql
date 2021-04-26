@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS `u424725676_dbpys`.`areaconocimientohasproyectos` (
   `pys_areaconocimiento_idAreaConocimiento` INT(11) NOT NULL,
   `pys_proyectos_idProy` VARCHAR(6) NOT NULL,
   `areaEstado` TINYINT(4) NOT NULL,
-  PRIMARY KEY (`pys_areaconocimiento_idAreaConocimiento`, `pys_proyectos_idProy`),)
-ENGINE = InnoDB;
+  PRIMARY KEY (`pys_areaconocimiento_idAreaConocimiento`, `pys_proyectos_idProy`))
+ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
