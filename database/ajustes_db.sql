@@ -68,6 +68,7 @@ COLLATE = utf8mb4_unicode_ci;
 
 ALTER TABLE areaconocimientohasproyectos ADD FOREIGN KEY ( pys_areaconocimiento_idAreaConocimiento) REFERENCES `u424725676_dbpys`.`pys_areaconocimiento` (`idAreaConocimiento`);
 
+ALTER TABLE `pys_actproductos` ADD `idAreaConocimiento` INT(11) NOT NULL AFTER `tipoContenido`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

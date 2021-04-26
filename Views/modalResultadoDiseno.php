@@ -64,6 +64,9 @@
             <div class="input-field col l6 m12 s12">
                 <?php echo $sltRED;?>
             </div>
+            <div class="input-field col l6 m12 s12">
+                <?php echo $sltAreaConocimiento;?>
+            </div>
             <div class="input-field col l12 m12 s12 left-align">
                 <textarea id="palabrasClave" name="palabrasClave" class="materialize-textarea"><?php echo $palabrasClave;?></textarea>
                 <label for="palabrasClave" class="active">Palabras clave:</label>
