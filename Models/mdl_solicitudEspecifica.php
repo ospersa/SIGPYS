@@ -928,6 +928,9 @@
         }
 
         public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
+            if($areaConocimiento == null || $areaConocimiento == '') {
+                $areaConocimiento = 0;
+            }
             require('../Core/connection.php');
             $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
             $red            = mysqli_real_escape_string($connection, $red);
@@ -955,6 +958,9 @@
         }
 
         public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
+            if($areaConocimiento == null || $areaConocimiento == '') {
+                $areaConocimiento = 0;
+            }
             require('../Core/connection.php');
             $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
             $red            = mysqli_real_escape_string($connection, $red);
