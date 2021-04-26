@@ -1666,16 +1666,22 @@ class Proyecto {
 
     public static function removeAreaConocimiento ($idAreaConocimiento, $idProy) {
         require('../Core/connection.php');
-        $response = [];
-        $consulta = "UPDATE areaconocimientohasproyectos SET areaEstado = '0' WHERE pys_proyectos_idProy  = '$idProy' AND pys_areaconocimiento_idAreaConocimiento = '$idAreaConocimiento';";
-        $resultado = mysqli_query($connection, $consulta);
-        if ($resultado) {
-            if (mysqli_query($connection, "COMMIT;")) {
-                array_push($response,'Correcto','Registró actualizado.');
-            }                            
-        } else {
-            if (mysqli_query($connection, "ROLLBACK;")) {
-                array_push($response,'Error','Registró no actualizado.');
+        $response   = [];
+        $query1     = "SELECT * FROM pys_actproductos WHERE idAreaConocimiento = '$idAreaConocimiento';";
+        $resp       = mysqli_query($connection, $query1);
+        if($resp > 0){
+            array_push($response,'Error','No se puede eliminar el área de conocimiento. Está área se encuentra asignada a uno o mas productos.');
+        }  else {
+            $consulta   = "UPDATE areaconocimientohasproyectos SET areaEstado = '0' WHERE pys_proyectos_idProy  = '$idProy' AND pys_areaconocimiento_idAreaConocimiento = '$idAreaConocimiento';";
+            $resultado = mysqli_query($connection, $consulta);
+            if ($resultado) {
+                if (mysqli_query($connection, "COMMIT;")) {
+                    array_push($response,'Correcto','Registró actualizado.');
+                }                            
+            } else {
+                if (mysqli_query($connection, "ROLLBACK;")) {
+                    array_push($response,'Error','Registró no actualizado.');
+                }
             }
         }
         return json_encode($response);
