@@ -406,10 +406,14 @@
             }
         }
 
-        public static function selectEstadoSolicitud ($idEstado) {
+        public static function selectEstadoSolicitud ($idEstado, $equipo) {
             require('../Core/connection.php');
             $string = "";
-            $consulta = "SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = '1' ORDER BY nombreEstSol;";
+            if ($equipo == 'EQU001' || $equipo == 'EQU002') {
+                $consulta = "SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = '1' AND descripcionEstSol = '$equipo' ORDER BY nombreEstSol;";
+            } else {
+                $consulta = "SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = '1' AND descripcionEstSol = '' ORDER BY nombreEstSol;";
+            }
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {

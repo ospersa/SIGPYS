@@ -106,9 +106,11 @@ if ($idInicial != "") {
 
 <!-- Modal Structure -->
 <div id="modalSolicitudEspecifica" class="modal">
+    <div class="modal-content center-align">
     <?php
         require('modalSolicitudEspecifica.php');
     ?>
+    </div>
 </div>
 
 <?php
