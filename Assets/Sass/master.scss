@@ -37,12 +37,14 @@ body {
     }
 }
 
-.row {
-    .col {
-        padding: 0;
-
-        label {
-            left: 0;
+.home {
+    .row {
+        .col {
+            padding: 0;
+    
+            label {
+                left: 0;
+            }
         }
     }
 }

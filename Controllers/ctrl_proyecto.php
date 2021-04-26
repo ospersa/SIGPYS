@@ -6,23 +6,26 @@ if (!isset($_SESSION['usuario'])) {
 include_once('../Models/mdl_proyecto.php');
 
 /** Inicialización de variables */
-$id         = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
-$val        = (isset($_POST['val'])) ? $_POST['val'] : null;
-$idProy     = (isset($_POST['cod'])) ? $_POST['cod'] : null;
-$search = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$id                     = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+$val                    = (isset($_POST['val'])) ? $_POST['val'] : null;
+$idProy                 = (isset($_POST['cod'])) ? $_POST['cod'] : null;
+$search                 = (isset($_POST['txt-search'])) ? $_POST['txt-search'] : null;
+$addSltArea             = (isset($_POST['addSltAreaElem'])) ? $_POST['addSltAreaElem'] : null;
+$removeSltArea          = (isset($_POST['removeSltAreaElem'])) ? $_POST['removeSltAreaElem'] : null;
+$areaIdProy             = (isset($_POST['areaIdProy'])) ? $_POST['areaIdProy'] : null;
 
 /** Variables de formulario: etapa de proyectos */
-$nombreEta          = (isset($_POST['txtNomEta'])) ? $_POST['txtNomEta'] : null;
-$descripcionEta     = (isset($_POST['txtDescEta'])) ? $_POST['txtDescEta'] : null;
-$tipoProy           = (isset($_POST['sltTipoProy'])) ? $_POST['sltTipoProy'] : null;
+$nombreEta              = (isset($_POST['txtNomEta'])) ? $_POST['txtNomEta'] : null;
+$descripcionEta         = (isset($_POST['txtDescEta'])) ? $_POST['txtDescEta'] : null;
+$tipoProy               = (isset($_POST['sltTipoProy'])) ? $_POST['sltTipoProy'] : null;
 
 /** Variables de formulario: tipo de proyectos */
-$nombreTip  = (isset($_POST['txtNomTipoProy'])) ? $_POST['txtNomTipoProy'] : null;
-$frente     = (isset($_POST['sltFrente'])) ? $_POST['sltFrente'] : null;
+$nombreTip              = (isset($_POST['txtNomTipoProy'])) ? $_POST['txtNomTipoProy'] : null;
+$frente                 = (isset($_POST['sltFrente'])) ? $_POST['sltFrente'] : null;
 
 /** Variables de formulario: estados de proyectos */
-$nombreEst          = (isset($_POST['txtNomEst'])) ? $_POST['txtNomEst'] : null;
-$descripcionEst     = (isset($_POST['txtDescEst'])) ? $_POST['txtDescEst'] : null;
+$nombreEst              = (isset($_POST['txtNomEst'])) ? $_POST['txtNomEst'] : null;
+$descripcionEst         = (isset($_POST['txtDescEst'])) ? $_POST['txtDescEst'] : null;
 
 /** Variables de formulario: proyectos */
 $idFrente               = null;
@@ -51,44 +54,65 @@ $fechFin                = (isset($_POST['txtFechFin'])) ? $_POST['txtFechFin'] :
 $semanas                = (isset($_POST['txtSemAcom'])) ? $_POST['txtSemAcom'] : null;
 $fechaColciencias       = (isset($_POST['txtFechColciencias'])) ? $_POST['txtFechColciencias'] : null;
 $fteFinancia            = (isset($_POST['sltFuenteFinanciamiento'])) ? $_POST['sltFuenteFinanciamiento'] : null;
+$areaConocimiento       = (isset($_POST['sltAreaConocimiento'])) ? $_POST['sltAreaConocimiento'] : null;
 
 /** Carga de información en Modales */
 if ($id) {
     $prep = substr($id, 0, 3);
     if ($prep == "TIP") {
-        $info = Proyecto::onLoadTipo($id);
-        $nombreTip = $info['nombreTProy'];
+        $info               = Proyecto::onLoadTipo($id);
+        $nombreTip          = $info['nombreTProy'];
     } else if ($prep == "PRY") {
         echo "<script>alert('Llegó id de proyecto');</script>";
-        $info = Proyecto::onLoadProyecto($id);
-        $entidad = $info['idEnt'];
-        $idProy = $info['idProy'];
-        $facultad = $info['idFac'];
-        $idFrente = $info['idFrente'];
-        $frente = $info['nombreFrente'];
-        $tipoProy = $info['nombreTProy'];
-        $idTipoProy = $info['idTProy'];
-        $tipoIntExt = $info['proyecto'];
-        $estadoPry = $info['idEstProy'];
-        $idEtapaPry = $info['idEtaProy'];
-        $codConectate = $info['codProy'];
-        $nombreProy = $info['nombreProy'];
-        $nombreCorto = $info['nombreCortoProy'];
-        $financia = $info['financia'];
-        $convocatoria = $info['idConvocatoria'];
-        $presupuesto = $info['presupuestoProy'];
-        $fechIni = $info['fechaIniProy'];
-        $fechFin = $info['fechaCierreProy'];
-        $nombreCompleto = $info['apellido1']." ".$info['apellido2']." ".$info['nombres'];
-        $fechaColciencias = $info['fechaColciencias'];
-        $actualizacion = $info['fechaActualizacionproy'];
-        $semanas = $info['semAcompanamiento'];
-        $celula = $info['idCelula'];
-        $contexto = $info['descripcionProy'];
+        $info               = Proyecto::onLoadProyecto($id);
+        $areasConocimiento  = Proyecto::areaConocimiento($id);
+        $entidad            = $info['idEnt'];
+        $idProy             = $info['idProy'];
+        $facultad           = $info['idFac']; 
+        $idFrente           = $info['idFrente'];
+        $frente             = $info['nombreFrente'];
+        $tipoProy           = $info['nombreTProy'];
+        $idTipoProy         = $info['idTProy'];
+        $tipoIntExt         = $info['proyecto'];
+        $estadoPry          = $info['idEstProy'];
+        $idEtapaPry         = $info['idEtaProy'];
+        $codConectate       = $info['codProy'];
+        $nombreProy         = $info['nombreProy'];
+        $nombreCorto        = $info['nombreCortoProy'];
+        $financia           = $info['financia'];
+        $convocatoria       = $info['idConvocatoria'];
+        $presupuesto        = $info['presupuestoProy'];
+        $fechIni            = $info['fechaIniProy'];
+        $fechFin            = $info['fechaCierreProy'];
+        $nombreCompleto     = $info['apellido1']." ".$info['apellido2']." ".$info['nombres'];
+        $fechaColciencias   = $info['fechaColciencias'];
+        $actualizacion      = $info['fechaActualizacionproy'];
+        $semanas            = $info['semAcompanamiento'];
+        $celula             = $info['idCelula'];
+        $contexto           = $info['descripcionProy'];
+
+        $areasConocimientoModal = '<div class="row">
+                                        <table>
+                                            <thead>
+                                                <th>Área de conocimiento</th>
+                                                <th>Eliminar</th>
+                                            </thead>
+                                            <tbody>';
+                                foreach ($areasConocimiento as $areaConocimiento) {
+                    $areasConocimientoModal .= '<tr>
+                                                    <td>'.$areaConocimiento['areaNombre'].'</td>
+                                                    <td>
+                                                        <a id="addSltAreaConocimiento" class="btn-floating btn-small waves-effect waves-light red" onclick="removeSltArea($(this),'.$areaConocimiento['pys_areaconocimiento_idAreaConocimiento'].')"><i class="material-icons">remove</i></a>
+                                                    </td>
+                                                </tr>';
+                                }
+                $areasConocimientoModal .= '</tbody>
+                                        </table>
+                                    </div>';            
     } else if ($prep == "ETP"){
-        $info = Proyecto::onLoadEtapa($id);
-        $nombreEta = $info['nombreEtaProy'];
-        $descripcionEta = $info['descripcionEtaProy'];
+        $info               = Proyecto::onLoadEtapa($id);
+        $nombreEta          = $info['nombreEtaProy'];
+        $descripcionEta     = $info['descripcionEtaProy'];
     }
 }
 
@@ -99,7 +123,7 @@ if (isset($_POST['btnRegistrarProy'])) {
     $celula         = (isset($_POST['sltCelula'])) ? $_POST['sltCelula'] : null;
     $centroCosto    = (isset($_POST['sltCeco'])) ? $_POST['sltCeco'] : null;
     $pep            = (isset($_POST['sltElementoPep'])) ? $_POST['sltElementoPep'] : null;
-    Proyecto::registrarProyecto($siglaFrente, $anio, $siglaProy, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $nombreProy, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCorto, $contexto, $fechIni, $fechFin, $usserName, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep);
+    Proyecto::registrarProyecto($siglaFrente, $anio, $siglaProy, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $nombreProy, $financia, $convocatoria, $departamento, $facultad, $entidad, $nombreCorto, $contexto, $fechIni, $fechFin, $usserName, $presupuesto, $fechaColciencias, $semanas, $fteFinancia, $celula, $centroCosto, $pep, $areaConocimiento);
 } else if (isset($_POST['btnRegistrarEst'])) {
     Proyecto::registrarEstado ($nombreEst, $descripcionEst);
 } else if (isset($_POST['btnRegistrarEta'])) {
@@ -107,6 +131,7 @@ if (isset($_POST['btnRegistrarProy'])) {
 } else if (isset($_POST['btnRegistrarTip'])) {
     Proyecto::registrarTipo ($frente, $nombreTip);
 }
+
 /* Peticion de busqueda de proyectos  */
 if (isset($_POST['txt-search'])) {
     $busqueda = ($search == null) ? Proyecto::busquedaTotalProyecto() : Proyecto::busqueda($search);
@@ -130,7 +155,7 @@ if ($val) {
         $celula = $_POST['sltCelula2'];
         $centroCosto = $_POST['sltCeco2'];
         $pep = $_POST['sltElementoPep'];
-        Proyecto::actualizarProyecto($idProy, $entidad, $facultad, $departamento, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $codProy, $nombreProy, $nombreCorto, $contexto, $convocatoria, $presupuesto, $financia, $fechIni, $fechFin, $persona, $fechaColciencias, $semanas, $celula, $fteFinancia, $centroCosto, $pep);
+        Proyecto::actualizarProyecto($idProy, $entidad, $facultad, $departamento, $tipoProy, $tipoIntExt, $frente, $estadoPry, $etapaPry, $codProy, $nombreProy, $nombreCorto, $contexto, $convocatoria, $presupuesto, $financia, $fechIni, $fechFin, $persona, $fechaColciencias, $semanas, $celula, $fteFinancia, $centroCosto, $pep, $areaConocimiento);
     }
 }
 
@@ -159,6 +184,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $ceco = $_POST['sltCeco2'];
         Proyecto::selectElementoPep($ceco);
     }
+}
+
+if($addSltArea != null) {
+    echo '  <div id="areaSlt'.$addSltArea.'">
+                <div class="input-field col l5 m5 s11 offset-l3 offset-m3 select-plugin">';
+                    Proyecto::selectAreaConocimiento(null, $addSltArea);
+    echo '      </div>
+                <div class="input-field col l1 m1 s1 center-align select-plugin">
+                    <a id="addSltAreaConocimiento" class="btn-floating btn-small waves-effect waves-light red" onclick="removeSltArea($(this))"><i class="material-icons">remove</i></a>
+                </div>
+            </div>';
+}
+
+if($removeSltArea != null) {
+    echo Proyecto::removeAreaConocimiento($removeSltArea, $areaIdProy);
 }
 
 ?>

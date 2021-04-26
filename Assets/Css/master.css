@@ -40,9 +40,9 @@ body {
   body footer {
     margin-top: 25px; }
 
-.row .col {
+.home .row .col {
   padding: 0; }
-  .row .col label {
+  .home .row .col label {
     left: 0; }
 
 /********* Estilos de estructura *********/

@@ -213,42 +213,38 @@
             $hora               = $tiempoTotal[0];
             $min                = $tiempoTotal[1];
             $string .= '    <div class="col l12 m12 s12">
-                                <div class="input-field col l3 m12 s12 ">
-                                    <label for="idSol" class="active">Solicitud Específica No:</label>
+                                <div class="input-field col l2 m12 s12 ">
+                                    <label for="idSol" class="active">Código PS:</label>
                                     <p class="left-align">P'.$idSol.'</p>
                                 </div>
-                                <div class="input-field col l9 m12 s12 ">
+                                <div class="input-field col l7 m12 s12 ">
                                     <label for="codProy" class="active">Código Proyecto en Conecta-TE:</label>
                                     <p class="left-align">'.$idProy.' - '.$nombreProy.'</p>
                                 </div>
-                                <div class="input-field col l8 m12 s12 ">
-                                    <label for="descSol" class="active">Descripción Solicitud Específica:</label>
-                                    <p class="left-align">'.$observacionAct.'</p>
-                                </div>
-                                <div class="input-field col l4 m12 s12 ">
+                                <div class="input-field col l3 m12 s12 ">
                                     <label for="descSol" class="active">Estado:</label>
                                     <p class="left-align">'.$estado.'</p>
+                                </div>
+                                <div class="input-field col l12 m12 s12 ">
+                                    <label for="descSol" class="active">Descripción Solicitud Específica:</label>
+                                    <p class="left-align">'.$observacionAct.'</p>
                                 </div>
                                 <div class="input-field col l3 m12 s12">
                                     <label for="duraSer" class="active">Fecha prevista de entrega al cliente:</label>
                                     <p class="left-align">'.$fechPrev.'</p>
                                 </div>
-                                <div class="input-field col l7 m12 s12 ">
+                                <div class="input-field col l6 m12 s12 ">
                                     <label for="monEqu" class="active">Equipo - Servicio:</label>
                                     <p class="left-align">'.$nombreEqu.' - '.$nombreSer.'</p>
                                 </div>
-                                <div class="input-field col l2 m12 s12">
+                                <div class="input-field col l3 m12 s12">
                                     <label for="duraSer" class="active">Duración del Servicio:</label>
                                     <p class="left-align">'.$hora.' h '.$min.' m</p>
                                 </div>';
             if ($datos['productoOservicio'] == 'SI') {
-                $string .='     <div class="input-field col l10 m12 s12 ">
+                $string .='     <div class="input-field col l12 m12 s12 ">
                                     <label for="nomProd" class="active">Nombre Producto:</label>
                                     '.$nomProduc.'
-                                </div>
-                                <div class="input-field col l2 m12 s12">
-                                    <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
-                                    '.$fechaEntre.'
                                 </div>';
                 if ($idEqu == 'EQU001') {
                     $string .=' <div class="input-field col l12 m12 s12  left-align">
@@ -256,60 +252,67 @@
                                     '.$sinopsis.'
                                 </div>';
                 }
-                $string .='     <div class="input-field col l5 m12 s12 ">
-                                    <label for="txtRED" class="active">¿Es un RED?:</label>
-                                    '.$RED.'
-                                </div>
-                                <div class="input-field col l5 m12 s12 offset-l1 ">
-                                    <label for="plat" class="active">Plataforma:</label>
-                                    '.$plataformaProducto.'
-                                </div>
-                                <div class="input-field col l5 m12 s12">
+                $string .='     <div class="input-field col l6 m12 s12">
                                     <label for="clase" class="active">Clase de Producto:</label>
                                     '.$clase.'
                                 </div>
-                                <div class="input-field col l5 m12 s12 offset-l1 " id="sltModalTipo">
+                                <div class="input-field col l6 m12 s12" id="sltModalTipo">
                                     <label for="tipo" class="active">Tipo de Producto:</label>
                                     '.$tipo.'
                                 </div>
-                                <div class="input-field col l4 m12 s12">
+                                <div class="input-field col l6 m12 s12">
                                     <label for="clase" class="active">Idioma:</label>
                                     '.$idioma.'
                                 </div>
-                                <div class="input-field col l4 m12 s12" id="sltModalTipo">
+                                <div class="input-field col l6 m12 s12" id="sltModalTipo">
                                     <label for="tipo" class="active">Formato:</label>
                                     '.$formato.'
                                 </div>
-                                <div class="input-field col l4 m12 s12" id="sltModalTipo">
+                                <div class="input-field col l6 m12 s12" id="sltModalTipo">
                                     <label for="tipo" class="active">Tipo Contenido:</label>
                                     '.$tipoContenido.'
                                 </div>
-                                <div class="input-field col l12 m12 s12 ">
-                                    <label for="url" class="active">URL Storeeasy Conecta-TE:</label>
-                                    '.$url.'
+                                <div class="input-field col l6 m12 s12 ">
+                                    <label for="txtRED" class="active">¿Es un RED?:</label>
+                                    '.$RED.'
                                 </div>
-                                <div class="input-field col l12 m12 s12  left-align">
-                                    <label for="labor" class="active">Observaciones:</label>
-                                    '.$labor.'
-                                </div>
-                                <div class="input-field col l12 m12 s12  left-align">
+                                <div class="input-field col l12 m12 s12">
                                     <label for="labor" class="active">Palabras clave:</label>
                                     '.$palabrasClave.'
-                                </div>';
-                if ($idEqu == 'EQU001') {
-                    $string .=' <div class="input-field col l11 m12 s12  left-align">
-                                    <label for="autores" class="active">Autores:</label>
-                                    '.$autores.'
-                                </div>
-                                <div class="input-field col l11 m12 s12 ">
-                                    <label for="urlVimeo" class="active">URL álbum de Vimeo:</label>
-                                    '.$urlVimeo.'
                                 </div>
                                 <div class="input-field col l12 m12 s12 ">
+                                    <label for="url" class="active">Enlace para inventario:</label>
+                                    '.$url.'
+                                </div>';
+                if ($idEqu == 'EQU001') {
+                    $string .= '<div class="input-field col l12 m12 s12 ">
+                                    <label for="urlVimeo" class="active">Enlace Vimeo:</label>
+                                    '.$urlVimeo.'
+                                </div>
+                                <div class="input-field col l12 m12 s12  left-align">
+                                    <label for="autores" class="active">Autores:</label>
+                                    '.$autores.'
+                                </div>';
+                }
+                $string .= '    <div class="input-field col l12 m12 s12  left-align">
+                                    <label for="labor" class="active">Observaciones:</label>
+                                    '.$labor.'
+                                </div>';
+                if ($idEqu == 'EQU001') {
+                    $string .=' <div class="input-field col l6 m12 s12 ">
                                     <label for="urlVimeo" class="active">Duración Video:</label>
                                     '.$minDura.'
                                 </div>';
+                } else if ($idEqu == 'EQU002') {
+                    $string .= '<div class="input-field col l6 m12 s12">
+                                    <label for="plat" class="active">Plataforma:</label>
+                                    '.$plataformaProducto.'
+                                </div>';
                 }
+                $string .= '    <div class="input-field col l6 m12 s12">
+                                    <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
+                                    '.$fechaEntre.'
+                                </div>';
             } else if ($datos['productoOservicio'] == 'NO'){
                 $consulta2 = "SELECT * FROM pys_resultservicio 
                 INNER JOIN pys_plataformas ON pys_resultservicio.idPlat = pys_plataformas.idPlat

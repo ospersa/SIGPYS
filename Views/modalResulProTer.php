@@ -1,4 +1,3 @@
-<div class="modal-content center-align">
 <?php 
 include_once('../Controllers/ctrl_resultadoProductoDis.php');
 if ($prep == "COM") {
@@ -11,5 +10,3 @@ if ($prep == "COM") {
     require('modalResultadoRealizacion.php');
 }
 ?>
-
-</div>

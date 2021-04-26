@@ -1,4 +1,3 @@
-<div class="modal-content center-align">
 <?php 
 include_once('../Controllers/ctrl_terminacionProductoServicio.php');
 
@@ -8,4 +7,3 @@ if ($prep == "TER") {
     require('modalInformacionTerminar.php');
 } 
 ?>
-</div>

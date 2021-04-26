@@ -44,9 +44,11 @@ require('../Estructure/header.php');
 
 <!-- Modal Structure -->
 <div id="modalResultadoServicio" class="modal">
+    <div class="modal-content center-align df">
     <?php
         require('modalResultadoServicio.php');
     ?>
+    </div>
 </div>
 
 <?php

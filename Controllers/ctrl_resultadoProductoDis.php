@@ -66,6 +66,7 @@ if ($id != null){
     $solEspecifica          = $info['ObservacionAct'];
     $fechaPrev              = $info['fechPrev'];
     $idSer                  = $info['idSer'];
+    $estado                 = $info['nombreEstSol'];
     $sltPlata               = Plataforma::selectPlataforma (null);
     $sltRED                 = SolicitudEspecifica::selectRED (null);
     $sltClase               = Producto::selectClaseConTipo ($idSer,null);

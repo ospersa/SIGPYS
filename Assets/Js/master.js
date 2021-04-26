@@ -1094,7 +1094,6 @@ function suprimir(value, url) {
 /*------- Inicio envio de datos a modal -------*/
 function envioData(valor, dir) {
     $('.modal-content').load(dir + "?id=" + valor, function () {
-        console.log(valor);
         $('#cod').val(valor);
         textbus = $("#txt-search").val();
         $('#valbus').val(textbus);
@@ -1737,6 +1736,11 @@ function inicializarCampos() {
         $('select').formSelect();
     }
 
+    var select = $('select');
+    if (select.length != 0) {
+        $('select').formSelect();
+    }
+
     var textareas = $(".textarea");
     if (textareas.length != 0) {
         M.textareaAutoResize($(".textarea"));
@@ -1758,7 +1762,6 @@ function inicializarCampos() {
 }
 
 function actualizaEstadoProductoServicio (idProductoServicio, idEstado, dir) {
-    console.log("El estado es: " + $(idEstado).val())
     $.ajax({
         type: "POST",
         url: dir,
@@ -1768,8 +1771,46 @@ function actualizaEstadoProductoServicio (idProductoServicio, idEstado, dir) {
             actualizarEstado: 1
         },
         success: function (data) {
-            console.log(data);
             M.toast({html: data, classes: 'rounded'});
         }
     })
+}
+
+function addSltArea () {
+    let selects = $("#multiselect").find('select');
+    let elem = $(selects[0]).data('elem');
+    elem++;
+    $(selects[0]).data('elem',elem);
+
+    $.ajax({
+        type:       "POST",
+        url:        "../Controllers/ctrl_proyecto.php",
+        data:       { addSltAreaElem: elem },
+        success:    function (data) {
+            $('#multiselect').append(data);
+            inicializarCampos();
+        }
+    })
+}
+
+function removeSltArea (element, idArea) {
+    if (idArea == null) {
+        $(element).parent().parent().remove();
+    } else {
+        var idProy = $('#cod').val();
+        $.ajax({
+            type:       "POST",
+            url:        "../Controllers/ctrl_proyecto.php",
+            data:       { removeSltAreaElem: idArea, areaIdProy: idProy },
+            success:    function (data) {
+                let datos = JSON.parse(data);
+                if (datos[0] == 'Correcto') {
+                    $(element).parent().parent().remove();
+                    M.toast({html: datos[1]})
+                } else {
+                    M.toast({html: datos[1]})
+                }
+            }
+        })
+    }
 }

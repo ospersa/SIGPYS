@@ -32,9 +32,11 @@ require('../Estructure/header.php');
 </div>
 <!-- Modal Structure -->
 <div id="modalResulProTer" class="modal">
+    <div class="modal-content center-align">
     <?php
        require('modalResulProTer.php');
     ?>
+    </div>
 </div>
 
 <?php

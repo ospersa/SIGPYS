@@ -649,7 +649,7 @@
 
         public static function cargarInformacionProducto($idSol){
             require('../Core/connection.php');
-            $consulta = "SELECT pys_actproductos.idPlat, pys_actproductos.idClProd, pys_actproductos.idTProd, pys_actproductos.observacionesProd, pys_actproductos.nombreProd, pys_actproductos.descripcionProd, pys_actproductos.urlservidor, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, pys_actproductos.fechEntregaProd, pys_actproductos.palabrasClave, pys_actproductos.idioma, pys_actproductos.formato, pys_actproductos.tipoContenido
+            $consulta = "SELECT pys_actproductos.idPlat, pys_actproductos.idClProd, pys_actproductos.idTProd, pys_actproductos.observacionesProd, pys_actproductos.nombreProd, pys_actproductos.descripcionProd, pys_actproductos.urlservidor, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, pys_actproductos.fechEntregaProd, pys_actproductos.palabrasClave, pys_actproductos.idioma, pys_actproductos.formato, pys_actproductos.tipoContenido, pys_actproductos.idAreaConocimiento 
                 FROM pys_productos
                 INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
                 WHERE idSol = '$idSol' AND pys_actproductos.est = '1' AND pys_productos.est = '1';";
@@ -792,6 +792,33 @@
             mysqli_close($connection);
         }
 
+        public static function selectAreaConocimiento ($idProy, $idAreaConocimiento) {
+            require('../Core/connection.php');
+            $query  = " SELECT * FROM areaconocimientohasproyectos
+                        INNER JOIN pys_areaconocimiento ON areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento  = pys_areaconocimiento.idAreaConocimiento
+                        WHERE pys_proyectos_idProy = '$idProy' AND areaEstado = '1' ";
+            $result = mysqli_query($connection, $query);
+            if (mysqli_num_rows($result) > 0) {
+                $string = '  <select name="sltAreaConocimiento" id="sltAreaConocimiento">
+                        <option selected>Seleccione...</option>';
+                while ($datos = mysqli_fetch_array($result)) {
+                    if ($datos['pys_areaconocimiento_idAreaConocimiento'] == $idAreaConocimiento) {
+                        $string .= '  <option value="'.$datos['pys_areaconocimiento_idAreaConocimiento'].'" selected>'.$datos['areaNombre'].'</option>';
+                    } else {
+                        $string .= '  <option value="'.$datos['pys_areaconocimiento_idAreaConocimiento'].'">'.$datos['areaNombre'].'</option>';
+                    }
+                }
+                $string .= '  </select>
+                        <label for="sltAreaConocimiento">Área de conocimiento</label>';
+            } else {
+                $string = '<label for="areaConocimiento">Área de conocimiento</label> <br>';
+                $string .= '<p name="areaConocimiento" id="areaConocimiento" class="left-align">El proyecto no tiene áreas de conocimiento asignadas.</p>';
+            }
+            return $string; 
+            mysqli_close($connection);
+        }
+
+
         public static function selectClaseConTipo ($idServicio, $idClase) {
             require ('../Core/connection.php');
             $consulta = "SELECT idClProd, nombreClProd FROM pys_claseproductos WHERE est = '1' AND idSer = '$idServicio';";
@@ -900,7 +927,7 @@
             mysqli_close($connection);
         }
 
-        public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido){
+        public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
             require('../Core/connection.php');
             $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
             $red            = mysqli_real_escape_string($connection, $red);
@@ -909,32 +936,60 @@
             $palabrasClave  = mysqli_real_escape_string($connection, $palabrasClave);
             $countProd      = SolicitudEspecifica::generarCodigoProducto();
             $idPersona      = SolicitudEspecifica::generarIdPersona($usuario);
-            if ($fechaEntre != null){
-                $fechaEntre ="'".$fechaEntre."'";   
-           } else {
-                $fechaEntre = "null";
-           }
-            $consulta       ="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '','$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '1')";
+            $fechaEntre     = ($fechaEntre != null) ? "'".$fechaEntre."'" : "null";
+            mysqli_query($connection, "BEGIN;");
+            $consulta       = "INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '1');";
             $resultado      = mysqli_query($connection, $consulta);
-            $consulta1      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1', '$idioma', '$formato', '$tipoContenido' )";
+            $consulta1      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1', $idioma, $formato, $tipoContenido, $areaConocimiento);";
             $resultado1     = mysqli_query($connection, $consulta1);
-            if($resultado && $resultado1){
+            if($resultado && $resultado1) {
+                mysqli_query($connection, "COMMIT;");
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
+                mysqli_query($connection, "ROLLBACK;");
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
         }
 
-        public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores,  $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido) {
+        public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
+            require('../Core/connection.php');
+            $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
+            $red            = mysqli_real_escape_string($connection, $red);
+            $url            = mysqli_real_escape_string($connection, $url);
+            $palabrasClave  = mysqli_real_escape_string($connection, $palabrasClave);
+            $labor = mysqli_real_escape_string($connection, $labor);
+            $fechaEntre     = ($fechaEntre != null) ? "'".$fechaEntre."'" : "null";
+            $consulta = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
+            $resultado = mysqli_query($connection, $consulta);
+            $datos = mysqli_fetch_array($resultado);
+            $countProd = $datos['idProd'];
+            mysqli_query($connection, "BEGIN;");
+            $consulta1 = "UPDATE pys_actproductos SET est= '2' WHERE idProd = '$countProd' AND est = '1';";
+            $resultado1 = mysqli_query($connection, $consulta1);
+            $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
+            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1', '$idioma', '$formato', '$tipoContenido', $areaConocimiento);";
+            $resultado2 = mysqli_query($connection, $consulta2);
+            if ($resultado && $resultado1 && $resultado2) {
+                mysqli_query($connection, "COMMIT;");
+                echo '<script>alert("Se actualizó correctamente la información.")</script>';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+            } else {
+                mysqli_query($connection, "ROLLBACK;");
+                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+            }
+            mysqli_close($connection);
+        }
+
+        public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores,  $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento) {
             require('../Core/connection.php');
             $min = ($min == "") ? "null" : $min;
             $seg = ($seg == "") ? "null" : $seg;
             $fechaEntre = ($fechaEntre != null) ? "'".$fechaEntre."'" : "null";
             $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-           
             $red            = mysqli_real_escape_string($connection, $red);
             $url            = mysqli_real_escape_string($connection, $url);
             $labor          = mysqli_real_escape_string($connection, $labor);
@@ -944,16 +999,55 @@
             $palabrasClave  = mysqli_real_escape_string($connection, $palabrasClave);
             $countProd      = SolicitudEspecifica::generarCodigoProducto();
             $idPersona      = SolicitudEspecifica::generarIdPersona($usuario);
-            echo $consulta       ="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
+            mysqli_query($connection, "BEGIN;");
+            $consulta       ="INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro','$nomProduc','$red', '', $fechaEntre, now(), '$urlVimeo','$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '1')";
             $resultado      = mysqli_query($connection, $consulta);
-            $consulta1      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1', '$idioma', '$formato', '$tipoContenido')";
+            $consulta1      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, $areaConocimiento)";
             $resultado1     = mysqli_query($connection, $consulta1);
             if($resultado && $resultado1){
+                mysqli_query($connection, "COMMIT;");
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
+                mysqli_query($connection, "ROLLBACK;");
                 echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
-                //echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+            }
+            mysqli_close($connection);
+        }
+
+        public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento) {
+            require('../Core/connection.php');
+            $min = ($min == "") ? "null" : $min;
+            $seg = ($seg == "") ? "null" : $seg;
+            $fechaEntre = ($fechaEntre != null) ? "'".$fechaEntre."'" : "null";
+            $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
+            $red            = mysqli_real_escape_string($connection, $red);
+            $url            = mysqli_real_escape_string($connection, $url);
+            $labor          = mysqli_real_escape_string($connection, $labor);
+            $autores        = mysqli_real_escape_string($connection, $autores);
+            $sinopsis       = mysqli_real_escape_string($connection, $sinopsis);
+            $urlVimeo       = mysqli_real_escape_string($connection, $urlVimeo);
+            $palabrasClave  = mysqli_real_escape_string($connection, $palabrasClave);
+            mysqli_query($connection, "BEGIN;");
+            $consulta1      = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
+            $resultado1     = mysqli_query($connection, $consulta1);
+            $datos          = mysqli_fetch_array($resultado1);
+            $countProd      = $datos['idProd'];
+            $consulta       = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = '1';";
+            $resultado      = mysqli_query($connection, $consulta);
+            $idPersona      = SolicitudEspecifica::generarIdPersona($usuario);
+            $consulta2      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '$palabrasClave', $fechaEntre, now(), '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, '$areaConocimiento');";
+            
+            $resultado2     = mysqli_query($connection, $consulta2);
+            if($resultado && $resultado1 && $resultado2){
+                mysqli_query($connection, "COMMIT;");
+                echo '<script>alert("Se actualizó correctamente la información.")</script>';
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
+            } else {
+                mysqli_query($connection, "ROLLBACK;");
+                echo "<script>alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
         }
@@ -978,66 +1072,6 @@
 
         }
 
-        public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido){
-            require('../Core/connection.php');
-            $nomProduc      = mysqli_real_escape_string($connection, $nomProduc);
-            $red            = mysqli_real_escape_string($connection, $red);
-            $url            = mysqli_real_escape_string($connection, $url);
-            $palabrasClave  = mysqli_real_escape_string($connection, $palabrasClave);
-            $labor = mysqli_real_escape_string($connection, $labor);
-            if ($fechaEntre != null){
-                $fechaEntre ="'".$fechaEntre."'";   
-            } else {
-                $fechaEntre = "null";
-            }
-            $consulta = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = 1";
-            $resultado = mysqli_query($connection, $consulta);
-            $datos = mysqli_fetch_array($resultado);
-            $countProd = $datos['idProd'];
-            $consulta1 = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = 1";
-            $resultado1 = mysqli_query($connection, $consulta1);
-            $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
-            $consulta2 ="INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0',DEFAULT , '', '', '1', '$idioma', '$formato', '$tipoContenido')";
-            $resultado2 = mysqli_query($connection, $consulta2);
-            if($resultado && $resultado1 && $resultado2){
-                echo '<script>alert("Se actualizó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
-            } else {
-                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
-            }
-        }
-
-        public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido) {
-            require('../Core/connection.php');
-            $min = ($min == "") ? "null" : $min;
-            $seg = ($seg == "") ? "null" : $seg;
-            $fechaEntre = ($fechaEntre != null) ? "'".$fechaEntre."'" : "null";
-            $nomProduc = mysqli_real_escape_string($connection, $nomProduc);
-            $red            = mysqli_real_escape_string($connection, $red);
-            $url            = mysqli_real_escape_string($connection, $url);
-            $labor          = mysqli_real_escape_string($connection, $labor);
-            $autores        = mysqli_real_escape_string($connection, $autores);
-            $sinopsis       = mysqli_real_escape_string($connection, $sinopsis);
-            $urlVimeo       = mysqli_real_escape_string($connection, $urlVimeo);
-            $palabrasClave  = mysqli_real_escape_string($connection, $palabrasClave);
-            $consulta1      = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
-            $resultado1     = mysqli_query($connection, $consulta1);
-            $datos          = mysqli_fetch_array($resultado1);
-            $countProd      = $datos['idProd'];
-            $consulta       = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = '1';";
-            $resultado      = mysqli_query($connection, $consulta);
-            $idPersona      = SolicitudEspecifica::generarIdPersona($usuario);
-            echo $consulta2      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '$palabrasClave', $fechaEntre, now(), '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1', '$idioma', '$formato', '$tipoContenido')";
-            $resultado2     = mysqli_query($connection, $consulta2);
-            if($resultado && $resultado1 && $resultado2){
-                echo '<script>alert("Se actualizó correctamente la información.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
-            } else {
-                echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
-                //echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
-            }
-        }
         public static function generarCodigoProducto(){
             require('../Core/connection.php');
             $consulta="SELECT COUNT(idProd),MAX(idProd) FROM pys_productos";
@@ -1078,17 +1112,17 @@
             mysqli_close($connection);
         }
 
-        public static function comprobraExisResultadoProductos($idSol){
+        public static function comprobraExisResultadoProductos($idSol) {
             require('../Core/connection.php');
-            $consulta1 = "SELECT idSol FROM pys_productos WHERE idSol = '$idSol' AND est = 1;";
+            $consulta1 = "SELECT idSol FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
+            mysqli_close($connection);
             if ($registros1 > 0){
                 return True;
             }else{
                 return False;
             }
-            mysqli_close($connection);
         }
 
         public static function selectEstadoProductoServicio ($idSol, $idEstado,$idEquipo) {
