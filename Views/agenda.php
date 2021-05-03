@@ -47,7 +47,7 @@ if( !empty( $hoy ) ){
                 </div>
             </div>
         </div>
-        <div class="col l5 m5 s12 offset-l1 offset-m1">
+        <div class="col l6 m6 s12">
             <ul class="collapsible">
                 <li>
                     <div class="collapsible-header teal white-text">

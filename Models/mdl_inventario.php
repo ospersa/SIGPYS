@@ -2,26 +2,33 @@
 
     Class Inventario {
 
-        Public static function onLoadAdmin($persona, $proyecto, $equipo, $idSol, $descrip){
+        Public static function onLoadAdmin($persona, $proyecto, $equipo, $idSol, $descrip, $estado) {
             require('../Core/connection.php');
             $string = "";
             $modal = "";
-            $estado="";
             $descrip = mysqli_real_escape_string($connection, $descrip);
-            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct 
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_servicios.idEqu, pys_actproductos.nombreProd, pys_actinventario.estadoInv
                 FROM pys_actsolicitudes
                 INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
                 INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
                 INNER JOIN pys_actualizacionproy ON pys_cursosmodulos.idProy = pys_actualizacionproy.idProy
                 INNER JOIN pys_servicios ON  pys_solicitudes.idSer = pys_servicios.idSer
                 INNER JOIN pys_equipos ON  pys_servicios.idEqu = pys_equipos.idEqu 
-                INNER JOIN pys_productos ON pys_actsolicitudes.idSol = pys_productos.idSol ";
+                INNER JOIN pys_productos ON pys_actsolicitudes.idSol = pys_productos.idSol
+                INNER JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
+                LEFT JOIN pys_inventario ON pys_inventario.idProd = pys_actproductos.idProd AND pys_inventario.est = '1'
+                LEFT JOIN pys_actinventario ON pys_actinventario.idInventario = pys_inventario.idInventario AND pys_actinventario.est = '1' ";
             $where = "WHERE pys_solicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_servicios.est = '1' AND pys_servicios.productoOservicio = 'SI' AND pys_equipos.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol = 'ESS006' AND pys_productos.est = '1' ";
             if ($persona != null) {
                 $consulta .= "INNER JOIN pys_asignados on pys_actsolicitudes.idSol = pys_asignados.idSol
                 INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona ";
                 $where .= "AND pys_asignados.est = 1 AND pys_personas.est = 1 AND pys_personas.idPersona ='$persona' ";
             } 
+            if ($estado != null) {
+                $where .= "AND pys_actinventario.estadoInv = '$estado' ";
+            } else {
+                $where .= "AND (pys_actinventario.estadoInv = '' OR pys_actinventario.estadoInv IS NULL) ";
+            }
             if ($proyecto != null) {
                 $where .= "AND pys_actualizacionproy.idProy ='$proyecto' ";
             } 
@@ -33,8 +40,9 @@
             } 
             if ($descrip != null) {
                 $where .= "AND pys_actsolicitudes.ObservacionAct  LIKE '%$descrip%' ";
-            }            
-            $consulta .= $where;
+            }
+            $order = "ORDER BY pys_actsolicitudes.fechAct DESC ";
+            $consulta .= $where . $order . ';';
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
@@ -56,35 +64,9 @@
                                 <tbody id="misSolicitudes">';
                 while ($datos = mysqli_fetch_array($resultado)) {
                     $idSol = $datos['idSol'];
-                    require('../Core/connection.php');
-                    $consultaE = "SELECT idEqu FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
-                    $resultadoE = mysqli_query($connection, $consultaE);
-                    $datosE = mysqli_fetch_array($resultadoE);
-                    $equipo = $datosE['idEqu'];
-                    if ($equipo == 'EQU001'){//realizar
-                        $modal = "REA";
-                    }else if($equipo == 'EQU002'){//diseno
-                        $modal = "DIS";
-                    }else if($equipo == 'EQU003'){
-                        $modal = "SOP";
-                    }
-                    $validar = Inventario::validarInventario($idSol);
-                    if($validar != null){
-                        $estado= $validar['estadoInv'];
-                    } else {
-                        $estado = 'Sin inventario';
-                    }
-                    if ($estado == "Terminado"){
-                        $color = "teal";
-                    } else {
-                        $color = "red";
-                    }
-                    $consultaProd = "SELECT pys_actproductos.nombreProd FROM pys_actproductos 
-                    INNER JOIN pys_productos ON pys_actproductos.idProd = pys_productos.idProd
-                    INNER JOIN pys_actsolicitudes ON pys_productos.idSol = pys_actsolicitudes.idSol
-                    WHERE pys_actsolicitudes.est = 1 AND pys_actproductos.est =1 AND pys_productos.est =1 AND pys_actsolicitudes.idSol = '$idSol'";
-                    $resultadoProd = mysqli_query($connection, $consultaProd);
-                    $datosP = mysqli_fetch_array($resultadoProd);
+                    $modal = strtoupper ( substr( $datos['nombreEqu'], 0, 3) );
+                    $color = ($datos['estadoInv'] == "Terminado") ? "teal" : "red";
+                    $estadoInv = ($datos['estadoInv'] != null) ? $datos['estadoInv'] : "Sin inventario" ;
                     $string .= '    <tr>
                                         <td>'.$datos['idSolIni'].'</td>
                                         <td>P'.$datos['idSol'].'</td>
@@ -92,9 +74,9 @@
                                         <td>'.$datos['nombreProy'].'</td>
                                         <td>'.$datos['nombreEqu'].' -- '.$datos['nombreSer'].'</td>
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
-                                        <td>'.$datosP['nombreProd'].'</td>
+                                        <td>'.$datos['nombreProd'].'</td>
                                         <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Personas Asignadas" onclick="envioData(\'ASI'.$idSol.'\',\'modalInventario.php\');"><i class="material-icons teal-text">group</i></a></td>
-                                        <td>'.$estado.'</td>
+                                        <td>'.$estadoInv.'</td>
                                         <td><a href="#modalInventario" class="modal-trigger tooltipped" data-position="right" data-tooltip="Entrega de inventario" onclick="envioData(\''.$modal.$idSol.'\',\'modalInventario.php\');"><i class="material-icons '.$color.'-text">description</i></a></td>
                                     </tr>';
                 }
@@ -333,7 +315,7 @@
 
         public static function validarInventario($id){
             require('../Core/connection.php');
-            $consulta ="SELECT pys_inventario.idInventario, pys_actinventario.estadoInv, pys_actinventario.crudoPeso, pys_actinventario.crudoCarpeta, pys_actinventario.proyectoPeso, pys_actinventario.proyectoCarpeta, pys_actinventario.finalesPeso, pys_actinventario.finalesCarpeta, pys_actinventario.recursosPeso, pys_actinventario.recursosCarpeta, pys_actinventario.documentosPeso, pys_actinventario.documentosCarpeta, pys_actinventario.rutaServidor, pys_actinventario.disenoCarpeta, pys_actinventario.disenoPeso, pys_actinventario.desarrolloCarpeta, pys_actinventario.desarrolloPeso, pys_actinventario.soporteCarpeta, pys_actinventario.soportePeso, pys_actinventario.observacion, pys_actinventario.idPersonaRecibe, pys_actinventario.idPersonaEntrega, pys_actinventario.estadoInv
+            $consulta ="SELECT pys_inventario.idInventario, pys_actinventario.estadoInv, pys_actinventario.crudoPeso, pys_actinventario.crudoCarpeta, pys_actinventario.proyectoPeso, pys_actinventario.proyectoCarpeta, pys_actinventario.finalesPeso, pys_actinventario.finalesCarpeta, pys_actinventario.recursosPeso, pys_actinventario.recursosCarpeta, pys_actinventario.documentosPeso, pys_actinventario.documentosCarpeta, pys_actinventario.rutaServidor, pys_actinventario.disenoCarpeta, pys_actinventario.disenoPeso, pys_actinventario.desarrolloCarpeta, pys_actinventario.desarrolloPeso, pys_actinventario.soporteCarpeta, pys_actinventario.soportePeso, pys_actinventario.observacion, pys_actinventario.idPersonaRecibe, pys_actinventario.idPersonaEntrega
                 FROM pys_inventario 
                 INNER JOIN pys_productos ON pys_productos.idProd = pys_inventario.idProd 
                 INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_productos.idSol 
@@ -542,38 +524,39 @@
             return $datos;
         }
 
-        public static function selectPersona($cod,$busqueda) {
+        public static function selectPersona($cod, $busqueda) {
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $string = '';
-            $consulta = "SELECT idPersona, apellido1, apellido2, nombres
-                FROM pys_personas
-                WHERE pys_personas.est = '1' ";
             if ($cod == 1) {
-                $consulta .= "AND (pys_personas.apellido1 LIKE '%$busqueda%' OR pys_personas.apellido2 LIKE '%$busqueda%' OR pys_personas.nombres LIKE '%$busqueda%')";
-                $string .=' <select name="sltPersona" id="sltPersona">';
-            } 
-            #cod =3 filtar solo los cargos que tienen personas del equipo de produccion y soporte P&S
-            #Utilizado para select en el modal inventario
-            else if ($cod == 3) {
-                $consulta .=  " AND (idCargo = 'CAR019' OR idCargo = 'CAR017' OR idCargo = 'CAR012' OR idCargo = 'CAR014' OR idCargo = 'CAR015' OR idCargo = 'CAR016' OR idCargo = 'CAR035' OR idCargo = 'CAR036' OR idCargo = 'CAR037' OR idCargo = 'CAR038' OR idCargo = 'CAR039' OR idCargo = 'CAR041' OR idCargo = 'CAR045');";
+                $consulta = "SELECT idPersona, apellido1, apellido2, nombres
+                    FROM pys_personas
+                    WHERE pys_personas.est = '1'
+                    AND (pys_personas.apellido1 LIKE '%$busqueda%' OR pys_personas.apellido2 LIKE '%$busqueda%' OR pys_personas.nombres LIKE '%$busqueda%')";
+                $string .='         <select name="sltPersona" id="sltPersona">';
             }
-
+            /** Si $cod contiene una letra se realizará búsqueda de las personas asignadas al proyecto */
+            else if ( is_string ( $cod ) ) {
+                $consulta = "SELECT *
+                    FROM pys_asignados
+                    INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
+                    WHERE pys_asignados.idProy = '$cod' AND pys_asignados.est != '0'
+                    GROUP BY pys_personas.idPersona
+                    ORDER BY pys_personas.apellido1 ASC;";
+            }
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 ) {
+                $string .= '            <option value="" disabled selected>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    if( $busqueda == $datos['idPersona'] && ($cod == 2 || $cod == 3) ){
-                        $nombreCompleto = $datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'];
-                        $string .= '  <option value="'.$datos['idPersona'].'" selected>'.$nombreCompleto.'</option>';
+                    $nombreCompleto = strtoupper ( $datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'] );
+                    if( $busqueda == $datos['idPersona'] ){
+                        $string .= '    <option value="'.$datos['idPersona'].'" selected>'.$nombreCompleto.'</option>';
                     } else {
-                        $nombreCompleto = $datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'];
-                        $string .= '  <option value="'.$datos['idPersona'].'">'.$nombreCompleto.'</option>';
+                        $string .= '    <option value="'.$datos['idPersona'].'">'.$nombreCompleto.'</option>';
                     }
                 }
             } else {
-                $string .=  '  
-                            <option value="" disabled>No hay resultados para la busqueda: '.$busqueda.'</option>
-                        ';
+                $string .=  '           <option value="" disabled>No hay resultados para la busqueda: '.$busqueda.'</option>';
             }
             mysqli_close($connection);
             if($cod == 1)  {

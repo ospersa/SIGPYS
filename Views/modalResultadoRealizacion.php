@@ -69,7 +69,7 @@
             <div class="input-field col l6 m12 s12">
                 <?php echo $sltRED;?>
             </div>
-            <div class="input-field col l6 m12 s12">
+            <div class="input-field col l12 m12 s12">
                 <?php echo $sltAreaConocimiento;?>
             </div>
             <div class="input-field col l12 m12 s12">

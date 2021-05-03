@@ -108,7 +108,10 @@ $(document).ready(function () {
 
     $('.collapsible').collapsible({
         onOpenEnd: function () {
-            M.textareaAutoResize($(".materialize-textarea"));
+            if ($('textarea').length > 0) {
+                M.textareaAutoResize($(".materialize-textarea"));
+            }
+            $('select').formSelect();
         }
     });
 

@@ -62,20 +62,17 @@ if (isset($_POST['btnTerEnvi'])) {
     $apellido2= $datos['apellido2'];
     $nombreRol= $datos['nombreRol'];
 
-}else {
-    if ($busProy != '' && $fechFin == null){
+} else {
+    if ($busProy != '' && $fechFin == null) {
         $cod = 1;
-        echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
-    } else if ($fechFin != null && $busProy == ''){
+    } else if ($fechFin != null && $busProy == '') {
         $cod = 2;
-        echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
-    } else if ($fechFin != null && $busProy != ''){
+    } else if ($fechFin != null && $busProy != '') {
         $cod = 3;
-        echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
     } else {
         $cod = 4;
-        echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
     }
+    echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
 }
 
 

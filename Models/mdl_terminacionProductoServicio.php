@@ -34,25 +34,25 @@
             $busProy = mysqli_real_escape_string($connection, $busProy);
             $resultado = "";
             $string = "";
-            //valida los proyectos en los cuales es asignado como gestor o asesor RED.
-            $consulta = "SELECT  pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol
-            FROM pys_actualizacionproy
-            INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
-            INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
-            INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
-            INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
-            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
-            INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
-            INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-            INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
-            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1 ";
+            // Valida los proyectos en los cuales es asignado como gestor o asesor RED.
+            $consulta = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol
+                FROM pys_actualizacionproy
+                INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
+                INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
+                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
+                INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+                INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
+                INNER JOIN pys_personas on pys_asignados.idPersona = pys_personas.idPersona 
+                INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+                INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
+                WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est = '1' AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est = '1' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS007' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_equipos.est = '1' AND pys_servicios.est = '1' ";
             if ($cod == 1 ){
-                $consulta .= "AND pys_actualizacionproy.idProy ='$busProy' ";
+                $consulta .= "AND pys_actualizacionproy.idProy = '$busProy' ";
             } else if($cod == 3){
-                $consulta .= "AND pys_actualizacionproy.idProy ='$busProy' AND pys_actsolicitudes.fechPrev <='$fechFin' ";
+                $consulta .= "AND pys_actualizacionproy.idProy = '$busProy' AND pys_actsolicitudes.fechPrev <= '$fechFin' ";
             }else if ($cod == 2 ){
-                $consulta .= "AND pys_actsolicitudes.fechPrev <='$fechFin' ";
+                $consulta .= "AND pys_actsolicitudes.fechPrev <= '$fechFin' ";
             } 
             $consulta .= "GROUP BY pys_solicitudes.idSol ORDER BY pys_solicitudes.fechSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
@@ -120,23 +120,24 @@
                         }
                     }
                     if ( $metapendiente > 0 ) {
+                        $colorMeta = "red";
                         $color = "red";
                         $modal = "!";
                         $onclick = "";
                         $mjsTooltip ="Metadata incompleta";
                     } else {
+                        $colorMeta = "teal";
                         if ( $pendientes > 0 ) {
                             $color = "red";
-                            $modal = "!";
-                            $onclick = "";
+                            $modal = "modalTerminarProSer";
+                            $onclick = 'onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
                             $mjsTooltip ="Hay $pendientes personas que no han terminado la labor";
                         } else {
                             $color = "teal";
                             $modal = "modalTerminarProSer";
-                            $onclick ='onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
+                            $onclick = 'onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')"';
                             $mjsTooltip = "Terminar Producto o Servicio";
                         }
-                    
                     }
                     $string .= '    <tr>
                                         <td>'.$codProy.' - '.$nombreProy.'</td>
@@ -146,7 +147,7 @@
                                         <td>'.$estadoSol.'</td>
                                         <td>'.$fechPrev.'</td>
                                         <td>'.$fechSol.'</td>
-                                        <td><a href="#modalTerminarProSer" data-position="left" class="modal-trigger tooltipped" data-tooltip="Más información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$color.'-text">info_outline</i></a></td>
+                                        <td><a href="#modalTerminarProSer" data-position="left" class="modal-trigger tooltipped" data-tooltip="Más información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$colorMeta.'-text">info_outline</i></a></td>
                                         <td><a href="#'.$modal.'" data-position="left" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
                                     </tr>'; 
                     }    
@@ -200,7 +201,7 @@
             $clase              = (empty($datos['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreClProd'].' </p>' ;
             $tipo               = (empty($datos['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreTProd'].' - '.$datos['descripcionTProd'].' </p>' ;
             $url                = (empty($datos['urlservidor'])) ? $vacio : '<p class="left-align">'.$datos['urlservidor'].' </p>' ;
-            $labor              = (empty($datos['observacionesProd'])) ? $vacio : '<p class="left-align">'.$datos['observacionesProd'].' </p>' ;
+            $labor              = (empty($datos['observacionesProd'])) ? '<p class="left-align" style="color:transparent;">Observación</p>' : '<p class="left-align">'.$datos['observacionesProd'].' </p>' ;
             $urlVimeo           = (empty($datos['urlVimeo'])) ? $vacio : '<p class="left-align">'.$datos['urlVimeo'].' </p>' ;
             $minDura            = (empty($datos['duracionmin']) && empty($datos['duracionseg']) ) ? $vacio : '<p class="left-align">'.$datos['duracionmin'].' m '.$datos['duracionseg'].' s </p>' ;
             $sinopsis           = (empty($datos['sinopsis'])) ? $vacio : '<p class="left-align">'.$datos['sinopsis'].' </p>' ;
@@ -415,13 +416,13 @@
         public static function infoSolicitante($idSolIni){
             require('../Core/connection.php');
             $consulta = "SELECT correo FROM pys_solicitudes 
-            INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idSolicitante
-            WHERE idSol = '$idSolIni' AND pys_personas.est = 1 AND pys_solicitudes.est = 1 AND idTSol='TSOL01';";
+                INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idSolicitante
+                WHERE idSol = '$idSolIni' AND pys_personas.est = '1' AND pys_solicitudes.est = '1' AND idTSol='TSOL01';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             $correo = $datos['correo'];
-            return $correo;
             mysqli_close($connection);
+            return $correo;
         }
 
         public static function infoUsuario($usuario,$id){
@@ -443,39 +444,51 @@
             mysqli_close($connection);      
         }
 
-        public static function terminarProducto($idSol){
+        public static function terminarProducto($idSol) {
             require('../Core/connection.php');
-            $consulta ="SELECT * FROM pys_actsolicitudes WHERE idSol='$idSol' AND est=1; ";
+            $consulta = "SELECT * FROM pys_actsolicitudes WHERE idSol = '$idSol' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
-            $idEstSol = $datos ['idEstSol'];
-            $idSol= $datos ['idSol']; 
-            $idCM= $datos ['idCM'];
-            $idSer= $datos ['idSer'];
-            $idPersona= $datos ['idPersona'];
-            $idSolicitante= $datos ['idSolicitante'];
-            //cambio 
-            $fechPrev=$datos ['fechPrev'];
-            
-            $fechPrev="'". $datos ['fechPrev']."'";
-            $fechAct= $datos ['fechAct'];
-            $ObservacionAct= $datos ['ObservacionAct'];
-            $presupuesto= $datos ['presupuesto'];
-            $horas= $datos ['horas'];
-            $registrar =$datos['registraTiempo'];
-            $est= $datos ['est'];
-            $consulta1 = "UPDATE pys_actsolicitudes SET est=2 WHERE idSol='$idSol' AND est=1; ";
+            $idEstSol       = $datos ['idEstSol'];
+            $idSol          = $datos ['idSol']; 
+            $idCM           = $datos ['idCM'];
+            $idSer          = $datos ['idSer'];
+            $idPersona      = $datos ['idPersona'];
+            $idSolicitante  = $datos ['idSolicitante']; 
+            $fechPrev       = "'". $datos ['fechPrev']."'";
+            $fechAct        = $datos ['fechAct'];
+            $ObservacionAct = $datos ['ObservacionAct'];
+            $presupuesto    = $datos ['presupuesto'];
+            $horas          = $datos ['horas'];
+            $registrar      = $datos['registraTiempo'];
+            mysqli_query($connection, "BEGIN;");
+            $consulta1 = "UPDATE pys_actsolicitudes SET est = '2' WHERE idSol = '$idSol' AND est = '1';";
             $resultado1 = mysqli_query($connection, $consulta1);
-            $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL,'ESS006', '$idSol','$idCM', '$idSer', '$idPersona', '$idSolicitante', null, now(), '$ObservacionAct', $presupuesto, '$horas','$registrar', '$est')";
+            $consulta2 = "INSERT INTO pys_actsolicitudes VALUES (NULL, 'ESS006', '$idSol', '$idCM', '$idSer', '$idPersona', '$idSolicitante', $fechPrev, now(), '$ObservacionAct', $presupuesto, '$horas', '$registrar', '1');";
             $resultado2 = mysqli_query($connection, $consulta2);
-            mysqli_close($connection);
-            if ($resultado && $resultado1 && $resultado2){
+            $consulta3 = "SELECT idAsig FROM pys_asignados WHERE idSol = '$idSol' AND est = '1';";
+            $resultado3 = mysqli_query($connection, $consulta3);
+            $asignados = mysqli_num_rows($resultado3);
+            if ($asignados > 0) {
+                while ($datos3 = mysqli_fetch_array($resultado3)) {
+                    $idAsig = $datos3['idAsig'];
+                    $consulta4 = "UPDATE pys_asignados SET est = '2' WHERE idAsig = '$idAsig' AND est = '1';";
+                    $resultado4 = mysqli_query($connection, $consulta4);
+                    if ( $resultado4 ) {
+                        $asignados--;
+                    }
+                }
+            }
+            if ( $resultado1 && $resultado2 && $asignados == 0 ) {
+                mysqli_query($connection, "COMMIT;");
                 echo '<script>alert("Se terminó el producto/Servicio correctamente.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/terminacionServiciosProductos.php">';
-            } else{
+            } else {
+                mysqli_query($connection, "ROLLBACK;");
                 echo '<script>alert("No se terminó el producto/Servicio correctamente.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/terminacionServiciosProductos.php">';
             }
+            mysqli_close($connection);
         }
         
 }

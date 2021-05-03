@@ -132,37 +132,35 @@ class  PlaneacionAse{
                 }
             $string .= '
             <div class ="row">
-                <div class ="row">
-                    <div class="input-field col l3 m3 s12 ">
-                        <p>
-                        <label>
-                            <input type="checkbox" id="checkidSol'.$long.'--'.$numero.'" class="filled-in" name ="idSol[]" value ='.$idSol.' data-checked="false" onclick ="checkProd(\'#checkidSol'.$long.'--'.$numero.'\','.$numero.','.$long.')">
-                            <span>P'.$idSol.'</span>
-                        </label>
-                        <p>
-                    </div>
-                    <div class="input-field col l4 m4 s12">
-                        <label class="active">'.$descripcionSol.'</label>
-                    </div>
-                    <div class="input-field col l2 m2 s12">
-                        <label class="active">Horas disponibles: '.$hDispo.' h</label>
-                    </div>
-                    <div class="input-field col l1 m1 s12">
-                        <input type="number" class="validate" name ="horas[]" id="horas'.$long.'--'.$numero.'" value="0" min="0" max="12" disabled>
-                        <label for="horas" class="active">Horas</label>
-                    </div>
-                    <div class="input-field col l1 m1 s12">
-                        <input type="number" class="validate" name ="min[]" id="min'.$long.'--'.$numero.'" value="0" min="0" max="59" disabled>
-                        <label for="min" class="active">Minutos</label>
-                    </div>
-                    <div class="input-field col l10 m10 s12 offset-l1 offset-m1">
-                        <textarea name="obser[]" id="obser'.$long.'--'.$numero.'" class="materialize-textarea" disabled></textarea>
-                        <label for="obser" class="active">Actividad</label>
-                    </div>
-                     
+                <div class="input-field col l2 m2 s12 ">
+                    <p>
+                    <label>
+                        <input type="checkbox" id="checkidSol'.$long.'--'.$numero.'" class="filled-in" name ="idSol[]" value ='.$idSol.' data-checked="false" onclick ="checkProd(\'#checkidSol'.$long.'--'.$numero.'\','.$numero.','.$long.')">
+                        <span>P'.$idSol.'</span>
+                    </label>
+                    <p>
                 </div>
-                <div class="divider"> </div>
-            </div>';
+                <div class="input-field col l4 m4 s12">
+                    <label class="active">'.$descripcionSol.'</label>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <label class="active">Horas disponibles: '.$hDispo.' h</label>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <input type="number" class="validate" name ="horas[]" id="horas'.$long.'--'.$numero.'" value="0" min="0" max="12" disabled>
+                    <label for="horas" class="active">Horas</label>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <input type="number" class="validate" name ="min[]" id="min'.$long.'--'.$numero.'" value="0" min="0" max="59" disabled>
+                    <label for="min" class="active">Minutos</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <textarea name="obser[]" id="obser'.$long.'--'.$numero.'" class="materialize-textarea" disabled></textarea>
+                    <label for="obser" class="active">Actividad</label>
+                </div>
+            </div>
+            <div class="divider"> </div>
+            <br>';
             $numero += 1;
             }
         }

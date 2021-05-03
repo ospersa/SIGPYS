@@ -17,6 +17,7 @@ $proyecto       = (isset($_POST['sltProyecto'])) ? $_POST['sltProyecto'] : null;
 $equipo         = (isset($_POST['sltEquipo'])) ? $_POST['sltEquipo'] : null;
 $idSol          = (isset($_POST['sltProducto'])) ? $_POST['sltProducto'] : null; 
 $descrip        = (isset($_POST['txtDescrip'])) ? $_POST['txtDescrip'] : null;
+$estado         = (isset($_POST['sltEstado'])) ? $_POST['sltEstado'] : null;
 $id             = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 $prep           = "";
 $crudosCarp     = (isset($_POST['txtCrudosCarp'])) ? $_POST['txtCrudosCarp'] : null;
@@ -62,6 +63,7 @@ if (isset($_POST['persona'])) {
     $idSol                  = $info['idSol'];
     $desSol                 = $info['descripcionSol'];
     $idProy                 = $info['codProy'];
+    $codProy                = $info['idProy'];
     $nomProy                = $info['nombreProy'];
     $nomProdOSer            = $info['nombreSer'];
     $equipo                 = $info['nombreEqu'];
@@ -95,8 +97,8 @@ if (isset($_POST['persona'])) {
         $estadoInv      = $validarInv['estadoInv'];
     }
     $selectEstado   = Inventario::selectEstadoInv($estadoInv);
-    $stlPerEnt      = Inventario::selectPersona(3, $idPerEnt);
-    $stlPerRec      = Inventario::selectPersona(3, $idPerRec);
+    $stlPerEnt      = Inventario::selectPersona($codProy, $idPerEnt);
+    $stlPerRec      = Inventario::selectPersona($codProy, $idPerRec); // Verificar select para saber si es necesario este elemento
 } else if ( isset( $_POST['btnGuaInv'] ) ) {
     $validarInv = Inventario::validarInventario($cod);
     if ( $validarInv != null ) {
@@ -104,8 +106,8 @@ if (isset($_POST['persona'])) {
     } else {
         Inventario::ingresarInventario ($cod, $crudosCarp, $crudosPes, $proyCarp, $proyPeso, $finCarp, $finPeso, $recCarp, $recPeso, $docCarp, $docPeso, $rutSer, $disCarp, $disPeso, $desCarp, $desPeso, $sopCarp, $sopPeso, $obs, $idPerEnt, $idPerRec, $estadoInv); 
     }
-} else if ($perfil == 'PERF01' || $perfil == 'PERF02' ||($persona || $proyecto || $equipo || $idSol || $descrip) != null) {
-    Inventario::onLoadAdmin($persona, $proyecto, $equipo, $idSol, $descrip);
+} else if ( $perfil == 'PERF01' || $perfil == 'PERF02' || ($persona || $proyecto || $equipo || $idSol || $descrip || $estado ) != null ) {
+    Inventario::onLoadAdmin($persona, $proyecto, $equipo, $idSol, $descrip, $estado);
 } else { 
     Inventario::onLoadUsuario($usuario);
 } 
