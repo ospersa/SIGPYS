@@ -360,22 +360,22 @@
             };
             $buscar = mysqli_real_escape_string($connection, $buscar);
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_actsolicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.descripcionSol, pys_equipos.idEqu,  pys_servicios.nombreSer,  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_estadosol.idEstSol, pys_actproductos.nombreProd
-            FROM pys_solicitudes
-            INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
-            INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
-            INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
-            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
-            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
-            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
-            INNER JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
-            INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
-            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            INNER JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
-            INNER JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
-            LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol
-            LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
-	        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '1' AND   pys_asignados.idPersona = '".$idUsuario."' AND pys_solicitudes.idTSol = 'TSOL02' AND ((pys_estadosol.idEstSol != 'ESS001') AND (pys_estadosol.idEstSol != 'ESS006') AND (pys_estadosol.idEstSol != 'ESS007')) AND ((pys_actualizacionproy.codProy like '%".$buscar."%') or (pys_actualizacionproy.nombreProy like '%$buscar%') or(pys_solicitudes.idSol like '%$buscar%')) 
-            ORDER BY pys_actsolicitudes.idSol DESC;";
+                FROM pys_solicitudes
+                INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol
+                INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
+                INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
+                INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+                INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+                INNER JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
+                INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer
+                INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+                INNER JOIN pys_asignados ON pys_asignados.idsol = pys_actsolicitudes.idSol
+                INNER JOIN pys_personas ON pys_asignados.idResponRegistro = pys_personas.idPersona
+                LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol
+                LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
+                WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_equipos.est = '1' AND pys_asignados.est = '1' AND   pys_asignados.idPersona = '".$idUsuario."' AND pys_solicitudes.idTSol = 'TSOL02' AND ((pys_estadosol.idEstSol != 'ESS001') AND (pys_estadosol.idEstSol != 'ESS006') AND (pys_estadosol.idEstSol != 'ESS007')) AND ((pys_actualizacionproy.codProy like '%".$buscar."%') or (pys_actualizacionproy.nombreProy like '%$buscar%') or(pys_solicitudes.idSol like '%$buscar%')) 
+                ORDER BY pys_actsolicitudes.idSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
@@ -425,9 +425,9 @@
         public static function registrarTiempo($idSol, $idUsuario){
             require('../Core/connection.php');
             $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
-            FROM pys_tiempos 
-            INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
-            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
+                FROM pys_tiempos 
+                INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
+                WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
             if ( $registros1 > 0){
@@ -442,72 +442,45 @@
         public static function registrarInfoPyS($idSol, $idUsuario){
             require('../Core/connection.php');
             $string = "";
-            //Camio realizado para registrar video de mooc
+            //Cambio realizado para registrar video de MOOC
             $consulta1 = "SELECT pys_asignados.idAsig
-            FROM pys_asignados 
-            WHERE pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
-            /* $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
-            FROM pys_tiempos 
-            INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
-            WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';"; */
+                FROM pys_asignados 
+                WHERE pys_asignados.est = '1' AND pys_asignados.idPersona = '$idUsuario' AND pys_asignados.idSol = '$idSol';";
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
-            $consulta2 = "SELECT * FROM pys_actsolicitudes INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer where idSol='".$idSol."' AND pys_actsolicitudes.est=1 AND pys_servicios.est=1";
+            $consulta2 = "SELECT * 
+                FROM pys_actsolicitudes 
+                INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer 
+                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu
+                WHERE idSol = '$idSol' AND pys_actsolicitudes.est = '1' AND pys_servicios.est = '1';";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
-            $validarLLenoSer = SolicitudEspecifica::validarResultadoServicio($idSol); 
-            if ($validarLLenoSer == 1){
-                $color = "teal";
-                $tooltips = 'data-position="left" data-tooltip="Editar resultado de servicio"';
-            } else {
-                $color = "red";
-                $tooltips = 'data-position="left" data-tooltip="Agregar resultado de servicio"';
-            }
             if ( $registros1 > 0){
+                $equipo = strtoupper( substr ( $datos2['nombreEqu'], 0, 3 ) );
                 if ($datos2['productoOservicio'] == 'SI') {
-                    if ($datos2['idEqu'] == 'EQU001') {
-                        /**Realizacion */
-                        $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
-                        if ($validarLLenoPro == 1){
-                            $color = "teal";
-                            $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
-                        } else {
-                            $color = "red";
-                            $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
-                        }
-                        $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'REA'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
-                    } else if ($datos2['idEqu'] == 'EQU002') {
-                        /**Diseño grafico */
-                        $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
-                        if ($validarLLenoPro == 1){
-                            $color = "teal";
-                            $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
-                        } else {
-                            $color = "red";
-                            $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
-                        }
-                        $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'DIS'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
-                    } else if ($datos2['idEqu'] == 'EQU003') {
-                        /**Soporte */
-                        $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol,$datos2['idEqu']);
-                        if ($validarLLenoPro == 1){
-                            $color = "teal";
-                            $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
-                        } else {
-                            $color = "red";
-                            $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
-                        }
-                        $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'SOP'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
+                    $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol, $datos2['idEqu']);
+                    if ($validarLLenoPro == 1) {
+                        $color = "teal";
+                        $tooltips = 'data-position="left" data-tooltip="Editar resultado de Producto"';
+                    } else {
+                        $color = "red";
+                        $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
                     }
+                    $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\''.$equipo.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
                 } if ($datos2['productoOservicio'] == 'NO' && $datos2['idEqu'] != 'EQU004' ) {
+                    $validarLLenoSer = SolicitudEspecifica::validarResultadoServicio($idSol); 
+                    if ($validarLLenoSer == 1){
+                        $color = "teal";
+                        $tooltips = 'data-position="left" data-tooltip="Editar resultado de servicio"';
+                    } else {
+                        $color = "red";
+                        $tooltips = 'data-position="left" data-tooltip="Agregar resultado de servicio"';
+                    }
                     $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\'GEN'.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
-
                 }
-            }else{
-                $string = "";
             }
-            return $string;
             mysqli_close($connection);
+            return $string;
         }
 
         public static function marcarTerminado($idSol, $idUsuario){
@@ -553,9 +526,10 @@
 
         public static function validarResultadoServicio($idSol){
             require('../Core/connection.php');
-            $consulta = "SELECT * FROM pys_resultservicio WHERE idSol = '$idSol' AND est = 1;";
+            $consulta = "SELECT * FROM pys_resultservicio WHERE idSol = '$idSol' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
-            if ($resultado == TRUE ){
+            $completo = 0;
+            if ( $resultado ) {
                 $datos = mysqli_fetch_array($resultado);
                 $idPlat = $datos['idPlat'];
                 $idClProd = $datos['idClProd'];
@@ -564,55 +538,50 @@
                 $estudiantesImpac = $datos['estudiantesImpac'];
                 $docentesImpac = $datos['docentesImpac'];
                 $urlResultado  = $datos['urlResultado'];
-                if (($idPlat && $idClProd /* && $idTProd */ && $observacion) != null){
-                    return 1;
-                } else {
-                    return 0;
-                } 
-            }else {
-                return 0;
+                if (($idPlat && $idClProd) != null){
+                    $completo = 1;
+                }
             }
             mysqli_close($connection);
+            return $completo;
         }
 
-        public static function validarResultadoProducto($idSol,$equipo){
+        public static function validarResultadoProducto($idSol, $equipo) {
             require('../Core/connection.php');
+            $completo = 0;
             $consulta = "SELECT * FROM pys_productos
-            INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
-            WHERE idSol = '$idSol' AND pys_actproductos.est = 1 AND pys_productos.est = 1;";
+                INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
+                WHERE idSol = '$idSol' AND pys_actproductos.est = '1' AND pys_productos.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
-            if ($resultado == TRUE ){
+            if ( $resultado ) {
                 $datos = mysqli_fetch_array($resultado);
-                $nomProduc = $datos['nombreProd'];
-                $fechaEntre = $datos['fechEntregaProd'];
-                $RED = $datos['descripcionProd'];
-                $plat = $datos['idPlat']; 
-                $clase = $datos['idClProd']; 
-                $tipo = $datos ['idTProd'];
-                $url = $datos['urlservidor'];  
-                $labor = $datos['observacionesProd']; 
-                if ($equipo == "EQU003" || $equipo == "EQU002" ){
-                    if (($plat && $clase && $tipo && $labor  && $nomProduc && $RED  && $url  && $fechaEntre) != null){
-                        return 1;
-                    } else {
-                        return 0;
-                    }                      
-                } else if ($equipo == "EQU001" ){   
+                $nomProduc      = $datos['nombreProd'];
+                $fechaEntre     = $datos['fechEntregaProd'];
+                $RED            = $datos['descripcionProd'];
+                $plat           = $datos['idPlat']; 
+                $clase          = $datos['idClProd']; 
+                $tipo           = $datos ['idTProd'];
+                $url            = $datos['urlservidor'];  
+                $idioma         = $datos['idioma'];
+                $formato        = $datos['formato'];
+                $tipoContenido  = $datos['tipoContenido'];
+                if ($equipo == "EQU003" || $equipo == "EQU002" ) {
+                    if ( ( $plat && $clase && $tipo && $nomProduc && $RED  && $url  && $fechaEntre && $idioma && $formato && $tipoContenido ) != null ) {
+                        $completo = 1;
+                    }        
+                } else if ($equipo == "EQU001" ) {
                     $urlVimeo = $datos['urlVimeo']; 
                     $minDura = $datos['duracionmin'];  
                     $segDura = $datos['duracionseg'];  
                     $sinopsis = $datos['sinopsis'];
                     $autores = $datos['autorExterno'];
-                    if (($plat && $clase && $tipo && $labor  && $nomProduc && $RED  && $url && $urlVimeo &&  $minDura && $segDura && $sinopsis && $autores && $fechaEntre) != null){
-                        return 1;
-                    } else {
-                        return 0;
-                    }   
+                    if ( ( $plat && $clase && $tipo && $nomProduc && $RED && $url && $urlVimeo && $sinopsis && $autores && $fechaEntre && $idioma && $formato && $tipoContenido ) != null && is_numeric($segDura) && is_numeric($minDura) ) {
+                        $completo = 1;
+                    }
                 }
-            } else {
-                return 0;
             }
             mysqli_close($connection);
+            return $completo;
         }
 
         public static function formResultado($idSol){
@@ -811,7 +780,7 @@
                 $string .= '  </select>
                         <label for="sltAreaConocimiento">Área de conocimiento</label>';
             } else {
-                $string = '<label for="areaConocimiento">Área de conocimiento</label> <br>';
+                $string = '<label for="areaConocimiento" class="active">Área de conocimiento</label>';
                 $string .= '<p name="areaConocimiento" id="areaConocimiento" class="left-align">El proyecto no tiene áreas de conocimiento asignadas.</p>';
             }
             return $string; 
