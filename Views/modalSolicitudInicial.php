@@ -20,7 +20,7 @@
                     <label for="txtTipoSol" class="active">Tipo de Solicitud:</label>
                 </div>
                 <div class="input-field col l4 m4 s12">
-                    <?php echo Solicitud::selectEstadoSolicitud($idEstado);?>
+                    <?php echo Solicitud::selectEstadoSolicitud($idEstado, "");?>
                 </div>
             </div>
             <div class="row">
