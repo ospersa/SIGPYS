@@ -99,10 +99,7 @@ Class Cotizacion {
         AND pys_actsolicitudes.est = 1
         AND pys_solicitudes.est = 1
         AND pys_actualizacionproy.est = 1
-        AND (pys_actsolicitudes.idEstSol = 'ESS002'
-        OR pys_actsolicitudes.idEstSol = 'ESS003'
-        OR pys_actsolicitudes.idEstSol = 'ESS004' 
-        OR pys_actsolicitudes.idEstSol = 'ESS005')
+        AND pys_actsolicitudes.idEstSol != 'ESS007'
         AND pys_solicitudes.idSol NOT IN (SELECT pys_cotizaciones.idSolEsp FROM pys_cotizaciones)
         AND (pys_actsolicitudes.idSol LIKE '%$busqueda%' OR pys_solicitudes.idSolIni LIKE '%$busqueda%' OR pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%' OR pys_actsolicitudes.ObservacionAct LIKE '%$busqueda%')
         ORDER BY pys_actsolicitudes.idSol DESC;";
@@ -162,10 +159,7 @@ Class Cotizacion {
             AND pys_actsolicitudes.est = 1
             AND pys_solicitudes.est = 1
             AND pys_actualizacionproy.est = 1
-            AND (pys_actsolicitudes.idEstSol = 'ESS002'
-            OR pys_actsolicitudes.idEstSol = 'ESS003'
-            OR pys_actsolicitudes.idEstSol = 'ESS004' 
-            OR pys_actsolicitudes.idEstSol = 'ESS005')
+            AND pys_actsolicitudes.idEstSol != 'ESS007'
             AND pys_solicitudes.idSol NOT IN (SELECT pys_cotizaciones.idSolEsp FROM pys_cotizaciones)
             ORDER BY pys_actsolicitudes.idSol DESC;";
         $resultado = mysqli_query($connection, $consulta);
