@@ -5,12 +5,14 @@
         public static function selectProyectoUsuario ($busqueda, $user){
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
-            $consulta = "SELECT pys_actualizacionproy.idProy,pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy  FROM pys_asignados 
-            INNER JOIN pys_proyectos on pys_proyectos.idProy = pys_asignados.idProy 
-            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy =pys_proyectos.idProy
-            INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
-            INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
-            WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est=1 AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_proyectos.est=1 AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%') GROUP BY pys_actualizacionproy.idProy;";
+            $consulta = "SELECT pys_actualizacionproy.idProy,pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy
+                FROM pys_asignados 
+                INNER JOIN pys_proyectos ON pys_proyectos.idProy = pys_asignados.idProy AND pys_proyectos.est = '1'
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_proyectos.idProy AND pys_actualizacionproy.est = '1' 
+                INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona 
+                INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+                WHERE pys_login.usrLogin = '$user' AND (idRol= 'ROL024' OR idRol= 'ROL025') AND (pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%') 
+                GROUP BY pys_actualizacionproy.idProy;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0 && $busqueda != null) {
                 echo '  <select name="sltProy" id="sltProy" >';
@@ -43,15 +45,15 @@
                 INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
                 INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
                 INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
-                INNER JOIN pys_personas on pys_asignados.idPersona = pys_personas.idPersona 
+                INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona 
                 INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
                 INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
                 WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est = '1' AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est = '1' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS007' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_equipos.est = '1' AND pys_servicios.est = '1' ";
-            if ($cod == 1 ){
+            if ($cod == 1 ) {
                 $consulta .= "AND pys_actualizacionproy.idProy = '$busProy' ";
-            } else if($cod == 3){
+            } else if($cod == 3) {
                 $consulta .= "AND pys_actualizacionproy.idProy = '$busProy' AND pys_actsolicitudes.fechPrev <= '$fechFin' ";
-            }else if ($cod == 2 ){
+            } else if ($cod == 2 ) {
                 $consulta .= "AND pys_actsolicitudes.fechPrev <= '$fechFin' ";
             } 
             $consulta .= "GROUP BY pys_solicitudes.idSol ORDER BY pys_solicitudes.fechSol DESC;";
@@ -108,13 +110,13 @@
                     $metapendiente = 0;
                     if ($nombreEqu == 'Realización') {
                         foreach ($metadataRealizacion as $meta) {
-                            if ( empty ($dataProd[$meta]) ) {
+                            if ( is_null ($dataProd[$meta]) ) {
                                 $metapendiente ++;
                             }
                         }
                     } else if ($nombreEqu == 'Diseño Gráfico') {
                         foreach ($metadataDiseno as $meta) {
-                            if ( empty ($dataProd[$meta]) ) {
+                            if ( is_null ($dataProd[$meta]) ) {
                                 $metapendiente ++;
                             }
                         }
@@ -167,7 +169,7 @@
             $vacio = '<p class="left-align red-text">Información pendiente</p>';
             $consulta = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_servicios.productoOservicio, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_tiposproductos.descripcionTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposContenido.tipoContenidoNombre, pys_actproductos.palabrasClave, pys_estadosol.nombreEstSol
                 FROM pys_actsolicitudes 
-                INNER JOIN pys_servicios on pys_actsolicitudes.idSer = pys_servicios.idSer 
+                INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer 
                 INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
                 INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
                 INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
@@ -371,17 +373,18 @@
 
         public static function infoEmail ($idSol){
             require('../Core/connection.php');
-            $consulta = "SELECT idEqu, codProy,nombreProy, productoOservicio, idSolIni, pys_personas.correo FROM pys_actsolicitudes 
-            INNER JOIN pys_servicios on pys_actsolicitudes.idSer= pys_servicios.idSer
-            INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
-            INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
-            INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
-            INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idPersona
-            WHERE pys_actsolicitudes.idSol='".$idSol."' AND pys_actsolicitudes.est = 1 AND pys_servicios.est=1 AND pys_proyectos.est = 1 AND  pys_actsolicitudes.est = 1;";
+            $consulta = "SELECT idEqu, codProy,nombreProy, productoOservicio, idSolIni, pys_personas.correo 
+                FROM pys_actsolicitudes 
+                INNER JOIN pys_servicios ON pys_actsolicitudes.idSer= pys_servicios.idSer
+                INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
+                INNER JOIN pys_proyectos ON pys_cursosmodulos.idProy = pys_proyectos.idProy
+                INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+                INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idPersona
+                WHERE pys_actsolicitudes.idSol = '$idSol' AND pys_actsolicitudes.est = '1' AND pys_servicios.est = '1' AND pys_proyectos.est = '1' AND  pys_actsolicitudes.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
-            return $datos;
             mysqli_close($connection);
+            return $datos;
         }
 
         public static function infoEmailPro($idSol, $idEqu){
@@ -408,8 +411,8 @@
             $observacion = $datos2['observacion'];
             $string =' <strong>Descripción del servicio: </strong>'.$observacion.'<br />
             <strong>Código Servicio:</strong> P'.$idSol.'<br />';
-            return $string;
             mysqli_close($connection);
+            return $string;
 
         }
         
@@ -434,7 +437,7 @@
             INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
             INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu        
             INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
-            INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
+            INNER JOIN pys_personas ON pys_asignados.idPersona= pys_personas.idPersona 
             INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
             INNER JOIN pys_roles ON  pys_asignados.idRol= pys_roles.idRol
             WHERE pys_login.usrLogin = '$usuario' AND (pys_asignados.idRol= 'ROL024' OR pys_asignados.idRol= 'ROL025') AND pys_actualizacionproy.est=1 AND pys_actsolicitudes.est=1 AND pys_solicitudes.idTSol= 'TSOL02' AND pys_actsolicitudes.est=1 AND pys_actsolicitudes.idEstSol !='ESS001' AND pys_actsolicitudes.idEstSol !='ESS007' AND pys_actsolicitudes.idEstSol !='ESS006' AND pys_equipos.est = 1 AND pys_servicios.est = 1  AND pys_solicitudes.idSol ='$id'";

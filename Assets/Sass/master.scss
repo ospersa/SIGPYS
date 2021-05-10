@@ -483,6 +483,13 @@ td, .trunca {
         
 }
 
+.card-content {
+    &.day {
+        padding: 20px 5px;
+        cursor: pointer;
+    }
+}
+
 .tablaAgenda{
     border-collapse: inherit;
     

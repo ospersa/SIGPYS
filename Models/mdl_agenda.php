@@ -29,13 +29,13 @@ class  PlaneacionAse{
         $diasFalt = (( ( $diff / 60 ) / 60 ) / 24);
         $string = "";
         for($i=1;$i<$diaIni;$i++){
-            $string .= '<div>
-            <div class="card">
-                <div class="card-content grey" type="button">
-                    <h6 class="card-stats-number transparent-text">00-00-0000</h6>
-                </div>
-            </div>
-        </div>';
+            $string .= '    <div>
+                                <div class="card">
+                                    <div class="card-content grey day" type="button">
+                                        <h6 class="card-stats-number transparent-text">00-00-0000</h6>
+                                    </div>
+                                </div>
+                            </div>';
         }
         
         for($i=0;$i<=$diasFalt;$i++){
@@ -62,25 +62,24 @@ class  PlaneacionAse{
                 $color = 'teal lighten-5 w';
                 $letra = "black";
             }
-                $string .= '
-                <div>
-                    <div class="card">
-                        <div class="fechPer card-content '.$color.' '.$letra.'-text" type="button" onclick ="cargarResAgenda(\''.$fechaDia.'\',$(this))">
-                        <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
-                        </div>
-                    </div>
-                </div>';
+                $string .= '<div>
+                                <div class="card">
+                                    <div class="fechPer card-content day '.$color.' '.$letra.'-text" type="button" onclick ="cargarResAgenda(\''.$fechaDia.'\',$(this))">
+                                        <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
+                                    </div>
+                                </div>
+                            </div>';
             
         }
         if($diaFin !=0){
             for($j=$diaFin+1;$j<=7;$j++){
                 $string .= '<div>
-                <div class="card">
-                    <div class="card-content grey " type="button">
-                        <h6 class="card-stats-number transparent-text ">00-00-0000</h6>
-                    </div>
-                </div>
-            </div>';
+                                <div class="card">
+                                    <div class="card-content grey day" type="button">
+                                        <h6 class="card-stats-number transparent-text ">00-00-0000</h6>
+                                    </div>
+                                </div>
+                            </div>';
             }
         }
         return $string;
@@ -321,11 +320,11 @@ class  PlaneacionAse{
         $newFecha = date("Y-m-d", strtotime($fecha));
         $cont = 1;
         $agenda = "";
-        $consulta ="SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda, estAgenda 
-        FROM pys_agenda 
-        INNER JOIN pys_asignados ON pys_asignados.idAsig =pys_agenda.idAsig
-        INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
-        WHERE pys_agenda.estAgenda <> 0 AND( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_login.est = 1 AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha'";
+        $consulta = "SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda, estAgenda 
+            FROM pys_agenda 
+            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
+            INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+            WHERE pys_agenda.estAgenda <> '0' AND ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_login.est = '1' AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha';";
         $resultado = mysqli_query($connection, $consulta);
         while ($datos = mysqli_fetch_array($resultado)){    
             $idAgenda = $datos['idAgenda'];
@@ -335,9 +334,9 @@ class  PlaneacionAse{
             $minAgenda = $datos['minAgenda'];
             $estAgenda = $datos['estAgenda'];
             $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy FROM pys_asignados
-            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
-            INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_asignados.idSol
-            WHERE ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_actualizacionproy.est = 1 AND pys_solicitudes.est = 1 AND pys_asignados.idAsig = $idAsig";
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
+                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_asignados.idSol
+                WHERE ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_actualizacionproy.est = '1' AND pys_solicitudes.est = '1' AND pys_asignados.idAsig = '$idAsig';";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
             $idSol = $datos2['idSol'];
@@ -349,49 +348,44 @@ class  PlaneacionAse{
                 $text = "";
             } else if ($estAgenda == 2) {
                 $type = 'disabled';
-                $text = '<div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                <p class="left-align teal-text text-darken-1">*Esta actividad ya ha sido registrada en Tiempo*</p>
-                </div>';
+                $text = '   <div class="input-field col l12 m12 s12">
+                                <p class="center-align teal-text text-darken-1"><strong>*Esta actividad ya ha sido registrada en Tiempo*</strong></p>
+                            </div>';
             } else if ($estAgenda == 3) {
                 $type = 'disabled';
-                $text = '<div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                <p class="left-align teal-text text-darken-1">*Esta actividad ha sido cancelada*</p>
-                </div>';
+                $text = '   <div class="input-field col l12 m12 s12">
+                                <p class="center-align teal-text text-darken-1"><strong>*Esta actividad ha sido cancelada*</strong></p>
+                            </div>';
             }
             if ($estAgenda == 1) {
-                $agenda = '
-                
-                        <div class="row">
-                    <div class="input-field col l4 m4 s12  offset-l1 offset-m1">
-                        <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
-                            name="btnCancelarAgen" data-position="right" onclick="cancelarAgenda('.$cont.')"
-                            data-tooltip="Cancelar de Agenda"><i class="material-icons red-text">clear</i></button>
-                    </div>
-        
-                    <div class="input-field col l2 m2 s12  ">
-                        <button class="btn btn-floating  waves-effect transparent  tooltipped" type="submit"
-                            name="btnActAgenda" data-position="right" data-tooltip="Actualizar en Agenda"><i
-                                class="material-icons teal-text">done</i></button>
-                    </div>
-                    </div>';
+                $agenda = ' <div class="input-field col l4 m4 s12 offset-l1 offset-m1">
+                                <button type="button" class="btn btn-floating  waves-effect white teal-text tooltipped"
+                                    name="btnCancelarAgen" data-position="right" onclick="cancelarAgenda('.$cont.')"
+                                    data-tooltip="Cancelar de Agenda"><i class="material-icons red-text">clear</i></button>
+                            </div>
+                            <div class="input-field col l2 m2 s12 ">
+                                <button class="btn btn-floating  waves-effect transparent  tooltipped" type="submit"
+                                    name="btnActAgenda" data-position="right" data-tooltip="Actualizar en Agenda"><i
+                                        class="material-icons teal-text">done</i></button>
+                            </div>';
             } 
             $fase =Tiempos::selectFase("Sin Label");
                 $json[]     = array(
-                    'type' => $type,
-                    'text'     => $text,
-                    'cont'     => $cont,
-                    'idAgenda'     => $idAgenda,
-                    'idSol'     => $idSol,
-                    'fecha'     => $fecha,
-                    'codProy'     => $codProy,
-                    'nombreProy'     => $nombreProy,
-                    'descripcionSol'     => $descripcionSol,
-                    'horaAgenda'     => $horaAgenda,
-                    'minAgenda'     => $minAgenda,
-                    'notaAgenda'     => $notaAgenda,
-                    'agenda'     => $agenda,
-                    'fase'     => $fase,
-                    'estAgenda'     => $estAgenda,
+                    'type'              => $type,
+                    'text'              => $text,
+                    'cont'              => $cont,
+                    'idAgenda'          => $idAgenda,
+                    'idSol'             => $idSol,
+                    'fecha'             => $fecha,
+                    'codProy'           => $codProy,
+                    'nombreProy'        => $nombreProy,
+                    'descripcionSol'    => $descripcionSol,
+                    'horaAgenda'        => $horaAgenda,
+                    'minAgenda'         => $minAgenda,
+                    'notaAgenda'        => $notaAgenda,
+                    'agenda'            => $agenda,
+                    'fase'              => $fase,
+                    'estAgenda'         => $estAgenda,
                 );
                 $cont += 1;
         }

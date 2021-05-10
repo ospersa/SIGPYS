@@ -67,9 +67,9 @@ if ($perfil == 'PERF01' || $perfil == 'PERF02' ){
                                     <div class="col l12 m12 s12">
                                         <div class="input-field col l10 m10 s12 offset-l1 offset-m1">
                                             <select name="sltEstado" id="">
-                                                <option value="" selected disabled>Seleccione</option>
+                                                <option value="All" selected>Seleccione</option>
                                                 <option value="Proceso de inventario">Proceso de inventario</option>
-                                                <option value="">Sin inventario</option>
+                                                <option value="Sin inventario">Sin inventario</option>
                                                 <option value="Terminado">Terminado</option>
                                             </select>
                                             <label for="sltEstado">Seleccione un Estado</label>

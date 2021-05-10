@@ -12,6 +12,9 @@
     </div>
     <div id="test1" class="col s12 tab-container">
         <form id="actForm" action="../Controllers/ctrl_inventario.php" method="post">
+            <input type="text" name="idProducto" id="idProducto" value="<?php echo $idProducto; ?>" hidden>
+            <input type="text" name="idInventario" id="idInventario" value="<?php echo $idInventario; ?>" hidden>
+            <input type="text" name="idEquipo" id="idEquipo" value="<?php echo $idEquipo; ?>" hidden>
             <input type="text" name="idSol" id="idSol" value="<?php echo $id; ?>" hidden>
             <div class="input-field col l2 m12 s12 ">
                 <label for="idSol" class="active">Código PS:</label>
@@ -85,9 +88,9 @@
                 <label for="sltPerEnt">Persona que entrega</label>
             </div>
             <div class="input-field col l6 m6 s12">
-            <label for="sltPerEnt" class="active">Persona que recibe</label>
+            <label for="sltPerRec" class="active">Persona que recibe</label>
                 <p class="left-align">'.$nombreUser.'</p>
-                <input type="text" name="sltPerEnt" id="sltPerEnt" value="'.$idUser.'" hidden >
+                <input type="text" name="sltPerRec" id="sltPerRec" value="'.$idUser.'" hidden >
             </div>';
             } else {
                 echo '

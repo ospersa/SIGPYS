@@ -39,9 +39,12 @@ $sopCarp        = (isset($_POST['txtSopCarp'])) ? $_POST['txtSopCarp'] : null;
 $sopPeso        = (isset($_POST['txtSopPeso'])) ? $_POST['txtSopPeso'] : null;
 $obs            = (isset($_POST['txtObs'])) ? $_POST['txtObs'] : null;
 $idPerEnt       = (isset($_POST['sltPerEnt'])) ? $_POST['sltPerEnt'] : null;
-$idPerRec       = (isset($_POST['sltPerEnt'])) ? $_POST['sltPerEnt'] : null;
+$idPerRec       = (isset($_POST['sltPerRec'])) ? $_POST['sltPerRec'] : null;
 $estadoInv      = (isset($_POST['sltEstadoInv'])) ? $_POST['sltEstadoInv'] : null;
 $cod            = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
+$idProducto     = (isset($_POST['idProducto'])) ? $_POST['idProducto'] : null;
+$idInventario   = (isset($_POST['idInventario'])) ? $_POST['idInventario'] : null;
+$idEquipo       = (isset($_POST['idEquipo'])) ? $_POST['idEquipo'] : null;
 
 if (isset($_POST['persona'])) {
     $busqueda = $_POST['persona'];
@@ -95,6 +98,9 @@ if (isset($_POST['persona'])) {
         $idPerEnt       = $validarInv['idPersonaEntrega'];
         $idPerRec       = $validarInv['idPersonaRecibe'];
         $estadoInv      = $validarInv['estadoInv'];
+        $idProducto     = $validarInv['idProd'];
+        $idInventario   = $validarInv['idInventario'];
+        $idEquipo       = $validarInv['idEqu'];
     }
     $selectEstado   = Inventario::selectEstadoInv($estadoInv);
     $stlPerEnt      = Inventario::selectPersona($codProy, $idPerEnt);
@@ -102,7 +108,7 @@ if (isset($_POST['persona'])) {
 } else if ( isset( $_POST['btnGuaInv'] ) ) {
     $validarInv = Inventario::validarInventario($cod);
     if ( $validarInv != null ) {
-        Inventario::actualizarInventario ($cod, $crudosCarp, $crudosPes, $proyCarp, $proyPeso, $finCarp, $finPeso, $recCarp, $recPeso, $docCarp, $docPeso, $rutSer, $disCarp, $disPeso, $desCarp, $desPeso, $sopCarp, $sopPeso, $obs, $idPerEnt, $idPerRec, $estadoInv); 
+        Inventario::actualizarInventario ($cod, $crudosCarp, $crudosPes, $proyCarp, $proyPeso, $finCarp, $finPeso, $recCarp, $recPeso, $docCarp, $docPeso, $rutSer, $disCarp, $disPeso, $desCarp, $desPeso, $sopCarp, $sopPeso, $obs, $idPerEnt, $idPerRec, $estadoInv, $idProducto, $idInventario, $idEquipo); 
     } else {
         Inventario::ingresarInventario ($cod, $crudosCarp, $crudosPes, $proyCarp, $proyPeso, $finCarp, $finPeso, $recCarp, $recPeso, $docCarp, $docPeso, $rutSer, $disCarp, $disPeso, $desCarp, $desPeso, $sopCarp, $sopPeso, $obs, $idPerEnt, $idPerRec, $estadoInv); 
     }

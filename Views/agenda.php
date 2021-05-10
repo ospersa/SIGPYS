@@ -78,10 +78,7 @@ if( !empty( $hoy ) ){
                         <h6 class="white-text">Planeación Registrada</h6>
                     </div>
                     <div class="collapsible-body">
-                        <div class="row">
-
-                            <div id="div_dinamico2"></div>
-                        </div>
+                        <div id="div_dinamico2"></div>
                     </div>
                 </li>
             </ul>
