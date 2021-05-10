@@ -812,71 +812,61 @@ function planeacionDia(fecha, idper, url){
             let tasks = JSON.parse(data);
             $('#div_dinamico2').hide();
             tasks.forEach(task => {
-                string += `<div class="card">
-                    <div class="card-content ">
-                        <div class="row">
-                            <form id="formAgenda${task.cont}" action="../Controllers/ctrl_agenda.php" method="post">
-                                <input id="idAgenda" name="idAgenda" value="${task.idAgenda}" type="hidden">
-                                <input id="idSol" name="idSol" value="${task.idSol}" type="hidden">
-                                <input id="fecha" name="fecha" value="${task.fecha}" type="hidden">
-                                <div class="row">
-                                    <div class="input-field col l10 m10 s12  offset-l1 offset-m1">
-                                        <p class="left-center teal-text">
-                                        <h6>${task.codProy} -- ${task.nombreProy}</h6>
-                                        </p>
-                                        <p class="left-align">P${task.idSol} ${task.descripcionSol}</p>
-                                    </div>
-                                    <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                                        <p class="left-align">Tiempo:</p>
-                                    </div>
-                                    <div class="input-field col l1 m1 s12  offset-l1 offset-m1">
-                                        <input type="number" class="validate" name="horas" value="${task.horaAgenda}" ${task.type}>
-                                        <label for="horas" class="active">Horas</label>
-                                    </div>
-                                    <div class="input-field col l1 m1 s12">
-                                        <input type="number" class="validate" name="min" value="${task.minAgenda}" ${task.type}>
-                                        <label for="min" class="active">Minutos</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col l2 m2 s12  offset-l1 offset-m1">
-                                        <p class="left-align">Actividad:</p>
-                                    </div>
-                                    <div class="input-field col l7 m7 s12">
-                                        <textarea name="obser" class="materialize-textarea" ${task.type}>${task.notaAgenda}</textarea>
-                                        <label for="obser" class="active">Actividad</label>
-                                    </div>
-                                </div>`;
+                string += `         <div class="card">
+                                        <div class="card-content ">
+                                            <div class="row" style="margin-bottom: 0;">
+                                            <form id="formAgenda${task.cont}" action="../Controllers/ctrl_agenda.php" method="post">
+                                                <input id="idAgenda" name="idAgenda" value="${task.idAgenda}" type="hidden">
+                                                <input id="idSol" name="idSol" value="${task.idSol}" type="hidden">
+                                                <input id="fecha" name="fecha" value="${task.fecha}" type="hidden">
+                                                <div class="col l12 m12 s12">
+                                                    <h6>${task.codProy} -- ${task.nombreProy}</h6>
+                                                </div>
+                                                <div class="input-field col l12 m12 s12">
+                                                    <p class="left-align"><strong>P${task.idSol}:</strong> ${task.descripcionSol}</p>
+                                                </div>
+                                                <div class="col l2 m2 s12">
+                                                    <p class="left-align"><strong>Tiempo:</strong></p>
+                                                </div>
+                                                <div class="input-field col l2 m2 s12">
+                                                    <input type="number" class="validate" name="horas" value="${task.horaAgenda}" ${task.type}>
+                                                    <label for="horas" class="active">Horas</label>
+                                                </div>
+                                                <div class="input-field col l2 m2 s12">
+                                                    <input type="number" class="validate" name="min" value="${task.minAgenda}" ${task.type}>
+                                                    <label for="min" class="active">Minutos</label>
+                                                </div>
+                                                <div class="input-field col l12 m12 s12">
+                                                    <textarea name="obser" class="materialize-textarea" ${task.type}>${task.notaAgenda}</textarea>
+                                                    <label for="obser" class="active"><strong>Actividad:</strong></label>
+                                                </div>`;
                             if (idper == null){
-                                string += 
-                               `
-                                <div class="row">
-                                    <div class="input-field col l4 m4 s12">
-                                        <p>
-                                            <label>
-                                                <input type="checkbox" id="checkFechaC${task.cont}" name="checkFechaC${task.cont}" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC${task.cont}\',\'${task.cont}\')">
-                                                <span>Mover a otro día</span>
-                                            </label>
-                                        <p>
-                                    </div>
-                                    <div class="input-field col l4 m4 s12">
-                                        <input id="fechaCambio${task.cont}" name="fechaCambio" type="text" class="datepicker" disabled>
-                                        <label for="fechaCambio${task.cont}">Ingrese la nueva fecha </label>
-                                    </div>
-                                </div>
-                                `;
+                                string += `     <div class="col l5 m5 s12 left-align">
+                                                    <p>
+                                                        <label>
+                                                            <input type="checkbox" id="checkFechaC${task.cont}" name="checkFechaC${task.cont}" class="filled-in" data-checked="false" onclick ="checkFechaC(\'#checkFechaC${task.cont}\',\'${task.cont}\')">
+                                                            <span>Mover a otro día</span>
+                                                        </label>
+                                                    <p>
+                                                </div>
+                                                <div class="input-field col l7 m7 s12">
+                                                    <input id="fechaCambio${task.cont}" name="fechaCambio" type="text" class="datepicker" placeholder="Seleccione" disabled>
+                                                    <label for="fechaCambio${task.cont}" class="active">Seleccione la nueva fecha</label>
+                                                </div>`;
                             }
                             string += `
                                 ${task.agenda}
                                 ${task.text}
-                        </form>
-                    </div>
-                </div>
-            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                `;
             });
             $('#div_dinamico2').html(string);
             $('#div_dinamico2').slideDown("slow");
+            $('.tooltipped').tooltip();
+            $('.collapsible').collapsible();
         }
     });
 

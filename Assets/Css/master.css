@@ -388,6 +388,10 @@ td:hover .truncate, .trunca:hover .truncate {
   .dia h6 {
     color: white; }
 
+.card-content.day {
+  padding: 20px 5px;
+  cursor: pointer; }
+
 .tablaAgenda {
   border-collapse: inherit; }
 
