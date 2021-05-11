@@ -90,29 +90,31 @@
 
         }
 
-        public static function tiempo($user){
+        public static function tiempo($user) {
             require('../Core/connection.php');
             $json = array();
             $fecha = date("Y-m-d");
-            $consultaPerAct ="SELECT idPeriodo, inicioPeriodo, finPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fecha' AND finPeriodo >= '$fecha'";
+            $consultaPerAct ="SELECT idPeriodo, inicioPeriodo, finPeriodo, porcentajeDedicacion1, porcentajeDedicacion2, diasSegmento1, diasSegmento2
+                FROM pys_periodos 
+                LEFT JOIN pys_dedicaciones ON pys_dedicaciones.periodo_IdPeriodo = pys_periodos.idPeriodo AND pys_dedicaciones.estadoDedicacion = '1'
+                LEFT JOIN pys_login ON pys_login.idPersona = pys_dedicaciones.persona_IdPersona
+                WHERE inicioPeriodo <= '$fecha' AND finPeriodo >= '$fecha' AND pys_login.usrLogin = '$user';";
             $resultadoP = mysqli_query($connection, $consultaPerAct);
             $datosP = mysqli_fetch_array($resultadoP);
             $idPeriodo = $datosP['idPeriodo'];
             $fechIni = $datosP['inicioPeriodo'];
             $fechaFin= $datosP['finPeriodo'];
+            $horas1 = ($datosP['diasSegmento1'] * 8) * ($datosP['porcentajeDedicacion1'] / 100);
+            $horas2 = ($datosP['diasSegmento2'] * 8) * ($datosP['porcentajeDedicacion2'] / 100);
+            $horasPeriodo = $horas1 + $horas2;
             $consulta = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos 
-            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-            INNER JOIN pys_login ON pys_login.idPersona =pys_asignados.idPersona
-            WHERE pys_tiempos.estTiempo= 1 AND pys_login.usrLogin ='$user' AND fechTiempo >= '$fechIni' AND fechTiempo <='$fechaFin'";
+                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
+                INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+                WHERE pys_tiempos.estTiempo = '1' AND pys_login.usrLogin = '$user' AND fechTiempo >= '$fechIni' AND fechTiempo <= '$fechaFin';";
             $resultado = mysqli_query($connection, $consulta);
             $data = mysqli_fetch_array($resultado);
-            $consulta1 ="SELECT totalHoras FROM pys_dedicaciones  
-            INNER JOIN pys_login ON pys_login.idPersona = pys_dedicaciones.persona_IdPersona
-            WHERE periodo_IdPeriodo = $idPeriodo AND  pys_login.usrLogin = '$user' ";
-            $resultado1 = mysqli_query($connection, $consulta1);
-            $data1 = mysqli_fetch_array($resultado1);
-            $horas = (($data['SUM(horaTiempo)']*60)+$data['SUM(minTiempo)'])/60;
-            $horasTotal = (int) $data1['totalHoras']-$horas;
+            $horas = (($data['SUM(horaTiempo)'] * 60) + $data['SUM(minTiempo)']) / 60;
+            $horasTotal = $horasPeriodo - $horas;
             $json[]     = array(
                 'label' => 'Horas registradas',
                 'cant'     => $horas,

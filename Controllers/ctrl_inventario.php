@@ -102,7 +102,8 @@ if (isset($_POST['persona'])) {
         $idInventario   = $validarInv['idInventario'];
         $idEquipo       = $validarInv['idEqu'];
     }
-    $selectEstado   = Inventario::selectEstadoInv($estadoInv);
+    /* $selectEstado   = Inventario::selectEstadoInv($estadoInv); */
+    $selectEstado   = ($estadoInv == "" || $estadoInv == null) ? "Sin inventario" : $estadoInv;
     $stlPerEnt      = Inventario::selectPersona($codProy, $idPerEnt);
     $stlPerRec      = Inventario::selectPersona($codProy, $idPerRec); // Verificar select para saber si es necesario este elemento
 } else if ( isset( $_POST['btnGuaInv'] ) ) {
