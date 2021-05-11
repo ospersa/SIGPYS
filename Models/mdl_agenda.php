@@ -5,20 +5,20 @@ class  PlaneacionAse{
     public static function onPeriodoActual() {
         require('../Core/connection.php');
         $fechaAct = date("Y/m/d");
-        $consulta ="SELECT idPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fechaAct' AND '$fechaAct'<= finPeriodo;";
+        $consulta ="SELECT idPeriodo FROM pys_periodos WHERE inicioPeriodo <= '$fechaAct' AND '$fechaAct' <= finPeriodo;";
         $resultado = mysqli_query($connection, $consulta);
-        if(mysqli_num_rows($resultado)>0){
+        mysqli_close($connection);
+        if(mysqli_num_rows($resultado)>0) {
             $datos = mysqli_fetch_array($resultado);
             return $datos['idPeriodo'];
-        }else{
+        } else {
             return false;
         }
-        mysqli_close($connection);
     }
 
     public static function onPeriodo($idPer,$usuario) {
         require('../Core/connection.php');
-        $consulta ="SELECT * FROM pys_periodos WHERE idPeriodo = $idPer;";
+        $consulta ="SELECT inicioPeriodo, finPeriodo FROM pys_periodos WHERE idPeriodo = $idPer;";
         $resultado = mysqli_query($connection, $consulta);
         $datos = mysqli_fetch_array($resultado);
         $fechaini = strtotime($datos['inicioPeriodo']);
@@ -28,7 +28,7 @@ class  PlaneacionAse{
         $diff = $fechafin - $fechaini;
         $diasFalt = (( ( $diff / 60 ) / 60 ) / 24);
         $string = "";
-        for($i=1;$i<$diaIni;$i++){
+        for ($i=1; $i < $diaIni; $i++) {
             $string .= '    <div>
                                 <div class="card">
                                     <div class="card-content grey day" type="button">
@@ -37,32 +37,31 @@ class  PlaneacionAse{
                                 </div>
                             </div>';
         }
-        
-        for($i=0;$i<=$diasFalt;$i++){
+        for ($i=0; $i <= $diasFalt; $i++) {
             $fechaDia = date("d-m-Y", strtotime( '+'.$i.' day', $fechaini ));
             $diafech = date('w', strtotime($fechaDia));
             $conteo = self::ValidacionPlaneacionDia($fechaDia, $usuario);
             $fechaCons = date("Y-m-d", strtotime($fechaDia));
-            $consultaTiempo ="SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos  
+            $consultaTiempo = "SELECT SUM(horaTiempo), SUM(minTiempo) FROM pys_tiempos  
                 INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig
-                INNER JOIN pys_login  ON pys_login.idPersona = pys_asignados.idPersona
-                WHERE usrLogin = '$usuario' AND estTiempo = 1 AND fechTiempo ='$fechaCons'";
+                INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
+                WHERE usrLogin = '$usuario' AND estTiempo = '1' AND fechTiempo = '$fechaCons';";
             $resultadoTiempo = mysqli_query($connection, $consultaTiempo);
             $datosTiempo = mysqli_fetch_array($resultadoTiempo);
-            $horaTiempo =$datosTiempo['SUM(horaTiempo)'];
+            $horaTiempo = $datosTiempo['SUM(horaTiempo)'];
             $minTiempo = $datosTiempo['SUM(minTiempo)'];
-            $tiempoTotal = ($horaTiempo*60)+ $minTiempo;
-            if($conteo > 0 && $tiempoTotal < 480){
+            $tiempoTotal = ($horaTiempo * 60) + $minTiempo;
+            if ($conteo > 0 && $tiempoTotal < 480) {
                 $color = 'teal accent-4';
                 $letra = "black";
             } else if ($tiempoTotal >= 480) {
                 $color = 'teal  darken-3 v';
                 $letra = "white";
-            } else{ 
+            } else { 
                 $color = 'teal lighten-5 w';
                 $letra = "black";
             }
-                $string .= '<div>
+            $string .= '<div>
                                 <div class="card">
                                     <div class="fechPer card-content day '.$color.' '.$letra.'-text" type="button" onclick ="cargarResAgenda(\''.$fechaDia.'\',$(this))">
                                         <h6 class="card-stats-number '.$letra.'-text">'.$fechaDia.'</h6>
@@ -82,44 +81,43 @@ class  PlaneacionAse{
                             </div>';
             }
         }
-        return $string;
         mysqli_close($connection);
+        return $string;
     }
   
     
     public static function crearDivP($long, $usuario){
-        echo '
-        <div class="row" id="cardPro'.$long.'">
-            <div class="col s12 m12 l12">
-                <div class="card" >
-                <div class="card-content ">
-                <div class="row ">
-            <a class=" btn btn-floating right waves-effect waves-light red" onclick="eliminarDiv('.$long.')"><i class="material-icons" >delete</i></a>
+        echo '  <div class="row" id="cardPro'.$long.'">
+                    <div class="col s12 m12 l12">
+                        <div class="card" >
+                            <div class="card-content ">
+                                <div class="row ">
+                                    <a class=" btn btn-floating right waves-effect waves-light red" onclick="eliminarDiv('.$long.')"><i class="material-icons" >delete</i></a>
+                                </div>
+                                <div class ="conteo row" id=" proy'.$long.'">       
+                                    <div class="input-field">'.PlaneacionAse::selectProyectoUsuario($usuario,$long).'</div>
+                                    <div id="div_produc'.$long.'" class="col l12 m12 s12 "></div>
+                                </div> 
+                            </div>
+                        </div>
                     </div>
-                    <div class ="conteo row" id=" proy'.$long.'">       
-                        <div class="input-field">'.PlaneacionAse::selectProyectoUsuario($usuario,$long).'</div>
-                        <div id="div_produc'.$long.'" class="col l12 m12 s12 "></div>
-                    </div> 
-                </div>
-                </div>
-            </div>
-        </div>';
+                </div>';
     } 
 
-    public static function selectSolUsuario ($user, $proyecto,$periodo, $long){
+    public static function selectSolUsuario ($user, $proyecto, $periodo, $long) {
         require('../Core/connection.php');
         $string = "";
         $numero = 1;
         $consulta = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_solicitudes.descripcionSol FROM pys_solicitudes 
-        INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
-        INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
-        INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
-        INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
-        INNER JOIN pys_personas on pys_asignados.idPersona= pys_personas.idPersona 
-        INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
-        WHERE pys_solicitudes.idTSol = 'TSOL02' 
-        AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007'
-        AND pys_solicitudes.est = 1 AND ( pys_asignados.est = 1 OR pys_asignados.est = 2) AND pys_actsolicitudes.est =1 AND pys_actualizacionproy.est = 1 AND pys_personas.est = 1 AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy ='$proyecto' AND pys_actsolicitudes.registraTiempo=1;";
+            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+            INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
+            INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
+            INNER JOIN pys_personas on pys_asignados.idPersona = pys_personas.idPersona 
+            INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
+            WHERE pys_solicitudes.idTSol = 'TSOL02' 
+            AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007'
+            AND pys_solicitudes.est = '1' AND ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_personas.est = '1' AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy = '$proyecto' AND pys_actsolicitudes.registraTiempo = '1';";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             while ($datos = mysqli_fetch_array($resultado)) {
@@ -129,37 +127,36 @@ class  PlaneacionAse{
                 if ($hDispo ==0){
                     $hDispo ='0';
                 }
-            $string .= '
-            <div class ="row">
-                <div class="input-field col l2 m2 s12 ">
-                    <p>
-                    <label>
-                        <input type="checkbox" id="checkidSol'.$long.'--'.$numero.'" class="filled-in" name ="idSol[]" value ='.$idSol.' data-checked="false" onclick ="checkProd(\'#checkidSol'.$long.'--'.$numero.'\','.$numero.','.$long.')">
-                        <span>P'.$idSol.'</span>
-                    </label>
-                    <p>
-                </div>
-                <div class="input-field col l4 m4 s12">
-                    <label class="active">'.$descripcionSol.'</label>
-                </div>
-                <div class="input-field col l2 m2 s12">
-                    <label class="active">Horas disponibles: '.$hDispo.' h</label>
-                </div>
-                <div class="input-field col l2 m2 s12">
-                    <input type="number" class="validate" name ="horas[]" id="horas'.$long.'--'.$numero.'" value="0" min="0" max="12" disabled>
-                    <label for="horas" class="active">Horas</label>
-                </div>
-                <div class="input-field col l2 m2 s12">
-                    <input type="number" class="validate" name ="min[]" id="min'.$long.'--'.$numero.'" value="0" min="0" max="59" disabled>
-                    <label for="min" class="active">Minutos</label>
-                </div>
-                <div class="input-field col l12 m12 s12">
-                    <textarea name="obser[]" id="obser'.$long.'--'.$numero.'" class="materialize-textarea" disabled></textarea>
-                    <label for="obser" class="active">Actividad</label>
-                </div>
-            </div>
-            <div class="divider"> </div>
-            <br>';
+            $string .= '    <div class ="row">
+                                <div class="input-field col l2 m2 s12 ">
+                                    <p>
+                                    <label>
+                                        <input type="checkbox" id="checkidSol'.$long.'--'.$numero.'" class="filled-in" name ="idSol[]" value ='.$idSol.' data-checked="false" onclick ="checkProd(\'#checkidSol'.$long.'--'.$numero.'\','.$numero.','.$long.')">
+                                        <span>P'.$idSol.'</span>
+                                    </label>
+                                    <p>
+                                </div>
+                                <div class="input-field col l4 m4 s12">
+                                    <label class="active">'.$descripcionSol.'</label>
+                                </div>
+                                <div class="input-field col l2 m2 s12">
+                                    <label class="active">Horas disponibles: '.$hDispo.' h</label>
+                                </div>
+                                <div class="input-field col l2 m2 s12">
+                                    <input type="number" class="validate" name ="horas[]" id="horas'.$long.'--'.$numero.'" value="0" min="0" max="12" disabled>
+                                    <label for="horas" class="active">Horas</label>
+                                </div>
+                                <div class="input-field col l2 m2 s12">
+                                    <input type="number" class="validate" name ="min[]" id="min'.$long.'--'.$numero.'" value="0" min="0" max="59" disabled>
+                                    <label for="min" class="active">Minutos</label>
+                                </div>
+                                <div class="input-field col l12 m12 s12">
+                                    <textarea name="obser[]" id="obser'.$long.'--'.$numero.'" class="materialize-textarea" disabled></textarea>
+                                    <label for="obser" class="active">Actividad</label>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <br>';
             $numero += 1;
             }
         }

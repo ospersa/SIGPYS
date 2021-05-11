@@ -25,17 +25,18 @@
                 <label for="descSol" class="active">Descripción Solicitud Específica:</label>
                 <p class="left-align"><?php echo $desSol ;?></p>
             </div>
-            <div class="input-field col l3 m12 s12">
-                <label for="duraSer" class="active">Fecha prevista de entrega al cliente:</label>
+            <div class="input-field col l2 m12 s12">
+                <label for="duraSer" class="active">Fecha prev. entrega cliente:</label>
                 <p class="left-align"><?php echo $fechaPrev?></p>
             </div>
-            <div class="input-field col l9 m12 s12 ">
+            <div class="input-field col l7 m12 s12 ">
                 <label for="monEqu" class="active">Equipo - Servicio:</label>
                 <p class="left-align"><?php echo $equipo. " - ".$nomProdOSer;?></p>
             </div>
-            <div class="input-field col l12 m12 s12 ">
-                <?php echo $selectEstado ;?>
-            </div> 
+            <div class="input-field col l3 m12 s12 ">
+                <label class="active">Estado:</label>
+                <p class="left-align"><?php echo $selectEstado ;?></p>
+            </div>   
             <div class="input-field col l6 m6 s12">
                 <input id="txtDisCarp" name="txtDisCarp" type="text" class="validate"
                     value="<?php echo $disCarp;?>">

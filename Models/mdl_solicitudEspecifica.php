@@ -4,12 +4,12 @@
         
         public static function onLoadSolicitudEspecifica ($id) {
             require('../Core/connection.php');
-            $consulta = "SELECT pys_solicitudes.idSolIni, pys_solicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_equipos.idEqu, pys_servicios.nombreSer, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct, pys_tipossolicitud.nombreTSol, pys_tipossolicitud.idTSol, pys_actsolicitudes.idEstSol, pys_actsolicitudes.idCM, pys_actsolicitudes.presupuesto, pys_actsolicitudes.horas, pys_solicitudes.idSer, pys_actsolicitudes.registraTiempo
+            $consulta = "SELECT pys_solicitudes.idSolIni, pys_solicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_equipos.idEqu, pys_servicios.nombreSer, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct, pys_tipossolicitud.nombreTSol, pys_tipossolicitud.idTSol, pys_actsolicitudes.idEstSol, pys_actsolicitudes.idCM, pys_actsolicitudes.presupuesto, pys_actsolicitudes.horas, pys_actsolicitudes.idSer, pys_actsolicitudes.registraTiempo
                 FROM pys_solicitudes
                 INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idPersona
-                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_solicitudes.idSer
-                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu
                 INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
+                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
                 INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
                 INNER JOIN pys_tipossolicitud ON pys_tipossolicitud.idTSol = pys_solicitudes.idTSol
@@ -124,7 +124,7 @@
             require('../Core/connection.php');
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
             $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
-            $RegistrarT = ($RegistrarT !='0'?1:0);
+            $RegistrarT = ( $RegistrarT != '0' ? 1 : 0 );
 
             /** Validación de datos vacíos */
             if ($solEsp == null || $tipoSol == null || $estSol == null || $persona == null || $idCM == null) {
@@ -148,60 +148,53 @@
                 $datos3 = mysqli_fetch_array($resultado3);
                 if ($datos3['ObservacionAct'] == $descripcion && $datos3['idSer'] == $servicio && $datos3['idEstSol'] == $estSol && $datos3['presupuesto'] == $presupuesto && $datos3['fechPrev'] == $fechaPrev && $datos3['registraTiempo'] == $RegistrarT) {
                     echo 'La información ingresada es la misma. El registro no fue modificado.';
-                   /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                 } else {
                     /** Verificación del cambio de estado de la solicitud específica; ESS006 = Terminado; ESS007 = Cancelado */
                     if ($estSol != "ESS006" && $estSol != "ESS007") {
                         /** Verificación del estado de la solicitud inicial */
                         if ($estSolIni == "ESS006" || $estSolIni == "ESS007") {
                             echo 'La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.';
-                          /*   echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                         } else {
                             mysqli_query($connection, "BEGIN;");
-                            /** Insert de los datos en la tabla pys_actsolicitudes */
-                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', '$fechaPrev', NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
-                            $resultado4 = mysqli_query($connection, $consulta4);
                             /** Busqueda del registro anterior, para cambiar el estado */
-                            $consulta5 = "SELECT MIN(pys_actsolicitudes.fechAct) FROM pys_actsolicitudes WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSol = '$solEsp';";
+                            $consulta5 = "SELECT idActSol FROM pys_actsolicitudes WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSol = '$solEsp';";
                             $resultado5 = mysqli_query($connection, $consulta5);
                             $datos5 = mysqli_fetch_array($resultado5);
                             /** Actualización del estado del registro anterior */
-                            $consulta6 = "UPDATE pys_actsolicitudes SET est = '2' WHERE fechAct = '$datos5[0]' AND idSol = '$solEsp';";
+                            $consulta6 = "UPDATE pys_actsolicitudes SET est = '2' WHERE idActSol = '$datos5[0]' AND idSol = '$solEsp';";
                             $resultado6 = mysqli_query($connection, $consulta6);
+                            /** Insert de los datos en la tabla pys_actsolicitudes */
+                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', '$fechaPrev', NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
+                            $resultado4 = mysqli_query($connection, $consulta4);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
                                 echo 'Solicitud específica P'.$solEsp.', actualizada correctamente.';
-                               /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             } else {
                                 mysqli_query($connection, "ROLLBACK;");
                                 echo 'Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.';
-                                /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             }
                         }
                     } else {
                         if ($estSolIni == "ESS006" || $estSolIni == "ESS007") {
                             echo 'La SOLICITUD INICIAL '.$solIni.' se encuentra en estado: TERMINADO o CANCELADO. No se puede actualizar este P/S.';
-                           /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                         } else {
                             mysqli_query($connection, "BEGIN;");
-                            /** Insert de los datos en la tabla pys_actsolicitudes */
-                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', '$fechaPrev', NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
-                            $resultado4 = mysqli_query($connection, $consulta4);
                             /** Busqueda del registro anterior, para cambiar el estado */
-                            $consulta5 = "SELECT MIN(pys_actsolicitudes.fechAct) FROM pys_actsolicitudes WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSol = '$solEsp';";
+                            $consulta5 = "SELECT idActSol FROM pys_actsolicitudes WHERE pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSol = '$solEsp';";
                             $resultado5 = mysqli_query($connection, $consulta5);
                             $datos5 = mysqli_fetch_array($resultado5);
                             /** Actualización del estado del registro anterior */
-                            $consulta6 = "UPDATE pys_actsolicitudes SET est = '2' WHERE fechAct = '$datos5[0]' AND idSol = '$solEsp';";
+                            $consulta6 = "UPDATE pys_actsolicitudes SET est = '2' WHERE idActSol = '$datos5[0]' AND idSol = '$solEsp';";
                             $resultado6 = mysqli_query($connection, $consulta6);
+                            /** Insert de los datos en la tabla pys_actsolicitudes */
+                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', '$fechaPrev', NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
+                            $resultado4 = mysqli_query($connection, $consulta4);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
                                 echo 'Solicitud específica P'.$solEsp.', actualizada correctamente.';
-                              /*   echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             } else {
                                 mysqli_query($connection, "ROLLBACK;");
                                 echo 'Ocurrió un error al intentar actualizar la información. Por favor intente nuevamente.';
-                               /*  echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
                             }
                         }
                     }
@@ -264,9 +257,9 @@
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_solicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct, pys_estadosol.nombreEstSol
                 FROM pys_solicitudes 
                 INNER JOIN pys_personas ON pys_personas.idPersona = pys_solicitudes.idPersona 
-                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_solicitudes.idSer 
-                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu 
                 INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol 
+                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer 
+                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu 
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
                 INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
                 INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol

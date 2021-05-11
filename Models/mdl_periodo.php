@@ -3,16 +3,18 @@
 
         public static function onLoad($idPeriodo) {
             require('../Core/connection.php');
-            $consulta="SELECT * FROM pys_periodos WHERE idPeriodo ='$idPeriodo';";
+            $consulta="SELECT idPeriodo, inicioPeriodo, finPeriodo, diasSegmento1, diasSegmento2
+                FROM pys_periodos WHERE idPeriodo = '$idPeriodo';";
             $resultado = mysqli_query($connection, $consulta);
-            $datos =mysqli_fetch_array($resultado);
-            return $datos;
+            $datos = mysqli_fetch_array($resultado);
             mysqli_close($connection);
+            return $datos;
         }
 
         public static function busquedaTotal() {
             require ('../Core/connection.php');
-            $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo='1' ORDER BY idPeriodo DESC;";
+            $consulta = "SELECT idPeriodo, inicioPeriodo, finPeriodo, diasSegmento1, diasSegmento2
+                FROM pys_periodos WHERE estadoPeriodo = '1' ORDER BY idPeriodo DESC;";
             $resultado = mysqli_query($connection, $consulta);
             echo'   <table class="left responsive-table">
                         <thead>
@@ -46,7 +48,8 @@
         public static function busqueda($busqueda){
             require ('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
-            $consulta = "SELECT * FROM pys_periodos WHERE estadoPeriodo = '1' AND (inicioPeriodo LIKE '%$busqueda%' OR finPeriodo LIKE '%$busqueda%') ORDER BY idPeriodo DESC;";
+            $consulta = "SELECT idPeriodo, inicioPeriodo, finPeriodo, diasSegmento1, diasSegmento2 
+                FROM pys_periodos WHERE estadoPeriodo = '1' AND (inicioPeriodo LIKE '%$busqueda%' OR finPeriodo LIKE '%$busqueda%') ORDER BY idPeriodo DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $count=mysqli_num_rows($resultado);
             if($count > 0){
@@ -86,23 +89,16 @@
             require ('../Core/connection.php');
             $consulta = "SELECT COUNT(idPeriodo) FROM pys_periodos;";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos =mysqli_fetch_array($resultado)){
-                $count=$datos[0];
-            }
-            if ($count==0){
-                $codPeriodo=1;
-            }
-            else if ($count > 0) {
-                $codPeriodo = $count + 1;
-            }
+            $datos = mysqli_fetch_array($resultado);
+            $codPeriodo = ($datos[0] == 0) ? 1 : $datos[0] + 1;
             $diasSeg1 = mysqli_real_escape_string($connection, $diasSeg1);
             $diasSeg2 = mysqli_real_escape_string($connection, $diasSeg2);
-            $sql="INSERT INTO pys_periodos VALUES ('$codPeriodo', '$fechIni',  '$fechFin', '$diasSeg1','$diasSeg2',1);";
+            $sql = "INSERT INTO pys_periodos VALUES ('$codPeriodo', '$fechIni', '$fechFin', '$diasSeg1', '$diasSeg2', 1);";
             $resultado = mysqli_query($connection, $sql);
-            if ($resultado){
+            if ($resultado) {
                 echo "<script> alert ('Se guardó correctamente la información');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/dedicacion.php?cod='.$codPeriodo.'">';
-            }else{
+            } else {
                 echo "<script> alert ('Ocurrió un error al intentar guardar el registro');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
             }
@@ -122,7 +118,6 @@
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/periodo.php">';
             }   
             mysqli_close ($connection);
-                     
         }
 
     }
