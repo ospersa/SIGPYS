@@ -110,13 +110,13 @@
                     $metapendiente = 0;
                     if ($nombreEqu == 'Realización') {
                         foreach ($metadataRealizacion as $meta) {
-                            if ( is_null ($dataProd[$meta]) ) {
+                            if ( is_null ($dataProd[$meta]) || empty ($dataProd[$meta]) ) {
                                 $metapendiente ++;
                             }
                         }
                     } else if ($nombreEqu == 'Diseño Gráfico') {
                         foreach ($metadataDiseno as $meta) {
-                            if ( is_null ($dataProd[$meta]) ) {
+                            if ( is_null ($dataProd[$meta]) || empty ($dataProd[$meta]) ) {
                                 $metapendiente ++;
                             }
                         }
