@@ -16,8 +16,8 @@
                 WHERE pys_solicitudes.est = '1' AND pys_solicitudes.idSol = '$id' AND pys_personas.est = '1' AND pys_equipos.est = '1' AND pys_servicios.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
-            return $datos;
             mysqli_close($connection);
+            return $datos;
         }
 
         public static function preLoadSolicitudEspecifica ($id) {
@@ -43,8 +43,8 @@
                 $array3 = ['codProy' => $datos3['codProy'], 'nombreProy' => $datos3['nombreProy'], 'observacion' => $datos3['ObservacionAct'], 'idProy' => $datos3['idProy']];
             }
             $array = array_merge($array1, $array2, $array3);
-            return $array;
             mysqli_close($connection);
+            return $array;
         }
 
         public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,$irPresu, $RegistrarT) {
@@ -267,6 +267,7 @@
                 AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' 
                 AND (pys_solicitudes.idSolIni LIKE '%$inicial%' OR pys_actsolicitudes.idSol LIKE '%$inicial%' 
                 OR pys_actualizacionproy.codProy LIKE '%$inicial%' OR pys_estadosol.nombreEstSol LIKE '%$inicial%')
+                AND pys_solicitudes.idTSol = 'TSOL02'
                 ORDER BY pys_actsolicitudes.idSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
@@ -335,12 +336,12 @@
                     echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$inicial.'</strong></h6></div>';
                 }
             }
+            mysqli_close($connection);
             if ($cod == '1') {
                 return $string;
             } else if ($cod == '2') {
                 echo $string;
             }
-            mysqli_close($connection);
         }
 
         public static function cargaEspecificasUsuario ($buscar, $cod, $usuario) {
