@@ -4,7 +4,7 @@ require_once('../Controllers/ctrl_infSupervision.php');
 ?>
 
 <div id="container" class="center-align">
-    <h4>INFORME SUPERVISIÓN</h4>
+    <h4>INFORME PRODUCTOS/SERVICIOS</h4>
     <div class="row">
         <form action="../Controllers/ctrl_infSupervision.php" method="post">
             <div class="row">

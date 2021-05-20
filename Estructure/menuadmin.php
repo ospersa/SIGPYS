@@ -211,10 +211,10 @@
             <a href="#!">P/S con Saldo Negativo</a>
         </li>-->
         <li>
-            <a href="infProyectos.php">Proyectos</a>
+            <a href="infSupervision.php">Productos/Servicios</a>
         </li>
         <li>
-            <a href="infSupervision.php">Supervisión</a>
+            <a href="infProyectos.php">Proyectos</a>
         </li>
         <li>
             <a href="infSemaforo.php">Semáforo</a>
