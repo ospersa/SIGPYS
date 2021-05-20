@@ -102,155 +102,117 @@ const STYLEBODY = ['font' => [
 
         public static function consulta ($fechaini, $fechafin) {
             require('../Core/connection.php');
-            $consulta = "SELECT pys_proyectos.idProy, 
-            pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria,
-            pys_cursosmodulos.idCurso, pys_cursosmodulos.nombreCursoCM, pys_cursosmodulos.codigoCursoCM, 
-            pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSol, 
-            pys_solicitudes.fechSol, pys_solicitudes.idSolIni,
-            pys_estadosol.nombreEstSol,
-            pys_equipos.nombreEqu,
-            pys_servicios.nombreSer,
-            pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres,
-            pys_roles.nombreRol,
-            pys_fases.idFase, pys_fases.nombreFase, 
-            pys_asignados.idAsig,
-            pys_celulas.nombreCelula,
-            pys_actsolicitudes.fechPrev
-           
-           FROM pys_asignados
-            
-           inner join pys_solicitudes on pys_asignados.idSol = pys_solicitudes.idSol   
-           inner join pys_actsolicitudes on pys_actsolicitudes.idSol = pys_solicitudes.idSol
-           inner join pys_cursosmodulos on pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
-           inner join pys_proyectos on pys_cursosmodulos.idProy = pys_proyectos.idProy
-           inner join pys_actualizacionproy on pys_actualizacionproy.idProy = pys_proyectos.idProy
-           inner join pys_estadosol on pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
-           inner join pys_servicios on pys_actsolicitudes.idSer = pys_servicios.idSer
-           inner join pys_equipos on pys_servicios.idEqu = pys_equipos.idEqu
-           inner join pys_personas on pys_asignados.idPersona = pys_personas.idPersona
-           inner join pys_roles on pys_asignados.idRol = pys_roles.idRol
-           inner join pys_fases on pys_asignados.idFase = pys_fases.idFase
-           inner join pys_convocatoria on pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
-           inner join pys_celulas on pys_actualizacionproy.idCelula = pys_celulas.idCelula
-                  
-           where pys_asignados.est = '1' and pys_actsolicitudes.est = '1' and pys_solicitudes.est = '1' and pys_cursosmodulos.estProy = '1' and
-           pys_cursosmodulos.estCurso = '1' and pys_actualizacionproy.est = '1' and pys_proyectos.est = '1' and 
-           ((pys_personas.est = '1') or (pys_personas.est = '0')) and pys_convocatoria.est = '1' and pys_roles.est = '1' and pys_fases.est = '1'  and pys_estadosol.est = '1' and pys_solicitudes.fechSol >= '$fechaini' and  pys_solicitudes.fechSol <= '$fechafin' 
-                           
-           ORDER BY pys_solicitudes.fechSol DESC";
+            $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechAct, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_servicios.productoOservicio, pys_estadosol.nombreEstSol, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd
+                FROM pys_solicitudes
+                INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol AND pys_actsolicitudes.est = '1'
+                INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1'
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy AND pys_actualizacionproy.est = '1'
+                INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol AND pys_estadosol.est = '1'
+                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer AND pys_servicios.est = '1'
+                INNER JOIN pys_equipos ON pys_equipos.idEqu = pys_servicios.idEqu
+                LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol AND pys_productos.est = '1'
+                LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
+                WHERE pys_solicitudes.est = '1' AND pys_solicitudes.fechSol >= '$fechaini' AND pys_solicitudes.fechsol <= '$fechafin' AND pys_solicitudes.idTSol = 'TSOL02'
+                ORDER BY pys_solicitudes.fechSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
+            while ($datos = mysqli_fetch_array($resultado)) {
+                $idProyecto = $datos['idProy'];
+                $consulta2 = "SELECT pys_areaconocimiento.areaNombre 
+                    FROM areaconocimientohasproyectos
+                    INNER JOIN pys_areaconocimiento ON pys_areaconocimiento.idAreaConocimiento = areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento
+                    WHERE areaconocimientohasproyectos.pys_proyectos_idProy = '$idProyecto' AND areaconocimientohasproyectos.areaEstado = '1';";
+                $resultado2 = mysqli_query($connection, $consulta2);
+                $registros2 = mysqli_num_rows($resultado2);
+                $areaConocimiento = '';
+                if ($registros2 > 0) {
+                    while ($datos2 = mysqli_fetch_array($resultado2)) {
+                        $areaConocimiento .= $datos2['areaNombre'] . '; ';
+                    }
+                    $areaConocimiento = ($areaConocimiento != '') ? substr($areaConocimiento, 0, -2) : '';
+                }
+                $json[] = array (
+                    'Nombre Proyecto' => $datos['codProy'] . ' - ' . $datos['nombreProy'],
+                    'Solicitud Inicial' => $datos['idSolIni'],
+                    'Solicitud Especifica' => 'P' . $datos['idSol'],
+                    'Descripcion' => $datos['ObservacionAct'],
+                    'Nombre Producto' => $datos['nombreProd'],
+                    'Area Conocimiento' => $areaConocimiento,
+                    'Fecha Creacion' => $datos['fechSol'],
+                    'Nombre Equipo' => $datos['nombreEqu'],
+                    'Nombre Servicio' => $datos['nombreSer'],
+                    'Genera Producto' => $datos['productoOservicio'],
+                    'Nombre Estado' => $datos['nombreEstSol'],
+                    'Fecha Entrega Cliente' => $datos['fechEntregaProd'],
+                    'Fecha Actualizacion' => $datos['fechAct']
+                );
+                $areaConocimiento = '';
+            }
             mysqli_close($connection);
-            return $resultado;            
+            return $json;            
         }
         
         public static function busqueda ($fechaini, $fechafin) {
-            require('../Core/connection.php');
             $string = "";
             $resultado = InformeSupervision::consulta($fechaini, $fechafin); 
-            $registros = mysqli_num_rows($resultado);
+            $registros = count($resultado);
             if ($registros > 0) {
-                $string = '     <table class="responsive-table" border="1">
-                        <thead>
-                            <tr class="teal lighten-4">
-                                <th class="row-teal3">Código Proyecto</th>
-                                <th class="row-teal3">Nombre Proyecto</th>
-                                <th class="row-teal3">Celula</th>
-                                <th class="row-teal3">Solicitud Inicial</th>
-                                <th class="row-teal3">Producto/Servicio</th>
-                                <th class="row-teal3">Descripción Producto/Servicio</th>
-                                <th class="row-teal3">Fecha de registro</th>
-                                <th class="row-teal3">Equipo -- Servicio</th>
-                                <th class="row-teal3">Estado Solicitud</th>
-                                <th class="row-teal3">Fecha Prevista de Entrega</th>
-                                <th class="row-teal3">Asignados</th>
-                                <th class="row-teal3">Fase</th>
-                                <th class="row-teal3">Fecha registro Producto</th>
-                                <th class="row-teal3">Fecha registro Servicio</th>
-                                <th class="row-teal3">Estado Inventario</th>
-                            </tr>
-                        </thead>
-                        <tbody>';
-            while ($result = mysqli_fetch_array($resultado)) {
-                $codSol=$result['idSol'];
-                $string .= '<tr><td>'.$result['codProy'].'</td>
-                <td>'.$result['nombreProy'].'</td>
-                <td>'.$result['nombreCelula'].'</td>
-                <td>'.$result['idSolIni'].'</td>
-                <td>P'.$result['idSol'].'</td>
-                <td><p class="truncate">'.$result['ObservacionAct'].'</p></td>
-                <td>'.$result['fechSol'].'</td>
-                <td>'.$result['nombreEqu'].' -- '.$result['nombreSer'].'</td>
-                <td>'.$result['nombreEstSol'].'</td>
-                <td>'.$result['fechPrev'].'</td>
-                <td>'.$result['apellido1'].' '.$result['apellido2'].' '.$result['nombres'].'</td>
-                <td>'.$result['nombreFase'].'</td>';
-                $dato="SELECT pys_productos.idProd, pys_productos.idSol, pys_productos.fechaCreacion  
-                FROM pys_productos
-                INNER JOIN pys_personas ON pys_productos.idResponRegistro = pys_personas.idPersona
-                INNER JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd	
-                WHERE pys_productos.est = '1' AND pys_actproductos.est = '1' AND pys_personas.est = '1' AND pys_productos.idSol = '$codSol'";
-                $consult=mysqli_query($connection,$dato);
-                $cont =mysqli_num_rows($consult);
-                if ($cont>0){
-                    $resultad = mysqli_fetch_array($consult);
-                    $idProducto=$resultad['idProd'];
-                    $fechaCreacion=$resultad['fechaCreacion'];                        
-                    $string.= "<td>$fechaCreacion</td>";	
-                }else{
-                    $string.= "<td></td>";	
-                    $idProducto='';
-                }
-                $dato1="SELECT pys_resultservicio.idSol, pys_resultservicio.fechaCreacion
-                FROM pys_resultservicio
-                INNER JOIN pys_personas ON pys_resultservicio.idResponRegistro = pys_personas.idPersona
-                WHERE pys_resultservicio.est = '1' AND pys_personas.est = '1' AND  pys_resultservicio.idSol = '$codSol'";
-                $consult1=mysqli_query($connection,$dato1);
-                $cont2 = mysqli_num_rows($consult1);
-                if ($cont2 > 0){
-                    $resultado1 = mysqli_fetch_array($consult1);
-                    $fechaCreacionResultServ=$resultado1['fechaCreacion'];
-                    $string.= "<td>$fechaCreacionResultServ</td>";	
-                }else{
-                    $string.= "<td></td>";
-                }
-                $dato2="SELECT estadoInv, idProd FROM `pys_actinventario`						
-                WHERE est = '1' AND idProd = '$idProducto'";
-                $consult2 = mysqli_query($connection,$dato2);
-                $cont3 = mysqli_num_rows($consult2);
-                if ($cont3>0){
-                    $resultado2 = mysqli_fetch_array($consult2);
-                    $estadoInv = $resultado2['estadoInv'];	
-                    $string.= "<td>$estadoInv</td>";
-                    $idProducto = '';
-                }else{							
-                    $string.= "<td>Sin inventario</td>";	
-                } 
-                $string.='</tr>';
+                $string = ' <table class="responsive-table" border="1">
+                                <thead>
+                                    <tr class="teal lighten-4">
+                                        <th class="row-teal3">Proyecto</th>
+                                        <th class="row-teal3">Solicitud Inicial</th>
+                                        <th class="row-teal3">Producto/Servicio</th>
+                                        <th class="row-teal3">Descripción Producto/Servicio</th>
+                                        <th class="row-teal3">Nombre del Producto</th>
+                                        <th class="row-teal3">Área de Conocimiento</th>
+                                        <th class="row-teal3">Fecha de creación</th>
+                                        <th class="row-teal3">Equipo</th>
+                                        <th class="row-teal3">Servicio</th>
+                                        <th class="row-teal3">Genera producto</th>
+                                        <th class="row-teal3">Estado</th>
+                                        <th class="row-teal3">Fecha entrega cliente</th>
+                                        <th class="row-teal3">Fecha actualización</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+            foreach ($resultado as $value) {
+                $string .= '        <tr>
+                                        <td>'.$value['Nombre Proyecto'].'</td>
+                                        <td>'.$value['Solicitud Inicial'].'</td>
+                                        <td>'.$value['Solicitud Especifica'].'</td>
+                                        <td>'.$value['Descripcion'].'</td>
+                                        <td>'.$value['Nombre Producto'].'</td>
+                                        <td>'.$value['Area Conocimiento'].'</td>
+                                        <td>'.$value['Fecha Creacion'].'</td>
+                                        <td>'.$value['Nombre Equipo'].'</td>
+                                        <td>'.$value['Nombre Servicio'].'</td>
+                                        <td>'.$value['Genera Producto'].'</td>
+                                        <td>'.$value['Nombre Estado'].'</td>
+                                        <td>'.$value['Fecha Entrega Cliente'].'</td>
+                                        <td>'.$value['Fecha Actualizacion'].'</td>
+                                    </tr>';
             }
-            $string .= '    </tbody>
-                    </table>';
+            $string .= '        </tbody>
+                            </table>';
             }
             else {
                 $string = "<h4>No hay resultados</h4>";
             }
             echo $string;
-            mysqli_close($connection);
         }
         
         public static function descarga ($fechaini, $fechafin) {
-            require('../Core/connection.php');
             $resultado = InformeSupervision::consulta($fechaini, $fechafin); 
-            $registros = mysqli_num_rows($resultado);
-            if ($registros > 0) {
+            if (count($resultado) > 0) {
                 $spreadsheet = new Spreadsheet();
                 $spreadsheet->getProperties()->setCreator('Conecta-TE')
                     ->setLastModifiedBy('Conecta-TE')
-                    ->setTitle('Informe de supervisión')
-                    ->setSubject('Informe de supervisión')
-                    ->setDescription('Informe de supervisión')
-                    ->setKeywords('Informe de supervisión')
+                    ->setTitle('Informe de productos-servicios')
+                    ->setSubject('Informe de productos-servicios')
+                    ->setDescription('Informe de productos-servicios')
+                    ->setKeywords('Informe de productos-servicios')
                     ->setCategory('Test result file');
-                $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-inventario');
+                $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'inf-productos-servicios');
                 $spreadsheet->addSheet($myWorkSheet, 0);
                 $sheetIndex = $spreadsheet->getIndex($spreadsheet->getSheetByName('Worksheet'));
                 $spreadsheet->removeSheetByIndex($sheetIndex);
@@ -259,96 +221,51 @@ const STYLEBODY = ['font' => [
                     /**Aplicación de estilos */
                 $spreadsheet->getActiveSheet()->getStyle('A1:J1')->applyFromArray(STYLETABLETI);
                 /**Dimensión columnas */
-                $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-                $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(35);
-                $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-                $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-                $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-                $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(35);
-                $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(12);
-                $spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(25);
-                $spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(25);
-                $spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(25);
+                $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(45);
+                $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+                $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+                $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+                $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(40);
+                $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+                $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(18);
+                $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+                $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(30);
+                $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+                $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(30);
+                $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(18);
+                $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(18);
                 $sheet = $spreadsheet->getActiveSheet();
-                $sheet->setCellValue('A1', 'Informe Supervisión');
+                $sheet->setCellValue('A1', 'Informe Productos - Servicios');
                 $sheet->setCellValue('A3', 'Fecha Inicial S.E. '.$fechaini);
                 $sheet->setCellValue('A4', 'Fecha Final  S.E. '.$fechafin);
-                $sheet->mergeCells("A1:P1");
-                $sheet->mergeCells("A3:P3");
-                $sheet->mergeCells("A4:P4");
-                $titulos=['Código Proyecto', 'Nombre Proyecto', 'Celula', 'Solicitud Inicial', 'Producto/Servicio', 'Descripción Producto/Servicio', 'Fecha de registro', 'Equipo', 'Servicio', 'Estado Solicitud', 'Fecha Prevista de Entrega', 'Asignados', 'Fase', 'Fecha registro Producto', 'Fecha registro Servicio', 'Estado Inventario'];
+                $sheet->mergeCells("A1:M1");
+                $titulos=['Proyecto', 'Solicitud Inicial', 'Producto/Servicio', 'Descripción Producto/Servicio', 'Nombre del producto', 'Área de conocimiento', 'Fecha de creación', 'Equipo', 'Servicio', 'Genera producto', 'Estado', 'Fecha entrega cliente', 'Fecha actualización'];
                 $spreadsheet->getActiveSheet()->fromArray($titulos,null,'A6');
-                $spreadsheet->getActiveSheet()->getStyle('A6:P6')->applyFromArray(STYLETABLETITLE);
+                $spreadsheet->getActiveSheet()->getStyle('A6:M6')->applyFromArray(STYLETABLETITLE);
                 $fila = 7;
-                while ($result = mysqli_fetch_array($resultado)) {
-                    $codSol=$result['idSol'];
-                    $codProy =$result['codProy'];
-                    $nombreProy =$result['nombreProy'];
-                    $nombreCelula =$result['nombreCelula'];
-                    $idSolIni =$result['idSolIni'];
-                    $idSol ='P'.$result['idSol'];
-                    $ObservacionAct =$result['ObservacionAct'];
-                    $fechSol =$result['fechSol'];
-                    $nombreEqu =$result['nombreEqu'];
-                    $nombreSer =$result['nombreSer']; 
-                    $nombreEstSol =$result['nombreEstSol'];
-                    $fechPrev =$result['fechPrev'];
-                    $nombre=$result['apellido1'].' '.$result['apellido2'].' '.$result['nombres'];
-                    $nombreFase =$result['nombreFase'];
-                    $dato="SELECT pys_productos.idProd, pys_productos.idSol, pys_productos.fechaCreacion  
-                    FROM pys_productos
-                    INNER JOIN pys_personas ON pys_productos.idResponRegistro = pys_personas.idPersona
-                    INNER JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd	
-                    WHERE pys_productos.est = '1' AND pys_actproductos.est = '1' AND pys_personas.est = '1' AND pys_productos.idSol = '$codSol'";
-                    $consult=mysqli_query($connection,$dato);
-                    $cont =mysqli_num_rows($consult);
-                    if ($cont>0){
-                        $resultad = mysqli_fetch_array($consult);
-                        $idProducto=$resultad['idProd'];
-                        $fechaCreacion=$resultad['fechaCreacion'];                        
-                    }else{
-                        $fechaCreacion=" ";
-                        $idProducto='';
-                    }
-                    $dato1="SELECT pys_resultservicio.idSol, pys_resultservicio.fechaCreacion
-                    FROM pys_resultservicio
-                    INNER JOIN pys_personas ON pys_resultservicio.idResponRegistro = pys_personas.idPersona
-                    WHERE pys_resultservicio.est = '1' AND pys_personas.est = '1' AND  pys_resultservicio.idSol = '$codSol'";
-                    $consult1=mysqli_query($connection,$dato1);
-                    $cont2 = mysqli_num_rows($consult1);
-                    if ($cont2 > 0){
-                        $resultado1 = mysqli_fetch_array($consult1);
-                        $fechaCreacionResultServ=$resultado1['fechaCreacion'];
-                    }else{
-                        $fechaCreacionResultServ = "";
-                    }
-                    $dato2="SELECT estadoInv, idProd FROM `pys_actinventario`						
-                    WHERE est = '1' AND idProd = '$idProducto'";
-                    $consult2 = mysqli_query($connection,$dato2);
-                    $cont3 = mysqli_num_rows($consult2);
-                    if ($cont3>0){
-                        $resultado2 = mysqli_fetch_array($consult2);
-                        $estadoInv = $resultado2['estadoInv'];	
-                        $idProducto = '';
-                    }else{							
-                        $estadoInv = "Sin Inventario";	
-                    } 
-                    $datos = [$codProy, $nombreProy, $nombreCelula, $idSolIni, $idSol, $ObservacionAct, $fechSol, $nombreEqu, $nombreSer, $nombreEstSol, $fechPrev, $nombre, $nombreFase, $fechaCreacion, $fechaCreacionResultServ,$estadoInv];
+                foreach ($resultado as $value) {
+                    $nombreProyecto = $value['Nombre Proyecto'];
+                    $idSolIni = $value['Solicitud Inicial'];
+                    $idSol = $value['Solicitud Especifica'];
+                    $ObservacionAct = $value['Descripcion'];
+                    $nombreProducto = $value['Nombre Producto'];
+                    $areaConocimiento = $value['Area Conocimiento'];
+                    $fechaCreacion = $value['Fecha Creacion'];
+                    $nombreEquipo = $value['Nombre Equipo'];
+                    $nombreServicio = $value['Nombre Servicio'];
+                    $generaProducto = $value['Genera Producto'];
+                    $nombreEstadoSolicitud = $value['Nombre Estado'];
+                    $fechaEntregaCliente = $value['Fecha Entrega Cliente'];
+                    $fechaActualizacion = $value['Fecha Actualizacion'];
+                    $datos = [$nombreProyecto, $idSolIni, $idSol, $ObservacionAct, $nombreProducto, $areaConocimiento, $fechaCreacion, $nombreEquipo, $nombreServicio, $generaProducto, $nombreEstadoSolicitud, $fechaEntregaCliente, $fechaActualizacion];
                     $spreadsheet->getActiveSheet()->fromArray($datos,null,'A'.$fila);
                     $fila += 1;
-
                 }
-                $spreadsheet->getActiveSheet()->getStyle('A6:P'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                $spreadsheet->getActiveSheet()->getStyle('A6:P'.($fila-1))->applyFromArray(STYLEBODY);
+                $spreadsheet->getActiveSheet()->getStyle('A6:M'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                $spreadsheet->getActiveSheet()->getStyle('A6:M'.($fila-1))->applyFromArray(STYLEBODY);
                
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Informe de supervisión '.gmdate(' d M Y ').'.xlsx"');
+                header('Content-Disposition: attachment;filename="Informe de productos-servicios'.gmdate(' d M Y ').'.xlsx"');
                 header('Cache-Control: max-age=0');
                 header('Cache-Control: max-age=1');
                 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
@@ -361,9 +278,6 @@ const STYLEBODY = ['font' => [
                 exit;
                 
             }
-            mysqli_close($connection);
-
-
         }
 
         
