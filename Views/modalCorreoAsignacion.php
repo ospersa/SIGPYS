@@ -14,10 +14,10 @@ require('../Controllers/ctrl_asignados.php');
                 <div class="input-field col l12 m12 s12 ">
                     <p class="left-align">
                         <?php
-                         echo $infoSol= "<strong><u>Información de la solicitud realizada:</u></strong><br><br>
-                        <strong>Código de la solicitud: </strong>".$idSolIni."<br>
-                        <strong>Solicitante:</strong> ".$nombres.' '.$apellido1.' '.$apellido2."<br>
-                        <strong>Proyecto:</strong> ".$codProy." - ".$nombreProy."<br><br>";
+                         echo $infoSol = "  <strong><u>Información de la solicitud realizada:</u></strong><br><br>
+                                            <strong>Código de la solicitud: </strong>".$idSolIni."<br>
+                                            <strong>Solicitante:</strong> ".$nombres.' '.$apellido1.' '.$apellido2."<br>
+                                            <strong>Proyecto:</strong> ".$codProy." - ".$nombreProy."<br><br>";
                         ?>
                     </p>
                 </div>
@@ -49,7 +49,7 @@ require('../Controllers/ctrl_asignados.php');
                         ?>
                     </p>
                 </div>  
-                <input type="text" name="correoSol" id="correoSol" value="<?php echo $correo; ?>" hidden>
+                <!-- <input type="text" name="correoSol" id="correoSol" value="<?php //echo $correo; ?>" hidden> -->
                 <input type="text" name="nombreSer" id="nombreSer" value="<?php echo $nombreSer; ?>" hidden>
                 <input type="text" name="nombreEqu" id="nombreEqu" value="<?php echo $nombreEqu; ?>" hidden>
                 <input type="text" name="codProy" id="codProy" value="<?php echo $codProy; ?>" hidden>

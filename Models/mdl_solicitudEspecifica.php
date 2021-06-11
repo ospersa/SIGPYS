@@ -125,7 +125,7 @@
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
             $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
             $RegistrarT = ( $RegistrarT != '0' ? 1 : 0 );
-
+            $fechaPrev = ($fechaPrev == null) ? "NULL" : "'$fechaPrev'";
             /** Validación de datos vacíos */
             if ($solEsp == null || $tipoSol == null || $estSol == null || $persona == null || $idCM == null) {
                 echo 'No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.';
@@ -164,7 +164,7 @@
                             $consulta6 = "UPDATE pys_actsolicitudes SET est = '2' WHERE idActSol = '$datos5[0]' AND idSol = '$solEsp';";
                             $resultado6 = mysqli_query($connection, $consulta6);
                             /** Insert de los datos en la tabla pys_actsolicitudes */
-                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', '$fechaPrev', NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
+                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', $fechaPrev, NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
                             $resultado4 = mysqli_query($connection, $consulta4);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");
@@ -187,7 +187,7 @@
                             $consulta6 = "UPDATE pys_actsolicitudes SET est = '2' WHERE idActSol = '$datos5[0]' AND idSol = '$solEsp';";
                             $resultado6 = mysqli_query($connection, $consulta6);
                             /** Insert de los datos en la tabla pys_actsolicitudes */
-                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', '$fechaPrev', NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
+                            $consulta4 = "INSERT INTO pys_actsolicitudes VALUES (DEFAULT, '$estSol', '$solEsp', '$idCM', '$servicio', '$persona', '', $fechaPrev, NOW(), '$descripcion', '$presupuesto', '$horas', $RegistrarT, '1');";
                             $resultado4 = mysqli_query($connection, $consulta4);
                             if ($resultado4 && $resultado6) {
                                 mysqli_query($connection, "COMMIT;");

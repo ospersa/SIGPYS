@@ -9,7 +9,8 @@ use PHPMailer\PHPMailer\Exception;
             require '../php_libraries/phpMailer/Exception.php';
             require '../php_libraries/phpMailer/PHPMailer.php';
             require '../php_libraries/phpMailer/SMTP.php';
-            $arrayccEmail = explode(';',$ccemail);
+            $arrayccEmail = explode(';', $ccemail);
+            $arrayGestores = explode(';', $asesor);
     
             $mail = new PHPMailer(true);
 
@@ -26,20 +27,20 @@ use PHPMailer\PHPMailer\Exception;
 
                 //Recipients
                 $mail->setFrom('produccionysoporte@sigpys.tk', 'Conecta-TE : PyS');
-                if( $solicitante != null){
-                    $mail->addAddress($solicitante, ''); 
+                if ($solicitante != null) {
+                    $mail->addAddress($solicitante, '');
+                }
+                if (is_array($arrayGestores)) {
+                    foreach ($arrayGestores as $gestor) {
+                        $mail->addAddress($gestor, ''); 
+                    }
+                }
+                if (is_array($arrayccEmail)) {
                     foreach($arrayccEmail as $item) {
                         $mail->addCC($item);
                     }
-                } else {
-                    foreach($arrayccEmail as $item) {
-                        $mail->addAddress($item);
-                    }
                 }
                 $mail->addCC('apoyoconectate@uniandes.edu.co');
-                if($asesor != null){
-                    $mail->addCC($asesor);
-                }               
                 // Content
                 $mail->isHTML(true);                                  
                 $mail->Subject = $asunto;
