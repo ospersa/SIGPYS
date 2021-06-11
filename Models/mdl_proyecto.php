@@ -78,9 +78,13 @@ class Proyecto {
                 $consulta2 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '$idProy';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
-                $idProyColciencias = $datos2[0];
-                if ($idProy == $idProyColciencias) {
-                    echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                if (is_array($datos2)) {
+                    $idProyColciencias = $datos2[0];
+                    if ($idProy == $idProyColciencias) {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
+                    }
                 } else {
                     echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
                 }
@@ -97,9 +101,13 @@ class Proyecto {
                 $consulta3 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '".$datos['idProy']."';";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
-                $idProyColciencias = $datos3[0];
-                if ($datos['idProy'] == $idProyColciencias) {
-                    echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                if (is_array($datos3)) {
+                    $idProyColciencias = $datos3[0];
+                    if ($datos['idProy'] == $idProyColciencias) {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
+                    }
                 } else {
                     echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
                 }
@@ -216,9 +224,13 @@ class Proyecto {
                     $consulta3 = "SELECT idProy FROM pys_colciencias WHERE est = '1' AND idProy = '".$datos['idProy']."';";
                     $resultado3 = mysqli_query($connection, $consulta3);
                     $datos3 = mysqli_fetch_array($resultado3);
-                    $idProyColciencias = $datos3[0];
-                    if ($datos['idProy'] == $idProyColciencias) {
-                        echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                    if (is_array($datos3)) {
+                        $idProyColciencias = $datos3[0];
+                        if ($datos['idProy'] == $idProyColciencias) {
+                            echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=1" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Proyecto Existente en Colciencias"><i class="material-icons teal-text">library_add</i></a></td>';
+                        } else {
+                            echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
+                        }
                     } else {
                         echo '  <td><a href="colcienciasProy.php?cod='.$datos[10].'&cod2=2" onclick="envioData('."'$datos[10]'".','."'colcienciasProy.php'".');" title="Agregar a Colciencias"><i class="material-icons red-text">library_add</i></a></td>';
                     }

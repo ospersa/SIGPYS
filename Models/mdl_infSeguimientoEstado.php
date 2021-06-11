@@ -2,8 +2,42 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 require '../php_libraries/vendor/autoload.php';
+const STYLEGREEN = [
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => '89F986',
+        ]
+    ]
+];
+const STYLEYELLOW = [
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => 'F9F22C',
+        ]
+    ]
+];
+const STYLEORANGE = [
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => 'F7B14B',
+        ]
+    ]
+];
+const STYLERED = [
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => 'F8473B',
+        ]
+    ]
+];
+
 const STYLETABLETITLE = [
     'font' => [
         'bold' => true,
@@ -92,7 +126,7 @@ const STYLEBODY = ['font' => [
 ];
 
 const ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 35, 35, 35, 35, 35, 35];
+const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 35, 35, 35, 35, 35, 35];
 
     Class InformeSeguimientoEstados {
       
@@ -120,34 +154,33 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                 $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Seguimiento Estados');
                 $spreadsheet->addSheet($myWorkSheet, 0);
                 $sheetIndex = $spreadsheet->getIndex($spreadsheet->getSheetByName('Worksheet'));
-                $spreadsheet->removeSheetByIndex($sheetIndex);
-                $spreadsheet->getActiveSheet()->setShowGridlines(false); 
+                $spreadsheet->removeSheetByIndex($sheetIndex); 
+                $spreadsheet->getActiveSheet()->setShowGridlines(false);
                 /** Arreglo títulos */
                 if ( $tiempos == null ) {
-                    $titulos = ['Código/Nombre del proyecto', 'Código solicitud', 'Descripción de la solicitud', 'Fecha estimada de entrega', 'Estado', 'Responsable P&S', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido'];
+                    $titulos = ['Código/Nombre del proyecto', 'Código solicitud', 'Descripción de la solicitud', 'Fecha estimada de entrega', 'Estado', 'Presupuesto P/S', 'Ejecutado P/S', 'Responsable P&S', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido'];
                 } else {
-                    $titulos = ['Código/Nombre del proyecto', 'Código solicitud', 'Descripción de la solicitud', 'Fecha estimada de entrega', 'Estado', 'Responsable P&S', 'Horas por persona', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido'];
+                    $titulos = ['Código/Nombre del proyecto', 'Código solicitud', 'Descripción de la solicitud', 'Fecha estimada de entrega', 'Estado', 'Presupuesto P/S', 'Ejecutado P/S', 'Responsable P&S', 'Horas por persona', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido'];
                 }
                 $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
                 /** Aplicación de estilos */
-                $spreadsheet->getActiveSheet()->getStyle('A1:J1')->applyFromArray(STYLETABLETI);
+                $spreadsheet->getActiveSheet()->getStyle('A1:E1')->applyFromArray(STYLETABLETI);
                 /** Dimensión columnas */
                 foreach ($titulos as $key => $titulo) {
                     $spreadsheet->getActiveSheet()->getColumnDimension(ALPHABET[$key])->setWidth(SIZES[$key]);                    
                 }
                 $sheet = $spreadsheet->getActiveSheet();
                 $sheet->setCellValue('A1', 'Informe de seguimiento de estados y metadata');
-                $sheet->mergeCells("A1:J1");
-                $sheet->mergeCells("A4:J4");
-                
+                $sheet->mergeCells("A1:E1");
                 $spreadsheet->getActiveSheet()->getStyle('A6:'.ALPHABET[count($titulos) - 1].'6')->applyFromArray(STYLETABLETITLE);
                 $fila = 7;
+                $presupuestoTotal = '0';
                 while ( $datos = mysqli_fetch_array($resultado) ) {
                     $codProy = $datos['codProy'];
                     $nombreProy = $datos['nombreProy'];
                     $spreadsheet->getActiveSheet()->setCellValue('B'.$fila, $codProy);
                     $idProy = $datos['idProy'];
-                    $consulta1 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSer, pys_estadosol.nombreEstSol, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_solicitudes.idSolIni, pys_actproductos.nombreProd, pys_actproductos.urlVimeo, pys_actproductos.descripcionProd, pys_actproductos.palabrasClave, pys_actproductos.fechEntregaProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, pys_tiposrecursos.nombreTRec, pys_plataformas.nombrePlt, pys_tiposproductos.descripcionTProd, formatos.formatoNombre, pys_claseproductos.nombreClProd, tiposcontenido.tipoContenidoNombre, pys_tiposproductos.descripcionTProd, idiomas.idiomaNombre
+                    $consulta1 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSer, pys_estadosol.nombreEstSol, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev, pys_actsolicitudes.presupuesto, pys_solicitudes.fechSol, pys_solicitudes.idSolIni, pys_actproductos.nombreProd, pys_actproductos.urlVimeo, pys_actproductos.descripcionProd, pys_actproductos.palabrasClave, pys_actproductos.fechEntregaProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, pys_tiposrecursos.nombreTRec, pys_plataformas.nombrePlt, pys_tiposproductos.descripcionTProd, formatos.formatoNombre, pys_claseproductos.nombreClProd, tiposcontenido.tipoContenidoNombre, pys_tiposproductos.descripcionTProd, idiomas.idiomaNombre
                         FROM pys_actualizacionproy
                         INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
                         INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
@@ -177,13 +210,15 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                         $cont = 0;
                         $filaIni = $fila;
                         while ($datos1 = mysqli_fetch_array($resultado1)) {
-                            $nomSer= $datos1['nombreSer'];
-                            $fechPrev= $datos1['fechPrev'];
+                            $nomSer = $datos1['nombreSer'];
+                            $fechPrev = $datos1['fechPrev'];
                             $idSol = $datos1['idSol'];
                             $ObservacionAct = $datos1['ObservacionAct'];
                             $idSolIni = $datos1['idSolIni'];
                             $fechSol = $datos1['fechSol']; 
                             $nombreEstSol = $datos1['nombreEstSol']; 
+                            $presupuesto = $datos1['presupuesto'];
+                            $presupuestoTotal += $presupuesto;
                             $nombreProd = $datos1['nombreProd'];                                   
                             $urlVimeo = $datos1['urlVimeo'];     
                             $idiomaNombre = $datos1['idiomaNombre'];
@@ -203,36 +238,45 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                             $autorExterno = $datos1['autorExterno'];
                             $tipoContenido = $datos1['tipoContenidoNombre'];
                             $formatoNombre = $datos1['formatoNombre'];
-                            $consulta2 = "SELECT pys_asignados.idAsig, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idPersona
+                            $consulta2 = "SELECT pys_asignados.idAsig, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idPersona, pys_asignados.maxhora, pys_asignados.maxmin
                                 FROM pys_asignados
                                 INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
                                 WHERE  (pys_asignados.est = '1' OR pys_asignados.est = '2') AND  pys_asignados.idSol = '$idSol'
                                 ORDER BY pys_personas.apellido1;";
                             $resultado2 = mysqli_query($connection, $consulta2);
+                            $ejecutadoAcumulado = '0';
                             if (mysqli_num_rows($resultado2) > 0) {
-                                $personasAsig = $personasTiempo = '';
+                                $personasAsig = $personasTiempo = $tiempoAsignado = '';
                                 while ($datos2 = mysqli_fetch_array($resultado2) ) {
-                                    $personasAsig .= $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres'].', ';
+                                    $personasAsig .= $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres']."\n";
+                                    $tiempoAsignado = ( ( ($datos2['maxhora'] * 60) + $datos2['maxmin'] ) / 60 ) . ' H';
                                     if ($tiempos != null) {
-                                        $horas = $minutos = 0;
+                                        $horas = $minutos = $ejecutado = 0;
                                         $idAsignado = $datos2['idAsig'];
-                                        $query = "SELECT horaTiempo, minTiempo FROM pys_tiempos WHERE idAsig = '$idAsignado' AND estTiempo = '1';";
+                                        $query = "SELECT horaTiempo, minTiempo, salario
+                                            FROM pys_tiempos 
+                                            INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != '0'
+                                            INNER JOIN pys_salarios ON pys_salarios.idPersona = pys_asignados.idPersona AND pys_salarios.estSal = '1' AND pys_salarios.mes <= pys_asignados.fechAsig AND pys_salarios.anio >= pys_asignados.fechAsig
+                                            WHERE pys_asignados.idAsig = '$idAsignado' AND pys_tiempos.estTiempo = '1';";
                                         $result = mysqli_query($connection, $query);
                                         while ( $data = mysqli_fetch_array($result) ) {
                                             $horas += $data['horaTiempo'];
                                             $minutos += $data['minTiempo'];
+                                            $ejecutado += ((($data['horaTiempo'] * 60) + $data['minTiempo']) / 60) * $data['salario'];
                                         }
-                                        $total = " (".( ( ($horas * 60) + $minutos ) / 60 ) . " H); \n";
-                                        $personasTiempo .= $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres'].$total;
+                                        $total = " (".( ( ($horas * 60) + $minutos ) / 60 ) . " H / ".$tiempoAsignado.")\n";
+                                        $ejecutadoAcumulado += $ejecutado;
+                                        $personasTiempo .= $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres'] . $total;
                                     } 
                                 }
-                                $personasAsig = trim($personasAsig, ', ');
-                                $personasTiempo = trim($personasTiempo, "; \n");
+                                $personasAsig = trim($personasAsig, "\n");
+                                $personasTiempo = trim($personasTiempo, "\n");
                             }
+                            $ejecutadoAcumulado = ($ejecutadoAcumulado == 0) ? '0' : $ejecutadoAcumulado;
                             $consulta4 = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres
-                            FROM pys_solicitudes 
-                            INNER JOIN pys_personas ON pys_solicitudes.idSolicitante = pys_personas.idPersona
-                            WHERE  pys_solicitudes.idSol='$idSolIni'";
+                                FROM pys_solicitudes 
+                                INNER JOIN pys_personas ON pys_solicitudes.idSolicitante = pys_personas.idPersona
+                                WHERE pys_solicitudes.idSol = '$idSolIni';";
                             $resultado4 = mysqli_query($connection, $consulta4);
                             if(mysqli_num_rows($resultado4)> 0){
                                 while ($datos4 = mysqli_fetch_array($resultado4)) {                              
@@ -240,11 +284,12 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                                 }
                             }
                             if ($tiempos != null) {
-                                $data = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $personasAsig, $personasTiempo, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
+                                $data = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $personasTiempo, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
                             } else {
-                                $data = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $personasAsig, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
+                                $data = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
                             }
                             $spreadsheet->getActiveSheet()->fromArray($data, null, 'A'.$fila);
+                            $spreadsheet->getActiveSheet()->getStyle('F'.$fila.':G'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                             $fila +=1;
                         }
                     }
@@ -290,23 +335,31 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                     $myWorkSheet3 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Ejecuciones Proyecto');
                     $spreadsheet->addSheet($myWorkSheet3, 2);
                     $spreadsheet->setActiveSheetIndex(2);
+                    $spreadsheet->getActiveSheet()->setCellValue('A1', '0%  - 40%  Verde');
+                    $spreadsheet->getActiveSheet()->setCellValue('A2', '41% - 60%  Amarillo');
+                    $spreadsheet->getActiveSheet()->setCellValue('A3', '61% - 80%  Naranja');
+                    $spreadsheet->getActiveSheet()->setCellValue('A4', '80% - 100% Rojo');
+                    $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(STYLEGREEN);
+                    $spreadsheet->getActiveSheet()->getStyle('A2')->applyFromArray(STYLEYELLOW);
+                    $spreadsheet->getActiveSheet()->getStyle('A3')->applyFromArray(STYLEORANGE);
+                    $spreadsheet->getActiveSheet()->getStyle('A4')->applyFromArray(STYLERED);
                     $spreadsheet->getActiveSheet()->setShowGridlines(false);
-                    $spreadsheet->getActiveSheet()->mergeCells("C1:D1");
-                    $spreadsheet->getActiveSheet()->mergeCells("E1:F1");
-                    $spreadsheet->getActiveSheet()->mergeCells("G1:H1");
-                    $spreadsheet->getActiveSheet()->setCellValue('A2', 'Proyecto');
-                    $spreadsheet->getActiveSheet()->setCellValue('B2', 'Asignado');
-                    $spreadsheet->getActiveSheet()->setCellValue('C1', 'Corte Anterior');
-                    $spreadsheet->getActiveSheet()->setCellValue('E1', 'Corte Actual');
-                    $spreadsheet->getActiveSheet()->setCellValue('G1', 'Total');
-                    $spreadsheet->getActiveSheet()->setCellValue('C2', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('D2', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('E2', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('F2', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('G2', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('H2', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->mergeCells("C5:D5");
+                    $spreadsheet->getActiveSheet()->mergeCells("E5:F5");
+                    $spreadsheet->getActiveSheet()->mergeCells("G5:H5");
+                    $spreadsheet->getActiveSheet()->setCellValue('A6', 'Proyecto');
+                    $spreadsheet->getActiveSheet()->setCellValue('B6', 'Asignado');
+                    $spreadsheet->getActiveSheet()->setCellValue('C5', 'Corte Anterior');
+                    $spreadsheet->getActiveSheet()->setCellValue('E5', 'Corte Actual');
+                    $spreadsheet->getActiveSheet()->setCellValue('G5', 'Total');
+                    $spreadsheet->getActiveSheet()->setCellValue('C6', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('D6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('E6', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('F6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('G6', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('H6', 'Ejecución');
                     $datos2 = self::ejecuciones($proyecto, $frente);
-                    $fila = $filasIni = 3;
+                    $fila = $filasIni = 7;
                     if ( is_array ( $datos2 ) ) {
                         foreach ($datos2 as $value) {
                             if ( ! empty ( $value['Proyecto'] ) ) {
@@ -324,11 +377,16 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                                 $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $fila++;
-                            } else if ( ! empty ( $value["Total Tiempo Anterior"] ) ) {
-                                $spreadsheet->getActiveSheet()->mergeCells("A".$filasIni.":A".($fila - 1));
-                                $spreadsheet->getActiveSheet()->fromArray(["Totales:", '', $value['Total Tiempo Anterior'], $value['Total Ejecutado Anterior'], $value['Total Tiempo Actual'], $value['Total Ejecutado Actual']], null, "A".$fila);
+                            } else if ( ! empty ( $value["Total Proyecto"] ) ) {
+                                $presupuestoProyecto = ( empty ( $value['Presupuesto Proyecto'] ) ) ? '0' : $value['Presupuesto Proyecto'];
+                                $totalTiempoAnterior = ( empty ( $value['Total Tiempo Anterior'] ) ) ? '0' : $value['Total Tiempo Anterior'];
+                                $totalEjecutadoAnterior = ( empty ( $value['Total Ejecutado Anterior'] ) ) ? '0' : $value['Total Ejecutado Anterior'];
+                                $totalTiempoActual = ( empty ( $value['Total Tiempo Actual'] ) ) ? '0' : $value['Total Tiempo Actual'];
+                                $totalEjecutadoActual = ( empty ( $value['Total Ejecutado Actual'] ) ) ? '0' : $value['Total Ejecutado Actual'];
+                                $spreadsheet->getActiveSheet()->fromArray([$value['Nombre Proyecto'], $presupuestoProyecto, $totalTiempoAnterior, $totalEjecutadoAnterior, $totalTiempoActual, $totalEjecutadoActual], null, "A".$fila);
                                 $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, '=C'.$fila.'+E'.$fila);
                                 $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, '=D'.$fila.'+F'.$fila);
+                                $spreadsheet->getActiveSheet()->getStyle('B'.$fila)->getNumberFormat()->setFormatCode('"Presupuesto proyecto: $" #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('C'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -336,10 +394,53 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                                 $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':H'.$fila)->applyFromArray(STYLETABLETITLESUB);
+                                /* Formato condicional para mostrar el color de la celda */
+                                $conditional1 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
+                                $conditional1->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
+                                $conditional1->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
+                                $conditional1->addCondition('AND(H'.$fila.'/B'.$fila.' > 0,H'.$fila.'/B'.$fila.' <= 0.4)');
+                                $conditional1->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
+                                $conditional1->getStyle()->getFill()->getEndColor()->setARGB('89F986');
+
+                                $conditional2 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
+                                $conditional2->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
+                                $conditional2->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
+                                $conditional2->addCondition('AND(H'.$fila.'/B'.$fila.' > 0.4,H'.$fila.'/B'.$fila.' <= 0.6)');
+                                $conditional2->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
+                                $conditional2->getStyle()->getFill()->getEndColor()->setARGB('F9F22C');
+                                
+                                $conditional3 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
+                                $conditional3->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
+                                $conditional3->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
+                                $conditional3->addCondition('AND(H'.$fila.'/B'.$fila.' > 0.6,H'.$fila.'/B'.$fila.' <= 0.8)');
+                                $conditional3->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
+                                $conditional3->getStyle()->getFill()->getEndColor()->setARGB('F7B14B');
+                                
+                                $conditional4 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
+                                $conditional4->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
+                                $conditional4->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
+                                $conditional4->addCondition('(H'.$fila.'/B'.$fila.' > 0.8)');
+                                $conditional4->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
+                                $conditional4->getStyle()->getFill()->getEndColor()->setARGB('F8473B');
+                                
+                                $conditional5 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
+                                $conditional5->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
+                                $conditional5->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
+                                $conditional5->addCondition('ISERROR(H'.$fila.'/B'.$fila.')');
+                                $conditional5->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
+                                $conditional5->getStyle()->getFill()->getEndColor()->setARGB('F8473B');
+
+                                $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getConditionalStyles();
+                                $conditionalStyles[] = $conditional1;
+                                $conditionalStyles[] = $conditional2;
+                                $conditionalStyles[] = $conditional3;
+                                $conditionalStyles[] = $conditional4;
+                                $conditionalStyles[] = $conditional5;
+                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->setConditionalStyles($conditionalStyles);
                                 $fila++;
                                 $filasIni = $fila;
                             }
-                            $spreadsheet->getActiveSheet()->getStyle('A1:H2')->applyFromArray(STYLETABLETITLE);
+                            $spreadsheet->getActiveSheet()->getStyle('A5:H6')->applyFromArray(STYLETABLETITLE);
                             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(60);
                             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(50);
                             $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(10);
@@ -348,8 +449,8 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                             $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(10);
                             $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-                            $spreadsheet->getActiveSheet()->getStyle('A1:H'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                            $spreadsheet->getActiveSheet()->getStyle('A2:H'.($fila-1))->applyFromArray(STYLEBODY);
+                            $spreadsheet->getActiveSheet()->getStyle('A5:H'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                            $spreadsheet->getActiveSheet()->getStyle('A6:H'.($fila-1))->applyFromArray(STYLEBODY);
                         }
                     } else {
                         $spreadsheet->getActiveSheet()->setCellValue('A3', 'No hay periodo configurado aún, no se puede mostrar información de tiempos');
@@ -423,7 +524,8 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                 $registros = mysqli_num_rows($result1);
                 $recorrido = 1;
                 while ($data1 = mysqli_fetch_array($result1)) {
-                    $idPersona = $data1['idPersona'];
+                    $json = '';
+                   /*  $idPersona = $data1['idPersona'];
                     $idPersonaOld = ($recorrido == 1) ? $idPersona : $idPersonaOld;
                     $nombreCompleto = $data1['apellido1'] . " " . $data1['apellido2'] . " " . $data1['nombres'];
                     $proyecto = $data1['codProy'] . " - " . $data1['nombreProy'];
@@ -453,7 +555,7 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                             "Porcentaje" => number_format(($total / $asignacion), 2)
                         );
                     }
-                    $recorrido++;
+                    $recorrido++; */
                 }
             } else {
                 $json = "";
@@ -473,103 +575,120 @@ const SIZES = [45, 13, 45, 22, 30, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 3
                 $data = mysqli_fetch_array($result);
                 $inicioPeriodo = $data['inicioPeriodo'];
                 $finPeriodo = $data['finPeriodo'];
-                $query1 = "SELECT pys_asignados.idPersona, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy
-                    FROM pys_asignados 
-                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND (pys_actsolicitudes.est = '1' AND pys_actsolicitudes.registraTiempo = '1')
-                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1'
+                $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy
+                    FROM pys_asignados
+                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
+                    INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1' 
                     WHERE pys_asignados.est != '0' ";
                 if ($proyecto != null) {
-                    $where = " AND pys_asignados.idProy = '$proyecto' ";
-                    $groupby = 'GROUP BY pys_asignados.idPersona;';
+                    $where = " AND pys_asignados.idProy = '$proyecto' 
+                        GROUP BY pys_actualizacionproy.idProy;";
                 } else if ($frente != null) {
-                    $where = " AND pys_actualizacionproy.idFrente = '$frente' ";
-                    $groupby = 'GROUP BY pys_asignados.idProy, pys_asignados.idPersona;';
+                    $where = " AND pys_actualizacionproy.idFrente = '$frente' 
+                        GROUP BY pys_actualizacionproy.idProy;";
                 }
-                $query1 = $query1 . $where . $groupby;
-                /* echo $query1;
-                echo"<hr>"; */
+                $query1 = $query1 . $where;
                 $result1 = mysqli_query($connection, $query1);
                 $registry1 = mysqli_num_rows($result1);
-                $recorrido = 1;
                 $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = 0;
                 if ($registry1 > 0) {
                     while ($datos1 = mysqli_fetch_array($result1)) {
-                        $idPersona = $datos1['idPersona'];
+                        $idProy = $datos1['idProy'];
                         $nombreProyecto = $datos1['codProy'] . " - " . $datos1['nombreProy'];
-                        $proyecto = ($frente != null) ? $datos1['idProy'] : $proyecto;
-                        $query2 = "SELECT pys_asignados.idAsig, pys_salarios.salario, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres
-                            FROM pys_asignados 
+                        $presupuestoProyecto = 0;
+                        /* Obtener suma de presupuesto de todas las solicitudes asociadas al proyecto */
+                        $query0 = "SELECT pys_actsolicitudes.presupuesto 
+                            FROM pys_actsolicitudes 
+                            INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol AND pys_solicitudes.est = '1' 
+                            INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
+                            WHERE pys_actsolicitudes.est = '1' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_cursosmodulos.idProy = '$idProy';";
+                        $result0 = mysqli_query($connection, $query0);
+                        $registry0 = mysqli_num_rows($result0);
+                        if ($registry0 > 0) {
+                            while ($data0 = mysqli_fetch_array($result0)) {
+                                $presupuestoProyecto += $data0['presupuesto'];
+                            }
+                        }
+                        $query2 = "SELECT pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres
+                            FROM pys_asignados
                             INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
-                            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.registraTiempo = '1'
-                            INNER JOIN pys_salarios ON pys_salarios.mes <= pys_asignados.fechAsig AND pys_salarios.anio >= pys_asignados.fechAsig AND pys_salarios.idPersona = pys_asignados.idPersona
-                            WHERE pys_asignados.idProy = '$proyecto' AND pys_asignados.est != '0' AND pys_asignados.idPersona = '$idPersona' AND pys_asignados.idSol != '';";
+                            WHERE pys_asignados.idProy = '$idProy' AND pys_asignados.est != '0' AND pys_asignados.idSol != ''
+                            GROUP BY pys_asignados.idPersona;";
                         $result2 = mysqli_query($connection, $query2);
-                        $registros2 = mysqli_num_rows($result2);
-                        $totalActual = $totalAnterior = $tiempoActual = $tiempoAnterior = 0;
-                        if ($registros2 > 0) {
-                            while ($datos2 = mysqli_fetch_array($result2)) {
-                                $idAsignado = $datos2['idAsig'];
-                                $salario = $datos2['salario'];
-                                $nombre = $datos2['apellido1'] . " " . $datos2['apellido2'] . " " . $datos2['nombres'];
-                                /* Información de tiempos en el corte actual */
-                                $query3 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                    FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$finPeriodo' AND pys_tiempos.estTiempo = '1';";
+                        $registry2 = mysqli_num_rows($result2);
+                        $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoActual = $consolidadoEjecutadoActual = 0;
+                        if ( $registry2 > 0 ) {
+                            while ($data2 = mysqli_fetch_array($result2)) {
+                                $idPersona = $data2['idPersona'];
+                                $nombreAsignado = $data2['apellido1'] . " " . $data2['apellido2'] . " " . $data2['nombres'];
+                                $query3 = "SELECT pys_asignados.idAsig, pys_salarios.salario
+                                    FROM pys_asignados
+                                    INNER JOIN pys_salarios ON pys_salarios.mes <= pys_asignados.fechAsig AND pys_salarios.anio >= pys_asignados.fechAsig AND pys_salarios.idPersona = pys_asignados.idPersona
+                                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
+                                    WHERE pys_asignados.idPersona = '$idPersona' AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol != '' AND pys_asignados.est != 0 AND pys_actsolicitudes.registraTiempo = '1';";
                                 $result3 = mysqli_query($connection, $query3);
-                                $registros3 = mysqli_num_rows($result3);
-                                if ($registros3 > 0) {
-                                    $data3 = mysqli_fetch_array($result3);
-                                    $tiempoActual += $tiempo = ((($data3['Horas'] * 60) + $data3['Minutos']) / 60);
-                                    $totalActual +=  $tiempo * $salario;
-                                    $consolidadoTiempoActual += $tiempoActual;
-                                    $consolidadoEjecutadoActual += $totalActual;
-                                }
-                                /* Información de tiempos en el corte anterior */
-                                $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                    FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
-                                $result4 = mysqli_query($connection, $query4);
-                                $registros4 = mysqli_num_rows($result4);
-                                if ($registros4 > 0) {
-                                    $data4 = mysqli_fetch_array($result4);
-                                    $tiempoAnterior += $tiempo = ((($data4['Horas'] * 60) + $data4['Minutos']) / 60);
-                                    $totalAnterior +=  $tiempo * $salario;
-                                    $consolidadoTiempoAnterior += $tiempo;
-                                    $consolidadoEjecutadoAnterior += $totalAnterior;
+                                $registry3 = mysqli_num_rows($result3);
+                                if ($registry3 > 0) {
+                                    $tiempoActual = $totalActual = $tiempoAnterior = $totalAnterior = 0;
+                                    while ($data3 = mysqli_fetch_array($result3)) {
+                                        $idAsignado = $data3['idAsig'];
+                                        $salario = $data3['salario'];
+                                        /* Información de tiempos en el corte actual */
+                                        $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                            FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$finPeriodo' AND pys_tiempos.estTiempo = '1';";
+                                        $result4 = mysqli_query($connection, $query4);
+                                        $registros4 = mysqli_num_rows($result4);
+                                        if ($registros4 > 0) {
+                                            $data4 = mysqli_fetch_array($result4);
+                                            $tiempo = ((($data4['Horas'] * 60) + $data4['Minutos']) / 60);
+                                            $costo = $tiempo * $salario;
+                                            $tiempoActual += $tiempo;
+                                            $totalActual +=  $tiempo * $salario;
+                                            $consolidadoTiempoActual += $tiempoActual;
+                                            $consolidadoEjecutadoActual += $costo;
+                                        }
+                                        /* Información de tiempos en el corte anterior */
+                                        $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                            FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
+                                        $result5 = mysqli_query($connection, $query5);
+                                        $registros5 = mysqli_num_rows($result5);
+                                        if ($registros5 > 0) {
+                                            $data5 = mysqli_fetch_array($result5);
+                                            $tiempo = ((($data5['Horas'] * 60) + $data5['Minutos']) / 60);
+                                            $costo = $tiempo * $salario;
+                                            $tiempoAnterior += $tiempo;
+                                            $totalAnterior +=  $tiempo * $salario;
+                                            $consolidadoTiempoAnterior += $tiempo;
+                                            $consolidadoEjecutadoAnterior += $costo;
+                                        }
+                                    }
+                                    if ($totalAnterior + $totalActual > 0) {
+                                        $json[] = array (
+                                            'Proyecto' => $nombreProyecto,
+                                            'Asignado' => $nombreAsignado,
+                                            'Tiempo Corte Anterior' => $tiempoAnterior,
+                                            'Ejecutado Corte Anterior' => $totalAnterior,
+                                            'Tiempo Corte Actual' => $tiempoActual,
+                                            'Ejecutado Corte Actual' => $totalActual
+                                        );
+                                    }
+                                    $tiempoActual = $totalActual = $tiempoAnterior = $totalAnterior = 0;
                                 }
                             }
-                            $json[] = array (
-                                'Proyecto' => $nombreProyecto,
-                                'Asignado' => $nombre,
-                                'Tiempo Corte Anterior' => $tiempoAnterior,
-                                'Ejecutado Corte Anterior' => $totalAnterior,
-                                'Tiempo Corte Actual' => $tiempoActual,
-                                'Ejecutado Corte Actual' => $totalActual
-                            );
+                            if ($consolidadoEjecutadoAnterior + $consolidadoEjecutadoActual > 0) {
+                                $json[] = array(
+                                    "Total Proyecto" => $nombreProyecto,
+                                    "Presupuesto Proyecto" => $presupuestoProyecto,
+                                    "Nombre Proyecto" => $nombreProyecto,
+                                    "Total Tiempo Anterior" => $consolidadoTiempoAnterior,
+                                    "Total Ejecutado Anterior" => $consolidadoEjecutadoAnterior,
+                                    "Total Tiempo Actual" => $consolidadoTiempoActual,
+                                    "Total Ejecutado Actual" => $consolidadoEjecutadoActual,
+                                );
+                            }
+                            $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = 0;
                         }
-                        if ($recorrido == $registry1) {
-                            $json[] = array(
-                                "Total Tiempo Anterior" => $consolidadoTiempoAnterior,
-                                "Total Ejecutado Anterior" => $consolidadoEjecutadoAnterior,
-                                "Total Tiempo Actual" => $consolidadoTiempoActual,
-                                "Total Ejecutado Actual" => $consolidadoEjecutadoActual,
-                            );
-                        }
-                        /* echo "<h3>Registry: $registry1 Recorrido: $recorrido</h3>"; */
-                        $recorrido++;
                     }
-                    /* $html = "<table border='1'>";
-                    foreach($json as $row) {
-                        $html .= "<tr>";
-                        foreach ($row as $cell) {
-                            $html .= "<td>" . $cell . "</td>";
-                        }
-                        $html .= "</tr>";
-                    }
-                    $html .= "</table>";
-
-                    echo $html; */
-                    /* echo "<pre>";
-                    var_dump($json);
-                    echo "</pre>"; */
                 }
             } else {
                 $json = '';
