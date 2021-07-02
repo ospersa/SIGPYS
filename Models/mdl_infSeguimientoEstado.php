@@ -167,7 +167,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                 $spreadsheet->getActiveSheet()->getStyle('A1:E1')->applyFromArray(STYLETABLETI);
                 /** Dimensión columnas */
                 foreach ($titulos as $key => $titulo) {
-                    $spreadsheet->getActiveSheet()->getColumnDimension(ALPHABET[$key])->setWidth(SIZES[$key]);                    
+                    $spreadsheet->getActiveSheet()->getColumnDimension(ALPHABET[$key])->setWidth(SIZES[$key]);
                 }
                 $sheet = $spreadsheet->getActiveSheet();
                 $sheet->setCellValue('A1', 'Informe de seguimiento de estados y metadata');
@@ -284,20 +284,21 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                                 }
                             }
                             if ($tiempos != null) {
-                                $data = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $personasTiempo, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
+                                $dataRow = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $personasTiempo, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
                             } else {
-                                $data = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
+                                $dataRow = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
                             }
-                            $spreadsheet->getActiveSheet()->fromArray($data, null, 'A'.$fila);
+                            $spreadsheet->getActiveSheet()->fromArray($dataRow, null, 'A'.$fila);
                             $spreadsheet->getActiveSheet()->getStyle('F'.$fila.':G'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                            $fila +=1;
+                            $fila++;
                         }
                     }
                 }
+                
                 $spreadsheet->getActiveSheet()->getStyle('A6:'.ALPHABET[count($titulos) - 1].($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                 $spreadsheet->getActiveSheet()->getStyle('A6:'.ALPHABET[count($titulos) - 1].($fila-1))->applyFromArray(STYLEBODY);
                 if ($tiempos != null) {
-                    /* Creación de hoja con información de tiempos registrados en el mes */
+                    // Creación de hoja con información de tiempos registrados en el mes
                     $myWorkSheet2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Total tiempos');
                     $spreadsheet->addSheet($myWorkSheet2, 1);
                     $spreadsheet->setActiveSheetIndex(1);
@@ -307,10 +308,10 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                     $fila = $filasIni = 2;
                     if ( is_array ( $datos ) ) {
                         foreach ($datos as $value) {
-                            if (!empty($value['Nombre'])) {
+                            if ( ! empty ( $value['Nombre'] ) ) {
                                 $spreadsheet->getActiveSheet()->fromArray([$value['Nombre'], $value['Proyecto'], $value['Tiempo'], $value['Porcentaje']], null, "A".$fila);
                                 $fila++;
-                            } else if (!empty($value["Total"])) {
+                            } else if ( ! empty ( $value["Total"] ) ) {
                                 $spreadsheet->getActiveSheet()->mergeCells("A".$filasIni.":A".($fila - 1));
                                 $spreadsheet->getActiveSheet()->fromArray(["Total tiempo ejecutado:", '', $value['Total'], $value['Porcentaje']], null, "A".$fila);
                                 $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':D'.$fila)->applyFromArray(STYLETABLETITLESUB);
@@ -331,7 +332,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                     $spreadsheet->getActiveSheet()->getStyle('D2:D'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
                     $spreadsheet->getActiveSheet()->getStyle('A1:D'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                     $spreadsheet->getActiveSheet()->getStyle('A2:D'.($fila-1))->applyFromArray(STYLEBODY);
-                    /* Creación de hoja con información de ejecuciones de proyectos */
+                    // Creación de hoja con información de ejecuciones de proyectos 
                     $myWorkSheet3 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Ejecuciones Proyecto');
                     $spreadsheet->addSheet($myWorkSheet3, 2);
                     $spreadsheet->setActiveSheetIndex(2);
@@ -368,8 +369,8 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                                 $tiempoCorteActual = ( empty ( $value['Tiempo Corte Actual'] ) ) ? '0' : $value['Tiempo Corte Actual'];
                                 $ejecutadoCorteActual = ( empty ( $value['Ejecutado Corte Actual'] ) ) ? '0' : $value['Ejecutado Corte Actual'];
                                 $spreadsheet->getActiveSheet()->fromArray([$value['Proyecto'], $value['Asignado'], $tiempoCorteAnterior, $ejecutadoCorteAnterior, $tiempoCorteActual, $ejecutadoCorteActual], null, "A".$fila);
-                                $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, '=C'.$fila.'+E'.$fila);
-                                $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, '=D'.$fila.'+F'.$fila);
+                                $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, ($tiempoCorteAnterior + $tiempoCorteActual));
+                                $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, ($ejecutadoCorteAnterior + $ejecutadoCorteActual));
                                 $spreadsheet->getActiveSheet()->getStyle('C'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -384,8 +385,8 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                                 $totalTiempoActual = ( empty ( $value['Total Tiempo Actual'] ) ) ? '0' : $value['Total Tiempo Actual'];
                                 $totalEjecutadoActual = ( empty ( $value['Total Ejecutado Actual'] ) ) ? '0' : $value['Total Ejecutado Actual'];
                                 $spreadsheet->getActiveSheet()->fromArray([$value['Nombre Proyecto'], $presupuestoProyecto, $totalTiempoAnterior, $totalEjecutadoAnterior, $totalTiempoActual, $totalEjecutadoActual], null, "A".$fila);
-                                $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, '=C'.$fila.'+E'.$fila);
-                                $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, '=D'.$fila.'+F'.$fila);
+                                $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, ($totalTiempoAnterior + $totalTiempoActual));
+                                $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, ($totalEjecutadoAnterior + $totalEjecutadoActual));
                                 $spreadsheet->getActiveSheet()->getStyle('B'.$fila)->getNumberFormat()->setFormatCode('"Presupuesto proyecto: $" #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('C'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -394,7 +395,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                                 $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':H'.$fila)->applyFromArray(STYLETABLETITLESUB);
-                                /* Formato condicional para mostrar el color de la celda */
+                                // Formato condicional para mostrar el color de la celda 
                                 $conditional1 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional1->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional1->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
@@ -503,8 +504,6 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
             $registry0 = mysqli_num_rows($result0);
             if ($registry0 > 0) {
                 while ($data0 = mysqli_fetch_array($result0)) {
-                    $idPeriodo = $data0['idPeriodo'];
-                    $totalDias = $data0['diasSegmento1'] + $data0['diasSegmento2'];
                     $inicioPeriodo = $data0['inicioPeriodo'];
                     $finPeriodo = $data0['finPeriodo'];
                     $asignaciones[$data0['persona_IdPersona']] =  ((($data0['diasSegmento1'] * 8) * $data0['porcentajeDedicacion1']) / 100) + ((($data0['diasSegmento2'] * 8) * $data0['porcentajeDedicacion2']) / 100);
@@ -523,9 +522,9 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                 $sumaHoras = $sumaMinutos = $total = 0;
                 $registros = mysqli_num_rows($result1);
                 $recorrido = 1;
+                $json = array();
                 while ($data1 = mysqli_fetch_array($result1)) {
-                    $json = '';
-                   /*  $idPersona = $data1['idPersona'];
+                    $idPersona = $data1['idPersona'];
                     $idPersonaOld = ($recorrido == 1) ? $idPersona : $idPersonaOld;
                     $nombreCompleto = $data1['apellido1'] . " " . $data1['apellido2'] . " " . $data1['nombres'];
                     $proyecto = $data1['codProy'] . " - " . $data1['nombreProy'];
@@ -555,7 +554,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                             "Porcentaje" => number_format(($total / $asignacion), 2)
                         );
                     }
-                    $recorrido++; */
+                    $recorrido++;
                 }
             } else {
                 $json = "";
