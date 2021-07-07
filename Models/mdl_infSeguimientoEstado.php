@@ -126,7 +126,7 @@ const STYLEBODY = ['font' => [
 ];
 
 const ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 35, 35, 35, 35, 35, 35];
+const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 15, 15, 35, 35, 35, 35, 35, 35, 35];
 
     Class InformeSeguimientoEstados {
       
@@ -158,9 +158,9 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                 $spreadsheet->getActiveSheet()->setShowGridlines(false);
                 /** Arreglo títulos */
                 if ( $tiempos == null ) {
-                    $titulos = ['Código/Nombre del proyecto', 'Código solicitud', 'Descripción de la solicitud', 'Fecha estimada de entrega', 'Estado', 'Presupuesto P/S', 'Ejecutado P/S', 'Responsable P&S', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido'];
+                    $titulos = ['Código/Nombre del proyecto', 'Código Producto', 'Descripción / Nombre Inicial', 'Fecha estimada de entrega', 'Estado', 'Presupuesto P/S', 'Ejecutado P/S', 'Responsable P&S', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido', 'Área de Conocimiento'];
                 } else {
-                    $titulos = ['Código/Nombre del proyecto', 'Código solicitud', 'Descripción de la solicitud', 'Fecha estimada de entrega', 'Estado', 'Presupuesto P/S', 'Ejecutado P/S', 'Responsable P&S', 'Horas por persona', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido'];
+                    $titulos = ['Código/Nombre del proyecto', 'Código Producto', 'Descripción / Nombre Inicial', 'Fecha estimada de entrega', 'Estado', 'Presupuesto P/S', 'Ejecutado P/S', 'Responsable P&S', 'Horas por persona', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido', 'Área de Conocimiento'];
                 }
                 $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
                 /** Aplicación de estilos */
@@ -180,7 +180,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                     $nombreProy = $datos['nombreProy'];
                     $spreadsheet->getActiveSheet()->setCellValue('B'.$fila, $codProy);
                     $idProy = $datos['idProy'];
-                    $consulta1 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSer, pys_estadosol.nombreEstSol, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev, pys_actsolicitudes.presupuesto, pys_solicitudes.fechSol, pys_solicitudes.idSolIni, pys_actproductos.nombreProd, pys_actproductos.urlVimeo, pys_actproductos.descripcionProd, pys_actproductos.palabrasClave, pys_actproductos.fechEntregaProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, pys_tiposrecursos.nombreTRec, pys_plataformas.nombrePlt, pys_tiposproductos.descripcionTProd, formatos.formatoNombre, pys_claseproductos.nombreClProd, tiposcontenido.tipoContenidoNombre, pys_tiposproductos.descripcionTProd, idiomas.idiomaNombre
+                    $consulta1 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSer, pys_estadosol.nombreEstSol, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev, pys_actsolicitudes.presupuesto, pys_solicitudes.fechSol, pys_solicitudes.idSolIni, pys_actproductos.nombreProd, pys_actproductos.urlVimeo, pys_actproductos.descripcionProd, pys_actproductos.palabrasClave, pys_actproductos.fechEntregaProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, pys_tiposrecursos.nombreTRec, pys_plataformas.nombrePlt, pys_tiposproductos.descripcionTProd, formatos.formatoNombre, pys_claseproductos.nombreClProd, tiposcontenido.tipoContenidoNombre, pys_tiposproductos.descripcionTProd, idiomas.idiomaNombre, pys_areaconocimiento.areaNombre
                         FROM pys_actualizacionproy
                         INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
                         INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
@@ -196,6 +196,8 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                         LEFT JOIN formatos ON formatos.idFormatos = pys_actproductos.formato
                         LEFT JOIN pys_claseproductos ON pys_claseproductos.idClProd = pys_actproductos.idClProd AND pys_claseproductos.est = '1'
                         LEFT JOIN tiposcontenido ON tiposcontenido.idtiposContenido = pys_actproductos.tipoContenido
+                        LEFT JOIN areaconocimientohasproyectos ON areaconocimientohasproyectos.pys_proyectos_idProy = pys_actualizacionproy.idProy
+                        LEFT JOIN pys_areaconocimiento ON pys_areaconocimiento.idAreaConocimiento = areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento
                         WHERE pys_actsolicitudes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_actualizacionproy.est = '1' AND pys_actsolicitudes.idSolicitante = '' ";
                     if ($estado != null) {
                         $consulta1 .= " AND pys_actsolicitudes.idEstSol != 'ESS007'";
@@ -203,7 +205,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                         $consulta1 .= " AND (pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007')";
                     }
                     $consulta1 .= " AND pys_actualizacionproy.idProy = '$idProy' 
-                        ORDER BY pys_actsolicitudes.idSol;";
+                        ORDER BY pys_actsolicitudes.registraTiempo DESC, pys_actsolicitudes.idSol ASC;";
                     $resultado1 = mysqli_query($connection, $consulta1);
                     $registros1 = mysqli_num_rows($resultado1);
                     if ($registros1 > 0) {
@@ -238,6 +240,7 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                             $autorExterno = $datos1['autorExterno'];
                             $tipoContenido = $datos1['tipoContenidoNombre'];
                             $formatoNombre = $datos1['formatoNombre'];
+                            $areaConocimiento = $datos1['areaNombre'];
                             $consulta2 = "SELECT pys_asignados.idAsig, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_asignados.idPersona, pys_asignados.maxhora, pys_asignados.maxmin
                                 FROM pys_asignados
                                 INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona
@@ -284,9 +287,9 @@ const SIZES = [45, 13, 45, 22, 30, 15, 15, 45, 45, 40, 40, 30, 40, 35, 35, 35, 1
                                 }
                             }
                             if ($tiempos != null) {
-                                $dataRow = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $personasTiempo, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
+                                $dataRow = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $personasTiempo, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido, $areaConocimiento];
                             } else {
-                                $dataRow = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido];
+                                $dataRow = [$codProy.' - '.$nombreProy, 'P'.$idSol, $ObservacionAct, $fechPrev, $nombreEstSol, $presupuesto, $ejecutadoAcumulado, $personasAsig, $nombreTProd, $nombrePlt, $nombreClProd, $descripcionTProd,$nombreProd, $observacionesProd, $urlVimeo, $urlservidor, $duracionmin, $duracionseg, $sinopsis, $autorExterno, $idiomaNombre, $formatoNombre, $tipoContenido, $areaConocimiento];
                             }
                             $spreadsheet->getActiveSheet()->fromArray($dataRow, null, 'A'.$fila);
                             $spreadsheet->getActiveSheet()->getStyle('F'.$fila.':G'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
