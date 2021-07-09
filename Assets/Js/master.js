@@ -520,22 +520,42 @@ $(document).ready(function () {
     $('#sltFrenteInf').on('change',function(){
         var selectValor = $(this).val();
         if(selectValor !=  ""){
-            $('#proyecInf').addClass("hide")
+            $('#txtBusquedaProy').prop('disabled', true);
+            $('#sltProy').prop('disabled', true);
+            $('#sltGestor').prop('disabled', true);
             inicializarCampos();
         }else if(selectValor == ""){
-            $('#proyecInf').removeClass("hide")
+            $('#txtBusquedaProy').prop('disabled', false);
+            $('#sltProy').prop('disabled', false);
+            $('#sltGestor').prop('disabled', false);
             inicializarCampos();
         }
-        
+    });
+    
+    $('#sltGestor').on('change',function(){
+        var selectValor = $(this).val();
+        if(selectValor !=  ""){
+            $('#txtBusquedaProy').prop('disabled', true);
+            $('#sltProy').prop('disabled', true);
+            $('#sltFrenteInf').prop('disabled', true);
+            inicializarCampos();
+        }else if(selectValor == ""){
+            $('#txtBusquedaProy').prop('disabled', false);
+            $('#sltProy').prop('disabled', false);
+            $('#sltFrenteInf').prop('disabled', false);
+            inicializarCampos();
+        }
     });
 
     $('#txtBusquedaProy').keyup('change',function(){
         var selectValor = $(this).val();
         if (selectValor !=  "") {
-            $('#frenteInf').css('opacity', '0')
+            $('#sltFrenteInf').prop('disabled', true)
+            $('#sltGestor').prop('disabled', true)
             inicializarCampos();
         } else if (selectValor == "") {
-            $('#frenteInf').css('opacity', '1')
+            $('#sltFrenteInf').prop('disabled', false)
+            $('#sltGestor').prop('disabled', false)
             inicializarCampos();
             $('#sltProy').removeAttr('required')
         }
