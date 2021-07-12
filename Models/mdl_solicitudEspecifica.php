@@ -525,13 +525,13 @@
             $completo = 0;
             if ( $resultado ) {
                 $datos = mysqli_fetch_array($resultado);
-                $idPlat = $datos['idPlat'];
-                $idClProd = $datos['idClProd'];
-                $idTProd = $datos['idTProd'];
+                $idPlat     = ( isset ( $datos['idPlat'] ) ) ? $datos['idPlat'] : null;
+                $idClProd   = ( isset ( $datos['idClProd'] ) ) ? $datos['idClProd'] : null;
+                /* $idTProd = $datos['idTProd'];
                 $observacion = $datos['observacion'];
                 $estudiantesImpac = $datos['estudiantesImpac'];
                 $docentesImpac = $datos['docentesImpac'];
-                $urlResultado  = $datos['urlResultado'];
+                $urlResultado  = $datos['urlResultado']; */
                 if (($idPlat && $idClProd) != null){
                     $completo = 1;
                 }
@@ -549,26 +549,26 @@
             $resultado = mysqli_query($connection, $consulta);
             if ( $resultado ) {
                 $datos = mysqli_fetch_array($resultado);
-                $nomProduc      = $datos['nombreProd'];
-                $fechaEntre     = $datos['fechEntregaProd'];
-                $RED            = $datos['descripcionProd'];
-                $plat           = $datos['idPlat']; 
-                $clase          = $datos['idClProd']; 
-                $tipo           = $datos ['idTProd'];
-                $url            = $datos['urlservidor'];  
-                $idioma         = $datos['idioma'];
-                $formato        = $datos['formato'];
-                $tipoContenido  = $datos['tipoContenido'];
+                $nomProduc      = ( isset ( $datos['nombreProd'] ) ) ? $datos['nombreProd'] : null;
+                $fechaEntre     = ( isset ( $datos['fechEntregaProd'] ) ) ? $datos['fechEntregaProd'] : null;
+                $RED            = ( isset ( $datos['descripcionProd'] ) ) ? $datos['descripcionProd'] : null;
+                $plat           = ( isset ( $datos['idPlat'] ) ) ? $datos['idPlat'] : null; 
+                $clase          = ( isset ( $datos['idClProd'] ) ) ? $datos['idClProd'] : null; 
+                $tipo           = ( isset ( $datos ['idTProd'] ) ) ? $datos ['idTProd'] : null;
+                $url            = ( isset ( $datos['urlservidor'] ) ) ? $datos['urlservidor'] : null;  
+                $idioma         = ( isset ( $datos['idioma'] ) ) ? $datos['idioma'] : null;
+                $formato        = ( isset ( $datos['formato'] ) ) ? $datos['formato'] : null;
+                $tipoContenido  = ( isset ( $datos['tipoContenido'] ) ) ? $datos['tipoContenido'] : null;
                 if ($equipo == "EQU003" || $equipo == "EQU002" ) {
                     if ( ( $plat && $clase && $tipo && $nomProduc && $RED  && $url  && $fechaEntre && $idioma && $formato && $tipoContenido ) != null ) {
                         $completo = 1;
                     }        
                 } else if ($equipo == "EQU001" ) {
-                    $urlVimeo = $datos['urlVimeo']; 
-                    $minDura = $datos['duracionmin'];  
-                    $segDura = $datos['duracionseg'];  
-                    $sinopsis = $datos['sinopsis'];
-                    $autores = $datos['autorExterno'];
+                    $urlVimeo   = ( isset ( $datos['urlVimeo'] ) ) ? $datos['urlVimeo'] : null;
+                    $minDura    = ( isset ( $datos['duracionmin'] ) ) ? $datos['duracionmin'] : null;
+                    $segDura    = ( isset ( $datos['duracionseg'] ) ) ? $datos['duracionseg'] : null;
+                    $sinopsis   = ( isset ( $datos['sinopsis'] ) ) ? $datos['sinopsis'] : null;
+                    $autores    = ( isset ( $datos['autorExterno'] ) ) ? $datos['autorExterno'] : null;
                     if ( ( $plat && $clase && $tipo && $nomProduc && $RED && $url && $urlVimeo && $sinopsis && $autores && $fechaEntre && $idioma && $formato && $tipoContenido ) != null && is_numeric($segDura) && is_numeric($minDura) ) {
                         $completo = 1;
                     }

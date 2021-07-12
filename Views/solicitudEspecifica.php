@@ -60,7 +60,7 @@ if ($idInicial != "") {
                                 <p>
                                     <label>
                                         <input class="filled-in" name="txtRegistrarT" id="txtRegistrarT" type="checkbox"/>
-                                        <span>Habilitar registrar tiempos (No para productos MOOCs)</span>
+                                        <span>Habilitar registro de tiempos en este producto/servicio.</span>
                                     </label>
                                 </p>
                                 </div>
