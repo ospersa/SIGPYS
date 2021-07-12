@@ -357,7 +357,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     $spreadsheet->getActiveSheet()->setCellValue('N6', 'Ejecución');
                     $spreadsheet->getActiveSheet()->setCellValue('O6', 'Presupuesto');
                     $spreadsheet->getActiveSheet()->setCellValue('P6', 'Ejecución');
-                    $datos2 = self::ejecuciones($proyecto, $frente);
+                    $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
                     $fila = $filasIni = 7;
                     if ( is_array ( $datos2 ) ) {
                         foreach ($datos2 as $value) {
@@ -631,7 +631,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             return $json;
         }
 
-        public static function ejecuciones($proyecto, $frente) {
+        public static function ejecuciones($proyecto, $frente, $gestor) {
             require('../Core/connection.php');
             $today = date('Y-m-d');
             $query = "SELECT inicioPeriodo, finPeriodo
@@ -644,7 +644,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 $finPeriodo = $data['finPeriodo'];
                 $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy
                     FROM pys_asignados
-                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
+                    
                     INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1' 
                     WHERE pys_asignados.est != '0' ";
                 if ($proyecto != null) {
@@ -652,6 +652,9 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                         GROUP BY pys_actualizacionproy.idProy;";
                 } else if ($frente != null) {
                     $where = " AND pys_actualizacionproy.idFrente = '$frente' 
+                        GROUP BY pys_actualizacionproy.idProy;";
+                } else if ($gestor != null) {
+                    $where = " AND pys_asignados.idPersona = '$gestor' AND pys_asignados.idSol = ''
                         GROUP BY pys_actualizacionproy.idProy;";
                 }
                 $query1 = $query1 . $where;
