@@ -390,14 +390,14 @@
 
         public static function infoEmailPro($idSol, $idEqu){
             require('../Core/connection.php');
-            $consulta1 = "SELECT nombreProd, urlVimeo FROM pys_productos WHERE pys_productos.idSol = '$idSol' AND pys_productos.est = 1 ";
+            $consulta1 = "SELECT nombreProd, urlVimeo FROM pys_productos WHERE pys_productos.idSol = '$idSol' AND pys_productos.est = '1';";
             $resultado1 = mysqli_query($connection, $consulta1);
             $datos1 = mysqli_fetch_array($resultado1);
-            $nomProduc  = $datos1['nombreProd'];
-            $string ='<strong>Nombre del producto: </strong>'.$nomProduc.'<br>
-            <strong>Código Producto:</strong> P'.$idSol.'<br>';
-            if ($idEqu == 'EQU001'){
-                $urlVimeo =$datos1['urlVimeo'];
+            $nomProduc  = isset ( $datos1['nombreProd'] ) ? $datos1['nombreProd'] : null;
+            $string = ' <strong>Nombre del producto: </strong>'.$nomProduc.'<br>
+                        <strong>Código Producto:</strong> P'.$idSol.'<br>';
+            if ( $idEqu == 'EQU001' ) {
+                $urlVimeo = isset ( $datos1['urlVimeo'] ) ? $datos1['urlVimeo'] : null;
                 $string .= 'URL versión Final (Vimeo): '.$urlVimeo.'<br />';
             }
             return $string;
