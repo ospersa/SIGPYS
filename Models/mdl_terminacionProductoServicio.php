@@ -84,6 +84,7 @@
                     $nombreEqu = $data['nombreEqu'];
                     $nombreSer = $data['nombreSer'];
                     $ObservacionAct = $data['ObservacionAct'];
+                    $nombreProducto     = ( isset ( $data['nombreProd'] ) ) ? $data['nombreProd'] : null;
                     $fechPrev = $data['fechPrev'];
                     $consulta2 = "SELECT est FROM pys_asignados WHERE idSol = '$idSol' AND est != '0' ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
@@ -105,18 +106,18 @@
                         WHERE idSol = '$idSol' AND pys_actproductos.est = '1' AND pys_productos.est = '1';";
                     $resultadoProd = mysqli_query($connection, $consultaProd);
                     $dataProd = mysqli_fetch_array($resultadoProd);
-                    $metadataRealizacion = ['nombreProd', 'fechEntregaProd', 'descripcionProd', 'plat_producto', 'nombreClProd', 'nombreTProd', 'urlservidor', 'urlVimeo', 'duracionmin', 'duracionseg', 'sinopsis', 'autorExterno', 'idiomaNombre', 'formatoNombre', 'tipoContenidoNombre', 'palabrasClave'];
+                    $metadataRealizacion = ['nombreProd', 'fechEntregaProd', 'descripcionProd', 'nombreClProd', 'nombreTProd', 'urlservidor', 'urlVimeo', 'duracionmin', 'duracionseg', 'sinopsis', 'autorExterno', 'idiomaNombre', 'formatoNombre', 'tipoContenidoNombre', 'palabrasClave'];
                     $metadataDiseno = ['nombreProd', 'fechEntregaProd', 'descripcionProd', 'plat_producto', 'nombreClProd', 'nombreTProd', 'idiomaNombre', 'formatoNombre', 'tipoContenidoNombre', 'palabrasClave', 'urlservidor'];
                     $metapendiente = 0;
-                    if ($nombreEqu == 'Realización') {
-                        foreach ($metadataRealizacion as $meta) {
-                            if ( is_null ($dataProd[$meta]) || empty ($dataProd[$meta]) ) {
+                    if ( $nombreEqu == 'Realización' ) {
+                        foreach ( $metadataRealizacion as $meta ) {
+                            if ( ! isset ( $dataProd[$meta] ) ) {
                                 $metapendiente ++;
                             }
                         }
-                    } else if ($nombreEqu == 'Diseño Gráfico') {
-                        foreach ($metadataDiseno as $meta) {
-                            if ( is_null ($dataProd[$meta]) || empty ($dataProd[$meta]) ) {
+                    } else if ( $nombreEqu == 'Diseño Gráfico' ) {
+                        foreach ( $metadataDiseno as $meta ) {
+                            if ( ! isset ($dataProd[$meta] ) ) {
                                 $metapendiente ++;
                             }
                         }
@@ -145,7 +146,7 @@
                                         <td>'.$codProy.' - '.$nombreProy.'</td>
                                         <td>P'.$idSol.'</td>
                                         <td><p class="truncate">'.$ObservacionAct.'</p></td>
-                                        <td>'.$dataProd['nombreProd'].'</td>
+                                        <td>'.$nombreProducto.'</td>
                                         <td>'.$estadoSol.'</td>
                                         <td>'.$fechPrev.'</td>
                                         <td>'.$fechSol.'</td>
