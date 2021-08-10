@@ -461,7 +461,7 @@
             $idSer          = $datos ['idSer'];
             $idPersona      = $datos ['idPersona'];
             $idSolicitante  = $datos ['idSolicitante']; 
-            $fechPrev       = "'". $datos ['fechPrev']."'";
+            $fechPrev       = ($datos ['fechPrev'] == '0000-00-00') ? 'NULL' : "'". $datos ['fechPrev']."'";
             $fechAct        = $datos ['fechAct'];
             $ObservacionAct = $datos ['ObservacionAct'];
             $presupuesto    = $datos ['presupuesto'];
