@@ -1708,6 +1708,42 @@ function actSolEsp(){
         }
     });
 }
+function cancelarSolicitudEspecifica() {
+    $("#actFormSolEs").submit(function(e){
+        e.preventDefault();
+    });
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_solicitudEspecifica.php',
+        data: {
+            idSolicitud: $('#cod').val(),
+            accion: 'cancelar'
+        },
+        success: function (data) {
+            alert(data);
+            buscarEst('../Controllers/ctrl_solicitudEspecifica.php', $("#valbus").val());
+            $("#modalSolicitudEspecifica").modal('close')
+        }
+    });
+}
+function eliminarSolicitudEspecifica() {
+    $("#actFormSolEs").submit(function(e){
+        e.preventDefault();
+    });
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_solicitudEspecifica.php',
+        data: {
+            idSolicitud: $('#cod').val(),
+            accion: 'eliminar'
+        },
+        success: function (data) {
+            alert(data);
+            buscarEst('../Controllers/ctrl_solicitudEspecifica.php', $("#valbus").val());
+            $("#modalSolicitudEspecifica").modal('close')
+        }
+    });
+}
 function buscarEst(url,cod) {
     $.ajax({
         type: "POST",

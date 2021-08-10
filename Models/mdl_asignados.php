@@ -8,7 +8,7 @@
                 FROM pys_asignados
                 INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
                 INNER JOIN pys_fases ON pys_fases.idFase = pys_asignados.idFase
-                WHERE (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_personas.est	= '1' AND pys_fases.est	= '1' AND pys_asignados.idSol = '$idSol';";
+                WHERE (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_personas.est	= '1' AND pys_fases.est	= '1' AND pys_asignados.idAsig = '$idSol';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             return $datos;

@@ -37,7 +37,7 @@
             $resultado = "";
             $string = "";
             // Valida los proyectos en los cuales es asignado como gestor o asesor RED.
-            $consulta = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol
+            $consulta = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol, pys_actproductos.nombreProd
                 FROM pys_actualizacionproy
                 INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
                 INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
@@ -48,6 +48,8 @@
                 INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona 
                 INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
                 INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
+                LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol AND pys_productos.est = '1'
+                LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
                 WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est = '1' AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est = '1' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS007' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_equipos.est = '1' AND pys_servicios.est = '1' ";
             if ($cod == 1 ) {
                 $consulta .= "AND pys_actualizacionproy.idProy = '$busProy' ";
@@ -84,7 +86,7 @@
                     $nombreEqu = $data['nombreEqu'];
                     $nombreSer = $data['nombreSer'];
                     $ObservacionAct = $data['ObservacionAct'];
-                    $nombreProducto     = ( isset ( $data['nombreProd'] ) ) ? $data['nombreProd'] : null;
+                    $nombreProducto = ( isset ( $data['nombreProd'] ) ) ? $data['nombreProd'] : null;
                     $fechPrev = $data['fechPrev'];
                     $consulta2 = "SELECT est FROM pys_asignados WHERE idSol = '$idSol' AND est != '0' ;";
                     $resultado2 = mysqli_query($connection, $consulta2);
