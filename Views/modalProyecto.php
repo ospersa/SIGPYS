@@ -53,7 +53,7 @@
                 </div>
                 <div class="input-field col l6 m6 s12">
                     <textarea name="txtNomCorProy" id="txtNomCorProy" class="materialize-textarea"><?php echo $nombreCorto;?></textarea>
-                    <label for="txtNomCorProy" class="active">Diposnible SAP $</label>
+                    <label for="txtNomCorProy" class="active">Ejecución Oficial (ORACLE)</label>
                 </div>
             </div>
             <div class="row">

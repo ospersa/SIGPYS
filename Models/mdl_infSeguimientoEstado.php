@@ -37,6 +37,25 @@ const STYLERED = [
         ]
     ]
 ];
+const STYLESALMON = [
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => 'ff7f50',
+        ]
+    ]
+];
+const STYLEBLUE = [
+    'font' => [
+        'color' => ['argb' => 'FFFFFF']
+    ],
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => '0000cd',
+        ]
+    ]
+];
 
 const STYLETABLETITLE = [
     'font' => [
@@ -328,35 +347,40 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     $spreadsheet->getActiveSheet()->getStyle('A4')->applyFromArray(STYLERED);
                     $spreadsheet->getActiveSheet()->setShowGridlines(false);
                     $spreadsheet->getActiveSheet()->mergeCells("C5:D5");
-                    $spreadsheet->getActiveSheet()->mergeCells("E5:F5");
-                    $spreadsheet->getActiveSheet()->mergeCells("G5:H5");
-                    $spreadsheet->getActiveSheet()->mergeCells("I5:J5");
-                    $spreadsheet->getActiveSheet()->mergeCells("K5:L5");
-                    $spreadsheet->getActiveSheet()->mergeCells("M5:N5");
-                    $spreadsheet->getActiveSheet()->mergeCells("O5:P5");
+                    $spreadsheet->getActiveSheet()->mergeCells("F5:G5");
+                    $spreadsheet->getActiveSheet()->mergeCells("H5:M5");
+                    $spreadsheet->getActiveSheet()->mergeCells("N5:O5");
+                    $spreadsheet->getActiveSheet()->mergeCells("P5:Q5");
+                    $spreadsheet->getActiveSheet()->mergeCells("R5:S5");
+                    $spreadsheet->getActiveSheet()->mergeCells("T5:U5");
+                    $spreadsheet->getActiveSheet()->setCellValue('C5', 'Corte Anterior');
+                    $spreadsheet->getActiveSheet()->setCellValue('E5', 'Oracle');
+                    $spreadsheet->getActiveSheet()->setCellValue('F5', 'Corte Actual');
+                    $spreadsheet->getActiveSheet()->setCellValue('H5', 'Total'); 
+                    $spreadsheet->getActiveSheet()->setCellValue('N5', 'Bolsa de recursos: Videos');
+                    $spreadsheet->getActiveSheet()->setCellValue('P5', 'Bolsa de recursos: Línea Gráfica');
+                    $spreadsheet->getActiveSheet()->setCellValue('R5', 'Gestoría');
+                    $spreadsheet->getActiveSheet()->setCellValue('T5', 'Montaje');
                     $spreadsheet->getActiveSheet()->setCellValue('A6', 'Proyecto');
                     $spreadsheet->getActiveSheet()->setCellValue('B6', 'Asignado');
-                    $spreadsheet->getActiveSheet()->setCellValue('C5', 'Corte Anterior');
-                    $spreadsheet->getActiveSheet()->setCellValue('E5', 'Corte Actual');
-                    $spreadsheet->getActiveSheet()->setCellValue('G5', 'Total'); 
-                    $spreadsheet->getActiveSheet()->setCellValue('I5', 'Bolsa de recursos: Videos');
-                    $spreadsheet->getActiveSheet()->setCellValue('K5', 'Bolsa de recursos: Línea Gráfica');
-                    $spreadsheet->getActiveSheet()->setCellValue('M5', 'Gestoría');
-                    $spreadsheet->getActiveSheet()->setCellValue('O5', 'Montaje');
                     $spreadsheet->getActiveSheet()->setCellValue('C6', 'Tiempo');
                     $spreadsheet->getActiveSheet()->setCellValue('D6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('E6', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('F6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('G6', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('H6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('I6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('J6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('K6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('L6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('M6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('N6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('O6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('P6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('F6', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('G6', 'Ejecución');                    
+                    $spreadsheet->getActiveSheet()->setCellValue('H6', 'Horas presupuestadas');
+                    $spreadsheet->getActiveSheet()->setCellValue('I6', 'Horas ejecutadas');
+                    $spreadsheet->getActiveSheet()->setCellValue('J6', 'Horas por ejecutar');
+                    $spreadsheet->getActiveSheet()->setCellValue('K6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('L6', 'Disponible presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('M6', 'Horas disponibles promedio ($36.000 hora)');
+                    $spreadsheet->getActiveSheet()->setCellValue('N6', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('O6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('P6', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('Q6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('R6', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('S6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('T6', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('U6', 'Ejecución');
                     $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
                     $fila = $filasIni = 7;
                     if ( is_array ( $datos2 ) ) {
@@ -366,15 +390,19 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $ejecutadoCorteAnterior = ( empty ( $value['Ejecutado Corte Anterior'] ) ) ? '0' : $value['Ejecutado Corte Anterior'];
                                 $tiempoCorteActual = ( empty ( $value['Tiempo Corte Actual'] ) ) ? '0' : $value['Tiempo Corte Actual'];
                                 $ejecutadoCorteActual = ( empty ( $value['Ejecutado Corte Actual'] ) ) ? '0' : $value['Ejecutado Corte Actual'];
-                                $spreadsheet->getActiveSheet()->fromArray([$value['Proyecto'], $value['Asignado'], $tiempoCorteAnterior, $ejecutadoCorteAnterior, $tiempoCorteActual, $ejecutadoCorteActual], null, "A".$fila);
-                                $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, ($tiempoCorteAnterior + $tiempoCorteActual));
-                                $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, ($ejecutadoCorteAnterior + $ejecutadoCorteActual));
+                                $horasPresupuestadas = ( empty ( $value['Horas Presupuestadas'] ) ) ? '0' : $value['Horas Presupuestadas'];
+                                $horasPendientes = $horasPresupuestadas - $tiempoCorteAnterior - $tiempoCorteActual;
+                                $spreadsheet->getActiveSheet()->fromArray([$value['Proyecto'], $value['Asignado'], $tiempoCorteAnterior, $ejecutadoCorteAnterior, '', $tiempoCorteActual, $ejecutadoCorteActual, $horasPresupuestadas], null, "A".$fila);
+                                $spreadsheet->getActiveSheet()->setCellValue('I'.$fila, ($tiempoCorteAnterior + $tiempoCorteActual));
+                                $spreadsheet->getActiveSheet()->setCellValue('J'.$fila, $horasPendientes);
+                                $spreadsheet->getActiveSheet()->setCellValue('K'.$fila, ($ejecutadoCorteAnterior + $ejecutadoCorteActual));
                                 $spreadsheet->getActiveSheet()->getStyle('C'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('I'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('J'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('D'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('K'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $fila++;
                             } else if ( ! empty ( $value["Total Proyecto"] ) ) {
                                 $presupuestoProyecto = ( empty ( $value['Presupuesto Proyecto'] ) ) ? '0' : $value['Presupuesto Proyecto'];
@@ -382,7 +410,10 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $totalEjecutadoAnterior = ( empty ( $value['Total Ejecutado Anterior'] ) ) ? '0' : $value['Total Ejecutado Anterior'];
                                 $totalTiempoActual = ( empty ( $value['Total Tiempo Actual'] ) ) ? '0' : $value['Total Tiempo Actual'];
                                 $totalEjecutadoActual = ( empty ( $value['Total Ejecutado Actual'] ) ) ? '0' : $value['Total Ejecutado Actual'];
-                                $spreadsheet->getActiveSheet()->fromArray([$value['Nombre Proyecto'], $presupuestoProyecto, $totalTiempoAnterior, $totalEjecutadoAnterior, $totalTiempoActual, $totalEjecutadoActual], null, "A".$fila);
+                                $totalHorasPresupuestadas = ( empty ( $value['Total Horas Presupuestadas'] ) ) ? '0' : $value['Total Horas Presupuestadas'];
+                                $oracle = (empty ($value['Oracle']) ? '0' : $value['Oracle']);
+                                $totalHorasPendientes = $totalHorasPresupuestadas - $totalTiempoAnterior - $totalTiempoActual;
+                                $spreadsheet->getActiveSheet()->fromArray([$value['Nombre Proyecto'], $presupuestoProyecto, $totalTiempoAnterior, $totalEjecutadoAnterior, $oracle, $totalTiempoActual, $totalEjecutadoActual, $totalHorasPresupuestadas], null, "A".$fila);
                                 $idProyecto = $value['idProyecto'];
                                 $servicioGestoria = "SER039";
                                 $servicioMontaje = "SER023";
@@ -411,88 +442,109 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 }
                                 $totalTiempo = $totalTiempoAnterior + $totalTiempoActual;
                                 $totalEjecutado = $totalEjecutadoAnterior + $totalEjecutadoActual;
-                                $spreadsheet->getActiveSheet()->setCellValue('G'.$fila, $totalTiempo);
-                                $spreadsheet->getActiveSheet()->setCellValue('H'.$fila, $totalEjecutado);
+                                $spreadsheet->getActiveSheet()->setCellValue('I'.$fila, $totalTiempo);
+                                $spreadsheet->getActiveSheet()->setCellValue('J'.$fila, $totalHorasPendientes);
+                                $spreadsheet->getActiveSheet()->setCellValue('K'.$fila, $totalEjecutado);
+                                if ($oracle != 0) {
+                                    $disponiblePresupuesto = $presupuestoProyecto - $oracle;
+                                } else {
+                                    $disponiblePresupuesto = $presupuestoProyecto - $totalEjecutado;
+                                }
+                                $spreadsheet->getActiveSheet()->setCellValue('L'.$fila, $disponiblePresupuesto);
+                                $horasDisponibles = ($disponiblePresupuesto > 0) ? $disponiblePresupuesto / 36000 : 0;
+                                $spreadsheet->getActiveSheet()->setCellValue('M'.$fila, $horasDisponibles);
                                 $bolsaRecursosPresupuesto = $presupuestoProyecto - $presupuestoLineaGrafica - $presupuestoGestoria - $presupuestoMontaje;
                                 $bolsaRecursosEjecutado = $totalEjecutado - $ejecucionLineaGrafica - $ejecucionGestoria - $ejecucionMontaje;
-                                $spreadsheet->getActiveSheet()->setCellValue('I'.$fila, $bolsaRecursosPresupuesto);
-                                $spreadsheet->getActiveSheet()->setCellValue('J'.$fila, $bolsaRecursosEjecutado);
-                                $spreadsheet->getActiveSheet()->setCellValue('K'.$fila, $presupuestoLineaGrafica);
-                                $spreadsheet->getActiveSheet()->setCellValue('L'.$fila, $ejecucionLineaGrafica);
-                                $spreadsheet->getActiveSheet()->setCellValue('M'.$fila, $presupuestoGestoria);
-                                $spreadsheet->getActiveSheet()->setCellValue('N'.$fila, $ejecucionGestoria);
-                                $spreadsheet->getActiveSheet()->setCellValue('O'.$fila, $presupuestoMontaje);
-                                $spreadsheet->getActiveSheet()->setCellValue('P'.$fila, $ejecucionMontaje);
+                                $spreadsheet->getActiveSheet()->setCellValue('N'.$fila, $bolsaRecursosPresupuesto);
+                                $spreadsheet->getActiveSheet()->setCellValue('O'.$fila, $bolsaRecursosEjecutado);
+                                $spreadsheet->getActiveSheet()->setCellValue('P'.$fila, $presupuestoLineaGrafica);
+                                $spreadsheet->getActiveSheet()->setCellValue('Q'.$fila, $ejecucionLineaGrafica);
+                                $spreadsheet->getActiveSheet()->setCellValue('R'.$fila, $presupuestoGestoria);
+                                $spreadsheet->getActiveSheet()->setCellValue('S'.$fila, $ejecucionGestoria);
+                                $spreadsheet->getActiveSheet()->setCellValue('T'.$fila, $presupuestoMontaje);
+                                $spreadsheet->getActiveSheet()->setCellValue('U'.$fila, $ejecucionMontaje);
                                 $spreadsheet->getActiveSheet()->getStyle('B'.$fila)->getNumberFormat()->setFormatCode('"Presupuesto proyecto: $" #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('C'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('D'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('I'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('J'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('E'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('F'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('G'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('I'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('J'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('K'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('L'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('M'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('M'.$fila)->getNumberFormat()->setFormatCode('#,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('N'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('O'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
                                 $spreadsheet->getActiveSheet()->getStyle('P'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
-                                $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':P'.$fila)->applyFromArray(STYLETABLETITLESUB);
+                                $spreadsheet->getActiveSheet()->getStyle('Q'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('R'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('S'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('T'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('U'.$fila)->getNumberFormat()->setFormatCode('$ #,##0.00');
+                                $spreadsheet->getActiveSheet()->getStyle('A'.$fila.':U'.$fila)->applyFromArray(STYLETABLETITLESUB);
                                 // Formato condicional para mostrar el color de la celda 
+                                if ($oracle != 0) {
+                                    $filaTotal = 'E';
+                                } else {
+                                    $filaTotal = 'K'; // FIla donde se muestra el total ejecutado
+                                }
+                                $spreadsheet->getActiveSheet()->getStyle($filaTotal.$fila)->applyFromArray(STYLEBLUE);
+                                $filaColor = 'L'; // Columna que muestra el color del semáforo
                                 $conditional1 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional1->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional1->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
-                                $conditional1->addCondition('AND(H'.$fila.'/B'.$fila.' > 0,H'.$fila.'/B'.$fila.' <= 0.4)');
+                                $conditional1->addCondition('AND('.$filaTotal.$fila.'/B'.$fila.' > 0,'.$filaTotal.$fila.'/B'.$fila.' <= 0.4)');
                                 $conditional1->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
                                 $conditional1->getStyle()->getFill()->getEndColor()->setARGB('89F986');
 
                                 $conditional2 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional2->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional2->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
-                                $conditional2->addCondition('AND(H'.$fila.'/B'.$fila.' > 0.4,H'.$fila.'/B'.$fila.' <= 0.6)');
+                                $conditional2->addCondition('AND('.$filaTotal.$fila.'/B'.$fila.' > 0.4,'.$filaTotal.$fila.'/B'.$fila.' <= 0.6)');
                                 $conditional2->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
                                 $conditional2->getStyle()->getFill()->getEndColor()->setARGB('F9F22C');
                                 
                                 $conditional3 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional3->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional3->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
-                                $conditional3->addCondition('AND(H'.$fila.'/B'.$fila.' > 0.6,H'.$fila.'/B'.$fila.' <= 0.8)');
+                                $conditional3->addCondition('AND('.$filaTotal.$fila.'/B'.$fila.' > 0.6,'.$filaTotal.$fila.'/B'.$fila.' <= 0.8)');
                                 $conditional3->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
                                 $conditional3->getStyle()->getFill()->getEndColor()->setARGB('F7B14B');
                                 
                                 $conditional4 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional4->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional4->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
-                                $conditional4->addCondition('(H'.$fila.'/B'.$fila.' > 0.8)');
+                                $conditional4->addCondition('('.$filaTotal.$fila.'/B'.$fila.' > 0.8)');
                                 $conditional4->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
                                 $conditional4->getStyle()->getFill()->getEndColor()->setARGB('F8473B');
                                 
                                 $conditional5 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional5->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional5->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
-                                $conditional5->addCondition('ISERROR(H'.$fila.'/B'.$fila.')');
+                                $conditional5->addCondition('ISERROR('.$filaTotal.$fila.'/B'.$fila.')');
                                 $conditional5->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
                                 $conditional5->getStyle()->getFill()->getEndColor()->setARGB('F8473B');
 
-                                $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->getConditionalStyles();
+                                $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle($filaColor.$fila)->getConditionalStyles();
                                 $conditionalStyles[] = $conditional1;
                                 $conditionalStyles[] = $conditional2;
                                 $conditionalStyles[] = $conditional3;
                                 $conditionalStyles[] = $conditional4;
                                 $conditionalStyles[] = $conditional5;
-                                $spreadsheet->getActiveSheet()->getStyle('H'.$fila)->setConditionalStyles($conditionalStyles);
+                                $spreadsheet->getActiveSheet()->getStyle($filaColor.$fila)->setConditionalStyles($conditionalStyles);
                                 $fila++;
                                 $filasIni = $fila;
                             }
-                            $spreadsheet->getActiveSheet()->getStyle('A5:P6')->applyFromArray(STYLETABLETITLE);
+                            $spreadsheet->getActiveSheet()->getStyle('A5:U6')->applyFromArray(STYLETABLETITLE);
                             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(60);
                             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(50);
                             $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(10);
                             $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-                            $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-                            $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-                            $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(15);
@@ -502,8 +554,14 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             $spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(15);
-                            $spreadsheet->getActiveSheet()->getStyle('A5:P'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                            $spreadsheet->getActiveSheet()->getStyle('A6:P'.($fila-1))->applyFromArray(STYLEBODY);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('R')->setWidth(15);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('S')->setWidth(15);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+                            $spreadsheet->getActiveSheet()->getColumnDimension('U')->setWidth(15);
+                            $spreadsheet->getActiveSheet()->getStyle('A5:U'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                            $spreadsheet->getActiveSheet()->getStyle('A6:U'.($fila-1))->applyFromArray(STYLEBODY);
+                            $spreadsheet->getActiveSheet()->getStyle('H5:M6')->applyFromArray(STYLESALMON);
                         }
                     } else {
                         $spreadsheet->getActiveSheet()->setCellValue('A3', 'No hay periodo configurado aún, no se puede mostrar información de tiempos');
@@ -540,8 +598,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(70);
                     $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(15);
                     $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-                    $spreadsheet->getActiveSheet()->getStyle('A1:D1')->applyFromArray(STYLETABLETITLE);
                     $spreadsheet->getActiveSheet()->getStyle('D2:D'.$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                    $spreadsheet->getActiveSheet()->getStyle('A1:D1')->applyFromArray(STYLETABLETITLE);
                     $spreadsheet->getActiveSheet()->getStyle('A1:D'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
                     $spreadsheet->getActiveSheet()->getStyle('A2:D'.($fila-1))->applyFromArray(STYLEBODY);
                     $spreadsheet->setActiveSheetIndex(0);
@@ -574,7 +632,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 while ($data0 = mysqli_fetch_array($result0)) {
                     $inicioPeriodo = $data0['inicioPeriodo'];
                     $finPeriodo = $data0['finPeriodo'];
-                    $asignaciones[$data0['persona_IdPersona']] =  ((($data0['diasSegmento1'] * 8) * $data0['porcentajeDedicacion1']) / 100) + ((($data0['diasSegmento2'] * 8) * $data0['porcentajeDedicacion2']) / 100);
+                    $totalAsig = ((($data0['diasSegmento1'] * 8) * $data0['porcentajeDedicacion1']) / 100) + ((($data0['diasSegmento2'] * 8) * $data0['porcentajeDedicacion2']) / 100);
+                    $asignaciones[$data0['persona_IdPersona']] = ($totalAsig == 0) ? 160 : $totalAsig;
                 }
                 $query1 = "SELECT pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, SUM(pys_tiempos.horaTiempo) AS 'Horas', SUM(pys_tiempos.minTiempo) AS 'Minutos', pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy
                     FROM pys_tiempos
@@ -607,13 +666,14 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                         $total = $asignacion = 0;
                     }
                     $total += $tiempo;
-                    $asignacion = $asignaciones[$idPersona];
+                    $asignacion = isset( $asignaciones[$idPersona] ) ? $asignaciones[$idPersona] : 160;
+
                     $json[] = array(
                         "Nombre" => $nombreCompleto,
                         "Proyecto" => $proyecto,
                         "Tiempo" => number_format($tiempo, 2),
-                        "Asignación" => $asignaciones[$idPersona],
-                        "Porcentaje" => number_format(($tiempo / $asignaciones[$idPersona]), 2)
+                        "Asignación" => $asignacion,
+                        "Porcentaje" => number_format(($tiempo / $asignacion), 2)
                     );
                     if ($recorrido == $registros) {
                         $json[] = array(
@@ -642,7 +702,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 $data = mysqli_fetch_array($result);
                 $inicioPeriodo = $data['inicioPeriodo'];
                 $finPeriodo = $data['finPeriodo'];
-                $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy
+                $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy, pys_actualizacionproy.nombreCortoProy
                     FROM pys_asignados
                     
                     INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1' 
@@ -665,6 +725,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     while ($datos1 = mysqli_fetch_array($result1)) {
                         $idProy = $datos1['idProy'];
                         $nombreProyecto = $datos1['codProy'] . " - " . $datos1['nombreProy'];
+                        $oracle = $datos1['nombreCortoProy'];
                         $presupuestoProyecto = 0;
                         /* Obtener suma de presupuesto de todas las solicitudes asociadas al proyecto */
                         $query0 = "SELECT pys_actsolicitudes.presupuesto 
@@ -686,12 +747,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             GROUP BY pys_asignados.idPersona;";
                         $result2 = mysqli_query($connection, $query2);
                         $registry2 = mysqli_num_rows($result2);
-                        $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoActual = $consolidadoEjecutadoActual = 0;
+                        $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAsignado = 0;
                         if ( $registry2 > 0 ) {
                             while ($data2 = mysqli_fetch_array($result2)) {
                                 $idPersona = $data2['idPersona'];
                                 $nombreAsignado = $data2['apellido1'] . " " . $data2['apellido2'] . " " . $data2['nombres'];
-                                $query3 = "SELECT pys_asignados.idAsig, pys_salarios.salario
+                                $query3 = "SELECT pys_asignados.idAsig, pys_salarios.salario, pys_asignados.maxhora, pys_asignados.maxmin
                                     FROM pys_asignados
                                     INNER JOIN pys_salarios ON pys_salarios.mes <= pys_asignados.fechAsig AND pys_salarios.anio >= pys_asignados.fechAsig AND pys_salarios.idPersona = pys_asignados.idPersona
                                     INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
@@ -699,9 +760,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $result3 = mysqli_query($connection, $query3);
                                 $registry3 = mysqli_num_rows($result3);
                                 if ($registry3 > 0) {
-                                    $tiempoActual = $totalActual = $tiempoAnterior = $totalAnterior = 0;
+                                    $tiempoActual = $totalActual = $tiempoAnterior = $totalAnterior = $tiempoAsignado = $totalTiempoAsignado = 0;
                                     while ($data3 = mysqli_fetch_array($result3)) {
                                         $idAsignado = $data3['idAsig'];
+                                        $tiempoAsignado = (($data3['maxhora'] * 60) + $data3['maxmin']) / 60;
+                                        $totalTiempoAsignado += $tiempoAsignado;
+                                        $consolidadoTiempoAsignado += $tiempoAsignado;
                                         $salario = $data3['salario'];
                                         /* Información de tiempos en el corte actual */
                                         $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
@@ -714,7 +778,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                             $costo = $tiempo * $salario;
                                             $tiempoActual += $tiempo;
                                             $totalActual +=  $tiempo * $salario;
-                                            $consolidadoTiempoActual += $tiempoActual;
+                                            $consolidadoTiempoActual += $tiempo;
                                             $consolidadoEjecutadoActual += $costo;
                                         }
                                         /* Información de tiempos en el corte anterior */
@@ -736,6 +800,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                         $json[] = array (
                                             'Proyecto' => $nombreProyecto,
                                             'Asignado' => $nombreAsignado,
+                                            'Horas Presupuestadas' => $totalTiempoAsignado,
                                             'Tiempo Corte Anterior' => $tiempoAnterior,
                                             'Ejecutado Corte Anterior' => $totalAnterior,
                                             'Tiempo Corte Actual' => $tiempoActual,
@@ -749,15 +814,17 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $json[] = array(
                                     "Total Proyecto" => $nombreProyecto,
                                     "Presupuesto Proyecto" => $presupuestoProyecto,
+                                    "Total Horas Presupuestadas" => $consolidadoTiempoAsignado,
                                     "Nombre Proyecto" => $nombreProyecto,
                                     "Total Tiempo Anterior" => $consolidadoTiempoAnterior,
                                     "Total Ejecutado Anterior" => $consolidadoEjecutadoAnterior,
                                     "Total Tiempo Actual" => $consolidadoTiempoActual,
                                     "Total Ejecutado Actual" => $consolidadoEjecutadoActual,
-                                    'idProyecto' => $idProy
+                                    'idProyecto' => $idProy,
+                                    'Oracle' => $oracle
                                 );
                             }
-                            $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = 0;
+                            $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoAsignado = 0;
                         }
                     }
                 }
