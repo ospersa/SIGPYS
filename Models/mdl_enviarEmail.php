@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\Exception;
             require '../php_libraries/phpMailer/PHPMailer.php';
             require '../php_libraries/phpMailer/SMTP.php';
             $arrayccEmail = explode(';', $ccemail);
-            $arrayGestores = explode(';', $asesor);
+            $arrayGestores = (!empty($asesor)) ? explode(';', $asesor) : '';
     
             $mail = new PHPMailer(true);
 
@@ -31,6 +31,7 @@ use PHPMailer\PHPMailer\Exception;
                     $mail->addAddress($solicitante, '');
                 }
                 if (is_array($arrayGestores)) {
+                    var_dump($arrayGestores);
                     foreach ($arrayGestores as $gestor) {
                         $mail->addAddress($gestor, ''); 
                     }
@@ -46,7 +47,6 @@ use PHPMailer\PHPMailer\Exception;
                 $mail->Subject = $asunto;
                 $mail->Body    = $cuerpo;
                 $mail->CharSet = 'UTF-8';
-
                 $mail->send();
                 return true;
             } catch (Exception $e) {

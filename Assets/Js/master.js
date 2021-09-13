@@ -912,7 +912,7 @@ function modalAgenda(fecha){
                     <table class="left responsive-table">
                     <thead>
                         <tr>
-                            <th>Producto/Servicio</th>
+                            <th>Proyecto - Producto/Servicio</th>
                             <th>Descripción del Producto/Servicio</th>
                             <th>Actividad</th>
                             <th>Tiempo</th>
@@ -925,9 +925,9 @@ function modalAgenda(fecha){
                         if (task.estAgenda == 1){
                         string += `
                             <tr>
-                            <td>P${task.idSol}</td>
+                            <td>${task.codProy} / P${task.idSol}</td>
                                 <td><p class="truncate">${task.descripcionSol}</p></td>
-                                <td><p class="truncate">${task.notaAgenda}</p></td>
+                                <td>${task.notaAgenda}</td>
                                 <td>${task.horaAgenda} h ${task.minAgenda} m </td>
                                 <td>${task.fase}</td>
                                 <td><p>

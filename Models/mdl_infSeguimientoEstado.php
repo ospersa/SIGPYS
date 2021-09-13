@@ -69,6 +69,17 @@ const STYLEBLUE = [
         ]
     ]
 ];
+const STYLEBLACK = [
+    'font' => [
+        'color' => ['argb' => 'FFFFFF']
+    ],
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => '000000',
+        ]
+    ]
+];
 
 const STYLETABLETITLE = [
     'font' => [
@@ -354,51 +365,53 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     $spreadsheet->getActiveSheet()->setCellValue('A2', '41% - 60%  Amarillo');
                     $spreadsheet->getActiveSheet()->setCellValue('A3', '61% - 80%  Naranja');
                     $spreadsheet->getActiveSheet()->setCellValue('A4', '80% - 100% Rojo');
+                    $spreadsheet->getActiveSheet()->setCellValue('A5', '> 100% Negro');
                     $spreadsheet->getActiveSheet()->setCellValue('B1', 'Este color indica que porcentaje se ha ejecutado del presupuesto cargado en el sistema para el proyecto (Fila B). De todas maneras recomendamos verificar los estados de los productos/servicio en la pestaña "Seguimiento Estados" para que sean concordantes con el presupuesto ejecutado.');
                     $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(STYLEGREEN);
                     $spreadsheet->getActiveSheet()->getStyle('A2')->applyFromArray(STYLEYELLOW);
                     $spreadsheet->getActiveSheet()->getStyle('A3')->applyFromArray(STYLEORANGE);
                     $spreadsheet->getActiveSheet()->getStyle('A4')->applyFromArray(STYLERED);
+                    $spreadsheet->getActiveSheet()->getStyle('A5')->applyFromArray(STYLEBLACK);
                     $spreadsheet->getActiveSheet()->getStyle('B1')->applyFromArray(STYLEORANGELIGHT);
                     $spreadsheet->getActiveSheet()->setShowGridlines(false);
-                    $spreadsheet->getActiveSheet()->mergeCells("C5:D5");
-                    $spreadsheet->getActiveSheet()->mergeCells("F5:G5");
-                    $spreadsheet->getActiveSheet()->mergeCells("H5:I5");
-                    $spreadsheet->getActiveSheet()->mergeCells("N5:O5");
-                    $spreadsheet->getActiveSheet()->mergeCells("P5:Q5");
-                    $spreadsheet->getActiveSheet()->mergeCells("R5:S5");
-                    $spreadsheet->getActiveSheet()->mergeCells("T5:U5");
-                    $spreadsheet->getActiveSheet()->mergeCells("B1:D4");
-                    $spreadsheet->getActiveSheet()->setCellValue('C5', 'Total ejecutado hasta corte anterior (SIGPYS)');
-                    $spreadsheet->getActiveSheet()->setCellValue('E5', 'Total ejecutado hasta corte anterior (Oracle)');
-                    $spreadsheet->getActiveSheet()->setCellValue('F5', 'Corte Actual');
-                    $spreadsheet->getActiveSheet()->setCellValue('H5', 'Total ejecutado (total ejecutado corte anterior más corte actual)');
-                    $spreadsheet->getActiveSheet()->setCellValue('N5', 'Bolsa de recursos: (Productos video y diseño, desarrollo, QA, asesoría y capacitación para proyectos sin rubro de gestoría)');
-                    $spreadsheet->getActiveSheet()->setCellValue('P5', 'Bolsa de recursos: Línea Gráfica');
-                    $spreadsheet->getActiveSheet()->setCellValue('R5', 'Gestoría (pilotos, capacitación asesoría, gestión del proyecto de contenido digital)');
-                    $spreadsheet->getActiveSheet()->setCellValue('T5', 'Montaje');
-                    $spreadsheet->getActiveSheet()->setCellValue('A6', 'Proyecto');
-                    $spreadsheet->getActiveSheet()->setCellValue('B6', 'Asignado');
-                    $spreadsheet->getActiveSheet()->setCellValue('C6', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('D6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('F6', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('G6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('H6', 'Tiempo');
-                    $spreadsheet->getActiveSheet()->setCellValue('I6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('J5', 'Horas asignadas');
-                    $spreadsheet->getActiveSheet()->setCellValue('K5', 'Horas por ejecutar');
-                    $spreadsheet->getActiveSheet()->setCellValue('L5', 'Disponible (Presupuesto menos total ejecutado)');
-                    $spreadsheet->getActiveSheet()->setCellValue('M5', 'Aproximado horas disponibles (Disponible dividido en $40.000)');
-                    $spreadsheet->getActiveSheet()->setCellValue('N6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('O6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('P6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('Q6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('R6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('S6', 'Ejecución');
-                    $spreadsheet->getActiveSheet()->setCellValue('T6', 'Presupuesto');
-                    $spreadsheet->getActiveSheet()->setCellValue('U6', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->mergeCells("C6:D6");
+                    $spreadsheet->getActiveSheet()->mergeCells("F6:G6");
+                    $spreadsheet->getActiveSheet()->mergeCells("H6:I6");
+                    $spreadsheet->getActiveSheet()->mergeCells("N6:O6");
+                    $spreadsheet->getActiveSheet()->mergeCells("P6:Q6");
+                    $spreadsheet->getActiveSheet()->mergeCells("R6:S6");
+                    $spreadsheet->getActiveSheet()->mergeCells("T6:U6");
+                    $spreadsheet->getActiveSheet()->mergeCells("B1:C5");
+                    $spreadsheet->getActiveSheet()->setCellValue('C6', 'Total ejecutado hasta corte anterior (SIGPYS)');
+                    $spreadsheet->getActiveSheet()->setCellValue('E6', 'Total ejecutado hasta corte anterior (Oracle)');
+                    $spreadsheet->getActiveSheet()->setCellValue('F6', 'Corte Actual');
+                    $spreadsheet->getActiveSheet()->setCellValue('H6', 'Total ejecutado (total ejecutado corte anterior más corte actual)');
+                    $spreadsheet->getActiveSheet()->setCellValue('N6', 'Bolsa de recursos: (Productos video y diseño, desarrollo, QA, asesoría y capacitación para proyectos sin rubro de gestoría)');
+                    $spreadsheet->getActiveSheet()->setCellValue('P6', 'Bolsa de recursos: Línea Gráfica');
+                    $spreadsheet->getActiveSheet()->setCellValue('R6', 'Gestoría (pilotos, capacitación asesoría, gestión del proyecto de contenido digital)');
+                    $spreadsheet->getActiveSheet()->setCellValue('T6', 'Montaje');
+                    $spreadsheet->getActiveSheet()->setCellValue('A7', 'Proyecto');
+                    $spreadsheet->getActiveSheet()->setCellValue('B7', 'Asignado');
+                    $spreadsheet->getActiveSheet()->setCellValue('C7', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('D7', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('F7', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('G7', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('H7', 'Tiempo');
+                    $spreadsheet->getActiveSheet()->setCellValue('I7', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('J6', 'Horas asignadas');
+                    $spreadsheet->getActiveSheet()->setCellValue('K6', 'Horas por ejecutar');
+                    $spreadsheet->getActiveSheet()->setCellValue('L6', 'Disponible (Presupuesto menos total ejecutado)');
+                    $spreadsheet->getActiveSheet()->setCellValue('M6', 'Aproximado horas disponibles (Disponible dividido en $40.000)');
+                    $spreadsheet->getActiveSheet()->setCellValue('N7', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('O7', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('P7', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('Q7', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('R7', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('S7', 'Ejecución');
+                    $spreadsheet->getActiveSheet()->setCellValue('T7', 'Presupuesto');
+                    $spreadsheet->getActiveSheet()->setCellValue('U7', 'Ejecución');
                     $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
-                    $fila = $filasIni = 7;
+                    $fila = $filasIni = 8;
                     if ( is_array ( $datos2 ) ) {
                         foreach ($datos2 as $value) {
                             if ( ! empty ( $value['Proyecto'] ) ) {
@@ -505,10 +518,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 // Formato condicional para mostrar el color de la celda 
                                 if ($oracle != 0) {
                                     $filaTotal = 'E'; // Fila con valor de Oracle
+                                    $filaTotalColor = 'E';
                                 } else {
                                     $filaTotal = 'I'; // FIla donde se muestra el total ejecutado
+                                    $filaTotalColor = 'D';
                                 }
-                                $spreadsheet->getActiveSheet()->getStyle($filaTotal.$fila)->applyFromArray(STYLEBLUE);
+                                $spreadsheet->getActiveSheet()->getStyle($filaTotalColor.$fila)->applyFromArray(STYLEBLUE);
                                 $filaColor = 'L'; // Columna que muestra el color del semáforo
                                 $conditional1 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional1->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
@@ -534,9 +549,17 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $conditional4 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional4->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
                                 $conditional4->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
-                                $conditional4->addCondition('('.$filaTotal.$fila.'/B'.$fila.' > 0.8)');
+                                $conditional4->addCondition('AND('.$filaTotal.$fila.'/B'.$fila.' > 0.8,'.$filaTotal.$fila.'/B'.$fila.' <= 1)');
                                 $conditional4->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
                                 $conditional4->getStyle()->getFill()->getEndColor()->setARGB('F8473B');
+
+                                $conditional6 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
+                                $conditional6->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
+                                $conditional6->setOperatorType(\PhpOffice\PhpSpreadsheet\Style\Conditional::OPERATOR_NONE);
+                                $conditional6->addCondition('('.$filaTotal.$fila.'/B'.$fila.' > 1)');
+                                $conditional6->getStyle()->getFill()->setFillType(fill::FILL_SOLID);
+                                $conditional6->getStyle()->getFill()->getEndColor()->setARGB('000000');
+                                $conditional6->getStyle()->getFont()->getColor()->setARGB('FFFFFF');
                                 
                                 $conditional5 = new \PhpOffice\PhpSpreadsheet\Style\Conditional();
                                 $conditional5->setConditionType(\PhpOffice\PhpSpreadsheet\Style\Conditional::CONDITION_EXPRESSION);
@@ -551,11 +574,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $conditionalStyles[] = $conditional3;
                                 $conditionalStyles[] = $conditional4;
                                 $conditionalStyles[] = $conditional5;
+                                $conditionalStyles[] = $conditional6;
                                 $spreadsheet->getActiveSheet()->getStyle($filaColor.$fila)->setConditionalStyles($conditionalStyles);
                                 $fila++;
                                 $filasIni = $fila;
                             }
-                            $spreadsheet->getActiveSheet()->getStyle('A5:U6')->applyFromArray(STYLETABLETITLE);
+                            $spreadsheet->getActiveSheet()->getStyle('A6:U7')->applyFromArray(STYLETABLETITLE);
                             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(60);
                             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(50);
                             $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(10);
@@ -577,8 +601,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             $spreadsheet->getActiveSheet()->getColumnDimension('S')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('T')->setWidth(15);
                             $spreadsheet->getActiveSheet()->getColumnDimension('U')->setWidth(15);
-                            $spreadsheet->getActiveSheet()->getStyle('A5:U'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                            $spreadsheet->getActiveSheet()->getStyle('A6:U'.($fila-1))->applyFromArray(STYLEBODY);
+                            $spreadsheet->getActiveSheet()->getStyle('A6:U'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                            $spreadsheet->getActiveSheet()->getStyle('A7:U'.($fila-1))->applyFromArray(STYLEBODY);
                         }
                     } else {
                         $spreadsheet->getActiveSheet()->setCellValue('A3', 'No hay periodo configurado aún, no se puede mostrar información de tiempos');

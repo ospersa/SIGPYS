@@ -553,3 +553,6 @@ table.mis-solicitudes {
     width: 20%; }
   table.mis-solicitudes thead th:nth-child(5) {
     width: 20%; }
+
+#modalAgenda {
+  width: 80%; }

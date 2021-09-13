@@ -168,7 +168,7 @@ Class SolicitudInicial {
                     WHERE pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '".$datos['idSolicitante']."';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
-                $nombreSolicitante = $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'];
+                $nombreSolicitante = isset ( $datos2['apellido1']) ? $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'] : '';
                 echo '          <td>'.$nombreSolicitante.'</td>
                                 <td>'.$datos['ObservacionAct'].'</td>
                                 <td>'.$datos['fechPrev'].'</td>';

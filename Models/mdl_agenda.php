@@ -323,14 +323,15 @@ class  PlaneacionAse{
             INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
             WHERE pys_agenda.estAgenda <> '0' AND ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_login.est = '1' AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha';";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos = mysqli_fetch_array($resultado)){    
+        while ($datos = mysqli_fetch_array($resultado)) {    
             $idAgenda = $datos['idAgenda'];
             $idAsig = $datos['idAsig'];
             $notaAgenda = $datos['notaAgenda'];
             $horaAgenda = $datos['horaAgenda'];
             $minAgenda = $datos['minAgenda'];
             $estAgenda = $datos['estAgenda'];
-            $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy FROM pys_asignados
+            $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy 
+                FROM pys_asignados
                 INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
                 INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_asignados.idSol
                 WHERE ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_actualizacionproy.est = '1' AND pys_solicitudes.est = '1' AND pys_asignados.idAsig = '$idAsig';";
