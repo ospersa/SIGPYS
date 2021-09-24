@@ -929,7 +929,7 @@ function modalAgenda(fecha){
                                 <td><p class="truncate">${task.descripcionSol}</p></td>
                                 <td>${task.notaAgenda}</td>
                                 <td>${task.horaAgenda} h ${task.minAgenda} m </td>
-                                <td>${task.fase}</td>
+                                <td class="fase">${task.fase}</td>
                                 <td><p>
                                 <label>
                                 <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />

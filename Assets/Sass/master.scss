@@ -628,9 +628,11 @@ table.mis-solicitudes {
     min-height: 80%!important;
 }
 
-.select-dropdown {
-    width: auto!important;
-    li > span {
-        white-space: nowrap;
+.fase {
+    .select-dropdown {
+        width: auto!important;
+        li > span {
+            white-space: nowrap;
+        }
     }
 }
