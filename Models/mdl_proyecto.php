@@ -1685,25 +1685,31 @@ class Proyecto {
     public static function removeAreaConocimiento ($idAreaConocimiento, $idProy) {
         require('../Core/connection.php');
         $response   = [];
-        $query1     = "SELECT * FROM pys_actproductos WHERE idAreaConocimiento = '$idAreaConocimiento';";
-        $resp       = mysqli_query($connection, $query1);
-        if($resp > 0){
+        $query1     = "SELECT pys_actproductos.idAreaConocimiento 
+            FROM pys_actproductos
+            INNER JOIN pys_productos ON pys_productos.idProd = pys_actproductos.idProd AND pys_productos.est = '1'
+            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_productos.idSol AND pys_actsolicitudes.est = '1'
+            INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+            WHERE pys_actproductos.est = '1' AND pys_cursosmodulos.idProy = '$idProy' AND pys_actproductos.idAreaConocimiento = '$idAreaConocimiento';";
+        $result = mysqli_query($connection, $query1);
+        $registry = mysqli_num_rows($result);
+        if ($registry > 0){
             array_push($response,'Error','No se puede eliminar el área de conocimiento. Está área se encuentra asignada a uno o mas productos.');
         }  else {
             $consulta   = "UPDATE areaconocimientohasproyectos SET areaEstado = '0' WHERE pys_proyectos_idProy  = '$idProy' AND pys_areaconocimiento_idAreaConocimiento = '$idAreaConocimiento';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado) {
                 if (mysqli_query($connection, "COMMIT;")) {
-                    array_push($response,'Correcto','Registró actualizado.');
+                    array_push($response,'Correcto','Registro actualizado.');
                 }                            
             } else {
                 if (mysqli_query($connection, "ROLLBACK;")) {
-                    array_push($response,'Error','Registró no actualizado.');
+                    array_push($response,'Error','Registro no actualizado.');
                 }
             }
         }
-        return json_encode($response);
         mysqli_close($connection);
+        return json_encode($response);
     }
 }
 

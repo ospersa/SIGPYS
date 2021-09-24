@@ -1853,6 +1853,7 @@ function removeSltArea (element, idArea) {
             data:       { removeSltAreaElem: idArea, areaIdProy: idProy },
             success:    function (data) {
                 let datos = JSON.parse(data);
+                console.log(datos);
                 if (datos[0] == 'Correcto') {
                     $(element).parent().parent().remove();
                     M.toast({html: datos[1]})

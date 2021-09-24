@@ -555,4 +555,10 @@ table.mis-solicitudes {
     width: 20%; }
 
 #modalAgenda {
-  width: 80%; }
+  width: 80%;
+  min-height: 80% !important; }
+
+.select-dropdown {
+  width: auto !important; }
+  .select-dropdown li > span {
+    white-space: nowrap; }
