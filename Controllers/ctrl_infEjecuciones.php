@@ -10,8 +10,8 @@ $diasLab    = (isset($_POST['diasLab'])) ? $_POST['diasLab'] : null;
 
 /* Procesamiento peticiones al controlador */
 if (isset($_POST['btnDescargar'])) {
-    InformeEjecuciones::descarga($txtFechIni, $txtFechFin, $diasLab);
+    InformeEjecuciones::descarga($txtFechIni, $txtFechFin);
 } else {
-    InformeEjecuciones::busqueda($txtFechIni, $txtFechFin, $diasLab);
+    InformeEjecuciones::busqueda($txtFechIni, $txtFechFin);
 } 
 ?>
