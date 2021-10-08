@@ -218,35 +218,38 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     ->setDescription('Informe de seguimiento estados y metadata')
                     ->setKeywords('Informe de seguimiento estados y metadata')
                     ->setCategory('Test result file');
-                $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Seguimiento Estados');
-                $spreadsheet->addSheet($myWorkSheet, 0);
-                $sheetIndex = $spreadsheet->getIndex($spreadsheet->getSheetByName('Worksheet'));
-                $spreadsheet->removeSheetByIndex($sheetIndex); 
-                $spreadsheet->getActiveSheet()->setShowGridlines(false);
-                /** Arreglo títulos */
-                if ( $tiempos == null ) {
-                    $titulos = ['Código/Nombre del proyecto', 'Código Producto', 'Descripción / Nombre Inicial', 'Fecha estimada de entrega', 'Estado', 'Responsable P&S', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Palabras Clave', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido', 'Área de Conocimiento'];
-                } else {
-                    $titulos = ['Código/Nombre del proyecto', 'Código Producto', 'Descripción / Nombre Inicial', 'Fecha estimada de entrega', 'Estado', 'Responsable P&S', 'Horas por persona', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Palabras Clave', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido', 'Área de Conocimiento'];
-                }
-                $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
-                /** Aplicación de estilos */
-                $spreadsheet->getActiveSheet()->getStyle('A1:E1')->applyFromArray(STYLETABLETI);
-                /** Dimensión columnas */
-                foreach ($titulos as $key => $titulo) {
-                    $spreadsheet->getActiveSheet()->getColumnDimension(ALPHABET[$key])->setWidth(SIZES[$key]);
-                }
-                $sheet = $spreadsheet->getActiveSheet();
-                $sheet->setCellValue('A1', 'Informe de seguimiento de estados y metadata');
-                $sheet->mergeCells("A1:E1");
-                $spreadsheet->getActiveSheet()->getStyle('A6:G6')->applyFromArray(STYLETABLETITLE);
-                $spreadsheet->getActiveSheet()->getStyle('H6:X6')->applyFromArray(STYLETABLETITLEORANGE);
-                $fila = 7;
-                $presupuestoTotal = '0';
                 while ( $datos = mysqli_fetch_array($resultado) ) {
+                    $fila = 7;
+                    $presupuestoTotal = '0';
                     $codProy = $datos['codProy'];
                     $nombreProy = $datos['nombreProy'];
-                    $spreadsheet->getActiveSheet()->setCellValue('B'.$fila, $codProy);
+
+                    $proyecto = $datos['idProy']; 
+
+                    $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Estados '.$codProy);
+                    $numOfWorksheets = $spreadsheet ->getSheetCount();
+                    $spreadsheet->addSheet($myWorkSheet, $numOfWorksheets);
+                    $spreadsheet->setActiveSheetIndex($numOfWorksheets);
+                    $spreadsheet->getActiveSheet()->setShowGridlines(false);
+                    /** Arreglo títulos */
+                    if ( $tiempos == null ) {
+                        $titulos = ['Código/Nombre del proyecto', 'Código Producto', 'Descripción / Nombre Inicial', 'Fecha estimada de entrega', 'Estado', 'Responsable P&S', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Palabras Clave', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido', 'Área de Conocimiento'];
+                    } else {
+                        $titulos = ['Código/Nombre del proyecto', 'Código Producto', 'Descripción / Nombre Inicial', 'Fecha estimada de entrega', 'Estado', 'Responsable P&S', 'Horas por persona', 'Tipo de recurso', 'Plataforma', 'Clase de producto', 'Tipo de producto', 'Nombre de producto', 'Descripción de producto', 'Link producto', 'URL Servidor', 'Duración Minutos', 'Duración Segundos', 'Sinopsis', 'Palabras Clave', 'Autor Externo', 'Idioma', 'Formato', 'Tipo Contenido', 'Área de Conocimiento'];
+                    }
+                    $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A6');
+                    /** Aplicación de estilos */
+                    $spreadsheet->getActiveSheet()->getStyle('A1:E1')->applyFromArray(STYLETABLETI);
+                    /** Dimensión columnas */
+                    foreach ($titulos as $key => $titulo) {
+                        $spreadsheet->getActiveSheet()->getColumnDimension(ALPHABET[$key])->setWidth(SIZES[$key]);
+                    }
+                    $sheet = $spreadsheet->getActiveSheet();
+                    $sheet->setCellValue('A1', 'Informe de seguimiento de estados y metadata');
+                    $sheet->mergeCells("A1:E1");
+                    $spreadsheet->getActiveSheet()->getStyle('A6:G6')->applyFromArray(STYLETABLETITLE);
+                    $spreadsheet->getActiveSheet()->getStyle('H6:X6')->applyFromArray(STYLETABLETITLEORANGE);
+
                     $idProy = $datos['idProy'];
                     $consulta1 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSer, pys_estadosol.nombreEstSol, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev, pys_actsolicitudes.presupuesto, pys_solicitudes.fechSol, pys_solicitudes.idSolIni, pys_actproductos.nombreProd, pys_actproductos.urlVimeo, pys_actproductos.descripcionProd, pys_actproductos.palabrasClave, pys_actproductos.fechEntregaProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, pys_tiposrecursos.nombreTRec, pys_plataformas.nombrePlt, pys_tiposproductos.descripcionTProd, formatos.formatoNombre, pys_claseproductos.nombreClProd, tiposcontenido.tipoContenidoNombre, pys_tiposproductos.descripcionTProd, idiomas.idiomaNombre, pys_areaconocimiento.areaNombre
                         FROM pys_actualizacionproy
@@ -350,13 +353,26 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             $fila++;
                         }
                     }
+                    $spreadsheet->getActiveSheet()->getStyle('A6:'.ALPHABET[count($titulos) - 1].($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
+                    $spreadsheet->getActiveSheet()->getStyle('A6:G'.ALPHABET[count($titulos) - 1].($fila-1))->applyFromArray(STYLEBODY);
+
+                    if ($tiempos != null) {
+                        $myWorkSheet2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Ejecuciones '.$codProy);
+                        $numOfWorksheets = $spreadsheet ->getSheetCount();
+                        $spreadsheet->addSheet($myWorkSheet2, $numOfWorksheets);
+                        $spreadsheet->setActiveSheetIndex($numOfWorksheets);
+                        self::ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor);
+                    }
                 }
                 
-                $spreadsheet->getActiveSheet()->getStyle('A6:'.ALPHABET[count($titulos) - 1].($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-                $spreadsheet->getActiveSheet()->getStyle('A6:G'.ALPHABET[count($titulos) - 1].($fila-1))->applyFromArray(STYLEBODY);
-                if ($tiempos != null) {
-                    $spreadsheet = self::ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor);
-                }
+                $myWorkSheet3 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Ejecuciones en el corte');
+                $numOfWorksheets = $spreadsheet ->getSheetCount();
+                $spreadsheet->addSheet($myWorkSheet3, $numOfWorksheets);
+                $spreadsheet->setActiveSheetIndex($numOfWorksheets);
+                $spreadsheet->getActiveSheet()->setShowGridlines(false);
+                $spreadsheet->getActiveSheet()->fromArray(['Persona', 'Proyecto', 'Tiempo trabajado', '% Ejecutado'], null, 'A1');
+                self::ejecucionesCorte($spreadsheet);
+                
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');  
                 header('Content-Disposition: attachment;filename="Informe seguimiento estados y metadata'.gmdate(' d M Y ').'.xlsx"');
                 header('Cache-Control: max-age=0');
@@ -375,9 +391,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
         public static function ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor){
             require('../Core/connection.php');
             // Creación de hoja con información de tiempos registrados en el mes
-            $myWorkSheet2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Ejecuciones proyectos');
-            $spreadsheet->addSheet($myWorkSheet2, 1);
-            $spreadsheet->setActiveSheetIndex(1);
+            $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
+
             $spreadsheet->getActiveSheet()->setCellValue('A1', '0%  - 40%  Verde');
             $spreadsheet->getActiveSheet()->setCellValue('A2', '41% - 60%  Amarillo');
             $spreadsheet->getActiveSheet()->setCellValue('A3', '61% - 80%  Naranja');
@@ -427,10 +442,10 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             $spreadsheet->getActiveSheet()->setCellValue('S7', 'Ejecución');
             $spreadsheet->getActiveSheet()->setCellValue('T7', 'Presupuesto');
             $spreadsheet->getActiveSheet()->setCellValue('U7', 'Ejecución');
-            $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
             $fila = $filasIni = 8;
+
             if ( is_array ( $datos2 ) ) {
-                foreach ($datos2 as $value) {
+                foreach ($datos2 as $value) {                  
                     if ( ! empty ( $value['Proyecto'] ) ) {
                         $tiempoCorteAnterior = ( empty ( $value['Tiempo Corte Anterior'] ) ) ? '0' : $value['Tiempo Corte Anterior'];
                         $ejecutadoCorteAnterior = ( empty ( $value['Ejecutado Corte Anterior'] ) ) ? '0' : $value['Ejecutado Corte Anterior'];
@@ -626,18 +641,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 $spreadsheet->getActiveSheet()->mergeCells("A3:H3");
                 $fila++;
             }
-            $spreadsheet = self::ejecucionesCorte($spreadsheet);
             return $spreadsheet;
         }
 
         public static function ejecucionesCorte ($spreadsheet) {
             require('../Core/connection.php');
             // Creación de hoja con información de ejecuciones de proyectos 
-            $myWorkSheet3 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Ejecuciones en el corte');
-            $spreadsheet->addSheet($myWorkSheet3, 2);
-            $spreadsheet->setActiveSheetIndex(2);
-            $spreadsheet->getActiveSheet()->setShowGridlines(false);
-            $spreadsheet->getActiveSheet()->fromArray(['Persona', 'Proyecto', 'Tiempo trabajado', '% Ejecutado'], null, 'A1');
             $datos = self::tiemposMes();
             $fila = $filasIni = 2;
             if ( is_array ( $datos ) ) {
@@ -776,6 +785,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 if ($registry1 > 0) {
                     while ($datos1 = mysqli_fetch_array($result1)) {
                         $idProy = $datos1['idProy'];
+                        $codProy = $datos1['codProy'];
                         $nombreProyecto = $datos1['codProy'] . " - " . $datos1['nombreProy'];
                         $oracle = $datos1['nombreCortoProy'];
                         $presupuestoProyecto = 0;
@@ -850,6 +860,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                     }
                                     if ($totalAnterior + $totalActual > 0) {
                                         $json[] = array (
+                                            'CodProy' => $codProy,
                                             'Proyecto' => $nombreProyecto,
                                             'Asignado' => $nombreAsignado,
                                             'Horas Presupuestadas' => $totalTiempoAsignado,
@@ -864,6 +875,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             }
                             if ($consolidadoEjecutadoAnterior + $consolidadoEjecutadoActual > 0) {
                                 $json[] = array(
+                                    "CodProy" => $codProy,
                                     "Total Proyecto" => $nombreProyecto,
                                     "Presupuesto Proyecto" => $presupuestoProyecto,
                                     "Total Horas Presupuestadas" => $consolidadoTiempoAsignado,
