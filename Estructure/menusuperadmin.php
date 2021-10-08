@@ -315,6 +315,9 @@
         <a href="fuenteFinanciamiento.php">Fuente Financiación</a>
     </li>
     <li>
+        <a href="opciones.php">Opción del sistema</a>
+    </li>
+    <li>
         <a href="plataforma.php">Plataformas</a>
     </li>
     <li>
