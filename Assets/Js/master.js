@@ -912,7 +912,7 @@ function modalAgenda(fecha){
                     <table class="left responsive-table">
                     <thead>
                         <tr>
-                            <th>Producto/Servicio</th>
+                            <th>Proyecto - Producto/Servicio</th>
                             <th>Descripción del Producto/Servicio</th>
                             <th>Actividad</th>
                             <th>Tiempo</th>
@@ -925,11 +925,11 @@ function modalAgenda(fecha){
                         if (task.estAgenda == 1){
                         string += `
                             <tr>
-                            <td>P${task.idSol}</td>
+                            <td>${task.codProy} / P${task.idSol}</td>
                                 <td><p class="truncate">${task.descripcionSol}</p></td>
-                                <td><p class="truncate">${task.notaAgenda}</p></td>
+                                <td>${task.notaAgenda}</td>
                                 <td>${task.horaAgenda} h ${task.minAgenda} m </td>
-                                <td>${task.fase}</td>
+                                <td class="fase">${task.fase}</td>
                                 <td><p>
                                 <label>
                                 <input type="checkbox" id="checkReg${task.cont}" name="idAgenda[]" value="${task.idAgenda}"  class="filled-in"  data-checked="false" onclick= "checkRegistarT('#checkReg${task.cont}')" />
@@ -1694,6 +1694,7 @@ function actTiempo(){
     });
 }
 function actSolEsp(){
+    let busqueda = $('#valbus').val();
     $("#actFormSolEs").submit(function(e){
         e.preventDefault();
     });
@@ -1703,8 +1704,58 @@ function actSolEsp(){
         data: $("#actFormSolEs").serialize(),
         success: function (data) {
             alert(data);
-            buscarEst('../Controllers/ctrl_solicitudEspecifica.php', $("#valbus").val());
             $("#modalSolicitudEspecifica").modal('close')
+            if (busqueda != '') {
+                buscarEst('../Controllers/ctrl_solicitudEspecifica.php', busqueda);
+            } else {
+                location.reload();
+            }
+        }
+    });
+}
+function cancelarSolicitudEspecifica() {
+    let busqueda = $('#valbus').val();
+    $("#actFormSolEs").submit(function(e){
+        e.preventDefault();
+    });
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_solicitudEspecifica.php',
+        data: {
+            idSolicitud: $('#cod').val(),
+            accion: 'cancelar'
+        },
+        success: function (data) {
+            alert(data);
+            $("#modalSolicitudEspecifica").modal('close')
+            if (busqueda != '') {
+                buscarEst('../Controllers/ctrl_solicitudEspecifica.php', busqueda);
+            } else {
+                location.reload();
+            }
+        }
+    });
+}
+function eliminarSolicitudEspecifica() {
+    let busqueda = $('#valbus').val();
+    $("#actFormSolEs").submit(function(e){
+        e.preventDefault();
+    });
+    $.ajax({
+        type: "POST",
+        url: '../Controllers/ctrl_solicitudEspecifica.php',
+        data: {
+            idSolicitud: $('#cod').val(),
+            accion: 'eliminar'
+        },
+        success: function (data) {
+            alert(data);
+            $("#modalSolicitudEspecifica").modal('close')
+            if (busqueda != '') {
+                buscarEst('../Controllers/ctrl_solicitudEspecifica.php', busqueda);
+            } else {
+                location.reload();
+            }
         }
     });
 }
@@ -1817,6 +1868,7 @@ function removeSltArea (element, idArea) {
             data:       { removeSltAreaElem: idArea, areaIdProy: idProy },
             success:    function (data) {
                 let datos = JSON.parse(data);
+                console.log(datos);
                 if (datos[0] == 'Correcto') {
                     $(element).parent().parent().remove();
                     M.toast({html: datos[1]})

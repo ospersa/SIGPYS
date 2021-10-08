@@ -63,7 +63,6 @@ if ($id) {
         $info               = Proyecto::onLoadTipo($id);
         $nombreTip          = $info['nombreTProy'];
     } else if ($prep == "PRY") {
-        echo "<script>alert('Llegó id de proyecto');</script>";
         $info               = Proyecto::onLoadProyecto($id);
         $areasConocimiento  = Proyecto::areaConocimiento($id);
         $entidad            = $info['idEnt'];
@@ -91,7 +90,7 @@ if ($id) {
         $celula             = $info['idCelula'];
         $contexto           = $info['descripcionProy'];
 
-        $areasConocimientoModal = '<div class="row">
+        $areasConocimientoModal = '<div class="">
                                         <table>
                                             <thead>
                                                 <th>Área de conocimiento</th>
@@ -188,7 +187,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 if($addSltArea != null) {
     echo '  <div id="areaSlt'.$addSltArea.'">
-                <div class="input-field col l5 m5 s11 offset-l3 offset-m3 select-plugin">';
+                <div class="input-field col l11 m11 s11 select-plugin">';
                     Proyecto::selectAreaConocimiento(null, $addSltArea);
     echo '      </div>
                 <div class="input-field col l1 m1 s1 center-align select-plugin">

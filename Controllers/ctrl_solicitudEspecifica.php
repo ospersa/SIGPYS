@@ -22,6 +22,8 @@ $fechCreacion       = null;
 $ultActualizacion   = null;
 $idTipoSol          = null;
 $idCM               = null;
+$accion             = isset ( $_POST['accion'] ) ? $_POST['accion'] : null;
+$idSolicitud        = isset ( $_POST['idSolicitud'] ) ? $_POST['idSolicitud'] : null;
 
 /* Variables que cargan Select en formularios*/
 if (isset($_POST['sltEquipo']) && !isset($_POST['btnRegistrarSolEsp']) && !isset($_POST['val'])) {
@@ -100,6 +102,13 @@ if (isset($_POST['txtSolIni']) && isset($_POST['txtSolEsp']) && isset($_POST['tx
     return SolicitudEspecifica::actualizarSolicitudEspecifica($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona, $txtRegistrarT);
 }
 
-
+/* Eliminación o cancelación de una solicitud específica */
+if ($accion != null && $idSolicitud != null) {
+    if ($accion == "cancelar") {
+        SolicitudEspecifica::cancelarSolicitudEspecifica($idSolicitud);
+    } else if ($accion == "eliminar") {
+        SolicitudEspecifica::eliminarSolicitudEspecifica($idSolicitud);
+    }
+}
 
 ?>

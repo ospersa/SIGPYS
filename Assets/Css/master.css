@@ -553,3 +553,12 @@ table.mis-solicitudes {
     width: 20%; }
   table.mis-solicitudes thead th:nth-child(5) {
     width: 20%; }
+
+#modalAgenda {
+  width: 80%;
+  min-height: 80% !important; }
+
+.fase .select-dropdown {
+  width: auto !important; }
+  .fase .select-dropdown li > span {
+    white-space: nowrap; }

@@ -29,11 +29,54 @@ const STYLEORANGE = [
         ]
     ]
 ];
+const STYLEORANGELIGHT = [
+    'alignment' => [
+        'wrapText' => TRUE,  
+        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER, 
+        'textRotation' => 0
+    ],
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'startColor' => [
+            'argb' => 'FFE699',
+        ]
+    ]
+];
 const STYLERED = [
     'fill' => [
     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
     'startColor' => [
         'argb' => 'F8473B',
+        ]
+    ]
+];
+const STYLESALMON = [
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => 'ff7f50',
+        ]
+    ]
+];
+const STYLEBLUE = [
+    'font' => [
+        'color' => ['argb' => 'FFFFFF']
+    ],
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => '0000cd',
+        ]
+    ]
+];
+const STYLEBLACK = [
+    'font' => [
+        'color' => ['argb' => 'FFFFFF']
+    ],
+    'fill' => [
+    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+    'startColor' => [
+        'argb' => '000000',
         ]
     ]
 ];
@@ -641,7 +684,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 while ($data0 = mysqli_fetch_array($result0)) {
                     $inicioPeriodo = $data0['inicioPeriodo'];
                     $finPeriodo = $data0['finPeriodo'];
-                    $asignaciones[$data0['persona_IdPersona']] =  ((($data0['diasSegmento1'] * 8) * $data0['porcentajeDedicacion1']) / 100) + ((($data0['diasSegmento2'] * 8) * $data0['porcentajeDedicacion2']) / 100);
+                    $totalAsig = ((($data0['diasSegmento1'] * 8) * $data0['porcentajeDedicacion1']) / 100) + ((($data0['diasSegmento2'] * 8) * $data0['porcentajeDedicacion2']) / 100);
+                    $asignaciones[$data0['persona_IdPersona']] = ($totalAsig == 0) ? 160 : $totalAsig;
                 }
                 $query1 = "SELECT pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, SUM(pys_tiempos.horaTiempo) AS 'Horas', SUM(pys_tiempos.minTiempo) AS 'Minutos', pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy
                     FROM pys_tiempos
@@ -674,13 +718,14 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                         $total = $asignacion = 0;
                     }
                     $total += $tiempo;
-                    $asignacion = $asignaciones[$idPersona];
+                    $asignacion = isset( $asignaciones[$idPersona] ) ? $asignaciones[$idPersona] : 160;
+
                     $json[] = array(
                         "Nombre" => $nombreCompleto,
                         "Proyecto" => $proyecto,
                         "Tiempo" => number_format($tiempo, 2),
-                        "Asignación" => $asignaciones[$idPersona],
-                        "Porcentaje" => number_format(($tiempo / $asignaciones[$idPersona]), 2)
+                        "Asignación" => $asignacion,
+                        "Porcentaje" => number_format(($tiempo / $asignacion), 2)
                     );
                     if ($recorrido == $registros) {
                         $json[] = array(
@@ -709,7 +754,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 $data = mysqli_fetch_array($result);
                 $inicioPeriodo = $data['inicioPeriodo'];
                 $finPeriodo = $data['finPeriodo'];
-                $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy
+                $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy, pys_actualizacionproy.nombreCortoProy
                     FROM pys_asignados
                     
                     INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1' 
@@ -732,6 +777,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     while ($datos1 = mysqli_fetch_array($result1)) {
                         $idProy = $datos1['idProy'];
                         $nombreProyecto = $datos1['codProy'] . " - " . $datos1['nombreProy'];
+                        $oracle = $datos1['nombreCortoProy'];
                         $presupuestoProyecto = 0;
                         /* Obtener suma de presupuesto de todas las solicitudes asociadas al proyecto */
                         $query0 = "SELECT pys_actsolicitudes.presupuesto 
@@ -753,12 +799,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             GROUP BY pys_asignados.idPersona;";
                         $result2 = mysqli_query($connection, $query2);
                         $registry2 = mysqli_num_rows($result2);
-                        $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoActual = $consolidadoEjecutadoActual = 0;
+                        $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAsignado = 0;
                         if ( $registry2 > 0 ) {
                             while ($data2 = mysqli_fetch_array($result2)) {
                                 $idPersona = $data2['idPersona'];
                                 $nombreAsignado = $data2['apellido1'] . " " . $data2['apellido2'] . " " . $data2['nombres'];
-                                $query3 = "SELECT pys_asignados.idAsig, pys_salarios.salario
+                                $query3 = "SELECT pys_asignados.idAsig, pys_salarios.salario, pys_asignados.maxhora, pys_asignados.maxmin
                                     FROM pys_asignados
                                     INNER JOIN pys_salarios ON pys_salarios.mes <= pys_asignados.fechAsig AND pys_salarios.anio >= pys_asignados.fechAsig AND pys_salarios.idPersona = pys_asignados.idPersona
                                     INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
@@ -766,9 +812,12 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $result3 = mysqli_query($connection, $query3);
                                 $registry3 = mysqli_num_rows($result3);
                                 if ($registry3 > 0) {
-                                    $tiempoActual = $totalActual = $tiempoAnterior = $totalAnterior = 0;
+                                    $tiempoActual = $totalActual = $tiempoAnterior = $totalAnterior = $tiempoAsignado = $totalTiempoAsignado = 0;
                                     while ($data3 = mysqli_fetch_array($result3)) {
                                         $idAsignado = $data3['idAsig'];
+                                        $tiempoAsignado = (($data3['maxhora'] * 60) + $data3['maxmin']) / 60;
+                                        $totalTiempoAsignado += $tiempoAsignado;
+                                        $consolidadoTiempoAsignado += $tiempoAsignado;
                                         $salario = $data3['salario'];
                                         /* Información de tiempos en el corte actual */
                                         $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
@@ -781,7 +830,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                             $costo = $tiempo * $salario;
                                             $tiempoActual += $tiempo;
                                             $totalActual +=  $tiempo * $salario;
-                                            $consolidadoTiempoActual += $tiempoActual;
+                                            $consolidadoTiempoActual += $tiempo;
                                             $consolidadoEjecutadoActual += $costo;
                                         }
                                         /* Información de tiempos en el corte anterior */
@@ -803,6 +852,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                         $json[] = array (
                                             'Proyecto' => $nombreProyecto,
                                             'Asignado' => $nombreAsignado,
+                                            'Horas Presupuestadas' => $totalTiempoAsignado,
                                             'Tiempo Corte Anterior' => $tiempoAnterior,
                                             'Ejecutado Corte Anterior' => $totalAnterior,
                                             'Tiempo Corte Actual' => $tiempoActual,
@@ -816,15 +866,17 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 $json[] = array(
                                     "Total Proyecto" => $nombreProyecto,
                                     "Presupuesto Proyecto" => $presupuestoProyecto,
+                                    "Total Horas Presupuestadas" => $consolidadoTiempoAsignado,
                                     "Nombre Proyecto" => $nombreProyecto,
                                     "Total Tiempo Anterior" => $consolidadoTiempoAnterior,
                                     "Total Ejecutado Anterior" => $consolidadoEjecutadoAnterior,
                                     "Total Tiempo Actual" => $consolidadoTiempoActual,
                                     "Total Ejecutado Actual" => $consolidadoEjecutadoActual,
-                                    'idProyecto' => $idProy
+                                    'idProyecto' => $idProy,
+                                    'Oracle' => $oracle
                                 );
                             }
-                            $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = 0;
+                            $consolidadoTiempoActual = $consolidadoEjecutadoActual = $consolidadoTiempoAnterior = $consolidadoEjecutadoAnterior = $consolidadoTiempoAsignado = 0;
                         }
                     }
                 }

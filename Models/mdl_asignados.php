@@ -8,7 +8,7 @@
                 FROM pys_asignados
                 INNER JOIN pys_personas ON pys_personas.idPersona = pys_asignados.idPersona
                 INNER JOIN pys_fases ON pys_fases.idFase = pys_asignados.idFase
-                WHERE (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_personas.est	= '1' AND pys_fases.est	= '1' AND pys_asignados.idSol = '$idSol';";
+                WHERE (pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_personas.est	= '1' AND pys_fases.est	= '1' AND pys_asignados.idAsig = '$idSol';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
             return $datos;
@@ -111,6 +111,30 @@
             }
             return $string;
             mysqli_close($connection);
+        }
+        
+        public static function selectPersonaPys () {
+            require('../Core/connection.php');
+            $consulta = "SELECT idPersona, apellido1, apellido2, nombres
+                            FROM pys_personas 
+                            WHERE est = '1' 
+                            AND ((idCargo = 'CAR012') OR (idCargo = 'CAR013') OR (idCargo = 'CAR014') OR (idCargo = 'CAR015') OR (idCargo = 'CAR016') OR (idCargo = 'CAR017') OR (idCargo = 'CAR019') OR (idCargo = 'CAR027') OR (idCargo = 'CAR033') OR (idCargo = 'CAR035') OR (idCargo = 'CAR036') OR (idCargo = 'CAR0340') OR (idCargo = 'CAR041'))
+                            ORDER BY apellido1;";
+            $resultado = mysqli_query($connection, $consulta);
+            if ($registros = mysqli_num_rows($resultado) > 0) {
+                $string = '  <select name="sltPersona" id="sltPersona" class="asignacion">
+                            <option value="" selected disabled>Seleccione</option>';
+                while ($datos = mysqli_fetch_array($resultado)) {
+                    $nombreCompleto = $datos['apellido1']." ".$datos['apellido2']." ".$datos['nombres'];
+                    $string .= '  <option value="'.$datos['idPersona'].'">'.$nombreCompleto.'</option>';
+                }
+                $string .= '  </select>
+                        <label for="sltPersona">Persona*</label>';
+            } else {
+                echo "<script>alert ('No hay categorías creadas')</script>";
+            }
+            mysqli_close($connection);
+            return $string;
         }
 
         public static function selectFase () {
@@ -552,7 +576,7 @@
                                     '.Asignados::selectRol().'
                                 </div>
                                 <div class="input-field col l4 m4 s12">
-                                    '.Asignados::selectPersona().'
+                                    '.Asignados::selectPersonaPys().'
                                 </div>
                                 <div class="input-field col l2 m4 s12">
                                     '.Asignados::selectFase().'

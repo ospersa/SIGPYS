@@ -15,7 +15,7 @@ class Proyecto {
                             <th>Cod. Conecta-TE</th>
                             <th>Proyecto</th>
                             <th>Convocatoria</th>
-                            <th>Diposnible SAP</th>
+                            <th>Ejecución (ORACLE)</th>
                             <th>Presupuesto</th>
                             <th>Inicio</th>
                             <th>Cierre</th>
@@ -44,7 +44,7 @@ class Proyecto {
         $resultado = mysqli_query($connection, $consulta);
         while ($datos = mysqli_fetch_array($resultado)) {
             $presupuesto = ($datos['presupuestoProy'] == '') ? 0 : $datos['presupuestoProy'];
-            $nombreCortoProy = ($datos['nombreCortoProy'] == '') ? 0 : $datos['nombreCortoProy'];
+            $nombreCortoProy = ($datos['nombreCortoProy'] == '') ? 0 : (int) $datos['nombreCortoProy'];
             echo "      <tr>
                             <td>".$datos['nombreEnt']."</td>
                             <td>".$datos['facDeptoFacultad']." - ".$datos['facDeptoDepartamento']."</td>
@@ -54,7 +54,7 @@ class Proyecto {
                             <td>".$datos['codProy']."</td>
                             <td>".$datos['nombreProy']."</td>
                             <td>".$datos['nombreConvocatoria']."</td>
-                            <td>$ ".$nombreCortoProy."</td>
+                            <td>$".number_format($nombreCortoProy, '0', ',', '.')."</td>
                             <td>$ ".number_format($presupuesto, '0', ',', '.')."</td>
                             <td>".$datos['fechaIniProy']."</td>
                             <td>".$datos['fechaCierreProy']."</td>
@@ -156,7 +156,7 @@ class Proyecto {
                     <th>Cod. Conecta-TE</th>
                     <th>Proyecto</th>
                     <th>Convocatoria</th>
-                    <th>Diposnible SAP</th>
+                    <th>Ejecución (ORACLE)</th>
                     <th>Presupuesto</th>
                     <th>Inicio</th>
                     <th>Cierre</th>
@@ -171,7 +171,7 @@ class Proyecto {
             <tbody>';
             while ($datos = mysqli_fetch_array($resultado)) {
                 $presupuesto = ($datos['presupuestoProy'] == '') ? 0 : $datos['presupuestoProy'];
-                $nombreCortoProy = ($datos['nombreCortoProy'] == '') ? 0 : $datos['nombreCortoProy'];
+                $nombreCortoProy = ($datos['nombreCortoProy'] == '') ? 0 : (int) $datos['nombreCortoProy'];
                 echo "      <tr>
                                 <td>".$datos['nombreEnt']."</td>
                                 <td>".$datos['facDeptoFacultad']." - ".$datos['facDeptoDepartamento']."</td>
@@ -181,8 +181,8 @@ class Proyecto {
                                 <td>".$datos['codProy']."</td>
                                 <td>".$datos['nombreProy']."</td>
                                 <td>".$datos['nombreConvocatoria']."</td>
-                                <td>$ ".$nombreCortoProy."</td>
-                                <td>$ ".number_format($presupuesto, '0', '.', ',')."</td>
+                                <td>$".number_format($nombreCortoProy, '0', ',', '.')."</td>
+                                <td>$ ".number_format($presupuesto, '0', ',', '.')."</td>
                                 <td>".$datos['fechaIniProy']."</td>
                                 <td>".$datos['fechaCierreProy']."</td>
                                 <td>".$datos['fechaColciencias']."</td>";
@@ -485,7 +485,7 @@ class Proyecto {
                     <label for="sltEstadoProy">Estado del Proyecto</label>';
         } else { // No hay información en tabla pys_estadoproy
             echo '  <select name="sltEstadoProy" id="sltEstadoProy">
-                        <option value"" selected disabled>No existen estados de proyecto</option>
+                        <option value="" selected disabled>No existen estados de proyecto</option>
                     </select>
                     <label for="sltEstadoProy">Estado del Proyecto</label>';
         }
@@ -816,7 +816,7 @@ class Proyecto {
                         <label for="sltFrente">Frente*</label>';
             }
         }
-        return $datos['idFrente'];
+        return (isset($datos['idFrente'])) ? $datos['idFrente'] : '';
         mysqli_close($connection);
     }
 
@@ -1109,7 +1109,8 @@ class Proyecto {
         $consulta = "SELECT idAreaConocimiento, areaNombre FROM pys_areaconocimiento;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
-            echo '  <select name="sltAreaConocimiento[]" id="sltAreaConocimiento'.$addSltArea.'" data-elem="'.$addSltArea.'">';
+            echo '      <select name="sltAreaConocimiento[]" id="sltAreaConocimiento'.$addSltArea.'" data-elem="'.$addSltArea.'">
+                            <option value="" selected>Seleccione</option>';
             while ($datos = mysqli_fetch_array($resultado)) {
                 if ($datos['idAreaConocimiento'] == $idAreaConocimiento) {
                     echo '  <option value="'.$datos['idAreaConocimiento'].'" selected>'.$datos['areaNombre'].'</option>';
@@ -1266,7 +1267,7 @@ class Proyecto {
 
         if($datos['idAreaConocimiento'] == null) {
             echo '  <div id="multiselect">
-                        <div class="input-field col l5 m5 s11 offset-l3 offset-m3 select-plugin">';
+                        <div class="input-field col l10 m10 s10 offset-l1 offset-m1 select-plugin">';
                             Proyecto::selectAreaConocimiento(null, null);
             echo '      </div>
                         <div class="input-field col l1 m1 s1 center-align select-plugin">
@@ -1558,6 +1559,7 @@ class Proyecto {
                 $resultado6 = mysqli_query($connection, $consulta6);
                 $datos6 = mysqli_fetch_array($resultado6);
                 $idActProy = $datos6[0]+1;
+
                 
                 if ($estProy == 'ESP002' || $estProy == 'ESP004') {
                     /** ESP002 = Cancelado; EPS004 = Terminado (PROYECTO) 
@@ -1575,6 +1577,7 @@ class Proyecto {
                         echo "<script> alert('Tiene SOLICITUDES INICIALES en Cola.');</script>";
                         echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
                     } else {
+
                         /** Insert de la información en la tabla pys_actualizacionproy */
                         $consulta3 = "INSERT INTO pys_actualizacionproy VALUES
                             ('$idActProy', '$facDepto', '$idProy', '$tipoProy', '$tipoIntExt', '$frente', '$estProy', '$etpProy', '$codProy', '$nomProy', '$nomCortoProy', '$descProy', $fechaIni, $fechaFin, NOW(), '$conv', '$idPersona', '', '$presupuesto', '$financia', $fechaColciencias, '$semanas', '$fteFinancia', '$celula', '1');";
@@ -1625,6 +1628,7 @@ class Proyecto {
                         }
                     }
                 } else {
+
                     /** Actualización de la información en la tabla pys_actualizacionproy */
                     $consulta3 = "INSERT INTO pys_actualizacionproy VALUES
                             ('$idActProy', '$facDepto', '$idProy', '$tipoProy', '$tipoIntExt', '$frente', '$estProy', '$etpProy', '$codProy', '$nomProy', '$nomCortoProy', '$descProy', $fechaIni, $fechaFin, NOW(), '$conv', '$idPersona', '', '$presupuesto', '$financia', $fechaColciencias, '$semanas', '$fteFinancia', '$celula', '1');";
@@ -1640,7 +1644,8 @@ class Proyecto {
                     /** Comprobación de la información registrada en la tabla pys_cruceproypep */
                     $consulta6 = "SELECT idCruce FROM pys_cruceproypep WHERE idProy = '$idProy' AND estado = '1';";
                     $resultado6 = mysqli_query($connection, $consulta6);
-                    if ($registros6 = mysqli_num_rows($resultado6) > 0) {
+                    $registros6 = mysqli_num_rows($resultado6);
+                    if ( $registros6 > 0) {
                         $consulta7 = "INSERT INTO pys_cruceproypep VALUES (NULL, '$pep', '$idProy', NOW(), NULL, '1');";
                         $resultado7 = mysqli_query($connection, $consulta7);
                         /** Cambio de estado de la anterior asignación del elemento PEP en la tabla pys_cruceproypep */
@@ -1656,19 +1661,20 @@ class Proyecto {
                     }
 
                     foreach ($areasConocimiento as $areaConocimiento ) {
-                        $consulta11 = "INSERT INTO areaconocimientohasproyectos VALUES ('$areaConocimiento','$idProy', 1)";
-                        $resultado11 = mysqli_query($connection, $consulta11);
+                        if ($areaConocimiento != "") {
+                            $consulta11 = "INSERT INTO areaconocimientohasproyectos VALUES ('$areaConocimiento','$idProy', '1');";
+                            $resultado11 = mysqli_query($connection, $consulta11);
+                        }
                     }
 
-                    if ($resultado3 && $resultado5 && $resultado6 && $resultado9 && $resultado11) {
-                        if (mysqli_query($connection, "COMMIT;")) {
-                            echo "<script> alert('El registro se ACTUALIZÓ correctamente.');</script>";
-                            echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
-                        }
+                    if ($resultado3 && $resultado5 && $resultado6 && $resultado9) {
+                        mysqli_query($connection, "COMMIT;");
+                        echo "<script> alert('El registro se ACTUALIZÓ correctamente.');</script>";
+                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
                     } else {
-                        if (mysqli_query($connection, "ROLLBACK;")) {
-                            echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
-                        }
+                        mysqli_query($connection, "ROLLBACK;");
+                        echo "<script> alert('El registro NO se ACTUALIZÓ correctamente.');</script>";
+                        echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">'; // Retornamos al usuario a la página anterior
                     }
                 }   
             }
@@ -1679,25 +1685,31 @@ class Proyecto {
     public static function removeAreaConocimiento ($idAreaConocimiento, $idProy) {
         require('../Core/connection.php');
         $response   = [];
-        $query1     = "SELECT * FROM pys_actproductos WHERE idAreaConocimiento = '$idAreaConocimiento';";
-        $resp       = mysqli_query($connection, $query1);
-        if($resp > 0){
+        $query1     = "SELECT pys_actproductos.idAreaConocimiento 
+            FROM pys_actproductos
+            INNER JOIN pys_productos ON pys_productos.idProd = pys_actproductos.idProd AND pys_productos.est = '1'
+            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_productos.idSol AND pys_actsolicitudes.est = '1'
+            INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+            WHERE pys_actproductos.est = '1' AND pys_cursosmodulos.idProy = '$idProy' AND pys_actproductos.idAreaConocimiento = '$idAreaConocimiento';";
+        $result = mysqli_query($connection, $query1);
+        $registry = mysqli_num_rows($result);
+        if ($registry > 0){
             array_push($response,'Error','No se puede eliminar el área de conocimiento. Está área se encuentra asignada a uno o mas productos.');
         }  else {
             $consulta   = "UPDATE areaconocimientohasproyectos SET areaEstado = '0' WHERE pys_proyectos_idProy  = '$idProy' AND pys_areaconocimiento_idAreaConocimiento = '$idAreaConocimiento';";
             $resultado = mysqli_query($connection, $consulta);
             if ($resultado) {
                 if (mysqli_query($connection, "COMMIT;")) {
-                    array_push($response,'Correcto','Registró actualizado.');
+                    array_push($response,'Correcto','Registro actualizado.');
                 }                            
             } else {
                 if (mysqli_query($connection, "ROLLBACK;")) {
-                    array_push($response,'Error','Registró no actualizado.');
+                    array_push($response,'Error','Registro no actualizado.');
                 }
             }
         }
-        return json_encode($response);
         mysqli_close($connection);
+        return json_encode($response);
     }
 }
 

@@ -8,14 +8,14 @@
             $tabla  = "";
             $tothor = 0;
             $totmin = 0;
-            $consulta = "SELECT pys_asignados.idSol, pys_asignados.idProy, pys_proyectos.codProy, pys_proyectos.nombreProy, pys_tiempos.idTiempo, pys_tiempos.idAsig, pys_tiempos.fechTiempo,pys_tiempos.notaTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.idFase, pys_fases.nombreFase
-            FROM pys_asignados
-            INNER JOIN pys_tiempos ON pys_asignados.idAsig = pys_tiempos.idAsig
-            INNER JOIN pys_proyectos ON pys_asignados.idProy = pys_proyectos.idProy
-            INNER JOIN pys_fases ON pys_tiempos.idFase = pys_fases.idFase
-            INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
-            INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
-            WHERE estTiempo = '1' AND fechTiempo >= '$fechaInicial' AND fechTiempo <= '$fechaFinal' AND pys_login.usrLogin = '$user' ORDER BY pys_tiempos.fechTiempo ASC;";
+            $consulta = "SELECT pys_asignados.idSol, pys_asignados.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_tiempos.idTiempo, pys_tiempos.idAsig, pys_tiempos.fechTiempo,pys_tiempos.notaTiempo, pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_tiempos.idFase, pys_fases.nombreFase
+                FROM pys_asignados
+                INNER JOIN pys_tiempos ON pys_asignados.idAsig = pys_tiempos.idAsig
+                INNER JOIN pys_actualizacionproy ON pys_asignados.idProy = pys_actualizacionproy.idProy AND pys_actualizacionproy.est = '1'
+                INNER JOIN pys_fases ON pys_tiempos.idFase = pys_fases.idFase
+                INNER JOIN pys_personas ON pys_asignados.idPersona =pys_personas.idPersona
+                INNER JOIN pys_login on pys_personas.idPersona=pys_login.idPersona
+                WHERE estTiempo = '1' AND fechTiempo >= '$fechaInicial' AND fechTiempo <= '$fechaFinal' AND pys_login.usrLogin = '$user' ORDER BY pys_tiempos.fechTiempo ASC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             $consulta2= "SELECT SUM(pys_tiempos.horaTiempo), SUM(pys_tiempos.minTiempo) FROM pys_tiempos

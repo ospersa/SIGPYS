@@ -89,24 +89,24 @@ if (isset($_POST['btnAsignar'])) {
 if (isset($_GET['id'])) {
     $id = (isset($_GET['id'])) ? $_GET['id'] : null;
     $info = Asignados::onLoadAsignacion($id);
-    $nombreCompleto = strtoupper($info['apellido1']." ".$info['apellido2']." ".$info['nombres']);
-    $nombreFase = $info['nombreFase'];
-    $horas = $info['maxhora'];
-    $minutos = $info['maxmin'];
-    $estado = $info['est'];
+    $nombreCompleto     = isset ($info['apellido1']) ? strtoupper($info['apellido1']." ".$info['apellido2']." ".$info['nombres']) : null;
+    $nombreFase         = isset ($info['nombreFase']) ? $info['nombreFase'] : null;
+    $horas              = isset ($info['maxhora']) ? $info['maxhora'] : null;
+    $minutos            = isset ($info['maxmin']) ? $info['maxmin'] : null;
+    $estado             = isset ($info['est']) ? $info['est'] : null;
     $info2 = Asignados::infoEnviarCorreoSolIni($id);
-    $idSolIni = $info2['idSolIni'];
-    $nombres = $info2['nombres'];
-    $apellido1 = $info2['apellido1'];
-    $apellido2 = $info2['apellido2'];
-    $correo = $info2['correo'];
-    $codProy = $info2['codProy'];
-    $nombreProy = $info2['nombreProy'];
+    $idSolIni           = isset ($info2['idSolIni']) ? $info2['idSolIni'] : null;
+    $nombres            = isset ($info2['nombres']) ? $info2['nombres'] : null;
+    $apellido1          = isset ($info2['apellido1']) ? $info2['apellido1'] : null;
+    $apellido2          = isset ($info2['apellido2']) ? $info2['apellido2'] : null;
+    $correo             = isset ($info2['correo']) ? $info2['correo'] : null;
+    $codProy            = isset ($info2['codProy']) ? $info2['codProy'] : null;
+    $nombreProy         = isset ($info2['nombreProy']) ? $info2['nombreProy'] : null;
     $info3 = Asignados::infoEnviarCorreoAsig($id);
-    $ObservacionAct = $info3['ObservacionAct'];  
-    $nombreEqu = $info3['nombreEqu'];   
-    $nombreSer = $info3['nombreSer'];   
-    $fechPrev = $info3['fechPrev'];    
+    $ObservacionAct     = isset ($info3['ObservacionAct']) ? $info3['ObservacionAct'] : null;  
+    $nombreEqu          = isset ($info3['nombreEqu']) ? $info3['nombreEqu'] : null;   
+    $nombreSer          = isset ($info3['nombreSer']) ? $info3['nombreSer'] : null;   
+    $fechPrev           = isset ($info3['fechPrev']) ? $info3['fechPrev'] : null;
     $responsables = Asignados::infoEnviarCorreoResponsable($id);
 }
 

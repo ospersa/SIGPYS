@@ -1141,6 +1141,102 @@
             mysqli_close($connection);
         }
 
+        public static function cancelarSolicitudEspecifica ($idSol) {
+            require('../Core/connection.php');
+            $allowCancel = false;
+            $asignados = self::totalAsignados($idSol);
+            if ( $asignados > 0 ) {
+                echo "El producto P$idSol, no puede ser cancelado porque tiene $asignados personas asignadas";
+            } else {
+                $query = "SELECT productoOservicio FROM pys_actsolicitudes 
+                    INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer AND pys_servicios.est = '1'
+                    WHERE idSol = '$idSol' AND pys_actsolicitudes.est = '1';";
+                $result = mysqli_query($connection, $query);
+                $data = mysqli_fetch_array($result);
+                $productoServicio = $data['productoOservicio'];
+                if ($productoServicio == "SI") {
+                    $metadataDiligenciada = self::verificarMetadataProducto($idSol);
+                    if ( $metadataDiligenciada > 0 ) {
+                        echo "El producto P$idSol, no puede ser cancelado porque tiene información de metadata relacionada";
+                    } else {
+                        $allowCancel = true;
+                    }
+                }
+            }
+            if ( $allowCancel ) {
+                $query1 = "SELECT idPersona FROM pys_login WHERE usrLogin = '".$_SESSION['usuario']."';";
+                $result1 = mysqli_query($connection, $query1);
+                $data1 = mysqli_fetch_array($result1);
+                $user = $data1[0];
+                $query2 = "UPDATE pys_actsolicitudes SET idEstSol = 'ESS007', idPersona = '$user', fechAct = NOW() WHERE idSol = '$idSol' AND est = '1';";
+                $result2 = mysqli_query($connection, $query2);
+                if ( $result2 ) {
+                    echo "Producto/Servicio P$idSol cancelado correctamente";
+                } else {
+                    echo "Ocurrión un error y el Producto/Servicio P$idSol no pudo ser cancelado. Por favor intente nuevamente.";
+                }
+            }
+            mysqli_close($connection);
+        }
+
+        public static function eliminarSolicitudEspecifica ($idSol) {
+            require('../Core/connection.php');
+            $allowDelete = false;
+            $asignados = self::totalAsignados($idSol);
+            if ( $asignados > 0 ) {
+                echo "El producto P$idSol, no puede ser eliminado porque tiene $asignados personas asignadas";
+            } else {
+                $query = "SELECT productoOservicio FROM pys_actsolicitudes 
+                    INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer AND pys_servicios.est = '1'
+                    WHERE idSol = '$idSol' AND pys_actsolicitudes.est = '1';";
+                $result = mysqli_query($connection, $query);
+                $data = mysqli_fetch_array($result);
+                $productoServicio = $data['productoOservicio'];
+                if ($productoServicio == "SI") {
+                    $metadataDiligenciada = self::verificarMetadataProducto($idSol);
+                    if ( $metadataDiligenciada > 0 ) {
+                        echo "El producto P$idSol, no puede ser eliminado porque tiene información de metadata relacionada";
+                    } else {
+                        $allowDelete = true;
+                    }
+                }
+            }
+            if ( $allowDelete ) {
+                $query1 = "SELECT idPersona FROM pys_login WHERE usrLogin = '".$_SESSION['usuario']."';";
+                $result1 = mysqli_query($connection, $query1);
+                $data1 = mysqli_fetch_array($result1);
+                $user = $data1[0];
+                $query2 = "UPDATE pys_actsolicitudes SET est = '0', idPersona = '$user', fechAct = NOW() WHERE idSol = '$idSol' AND est = '1';";
+                $result2 = mysqli_query($connection, $query2);
+                if ( $result2 ) {
+                    echo "Producto/Servicio P$idSol eliminado correctamente";
+                } else {
+                    echo "Ocurrión un error y el Producto/Servicio P$idSol no pudo ser eliminado. Por favor intente nuevamente.";
+                }
+            }
+            mysqli_close($connection);
+        }
+
+        public static function totalAsignados ($idSol) {
+            require('../Core/connection.php');
+            $query = "SELECT idAsig FROM pys_asignados WHERE idSol = '$idSol' AND est != '0';";
+            $result = mysqli_query($connection, $query);
+            $registry = mysqli_num_rows($result);
+            mysqli_close($connection);
+            return $registry;
+        }
+
+        public static function verificarMetadataProducto ($idSol) {
+            require('../Core/connection.php');
+            $query = "SELECT pys_productos.idProd FROM pys_productos
+                INNER JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
+                WHERE pys_productos.idSol = 'S04615';";
+            $result = mysqli_query($connection, $query);
+            $registry = mysqli_num_rows($result);
+            mysqli_close($connection);
+            return $registry;
+        }
+
     }
 
 ?>

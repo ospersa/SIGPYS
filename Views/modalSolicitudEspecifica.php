@@ -68,7 +68,16 @@
         </p>
         </div>
         <div class="input-field col l12 m12 s12">
-                <button class="btn waves-effect waves-light" type="submit" onclick="actSolEsp();" name="btnActualizarSolEsp">Actualizar</button>
+            <button class="btn waves-effect waves-light" type="submit" onclick="actSolEsp();" name="btnActualizarSolEsp">Actualizar</button>
+            <?php
+            if ($idEstadoSol == 'ESS007') {
+                $disabled = "disabled";
+            } else {
+                $disabled = "";
+            } 
+            ?>
+            <button style="margin-left: 50px;" class="btn waves-effect waves-light red" onclick="cancelarSolicitudEspecifica();" <?php echo $disabled; ?>>Cancelar<i class="material-icons left">cancel</i></button>
+            <button class="btn waves-effect waves-light red darken-4" onclick="eliminarSolicitudEspecifica();">Eliminar<i class="material-icons left">delete</i></button>
         </div>
     </form>
 </div>

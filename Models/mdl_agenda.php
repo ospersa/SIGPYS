@@ -317,20 +317,22 @@ class  PlaneacionAse{
         $newFecha = date("Y-m-d", strtotime($fecha));
         $cont = 1;
         $agenda = "";
-        $consulta = "SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda, estAgenda 
+        $consulta = "SELECT pys_agenda.idAsig , pys_agenda.idAgenda, pys_agenda.horaAgenda, pys_agenda.minAgenda, pys_agenda.notaAgenda, pys_agenda.estAgenda, estAgenda, pys_asignados.idFase
             FROM pys_agenda 
             INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_agenda.idAsig
             INNER JOIN pys_login ON pys_login.idPersona = pys_asignados.idPersona
             WHERE pys_agenda.estAgenda <> '0' AND ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_login.est = '1' AND pys_login.usrLogin = '$user' AND pys_agenda.fechAgenda ='$newFecha';";
         $resultado = mysqli_query($connection, $consulta);
-        while ($datos = mysqli_fetch_array($resultado)){    
+        while ($datos = mysqli_fetch_array($resultado)) {    
             $idAgenda = $datos['idAgenda'];
             $idAsig = $datos['idAsig'];
+            $idFase = $datos['idFase'];
             $notaAgenda = $datos['notaAgenda'];
             $horaAgenda = $datos['horaAgenda'];
             $minAgenda = $datos['minAgenda'];
             $estAgenda = $datos['estAgenda'];
-            $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy FROM pys_asignados
+            $consulta2 = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_actualizacionproy.nombreProy, pys_actualizacionproy.codProy 
+                FROM pys_asignados
                 INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy
                 INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_asignados.idSol
                 WHERE ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_actualizacionproy.est = '1' AND pys_solicitudes.est = '1' AND pys_asignados.idAsig = '$idAsig';";
@@ -366,29 +368,54 @@ class  PlaneacionAse{
                                         class="material-icons teal-text">done</i></button>
                             </div>';
             } 
-            $fase =Tiempos::selectFase("Sin Label");
-                $json[]     = array(
-                    'type'              => $type,
-                    'text'              => $text,
-                    'cont'              => $cont,
-                    'idAgenda'          => $idAgenda,
-                    'idSol'             => $idSol,
-                    'fecha'             => $fecha,
-                    'codProy'           => $codProy,
-                    'nombreProy'        => $nombreProy,
-                    'descripcionSol'    => $descripcionSol,
-                    'horaAgenda'        => $horaAgenda,
-                    'minAgenda'         => $minAgenda,
-                    'notaAgenda'        => $notaAgenda,
-                    'agenda'            => $agenda,
-                    'fase'              => $fase,
-                    'estAgenda'         => $estAgenda,
-                );
-                $cont += 1;
+            /* $fase =Tiempos::selectFase("Sin Label"); */
+            $fase = self::selectFase($idFase);
+            $json[]     = array(
+                'type'              => $type,
+                'text'              => $text,
+                'cont'              => $cont,
+                'idAgenda'          => $idAgenda,
+                'idSol'             => $idSol,
+                'fecha'             => $fecha,
+                'codProy'           => $codProy,
+                'nombreProy'        => $nombreProy,
+                'descripcionSol'    => $descripcionSol,
+                'horaAgenda'        => $horaAgenda,
+                'minAgenda'         => $minAgenda,
+                'notaAgenda'        => $notaAgenda,
+                'agenda'            => $agenda,
+                'fase'              => $fase,
+                'estAgenda'         => $estAgenda,
+            );
+            $cont += 1;
         }
         $jsonString = json_encode($json);
         echo $jsonString;
         mysqli_close($connection);
+    }
+
+    public static function selectFase ($idFase) {
+        require('../Core/connection.php');
+        $consulta = "SELECT * FROM pys_fases WHERE est = '1' ;";
+        $resultado = mysqli_query($connection, $consulta);
+        if (mysqli_num_rows($resultado) > 0) {
+            $cons = "[]" ;
+            $disabled = "disabled" ;
+            $string = ' <select name="sltFaseEdit'.$cons.'" id="sltFaseEdit'.$cons.'" class="asignacion" '.$disabled.'>
+                            <option value="" selected disabled>Seleccione</option>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                if( $datos['idFase'] == $idFase){
+                    $string .= '  <option selected value="'.$datos['idFase'].'">'.$datos['nombreFase'].'</option>';
+                } else {
+                    $string .= '  <option value="'.$datos['idFase'].'">'.$datos['nombreFase'].'</option>';
+                }
+            }
+            $string .= '</select>';
+        } else {
+            echo "<script>alert ('No hay categorías creadas')</script>";
+        }
+        mysqli_close($connection);
+        return $string;
     }
 	
      public static function mostrarAgendaAdmin ($fecha, $user){

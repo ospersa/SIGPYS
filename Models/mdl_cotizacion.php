@@ -187,7 +187,8 @@ Class Cotizacion {
             AND pys_personas.est =  '1';";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
-            $nombreCompleto = $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'];
+            $nombreCompleto = isset($datos2['apellido1']) ? $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'] : '';
+            $idSolicitante = isset($datos2['idSolicitante']) ? $datos2['idSolicitante'] : '';
             echo '
                 <tr>
                     <td>P'.$datos['idSol'].'</td>
@@ -195,7 +196,7 @@ Class Cotizacion {
                     <td>'.$datos['nombreProy'].'</td>
                     <td>'.$datos['ObservacionAct'].'</td>
                     <td>'.$nombreCompleto.'</td>
-                    <td><a href="cotizador.php?cod='.$datos['idSol'].'&val='.$datos2['idSolicitante'].'" class="waves-effect waves-light btn" title="Cotizar"><i class="material-icons">attach_money</i></a></td>
+                    <td><a href="cotizador.php?cod='.$datos['idSol'].'&val='.$idSolicitante.'" class="waves-effect waves-light btn" title="Cotizar"><i class="material-icons">attach_money</i></a></td>
                 </tr>';
         }
         echo "
@@ -556,7 +557,7 @@ Class Cotizacion {
                     AND '$fecha' <= anio;";
                 $resultado3 = mysqli_query($connection, $consulta3);
                 $datos3 = mysqli_fetch_array($resultado3);
-                $salarioMinuto = $datos3['salario'] / 60;
+                $salarioMinuto = isset($datos3['salario']) ? $datos3['salario'] / 60 : 0;
                 $minutosAsignados = ($datos2['maxhora'] * 60) + $datos2['maxmin'];
                 $recurso = round($salarioMinuto * $minutosAsignados, 2);
                 $totalHoras = $totalHoras + $datos2['maxhora'];
@@ -579,9 +580,9 @@ Class Cotizacion {
             INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
             INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
             INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_cotizaciones.idSolEsp
-            WHERE pys_cotizaciones.estado = 1
-            AND pys_actualizacionproy.est = 1
-            AND pys_actsolicitudes.est = 1
+            WHERE pys_cotizaciones.estado = '1'
+            AND pys_actualizacionproy.est = '1'
+            AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS007'
             ORDER BY pys_cotizaciones.idSolEsp DESC;";
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);

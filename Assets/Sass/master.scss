@@ -622,3 +622,17 @@ table.mis-solicitudes {
         }
     }
 }
+
+#modalAgenda {
+    width: 80%;
+    min-height: 80%!important;
+}
+
+.fase {
+    .select-dropdown {
+        width: auto!important;
+        li > span {
+            white-space: nowrap;
+        }
+    }
+}
