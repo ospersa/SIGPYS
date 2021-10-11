@@ -188,6 +188,12 @@ const STYLEBODY = ['font' => [
     ]
 ];
 
+CONST STYLELINK = [
+    'font'=>[
+        'color' => ['argb' => '4551e7']
+    ]
+];
+
 const ALPHABET =    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 , 35 , 35 , 15 , 15 , 35 , 35 , 35 , 35 , 35 , 35 , 35 , 35];
 
@@ -249,6 +255,9 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     $sheet->mergeCells("A1:E1");
                     $spreadsheet->getActiveSheet()->getStyle('A6:G6')->applyFromArray(STYLETABLETITLE);
                     $spreadsheet->getActiveSheet()->getStyle('H6:X6')->applyFromArray(STYLETABLETITLEORANGE);
+
+                    $sheet->setCellValue('A4', 'Índice'); 
+                    $sheet->getCell('A4')->getHyperlink()->setUrl("sheet://'Indice'!A1");
 
                     $idProy = $datos['idProy'];
                     $consulta1 = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSer, pys_estadosol.nombreEstSol, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev, pys_actsolicitudes.presupuesto, pys_solicitudes.fechSol, pys_solicitudes.idSolIni, pys_actproductos.nombreProd, pys_actproductos.urlVimeo, pys_actproductos.descripcionProd, pys_actproductos.palabrasClave, pys_actproductos.fechEntregaProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, pys_tiposrecursos.nombreTRec, pys_plataformas.nombrePlt, pys_tiposproductos.descripcionTProd, formatos.formatoNombre, pys_claseproductos.nombreClProd, tiposcontenido.tipoContenidoNombre, pys_tiposproductos.descripcionTProd, idiomas.idiomaNombre, pys_areaconocimiento.areaNombre
@@ -372,6 +381,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 $spreadsheet->getActiveSheet()->setShowGridlines(false);
                 $spreadsheet->getActiveSheet()->fromArray(['Persona', 'Proyecto', 'Tiempo trabajado', '% Ejecutado'], null, 'A1');
                 self::ejecucionesCorte($spreadsheet);
+                self::generarIndice($spreadsheet);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');  
                 header('Content-Disposition: attachment;filename="Informe seguimiento estados y metadata'.gmdate(' d M Y ').'.xlsx"');
@@ -388,6 +398,48 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             mysqli_close($connection);
         }
 
+        public static function generarIndice($spreadsheet) {
+            $sheetIndex = $spreadsheet->getIndex(
+                $spreadsheet->getSheetByName('Worksheet')
+            );
+            $spreadsheet->removeSheetByIndex($sheetIndex);
+
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Indice');
+            $spreadsheet->addSheet($myWorkSheet, 0);
+
+            $cellStart = 3 ;
+            $namesOfSheets = $spreadsheet->getSheetNames();
+            $spreadsheet->setActiveSheetIndex(0);
+            $spreadsheet->getActiveSheet()->setShowGridlines(false);
+            $titulos = ['Estados','Ejecuciones'];
+            $spreadsheet->getActiveSheet()->fromArray($titulos, null, 'A3');
+            $spreadsheet->getActiveSheet()->getStyle('A1:E1')->applyFromArray(STYLETABLETI);
+            foreach ($titulos as $key => $titulo) {
+                $spreadsheet->getActiveSheet()->getColumnDimension(ALPHABET[$key])->setWidth(SIZES[0]);
+            }
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setCellValue('A1', 'Índice informe de seguimiento de estados y metadata');
+            $sheet->mergeCells("A1:J1");
+            $spreadsheet->getActiveSheet()->getStyle('A3:B3')->applyFromArray(STYLETABLETITLE);
+            $numOfSheets = count($namesOfSheets);
+            for ($i=1; $i < ($numOfSheets-1); $i++) { 
+                if($i & 1){  
+                    $sheet->setCellValue('A'.($i+$cellStart), $namesOfSheets[$i]); 
+                    $sheet->getCell('A'.($i+$cellStart))->getHyperlink()->setUrl("sheet://'".$namesOfSheets[$i]."'!A1");
+                    /* $spreadsheet->getActiveSheet()->getStyle('A'.($i+$cellStart))->applyFromArray(STYLELINK); */
+                }else{  
+                    $sheet->setCellValue('B'.(($i+$cellStart)-1), $namesOfSheets[$i]); 
+                    $sheet->getCell('B'.(($i+$cellStart)-1))->getHyperlink()->setUrl("sheet://'".$namesOfSheets[$i]."'!A1"); 
+                    /* $spreadsheet->getActiveSheet()->getStyle('B'.(($i+$cellStart)-1))->applyFromArray(STYLELINK); */
+                } 
+            }
+            
+            $sheet->setCellValue('F3', $namesOfSheets[$numOfSheets-1]); 
+            $sheet->getCell('F3')->getHyperlink()->setUrl("sheet://'".$namesOfSheets[$numOfSheets-1]."'!A1");
+
+            return $spreadsheet;
+        }
+
         public static function ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor){
             require('../Core/connection.php');
             // Creación de hoja con información de tiempos registrados en el mes
@@ -399,6 +451,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             $spreadsheet->getActiveSheet()->setCellValue('A4', '80% - 100% Rojo');
             $spreadsheet->getActiveSheet()->setCellValue('A5', '> 100% Negro');
             $spreadsheet->getActiveSheet()->setCellValue('B1', 'Este color indica que porcentaje se ha ejecutado del presupuesto cargado en el sistema para el proyecto (Fila B). De todas maneras recomendamos verificar los estados de los productos/servicio en la pestaña "Seguimiento Estados" para que sean concordantes con el presupuesto ejecutado.');
+            $spreadsheet->getActiveSheet()->setCellValue('E4', 'Índice'); 
+            $spreadsheet->getActiveSheet()->getCell('E4')->getHyperlink()->setUrl("sheet://'Indice'!A1");
             $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(STYLEGREEN);
             $spreadsheet->getActiveSheet()->getStyle('A2')->applyFromArray(STYLEYELLOW);
             $spreadsheet->getActiveSheet()->getStyle('A3')->applyFromArray(STYLEORANGE);
@@ -675,6 +729,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             $spreadsheet->getActiveSheet()->getStyle('A1:D1')->applyFromArray(STYLETABLETITLE);
             $spreadsheet->getActiveSheet()->getStyle('A1:D'.($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
             $spreadsheet->getActiveSheet()->getStyle('A2:D'.($fila-1))->applyFromArray(STYLEBODY);
+            $spreadsheet->getActiveSheet()->setCellValue('F4', 'Índice'); 
+            $spreadsheet->getActiveSheet()->getCell('F4')->getHyperlink()->setUrl("sheet://'Indice'!A1");
             $spreadsheet->setActiveSheetIndex(0);
 
             return $spreadsheet;
