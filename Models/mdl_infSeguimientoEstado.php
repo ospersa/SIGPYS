@@ -5,6 +5,10 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 require '../php_libraries/vendor/autoload.php';
+
+/* Nombre de variable configurada en las opciones del sistema para almacenar el Valor hora de realizador más alta en el momento */
+const VALOR_HORA = 'valor_hora';
+
 const STYLEGREEN = [
     'fill' => [
     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -445,6 +449,11 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             // Creación de hoja con información de tiempos registrados en el mes
             $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
 
+            $query_ = "SELECT option_value FROM pys_options WHERE option_name = '" . VALOR_HORA . "' AND option_state = '1';";
+            $result_ = mysqli_query($connection, $query_);
+            $data_ = mysqli_fetch_array($result_);
+            $valor_hora = $data_['option_value'];
+
             $spreadsheet->getActiveSheet()->setCellValue('A1', '0%  - 40%  Verde');
             $spreadsheet->getActiveSheet()->setCellValue('A2', '41% - 60%  Amarillo');
             $spreadsheet->getActiveSheet()->setCellValue('A3', '61% - 80%  Naranja');
@@ -487,7 +496,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             $spreadsheet->getActiveSheet()->setCellValue('J6', 'Horas asignadas');
             $spreadsheet->getActiveSheet()->setCellValue('K6', 'Horas por ejecutar');
             $spreadsheet->getActiveSheet()->setCellValue('L6', 'Disponible (Presupuesto menos total ejecutado)');
-            $spreadsheet->getActiveSheet()->setCellValue('M6', 'Aproximado horas disponibles (Disponible dividido en $40.000)');
+            $spreadsheet->getActiveSheet()->setCellValue('M6', 'Aproximado horas disponibles (Disponible dividido en $'. number_format( $valor_hora, 0, ',', '.' ).')');
             $spreadsheet->getActiveSheet()->setCellValue('N7', 'Presupuesto');
             $spreadsheet->getActiveSheet()->setCellValue('O7', 'Ejecución');
             $spreadsheet->getActiveSheet()->setCellValue('P7', 'Presupuesto');
@@ -568,7 +577,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             $disponiblePresupuesto = $presupuestoProyecto - $totalEjecutado;
                         }
                         $spreadsheet->getActiveSheet()->setCellValue('L'.$fila, $disponiblePresupuesto);
-                        $horasDisponibles = ($disponiblePresupuesto > 0) ? $disponiblePresupuesto / 40000 : 0;
+                        $horasDisponibles = ($disponiblePresupuesto > 0) ? $disponiblePresupuesto / $valor_hora : 0;
                         $spreadsheet->getActiveSheet()->setCellValue('M'.$fila, $horasDisponibles);
                         $bolsaRecursosPresupuesto = $presupuestoProyecto - $presupuestoLineaGrafica - $presupuestoGestoria - $presupuestoMontaje;
                         $bolsaRecursosEjecutado = $totalEjecutado - $ejecucionLineaGrafica - $ejecucionGestoria - $ejecucionMontaje;
