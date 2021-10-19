@@ -71,8 +71,8 @@
                                         <th>Estado</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
-                                        <th>Información</th>
-                                        <th>Terminar y enviar correo</th>
+                                        <th>Metadata y cierre</th>
+                                        <!--<th>Terminar y enviar correo</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>';
@@ -147,13 +147,13 @@
                     $string .= '    <tr>
                                         <td>'.$codProy.' - '.$nombreProy.'</td>
                                         <td>P'.$idSol.'</td>
-                                        <td><p class="truncate">'.$ObservacionAct.'</p></td>
+                                        <td>'.$ObservacionAct.'</p></td>
                                         <td>'.$nombreProducto.'</td>
                                         <td>'.$estadoSol.'</td>
                                         <td>'.$fechPrev.'</td>
                                         <td>'.$fechSol.'</td>
-                                        <td><a href="#modalTerminarProSer" data-position="left" class="modal-trigger tooltipped" data-tooltip="Más información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$colorMeta.'-text">info_outline</i></a></td>
-                                        <td><a href="#'.$modal.'" data-position="left" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
+                                        <td class="center-align"><a href="#modalTerminarProSer" data-position="left" class="modal-trigger tooltipped" data-tooltip="Más información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$colorMeta.'-text">info_outline</i></a></td>
+                                        <!-- <td><a href="#'.$modal.'" data-position="left" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td> -->
                                     </tr>'; 
                     }    
                 $string .= '    </tbody>

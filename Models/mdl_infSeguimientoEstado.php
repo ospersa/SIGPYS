@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 require '../php_libraries/vendor/autoload.php';
 
 /* Nombre de variable configurada en las opciones del sistema para almacenar el Valor hora de realizador más alta en el momento */
-const VALOR_HORA = 'valor_hora';
+const VALOR_HORA = 'valor_hora_informes';
 
 const STYLEGREEN = [
     'fill' => [
