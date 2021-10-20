@@ -194,7 +194,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
     Class InformeSeguimientoEstados {
       
 
-        public static function descarga ($proyecto, $frente, $gestor, $estado, $tiempos, $txtFechFin) {
+        public static function descarga ($proyecto, $frente, $gestor, $estado, $tiempos) {
             require('../Core/connection.php');
             if ($proyecto != "" && $frente == null && $gestor == null) {
                 $consulta = "SELECT codProy, nombreProy, idProy FROM pys_actualizacionproy WHERE est = '1' AND idProy = '$proyecto' ORDER BY codProy asc;";
@@ -410,7 +410,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                     $spreadsheet->getActiveSheet()->setCellValue('S7', 'Ejecución');
                     $spreadsheet->getActiveSheet()->setCellValue('T7', 'Presupuesto');
                     $spreadsheet->getActiveSheet()->setCellValue('U7', 'Ejecución');
-                    $datos2 = self::ejecuciones($proyecto, $frente, $gestor, $txtFechFin);
+                    $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
                     $fila = $filasIni = 8;
                     if ( is_array ( $datos2 ) ) {
                         foreach ($datos2 as $value) {
@@ -732,7 +732,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             return $json;
         }
 
-        public static function ejecuciones($proyecto, $frente, $gestor,$txtFechFin) {
+        public static function ejecuciones($proyecto, $frente, $gestor) {
             require('../Core/connection.php');
             $today = date('Y-m-d');
             $query = "SELECT inicioPeriodo, finPeriodo
@@ -742,7 +742,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             if ($registry > 0) {
                 $data = mysqli_fetch_array($result);
                 $inicioPeriodo = $data['inicioPeriodo'];
-                $finPeriodo = $txtFechFin != null ? $txtFechFin : $data['finPeriodo'];
+                $finPeriodo = $data['finPeriodo'];
                 $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy, pys_actualizacionproy.nombreCortoProy
                     FROM pys_asignados
                     
