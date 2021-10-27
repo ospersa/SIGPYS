@@ -43,7 +43,7 @@
             if ($descrip != null) {
                 $where .= "AND pys_actsolicitudes.ObservacionAct LIKE '%$descrip%' ";
             }
-            $order = "ORDER BY pys_actsolicitudes.fechAct DESC ";
+            $order = "ORDER BY pys_actsolicitudes.idSol DESC ";
             $consulta .= $where . $order . ';';
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
@@ -109,7 +109,7 @@
                 LEFT JOIN pys_inventario ON pys_inventario.idProd = pys_actproductos.idProd AND pys_inventario.est = '1'
                 LEFT JOIN pys_actinventario ON pys_actinventario.idInventario = pys_inventario.idInventario AND pys_actinventario.est = '1'
                 WHERE pys_asignados.est != '0'
-                ORDER BY pys_actsolicitudes.fechAct DESC;";
+                ORDER BY pys_actsolicitudes.idSol DESC;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
