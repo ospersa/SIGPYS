@@ -72,7 +72,7 @@
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
                                         <th>Metadata y cierre</th>
-                                        <th>Terminar y enviar correo</th>
+                                        <!--<th>Terminar y enviar correo</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>';
@@ -96,7 +96,7 @@
                             $pendientes++;
                         }
                     }
-                    $consultaProd = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave 
+                   $consultaProd = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave 
                         FROM pys_productos
                         INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
                         LEFT JOIN idiomas ON idiomas.idIdiomas = pys_actproductos.idioma
@@ -113,13 +113,13 @@
                     $metapendiente = 0;
                     if ( $nombreEqu == 'Realización' ) {
                         foreach ( $metadataRealizacion as $meta ) {
-                            if ( ! isset ( $dataProd[$meta] ) ) {
+                            if ( ! isset ( $dataProd[$meta] ) || $dataProd[$meta] == '' ) {
                                 $metapendiente ++;
                             }
                         }
                     } else if ( $nombreEqu == 'Diseño Gráfico' ) {
                         foreach ( $metadataDiseno as $meta ) {
-                            if ( ! isset ($dataProd[$meta] ) ) {
+                            if ( ! isset ($dataProd[$meta] ) || $dataProd[$meta] == '' ) {
                                 $metapendiente ++;
                             }
                         }
@@ -153,7 +153,7 @@
                                         <td>'.$fechPrev.'</td>
                                         <td>'.$fechSol.'</td>
                                         <td class="center-align"><a href="#modalTerminarProSer" data-position="left" class="modal-trigger tooltipped" data-tooltip="Más información del Producto/Servicio" onclick="envioData(\'INF'.$idSol.'\',\'modalTerminarProSer.php\')"><i class="material-icons '.$colorMeta.'-text">info_outline</i></a></td>
-                                        <td><a href="#'.$modal.'" data-position="left" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>
+                                        <!--<td><a href="#'.$modal.'" data-position="left" class="modal-trigger tooltipped" data-tooltip="'.$mjsTooltip.'" '.$onclick.'><i class="material-icons '.$color.'-text">done_all</i></a></td>-->
                                     </tr>'; 
                     }    
                 $string .= '    </tbody>
@@ -168,7 +168,7 @@
         public static function informacionProdSer ($idSol) {
             require('../Core/connection.php');
             require('../Models/mdl_solicitudEspecifica.php');
-            $string = "";
+            $string = $disabled = "";
             $vacio = '<p class="left-align red-text">Información pendiente</p>';
             $consulta = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_servicios.productoOservicio, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_tiposproductos.descripcionTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave, pys_estadosol.nombreEstSol
                 FROM pys_actsolicitudes 
@@ -218,6 +218,11 @@
             $tiempoTotal        = SolicitudEspecifica::totalTiempo ($idSol);
             $hora               = $tiempoTotal[0];
             $min                = $tiempoTotal[1];
+            if ($idEqu == 'EQU001') {
+                $disabled = ($nomProduc == $vacio || $sinopsis == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $urlVimeo == $vacio || $autores == $vacio || $minDura == $vacio || $fechaEntre == $vacio) ? "disabled" : "";
+            } else if ($idEqu == 'EQU002') {
+                $disabled = ($nomProduc == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $fechaEntre == $vacio ) ? "disabled" : "";
+            }
             $string .= '    <div class="col l12 m12 s12">
                                 <div class="input-field col l2 m12 s12 ">
                                     <label for="idSol" class="active">Código PS:</label>
@@ -247,7 +252,7 @@
                                     <label for="duraSer" class="active">Duración del Servicio:</label>
                                     <p class="left-align">'.$hora.' h '.$min.' m</p>
                                 </div>';
-            if ($datos['productoOservicio'] == 'SI') {
+            if ($datos['productoOservicio'] == 'SI') { 
                 $string .='     <div class="input-field col l12 m12 s12 ">
                                     <label for="nomProd" class="active">Nombre Producto:</label>
                                     '.$nomProduc.'
@@ -318,6 +323,9 @@
                 $string .= '    <div class="input-field col l6 m12 s12">
                                     <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
                                     '.$fechaEntre.'
+                                </div>
+                                <div class="input-field col l12 m12 s12">
+                                    <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
                                 </div>';
             } else if ($datos['productoOservicio'] == 'NO'){
                 $consulta2 = "SELECT * FROM pys_resultservicio 
@@ -364,6 +372,9 @@
                     <div class="input-field col l6 m12 s12 offset-l1">
                         <label for="url" class="active">URL store easy Conecta-TE :</label>
                         '.$urlResultado.'
+                    </div>
+                    <div class="input-field col l12 m12 s12">
+                        <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
                     </div>';
                 /* } else{
                     $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No se ha completado la información de Terminación del servicio </h6></div>';
@@ -411,7 +422,7 @@
             $consulta2 = "SELECT * FROM pys_resultservicio WHERE pys_resultservicio.idSol = '$idSol' AND pys_resultservicio.est = 1 ;";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
-            $observacion = $datos2['observacion'];
+            $observacion = isset($datos2['observacion']) ? $datos2['observacion'] : '';
             $string =' <strong>Descripción del servicio: </strong>'.$observacion.'<br />
             <strong>Código Servicio:</strong> P'.$idSol.'<br />';
             mysqli_close($connection);
