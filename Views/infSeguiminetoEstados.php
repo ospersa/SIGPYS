@@ -13,11 +13,15 @@ require_once('../Controllers/ctrl_infSeguimientoEstados.php');
                         placeholder="Ingrese el código del proyecto">
                     <label for="txtBusquedaProy">Cód. Proyecto Conecta-TE*</label>
                 </div>
-                <div class="input-field col l7 m8 s12" id="sltProyecto">
+                <div class="input-field col l5 m6 s12" id="sltProyecto">
                     <select name="sltProy" id="sltProy">
                         <option value="">Seleccione</option>
                     </select>
                     <label for="sltProy">Seleccione un proyecto</label>
+                </div>
+                <div class="input-field col l2 m2 s12">
+                    <input type="text" name="txtFechFin" id="txtFechFin" class="datepicker" placeholder="aaaa/mm/dd">
+                    <label for="txtFechFin">Fecha hasta</label>
                 </div>
             </div>
             <div class="row" style="margin-bottom: 0;">

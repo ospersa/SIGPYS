@@ -202,7 +202,9 @@ const ALPHABET =    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 , 35 , 35 , 15 , 15 , 35 , 35 , 35 , 35 , 35 , 35 , 35 , 35];
 
     Class InformeSeguimientoEstados {
-        public static function descarga ($proyecto, $frente, $gestor, $estado, $tiempos) {
+      
+
+        public static function descarga ($proyecto, $frente, $gestor, $estado, $tiempos, $txtFechFin) {
             require('../Core/connection.php');
             if ($proyecto != "" && $frente == null && $gestor == null) {
                 $consulta = "SELECT codProy, nombreProy, idProy FROM pys_actualizacionproy WHERE est = '1' AND idProy = '$proyecto' ORDER BY codProy asc;";
@@ -447,7 +449,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
         public static function ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor){
             require('../Core/connection.php');
             // Creación de hoja con información de tiempos registrados en el mes
-            $datos2 = self::ejecuciones($proyecto, $frente, $gestor);
+            $datos2 = self::ejecuciones($proyecto, $frente, $gestor ,$txtFechFin);
 
             $query_ = "SELECT option_value FROM pys_options WHERE option_name = '" . VALOR_HORA . "' AND option_state = '1';";
             $result_ = mysqli_query($connection, $query_);
@@ -817,7 +819,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             return $json;
         }
 
-        public static function ejecuciones($proyecto, $frente, $gestor) {
+        public static function ejecuciones($proyecto, $frente, $gestor,$txtFechFin) {
             require('../Core/connection.php');
             $today = date('Y-m-d');
             $query = "SELECT inicioPeriodo, finPeriodo
@@ -827,7 +829,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             if ($registry > 0) {
                 $data = mysqli_fetch_array($result);
                 $inicioPeriodo = $data['inicioPeriodo'];
-                $finPeriodo = $data['finPeriodo'];
+                $finPeriodo = $txtFechFin != null ? $txtFechFin : $data['finPeriodo'];
                 $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy, pys_actualizacionproy.nombreCortoProy
                     FROM pys_asignados
                     
