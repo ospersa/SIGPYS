@@ -376,7 +376,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                         $numOfWorksheets = $spreadsheet ->getSheetCount();
                         $spreadsheet->addSheet($myWorkSheet2, $numOfWorksheets);
                         $spreadsheet->setActiveSheetIndex($numOfWorksheets);
-                        self::ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor);
+                        self::ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor, $txtFechFin);
                     }
                 }
                 
@@ -446,7 +446,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             return $spreadsheet;
         }
 
-        public static function ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor){
+        public static function ejecucionesProyectos($spreadsheet, $proyecto, $frente, $gestor, $txtFechFin){
             require('../Core/connection.php');
             // Creación de hoja con información de tiempos registrados en el mes
             $datos2 = self::ejecuciones($proyecto, $frente, $gestor ,$txtFechFin);
@@ -829,7 +829,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
             if ($registry > 0) {
                 $data = mysqli_fetch_array($result);
                 $inicioPeriodo = $data['inicioPeriodo'];
-                $finPeriodo = $txtFechFin != null ? $txtFechFin : $data['finPeriodo'];
+                /* $finPeriodo = $txtFechFin != null ? $txtFechFin : $data['finPeriodo']; */
+                $finPeriodo = $data['finPeriodo'];
                 $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy, pys_actualizacionproy.nombreCortoProy
                     FROM pys_asignados
                     
@@ -896,9 +897,31 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                         $totalTiempoAsignado += $tiempoAsignado;
                                         $consolidadoTiempoAsignado += $tiempoAsignado;
                                         $salario = $data3['salario'];
-                                        /* Información de tiempos en el corte actual */
-                                        $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                            FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$finPeriodo' AND pys_tiempos.estTiempo = '1';";
+                                        if ($txtFechFin != '' && ($txtFechFin >= $inicioPeriodo && $txtFechFin <= $finPeriodo)) {
+                                            /* Información de tiempos en el corte actual */
+                                            $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$txtFechFin' AND pys_tiempos.estTiempo = '1';";
+                                            /* Información de tiempos en el corte anterior */
+                                            $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
+
+                                        } else if ($txtFechFin != '' && $txtFechFin < $inicioPeriodo) {
+                                            /* Información de tiempos en el corte actual */
+                                            $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$txtFechFin' AND pys_tiempos.estTiempo = '1';";
+                                            /* Información de tiempos en el corte anterior */
+                                            $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$txtFechFin'  AND pys_tiempos.estTiempo = '1';";
+                                                
+
+                                        } else {
+                                            /* Información de tiempos en el corte actual */
+                                            $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$finPeriodo' AND pys_tiempos.estTiempo = '1';";
+                                            /* Información de tiempos en el corte anterior */
+                                            $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
+                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
+                                        }
                                         $result4 = mysqli_query($connection, $query4);
                                         $registros4 = mysqli_num_rows($result4);
                                         if ($registros4 > 0) {
@@ -910,9 +933,6 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                             $consolidadoTiempoActual += $tiempo;
                                             $consolidadoEjecutadoActual += $costo;
                                         }
-                                        /* Información de tiempos en el corte anterior */
-                                        $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                            FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
                                         $result5 = mysqli_query($connection, $query5);
                                         $registros5 = mysqli_num_rows($result5);
                                         if ($registros5 > 0) {
