@@ -21,7 +21,13 @@ $codProy         = (isset($_POST['codProy'])) ? $_POST['codProy']: null;
 $prep            = "";
 $datoPoS         = "";
 $cuerpo          = (isset($_POST['cuerpo'])) ? $_POST['cuerpo']: null;
-if (isset($_POST['btnTerEnvi'])) {
+$action         = (isset($_POST['action'])) ? $_POST['action'] : null;
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if ($action == 'close') {
+        $id = null;
+        Terminar::terminarProducto($id2);
+    }
+    /* if (isset($_POST['btnTerEnvi'])) {
     $correo = Terminar::infoSolicitante($idSolIni);
     $asunto = $codProy." - Terminación ".$proOser. "P".$id2;
     $asesor = $usuario."@uniandes.edu.co";
@@ -30,11 +36,11 @@ if (isset($_POST['btnTerEnvi'])) {
         $cuerpoTotal .='<strong>Observaciones: </strong>'.$observaciones.'<br><br>';
     }
     $cuerpoTotal .= $nota. $datosEnvio;
-    /* $sendEmail = EnviarCorreo::enviarCorreos($correo, $asesor, $ccemail, $asunto, $cuerpoTotal);
-    if($sendEmail == true){ */
+    $sendEmail = EnviarCorreo::enviarCorreos($correo, $asesor, $ccemail, $asunto, $cuerpoTotal);
+    if($sendEmail == true){
         Terminar::terminarProducto($id2);
- /*    }     */
-} else if (isset($_POST['b']) ) {
+    }    
+}*/ else  if (isset($_POST['b']) ) {
     $busqueda = $_POST['b'];
     Terminar::selectProyectoUsuario($busqueda, $usuario);
 } else if ($id != null) {
@@ -74,8 +80,6 @@ if (isset($_POST['btnTerEnvi'])) {
     }
     echo Terminar::cargarProyectosUser($usuario, $cod, $busProy, $fechFin);
 }
-
-
-
+}
 
 ?>

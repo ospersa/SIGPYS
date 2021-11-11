@@ -1,6 +1,6 @@
 <h4>Terminación de <?php echo $proOser;?> </h4>
 <div class="row">
-    <form id="actForm" action="../Controllers/ctrl_terminacionProductoServicio.php" method="post" class="col l12 m12 s12">
+    <form id="frmCierreProducto" method="post" class="col l12 m12 s12">
         <div class="row">
             
             <div class="input-field col l12 m12 s12 ">
@@ -40,9 +40,10 @@
             <input type="text" name="idSolIni" id="idSolIni" value="<?php echo $idSolIni; ?>" hidden>
             <input type="text" name="nota" id="nota" value="<?php echo $nota; ?>" hidden>
             <input type="text" name="codProy" id="codProy" value="<?php echo $codProy; ?>" hidden>
+            <input type="text" name="action" id="action" value="close" hidden>
         </div>
         <div class="input-field col l6 m12 s12 offset-l3 ">
-            <button class="btn waves-effect waves-light" type="submit" name="btnTerEnvi">Terminar y enviar correo</button>
+            <a href="#" class="btn waves-effect waves-light" name="btnTerEnvi" onclick="closeProduct()">Terminar y enviar correo</a>
         </div>
     </form>
 </div>

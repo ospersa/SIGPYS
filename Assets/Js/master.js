@@ -1879,3 +1879,17 @@ function removeSltArea (element, idArea) {
         })
     }
 }
+
+function closeProduct () {
+    $.ajax({
+        type: "POST",
+        url: "../Controllers/ctrl_terminacionProductoServicio.php",
+        data: $('form').serialize(),
+        success: function(data) {
+            busquedaMultiple('../Controllers/ctrl_terminacionProductoServicio.php');
+            $("#modalTerminarProSer").modal('close');
+            let datos = JSON.parse(data);
+            M.toast({ html: datos[0].message, displayLength: 2000});
+        }
+    })
+}

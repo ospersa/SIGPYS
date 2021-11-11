@@ -498,13 +498,24 @@
             }
             if ( $resultado1 && $resultado2 && $asignados == 0 ) {
                 mysqli_query($connection, "COMMIT;");
-                echo '<script>alert("Se terminó el producto/Servicio correctamente.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/terminacionServiciosProductos.php">';
+                $message = "El producto/servicio P$idSol fue cerrado correctamente.";
             } else {
                 mysqli_query($connection, "ROLLBACK;");
-                echo '<script>alert("No se terminó el producto/Servicio correctamente.")</script>';
-                echo '<meta http-equiv="Refresh" content="0;url=../Views/terminacionServiciosProductos.php">';
+                $message = "El producto/servicio P$idSol NO se pudo cerrar. Por favor intente nuevamente.";
             }
+            $query = "SELECT pys_actualizacionproy.codProy
+                FROM pys_cursosmodulos
+                INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy AND pys_actualizacionproy.est = '1'
+                WHERE idCM = '$idCM';";
+            $result = mysqli_query($connection, $query);
+            $data = mysqli_fetch_array($result);
+            $proyecto = $data[0];
+            $json[] = array (
+                'message' => $message,
+                'proyecto' => $proyecto
+            );
+            $jsonString = json_encode($json);
+            echo $jsonString;
             mysqli_close($connection);
         }
         
