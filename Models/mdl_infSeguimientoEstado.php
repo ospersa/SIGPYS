@@ -282,7 +282,7 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                         LEFT JOIN formatos ON formatos.idFormatos = pys_actproductos.formato
                         LEFT JOIN pys_claseproductos ON pys_claseproductos.idClProd = pys_actproductos.idClProd AND pys_claseproductos.est = '1'
                         LEFT JOIN tiposcontenido ON tiposcontenido.idtiposContenido = pys_actproductos.tipoContenido
-                        LEFT JOIN areaconocimientohasproyectos ON areaconocimientohasproyectos.pys_proyectos_idProy = pys_actualizacionproy.idProy
+                        LEFT JOIN areaconocimientohasproyectos ON areaconocimientohasproyectos.pys_proyectos_idProy = pys_actualizacionproy.idProy AND areaconocimientohasproyectos.areaEstado = '1'
                         LEFT JOIN pys_areaconocimiento ON pys_areaconocimiento.idAreaConocimiento = areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento
                         WHERE pys_actsolicitudes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_actualizacionproy.est = '1' AND pys_actsolicitudes.idSolicitante = '' ";
                     if ($estado != null) {
@@ -331,8 +331,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                 ORDER BY pys_personas.apellido1;";
                             $resultado2 = mysqli_query($connection, $consulta2);
                             $ejecutadoAcumulado = '0';
+                            $personasAsig = $personasTiempo = $tiempoAsignado = '';
                             if (mysqli_num_rows($resultado2) > 0) {
-                                $personasAsig = $personasTiempo = $tiempoAsignado = '';
                                 while ($datos2 = mysqli_fetch_array($resultado2) ) {
                                     $personasAsig .= $datos2['apellido1'].' '.$datos2['apellido2'].' '.$datos2['nombres']."\n";
                                     $tiempoAsignado = ( ( ($datos2['maxhora'] * 60) + $datos2['maxmin'] ) / 60 ) . ' H';
