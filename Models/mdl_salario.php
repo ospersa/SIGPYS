@@ -32,7 +32,7 @@ Class Salarios {
             FROM pys_salarios
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_salarios.idPersona
             WHERE pys_salarios.estSal = '1'
-            ORDER BY pys_personas.apellido1;";
+            ORDER BY pys_personas.apellido1, pys_salarios.mes DESC;";
         $resultado = mysqli_query($connection, $consulta);
         while ($datos = mysqli_fetch_array($resultado)) {
             echo '
@@ -56,7 +56,7 @@ Class Salarios {
         $consulta = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_salarios.idSalarios, pys_salarios.mes, pys_salarios.anio, pys_salarios.salario FROM pys_salarios
             INNER JOIN pys_personas ON pys_personas.idPersona = pys_salarios.idPersona
             WHERE ((pys_personas.apellido1 LIKE '%$busqueda%') OR (pys_personas.apellido2 LIKE '%$busqueda%') OR (pys_personas.nombres LIKE '%$busqueda%') OR (pys_salarios.mes LIKE '%$busqueda%') OR (pys_salarios.anio LIKE '%$busqueda%')) AND pys_salarios.estSal='1'
-            ORDER BY pys_personas.apellido1";
+            ORDER BY pys_personas.apellido1, pys_salarios.mes DESC";
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);
         if ($registros > 0) {
