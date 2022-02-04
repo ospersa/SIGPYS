@@ -833,7 +833,6 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                 $finPeriodo = $data['finPeriodo'];
                 $query1 = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idProy, pys_actualizacionproy.nombreCortoProy
                     FROM pys_asignados
-                    
                     INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1' 
                     WHERE pys_asignados.est != '0' ";
                 if ($proyecto != null) {
@@ -882,9 +881,8 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                             while ($data2 = mysqli_fetch_array($result2)) {
                                 $idPersona = $data2['idPersona'];
                                 $nombreAsignado = $data2['apellido1'] . " " . $data2['apellido2'] . " " . $data2['nombres'];
-                                $query3 = "SELECT pys_asignados.idAsig, pys_salarios.salario, pys_asignados.maxhora, pys_asignados.maxmin
+                                $query3 = "SELECT pys_asignados.idAsig, pys_asignados.maxhora, pys_asignados.maxmin
                                     FROM pys_asignados
-                                    INNER JOIN pys_salarios ON pys_salarios.mes <= pys_asignados.fechAsig AND pys_salarios.anio >= pys_asignados.fechAsig AND pys_salarios.idPersona = pys_asignados.idPersona
                                     INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
                                     WHERE pys_asignados.idPersona = '$idPersona' AND pys_asignados.idProy = '$idProy' AND pys_asignados.idSol != '' AND pys_asignados.est != 0 AND pys_actsolicitudes.registraTiempo = '1';";
                                 $result3 = mysqli_query($connection, $query3);
@@ -896,53 +894,76 @@ const SIZES =       [45 , 13 , 45 , 22 , 30 , 45 , 45 , 40 , 40 , 30 , 40 , 35 ,
                                         $tiempoAsignado = (($data3['maxhora'] * 60) + $data3['maxmin']) / 60;
                                         $totalTiempoAsignado += $tiempoAsignado;
                                         $consolidadoTiempoAsignado += $tiempoAsignado;
-                                        $salario = $data3['salario'];
                                         if ($txtFechFin != '' && ($txtFechFin >= $inicioPeriodo && $txtFechFin <= $finPeriodo)) {
                                             /* Información de tiempos en el corte actual */
-                                            $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$txtFechFin' AND pys_tiempos.estTiempo = '1';";
+                                            $query4 = "SELECT horaTiempo AS 'Horas', minTiempo AS 'Minutos', salario AS 'Salario'
+                                                FROM pys_tiempos 
+                                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != 0
+                                                INNER JOIN pys_salarios ON pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo AND pys_salarios.idPersona = pys_asignados.idPersona
+                                                WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$txtFechFin' AND pys_tiempos.estTiempo = '1';";
                                             /* Información de tiempos en el corte anterior */
-                                            $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
+                                            $query5 = "SELECT horaTiempo AS 'Horas', minTiempo AS 'Minutos', salario AS 'Salario'
+                                                FROM pys_tiempos 
+                                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != 0
+                                                INNER JOIN pys_salarios ON pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo AND pys_salarios.idPersona = pys_asignados.idPersona
+                                                WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
 
                                         } else if ($txtFechFin != '' && $txtFechFin < $inicioPeriodo) {
                                             /* Información de tiempos en el corte actual */
-                                            $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$txtFechFin' AND pys_tiempos.estTiempo = '1';";
+                                            $query4 = "SELECT horaTiempo AS 'Horas', minTiempo AS 'Minutos', salario AS 'Salario'
+                                                FROM pys_tiempos 
+                                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != 0
+                                                INNER JOIN pys_salarios ON pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo AND pys_salarios.idPersona = pys_asignados.idPersona
+                                                WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$txtFechFin' AND pys_tiempos.estTiempo = '1';";
                                             /* Información de tiempos en el corte anterior */
-                                            $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$txtFechFin'  AND pys_tiempos.estTiempo = '1';";
+                                            $query5 = "SELECT horaTiempo AS 'Horas', SUM(minTiempo) AS 'Minutos', salario AS 'Salario'
+                                                FROM pys_tiempos 
+                                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != 0
+                                                INNER JOIN pys_salarios ON pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo AND pys_salarios.idPersona = pys_asignados.idPersona
+                                                WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$txtFechFin'  AND pys_tiempos.estTiempo = '1';";
                                                 
 
                                         } else {
                                             /* Información de tiempos en el corte actual */
-                                            $query4 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$finPeriodo' AND pys_tiempos.estTiempo = '1';";
+                                            $query4 = "SELECT horaTiempo AS 'Horas', minTiempo AS 'Minutos', salario AS 'Salario'
+                                                FROM pys_tiempos 
+                                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != 0
+                                                INNER JOIN pys_salarios ON pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo AND pys_salarios.idPersona = pys_asignados.idPersona
+                                                WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo >= '$inicioPeriodo' AND pys_tiempos.fechTiempo <= '$finPeriodo' AND pys_tiempos.estTiempo = '1';";
                                             /* Información de tiempos en el corte anterior */
-                                            $query5 = "SELECT SUM(horaTiempo) AS 'Horas', SUM(minTiempo) AS 'Minutos'
-                                                FROM pys_tiempos WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
+                                            $query5 = "SELECT horaTiempo AS 'Horas', minTiempo AS 'Minutos', salario AS 'Salario'
+                                                FROM pys_tiempos 
+                                                INNER JOIN pys_asignados ON pys_asignados.idAsig = pys_tiempos.idAsig AND pys_asignados.est != 0
+                                                INNER JOIN pys_salarios ON pys_salarios.mes <= pys_tiempos.fechTiempo AND pys_salarios.anio >= pys_tiempos.fechTiempo AND pys_salarios.idPersona = pys_asignados.idPersona
+                                                WHERE pys_tiempos.idAsig = '$idAsignado' AND pys_tiempos.fechTiempo < '$inicioPeriodo'  AND pys_tiempos.estTiempo = '1';";
                                         }
                                         $result4 = mysqli_query($connection, $query4);
                                         $registros4 = mysqli_num_rows($result4);
                                         if ($registros4 > 0) {
-                                            $data4 = mysqli_fetch_array($result4);
-                                            $tiempo = ((($data4['Horas'] * 60) + $data4['Minutos']) / 60);
-                                            $costo = $tiempo * $salario;
-                                            $tiempoActual += $tiempo;
-                                            $totalActual +=  $tiempo * $salario;
-                                            $consolidadoTiempoActual += $tiempo;
-                                            $consolidadoEjecutadoActual += $costo;
+                                            /* $data4 = mysqli_fetch_array($result4); */
+                                            while ($data4 = mysqli_fetch_array($result4)) {
+                                                $salario = $data4['Salario'];
+                                                $tiempo = ((($data4['Horas'] * 60) + $data4['Minutos']) / 60);
+                                                $costo = $tiempo * $salario;
+                                                $tiempoActual += $tiempo;
+                                                $totalActual +=  $tiempo * $salario;
+                                                $consolidadoTiempoActual += $tiempo;
+                                                $consolidadoEjecutadoActual += $costo;
+                                            }
                                         }
                                         $result5 = mysqli_query($connection, $query5);
                                         $registros5 = mysqli_num_rows($result5);
                                         if ($registros5 > 0) {
-                                            $data5 = mysqli_fetch_array($result5);
-                                            $tiempo = ((($data5['Horas'] * 60) + $data5['Minutos']) / 60);
-                                            $costo = $tiempo * $salario;
-                                            $tiempoAnterior += $tiempo;
-                                            $totalAnterior +=  $tiempo * $salario;
-                                            $consolidadoTiempoAnterior += $tiempo;
-                                            $consolidadoEjecutadoAnterior += $costo;
+                                            /* $data5 = mysqli_fetch_array($result5); */
+                                            while ($data5 = mysqli_fetch_array($result5)) {
+                                                $salario = $data5['Salario'];
+                                                $tiempo = ((($data5['Horas'] * 60) + $data5['Minutos']) / 60);
+                                                $costo = $tiempo * $salario;
+                                                $tiempoAnterior += $tiempo;
+                                                $totalAnterior +=  $tiempo * $salario;
+                                                $consolidadoTiempoAnterior += $tiempo;
+                                                $consolidadoEjecutadoAnterior += $costo;
+                                            }
                                         }
                                     }
                                     if ($totalAnterior + $totalActual > 0) {
