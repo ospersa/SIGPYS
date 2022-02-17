@@ -134,7 +134,9 @@ Class Producto {
             $nombre = mysqli_real_escape_string($connection, $nombre);
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
             /** Verificación de información existente en la tabla, para evitar duplicidad */
-            $consulta = "SELECT idTProd FROM pys_tiposproductos WHERE idSer = '$servicio' AND nombreTProd = '$nombre' AND est = '1';";
+            $consulta = "SELECT idCosto FROM pys_costos 
+                INNER JOIN pys_tiposproductos ON pys_tiposproductos.idTProd = pys_costos.idTProd AND pys_tiposproductos.est = '1'
+                WHERE pys_costos.idSer = '$servicio' AND pys_costos.idClProd = '$clase' AND pys_costos.est = '1' AND pys_tiposproductos.nombreTProd = '$nombre';";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
