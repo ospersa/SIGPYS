@@ -138,7 +138,7 @@
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
                 if ($idEquipo != null && $modal == null) {
-                    $select = ' <select name="sltEquipo" id="sltEquipo" disabled>
+                    $select = ' <select name="sltEquipo" id="sltEquipo">
                                     <option value="" selected disabled>Seleccione</option>';
                 } else if ($idEquipo != null && $modal == "modal"){    
                     $select = ' <select name="sltEquipo" id="sltEquipo">

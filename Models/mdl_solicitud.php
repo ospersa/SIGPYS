@@ -119,9 +119,11 @@
         public static function busquedaEstados ($busqueda) {
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
-            $consulta = "SELECT * FROM pys_estadosol 
+            $consulta = "SELECT pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_equipos.nombreEqu
+                FROM pys_estadosol 
                 LEFT JOIN pys_equipos ON pys_equipos.idEqu = pys_estadosol.descripcionEstSol AND pys_equipos.est = '1'
-                WHERE pys_estadosol.est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%' OR nombreEqu LIKE '%$busqueda%');";
+                WHERE pys_estadosol.est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%' OR nombreEqu LIKE '%$busqueda%')
+                ORDER BY pys_estadosol.nombreEstSol ASC;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table left">
