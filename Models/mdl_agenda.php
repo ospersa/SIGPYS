@@ -108,16 +108,15 @@ class  PlaneacionAse{
         require('../Core/connection.php');
         $string = "";
         $numero = 1;
-        $consulta = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_solicitudes.descripcionSol FROM pys_solicitudes 
-            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
-            INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
-            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
-            INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol
-            INNER JOIN pys_personas on pys_asignados.idPersona = pys_personas.idPersona 
-            INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona
-            WHERE pys_solicitudes.idTSol = 'TSOL02' 
-            AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007'
-            AND pys_solicitudes.est = '1' AND ( pys_asignados.est = '1' OR pys_asignados.est = '2') AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_personas.est = '1' AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy = '$proyecto' AND pys_actsolicitudes.registraTiempo = '1';";
+        $consulta = "SELECT pys_actsolicitudes.idSol, pys_actsolicitudes.ObservacionAct, pys_solicitudes.descripcionSol 
+            FROM pys_solicitudes 
+            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol AND pys_actsolicitudes.est = '1' AND (pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007')
+            INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy AND pys_actualizacionproy.est = '1'
+            INNER JOIN pys_asignados ON pys_asignados.idSol = pys_actsolicitudes.idSol AND pys_asignados.est = '1'
+            INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona AND pys_personas.est = '1'
+            INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+            WHERE pys_solicitudes.idTSol = 'TSOL02' AND pys_solicitudes.est = '1' AND pys_login.usrLogin = '$user' AND pys_actualizacionproy.idProy = '$proyecto';";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             while ($datos = mysqli_fetch_array($resultado)) {
@@ -617,24 +616,19 @@ class  PlaneacionAse{
     public static function selectProyectoUsuario ($user,$long){
         require('../Core/connection.php');
         $string = "";
-        $consultaPer = "SELECT idPersona FROM pys_login WHERE pys_login.usrLogin = '$user' AND est = 1 ";
-        $resultadoPer= mysqli_query($connection, $consultaPer);
+        $consultaPer = "SELECT idPersona FROM pys_login WHERE pys_login.usrLogin = '$user' AND est = '1';";
+        $resultadoPer = mysqli_query($connection, $consultaPer);
         $datosPer = mysqli_fetch_array($resultadoPer);
         $idPer = $datosPer['idPersona'];
         $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy
-        FROM pys_asignados 
-        INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy 
-        INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol 
-        INNER JOIN pys_solicitudes AS solicitudEspecifica ON solicitudEspecifica.idSol = pys_asignados.idSol 
-        INNER JOIN pys_solicitudes AS solicitudInicial ON solicitudInicial.idSol = solicitudEspecifica.idSolIni 
-        INNER JOIN pys_personas ON pys_personas.idPersona = solicitudInicial.idSolicitante 
-        INNER JOIN pys_roles ON pys_roles.idRol = pys_asignados.idRol 
-        WHERE pys_asignados.idPersona = '$idPer' 
-        AND pys_actsolicitudes.idSolicitante = '' AND pys_asignados.est = '1' AND pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND solicitudInicial.est = '1' AND solicitudEspecifica.est = '1' 
-        AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007'
-        GROUP BY pys_actualizacionproy.codProy
-        ORDER BY `pys_actualizacionproy`.`codProy` ASC
-        ";
+            FROM pys_asignados 
+            INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_asignados.idProy AND pys_actualizacionproy.est = '1'
+            INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_asignados.idSol AND pys_actsolicitudes.est = '1'
+            INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol AND pys_solicitudes.est = '1'
+            WHERE pys_asignados.idPersona = '$idPer' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_asignados.est = '1'
+            AND (pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007') AND pys_actsolicitudes.registraTiempo = '1'
+            GROUP BY pys_actualizacionproy.codProy
+            ORDER BY `pys_actualizacionproy`.`codProy` ASC;";
         $resultado = mysqli_query($connection, $consulta);
         if (mysqli_num_rows($resultado) > 0 ) {
             $string .= '  <select name="sltProy'.$long.'" id="sltProy'.$long.'" onchange="cargaSolicitudesProy(\'#sltProy'.$long.'\',\'../Controllers/ctrl_agenda.php\',\'#div_produc'.$long.'\','.$long.')" required><option value="" disabled selected>Seleccione</option>';
