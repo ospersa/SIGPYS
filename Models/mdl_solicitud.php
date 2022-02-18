@@ -120,7 +120,8 @@
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT * FROM pys_estadosol 
-            WHERE pys_estadosol.est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%');";
+                LEFT JOIN pys_equipos ON pys_equipos.idEqu = pys_estadosol.descripcionEstSol AND pys_equipos.est = '1'
+                WHERE pys_estadosol.est = '1' AND (nombreEstSol LIKE '%$busqueda%' OR descripcionEstSol LIKE '%$busqueda%' OR nombreEqu LIKE '%$busqueda%');";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table left">
@@ -133,18 +134,9 @@
                             </thead>
                             <tbody>';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    $equipo= $datos['descripcionEstSol'];
-                    $consulta1 = "SELECT nombreEqu  FROM pys_equipos
-                        WHERE est = '1' and idEqu='$equipo';";
-                    $resultado1 = mysqli_query($connection, $consulta1);
-                    if (mysqli_num_rows($resultado1) > 0) {
-                        while ($datos1 = mysqli_fetch_array($resultado1)) {
-                        $equipo =$datos1['nombreEqu'];
-                        }
-                    }
                     echo '      <tr>
                                     <td>'.$datos['nombreEstSol'].'</td>
-                                    <td>'.$equipo.'</td>
+                                    <td>'.$datos['nombreEqu'].'</td>
                                     <td><a href="#modalEstSol" class="waves-effect waves-light modal-trigger" onclick="envioData('."'$datos[0]'".','."'modalEstSol.php'".');" title="Editar"><i class="material-icons teal-text">edit</i></a></td>
                                 </tr>';
                 }
