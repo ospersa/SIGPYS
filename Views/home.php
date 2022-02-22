@@ -7,7 +7,7 @@ require('../Controllers/ctrl_home.php');
 	<div class=" col l9 m9 s12 ">
 		<div class="col l12 m12 s12 ">
 			<ul class="collapsible  margintop">
-				<li>
+				<li class="active">
 					<div class="collapsible-header teal white-text collapHome"><span class="center-align"><h6 class="white-text"> Productos/Servicios asignados</h6></span><i class="material-icons right" id="flechaColla">arrow_drop_down</i></div>
 					<div class="collapsible-body white">
 						<div class="row">

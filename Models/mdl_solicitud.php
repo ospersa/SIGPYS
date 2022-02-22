@@ -1,8 +1,9 @@
 <?php
 
-    Class Solicitud {
-
-        public static function onLoadEstadoSolicitud ($idEstado) {
+    class Solicitud
+    {
+        public static function onLoadEstadoSolicitud($idEstado)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_estadosol WHERE est = '1' AND idEstSol = '$idEstado';";
             $resultado = mysqli_query($connection, $consulta);
@@ -11,7 +12,8 @@
             mysqli_close($connection);
         }
         
-        public static function onLoadTipoSolicitud ($idTipo) {
+        public static function onLoadTipoSolicitud($idTipo)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1' AND idTSol = '$idTipo';";
             $resultado = mysqli_query($connection, $consulta);
@@ -20,11 +22,12 @@
             mysqli_close($connection);
         }
 
-        public static function busquedaTotalTipos () {
+        public static function busquedaTotalTipos()
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
-            if ( mysqli_num_rows($resultado) > 0) {
+            if (mysqli_num_rows($resultado) > 0) {
                 echo '  <table class="responsive-table  left">
                             <thead>
                                 <tr>
@@ -43,13 +46,14 @@
                 }
                 echo '      </tbody>
                         </table>';
-            }else{
+            } else {
                 echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
             }
             mysqli_close($connection);
         }
 
-        public static function busquedaTipos ($busqueda) {
+        public static function busquedaTipos($busqueda)
+        {
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT * FROM pys_tipossolicitud WHERE est = '1' AND (nombreTSol LIKE '%$busqueda%' OR descripcionTSol LIKE '%$busqueda%');";
@@ -79,7 +83,8 @@
             mysqli_close($connection);
         }
 
-        public static function busquedaTotalEstados () {
+        public static function busquedaTotalEstados()
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_estadosol 
             WHERE pys_estadosol.est = '1';";
@@ -101,7 +106,7 @@
                     $resultado1 = mysqli_query($connection, $consulta1);
                     if (mysqli_num_rows($resultado1) > 0) {
                         while ($datos1 = mysqli_fetch_array($resultado1)) {
-                        $equipo =$datos1['nombreEqu'];
+                            $equipo =$datos1['nombreEqu'];
                         }
                     }
                     echo '      <tr>
@@ -112,11 +117,12 @@
                 }
                 echo '      </tbody>
                         </table>';
-            } 
+            }
             mysqli_close($connection);
         }
 
-        public static function busquedaEstados ($busqueda) {
+        public static function busquedaEstados($busqueda)
+        {
             require('../Core/connection.php');
             $busqueda = mysqli_real_escape_string($connection, $busqueda);
             $consulta = "SELECT pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_equipos.nombreEqu
@@ -150,7 +156,8 @@
             mysqli_close($connection);
         }
 
-        public static function registrarEstadoSolicitud ($nombre, $descripcion) {
+        public static function registrarEstadoSolicitud($nombre, $descripcion)
+        {
             require('../Core/connection.php');
             $nombre = mysqli_real_escape_string($connection, $nombre);
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
@@ -167,7 +174,7 @@
                 if ($count == '0') {
                     $idEstado = "ESS001";
                 } else {
-                    $idEstado = 'ESS'.substr((substr($max,3)+1001),1);
+                    $idEstado = 'ESS'.substr((substr($max, 3)+1001), 1);
                 }
                 /** Validación para evitar que se creen registros duplicados */
                 $consulta2 = "SELECT * FROM pys_estadosol WHERE nombreEstSol = '$nombre' AND  descripcionEstSol = '$descripcion' AND est = '1';";
@@ -191,7 +198,8 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarEstadoSolicitud ($cod, $nombre, $descripcion) {
+        public static function actualizarEstadoSolicitud($cod, $nombre, $descripcion)
+        {
             require('../Core/connection.php');
             $nombre = mysqli_real_escape_string($connection, $nombre);
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
@@ -221,7 +229,8 @@
             mysqli_close($connection);
         }
 
-        public static function registrarTipoSolicitud ($nombreTip, $descripcionTip) {
+        public static function registrarTipoSolicitud($nombreTip, $descripcionTip)
+        {
             require('../Core/connection.php');
             $nombreTip = mysqli_real_escape_string($connection, $nombreTip);
             $descripcionTip = mysqli_real_escape_string($connection, $descripcionTip);
@@ -238,7 +247,7 @@
                 if ($count == '0') {
                     $idTipo = "TSOL01";
                 } else {
-                    $idTipo = 'TSOL'.substr((substr($max,4)+101),1);		
+                    $idTipo = 'TSOL'.substr((substr($max, 4)+101), 1);
                 }
                 /** Validación para evitar que se creen registros duplicados */
                 $consulta2 = "SELECT * FROM pys_tipossolicitud WHERE nombreTSol = '$nombreTip' AND est = '1';";
@@ -262,7 +271,8 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarSolicitudInicial ($idSol, $estSol, $obs, $solicita, $registra, $idCM, $fechaPrevista, $estProy) {
+        public static function actualizarSolicitudInicial($idSol, $estSol, $obs, $solicita, $registra, $idCM, $fechaPrevista, $estProy)
+        {
             if ($fechaPrevista == null || $fechaPrevista == '') {
                 $fechaPrevista = "NULL";
             } else {
@@ -330,7 +340,8 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarTipoSolicitud ($cod, $nombre, $descripcion) {
+        public static function actualizarTipoSolicitud($cod, $nombre, $descripcion)
+        {
             require('../Core/connection.php');
             $nombre = mysqli_real_escape_string($connection, $nombre);
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
@@ -360,7 +371,8 @@
             mysqli_close($connection);
         }
 
-        public static function validarDatosSolIni ($idSol, $estSol, $obs, $solicita, $fechaPrevista) {
+        public static function validarDatosSolIni($idSol, $estSol, $obs, $solicita, $fechaPrevista)
+        {
             if ($estSol == null || $obs == "" || $obs == " " || $obs == null || $solicita == null) {
                 echo '<script>alert("No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudInicial.php">';
@@ -369,9 +381,9 @@
                 $observacionForm = "";
                 $observacionDB = "";
                 require('../Core/connection.php');
-                $split1 = str_split($obs); 
-                foreach ($split1 as $sp) { 
-                    if (ctype_space($sp)) { 
+                $split1 = str_split($obs);
+                foreach ($split1 as $sp) {
+                    if (ctype_space($sp)) {
                         unset($sp);
                     } else {
                         $observacionForm .= $sp;
@@ -400,7 +412,8 @@
             }
         }
 
-        public static function selectEstadoSolicitud ($idEstado, $equipo) {
+        public static function selectEstadoSolicitud($idEstado, $equipo)
+        {
             require('../Core/connection.php');
             $string = "";
             if ($equipo == 'EQU001' || $equipo == 'EQU002') {
@@ -429,6 +442,34 @@
             mysqli_close($connection);
         }
 
+        public static function selectEstadoSolicitudInicial($idEstado, $equipo)
+        {
+            require('../Core/connection.php');
+            $string = "";
+            if ($equipo == 'EQU001' || $equipo == 'EQU002') {
+                $consulta = "SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = '1' AND descripcionEstSol = '$equipo' ORDER BY nombreEstSol;";
+            } else {
+                $consulta = "SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE (idEstSol = 'ESS002' OR idEstSol = 'ESS004' OR idEstSol = 'ESS006' ) AND est = '1' AND descripcionEstSol = '' ORDER BY nombreEstSol;";
+            }
+            
+            $resultado = mysqli_query($connection, $consulta);
+            $registros = mysqli_num_rows($resultado);
+            if ($registros > 0) {
+                if ($idEstado != null) {
+                    $string = " <select name='sltEstadoSolicitud' id='sltEstadoSolicitud'>
+                                        <option value=''>Seleccione</option>";
+                    while ($datos = mysqli_fetch_array($resultado)) {
+                        if ($datos['idEstSol'] == $idEstado) {
+                            $string.= " <option value='".$datos['idEstSol']."' selected>".$datos['nombreEstSol']."</option>";
+                        } else {
+                            $string.= " <option value='".$datos['idEstSol']."'>".$datos['nombreEstSol']."</option>";
+                        }
+                    }
+                    $string .= "</select>
+                                <label for='sltEstadoSolicitud'>Estado Producto/Servicio</label>";
+                }
+            }
+            return $string;
+            mysqli_close($connection);
+        }
     }
-
-?>
