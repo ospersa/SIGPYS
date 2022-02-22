@@ -57,3 +57,5 @@ if (isset($_POST['btnRegistrarSolIni']) && !isset($_POST['val']) && !isset($_POS
     $registra = $_SESSION['usuario'];
     SolicitudInicial::registrarSolicitudInicial($solicitud, $idTipo, $idEstado, $proyecto, $fecha, $descripcion, $solicita, $registra);
 }
+
+?>

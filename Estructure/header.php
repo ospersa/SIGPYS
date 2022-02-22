@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario'])) {
 $path = $_SERVER['REQUEST_URI'];
 $path = explode('/', $path);
 $path = end($path);
-if ($path != "visitante.php") {
+if( $path != "visitante.php"){
     if ((!isset($_SESSION['usuario'])) and ($_SESSION['estado'] != 'Autenticado')) {
         header('Location: ../index.php');
     } else {
@@ -31,36 +31,36 @@ if ($path != "visitante.php") {
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
-    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"> -->
-    <link rel="stylesheet" type="text/css" href="../Assets/Css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="../Assets/Css/Chart.css">
+   <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"> -->
+   <link rel="stylesheet" href="../Assets/Css/materialize.min.css">
+   <link rel="stylesheet" href="../Assets/Css/Chart.css">
     <link rel="stylesheet" type="text/css" href="../Assets/Css/master.css">
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
-
-<body>
-    <header>
-        <?php
-            if ($path != "visitante.php") {
+    <body>
+        <header>
+            <?php
+            if( $path != "visitante.php"){
                 require_once('../Controllers/ctrl_menu.php');
             }
             ?>
-    </header>
-    <main>
-        <div class="loader">
-            <div id="page-loader" class="preloader-wrapper big active">
-                <div class="spinner-layer spinner-teal-only">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
+        </header>
+        <main>
+            <div class="loader">
+                <div id="page-loader" class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-teal-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            

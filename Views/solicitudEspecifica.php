@@ -40,22 +40,22 @@ if ($idInicial != "") {
                                     </li>
                                 </ul>
                             </div>
-                            <input type="hidden" min="0" name="txtHora" id="txtHora" placeholder="0" value="0">
-                            <!--<div class="input-field col l1 m1 s12 offset-l3 offset-m3">
+                            <div class="input-field col l1 m1 s12 offset-l3 offset-m3">
+                                <input type="number" min="0" name="txtHora" id="txtHora" placeholder="0" value="0">
                                 <label for="txtHora">Horas</label>
-                            </div>-->
-                            <input type="hidden" max="59" min="0" name="txtMinuto" id="txtMinuto" placeholder="0" value="0">
-                            <!--<div class="input-field col l1 m1 s12">
+                            </div>
+                            <div class="input-field col l1 m1 s12">
+                                <input type="number" max="59" min="0" name="txtMinuto" id="txtMinuto" placeholder="0" value="0">
                                 <label for="txtMinuto">Minutos</label>
-                            </div>-->
-                            <div class="input-field col l2 m2 s12 offset-l3 offset-m3">
+                            </div>
+                            <div class="input-field col l2 m2 s12">
                                 <input type="text" class="datepicker" name="txtFechaPrevista" id="txtFechaPrevista" placeholder="dd/mm/aaaa" title="Fecha para entrega del producto / servicio">
                                 <label for="txtFechaPrevista">Fecha prevista entrega</label>
                             </div>
                             <div class="input-field col l2 m2 s12">'
                                 .$selectEquipo.
                             '</div>
-                            <div id="sltServicio" class="input-field col l2 m2 s12 "></div>
+                            <div id="sltServicio" class="input-field col l4 m4 s12 offset-l3 offset-m3"></div>
                             <div class="input-field col l4 m4 s12 offset-l3 offset-m3">
                                 <p>
                                     <label>
@@ -107,7 +107,7 @@ if ($idInicial != "") {
 <!-- Modal Structure -->
 <div id="modalSolicitudEspecifica" class="modal">
     <div class="modal-content center-align">
-        <?php
+    <?php
         require('modalSolicitudEspecifica.php');
     ?>
     </div>
@@ -115,3 +115,4 @@ if ($idInicial != "") {
 
 <?php
 require('../Estructure/footer.php');
+?>

@@ -156,9 +156,6 @@
 
     <ul id="gestores" class="dropdown-content teal darken-1">
         <li>
-            <a href="proycontdigital.php">Mis solicitudes iniciales</a>
-        </li>
-        <li>
             <a href="terminacionServiciosProductos.php">Terminación P/S</a>
         </li>
     </ul>
@@ -187,8 +184,8 @@
             <a href="infEjecuciones.php">Ejecuciones generales P&S</a>
         </li>
         <li>
-            <a href="infEjecuProdSer.php">Ejecuciones por proyecto</a>
-        </li>
+        <a href="infEjecuProdSer.php">Ejecuciones por proyecto</a>
+    </li>
         <li>
             <a href="infNomina.php">Nómina</a>
         </li>
@@ -240,7 +237,7 @@
             <a href="ResultadoSoporte.php">Productos de soporte</a>
         </li>
         <li>
-            <a href="productosInfo.php">Productos Información</a>
+        <a href="productosInfo.php">Productos Información</a>
         </li>
         <li>
             <a href="#!">Clases de productos</a>
