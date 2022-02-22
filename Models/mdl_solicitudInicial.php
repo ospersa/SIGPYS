@@ -1,8 +1,9 @@
 <?php
 
-Class SolicitudInicial {
-
-    public static function onLoadSolicitudInicial ($idSolicitud) {
+class SolicitudInicial
+{
+    public static function onLoadSolicitudInicial($idSolicitud)
+    {
         require('../Core/connection.php');
         $consulta = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_cursosmodulos.idCM, pys_cursosmodulos.nombreCursoCM, pys_cursosmodulos.nombreModuloCM, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_cursosmodulos.codigoCursoCM, pys_actsolicitudes.idSolicitante, pys_actualizacionproy.idEstProy
             FROM pys_solicitudes
@@ -22,7 +23,8 @@ Class SolicitudInicial {
         mysqli_close($connection);
     }
 
-    public static function busquedaIniciales ($busqueda) {
+    public static function busquedaIniciales($busqueda)
+    {
         require('../Core/connection.php');
         $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_cursosmodulos.codigoCursoCM, pys_actsolicitudes.idSolicitante
@@ -112,13 +114,14 @@ Class SolicitudInicial {
             }
             echo '      </tbody>
                     </table>';
-        }else{
+        } else {
             echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda: <strong>'.$busqueda.'</strong></h6></div>';
         }
         mysqli_close($connection);
     }
 
-    public static function busquedaTotalIniciales () {
+    public static function busquedaTotalIniciales()
+    {
         require('../Core/connection.php');
         $consulta = "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_cursosmodulos.codigoCursoCM, pys_actsolicitudes.idSolicitante
             FROM pys_solicitudes
@@ -168,7 +171,7 @@ Class SolicitudInicial {
                     WHERE pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '".$datos['idSolicitante']."';";
                 $resultado2 = mysqli_query($connection, $consulta2);
                 $datos2 = mysqli_fetch_array($resultado2);
-                $nombreSolicitante = isset ( $datos2['apellido1']) ? $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'] : '';
+                $nombreSolicitante = isset($datos2['apellido1']) ? $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'] : '';
                 echo '          <td>'.$nombreSolicitante.'</td>
                                 <td>'.$datos['ObservacionAct'].'</td>
                                 <td>'.$datos['fechPrev'].'</td>';
@@ -207,13 +210,245 @@ Class SolicitudInicial {
             }
             echo '      </tbody>
                     </table>';
-        }else{
+        } else {
             echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda.</h6></div>';
         }
         mysqli_close($connection);
     }
 
-    public static function selectProyecto($busqueda) {
+    public static function busquedaTotalInicialesGest($userName)
+    {
+        require('../Core/connection.php');
+
+        $user = '';
+        $query  =  " SELECT `idPersona` FROM `pys_login` WHERE `usrLogin` = '$userName' ";
+        $resultado1 = mysqli_query($connection, $query);
+        if (mysqli_num_rows($resultado1) > 0) {
+            while ($datos1 = mysqli_fetch_array($resultado1)) {
+                $user = $datos1['idPersona'];
+            }
+        }
+
+        $consulta = "SELECT pys_asignados.idProy, pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_cursosmodulos.codigoCursoCM, pys_actsolicitudes.idSolicitante, pys_roles.nombreRol
+        FROM `pys_asignados` 
+        INNER JOIN pys_actualizacionproy ON pys_asignados.idProy = pys_actualizacionproy.idProy
+        INNER JOIN pys_proyectos ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+        INNER JOIN pys_cursosmodulos ON pys_proyectos.idProy =  pys_cursosmodulos.idProy 
+        INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+        INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+        INNER JOIN pys_convocatoria ON pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
+        INNER JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
+        INNER JOIN pys_personas ON pys_actsolicitudes.idPersona = pys_personas.idPersona
+        INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
+        INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol  
+        INNER JOIN pys_roles ON pys_asignados.idRol = pys_roles.idRol     
+        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_convocatoria.est = '1' AND pys_solicitudes.idTSol = 'TSOL01' AND pys_asignados.idSol = '' AND (pys_asignados.idRol = 'ROL024' OR pys_asignados.idRol = 'ROL025') AND pys_asignados.idPersona = '$user'
+        ORDER BY pys_solicitudes.idSol DESC;";
+        $resultado = mysqli_query($connection, $consulta);
+        if (mysqli_num_rows($resultado) > 0) {
+            echo '  <table class="responsive-table  left" id="tblProyecto">
+                        <thead>
+                            <tr>
+                                <th>CSI</th>
+                                <th>Estado Sol.Inicial</th>
+                                <th>Código Proyecto Conecta-TE</th>
+                                <th>Proyecto</th>
+                                <th>Registró</th>
+                                <th>Solicitante</th>
+                                <th>Descripción Sol. Inicial</th>
+                                <th>Fecha Prevista para Entrega</th>
+                                <th>Fecha de Creación</th>
+                                <th>Fecha de Actualización</th>
+                                <th>Editar</th>
+                                <th>Crear PS</th>
+                                <th>Asignar</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                $splitDescSolIni    = explode("||", $datos['ObservacionAct']);
+                $stringDescsolIni   = '<ul class="browser-default">';
+                for ($i=0; $i < count($splitDescSolIni) ; $i++) {
+                    $stringDescsolIni .= '<li>'.$splitDescSolIni[$i].'</li>';
+                }
+                $stringDescsolIni .= '</ul>';
+
+                echo '      <tr>
+                                <td>'.$datos['idSol'].'</td>
+                                <td>'.$datos['nombreEstSol'].'</td>
+                                <td>'.$datos['codProy'].'</td>
+                                <td>'.$datos['nombreProy'].'</td>
+                                <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>';
+                /** Validación del nombre del solicitante */
+                $consulta2 = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres 
+                    FROM pys_personas
+                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSolicitante = pys_personas.idPersona
+                    WHERE pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '".$datos['idSolicitante']."';";
+                $resultado2 = mysqli_query($connection, $consulta2);
+                $datos2 = mysqli_fetch_array($resultado2);
+                $nombreSolicitante = isset($datos2['apellido1']) ? $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'] : '';
+                echo '          <td>'.$nombreSolicitante.'</td>
+                                <td>'.$stringDescsolIni.'</td>
+                                <td>'.$datos['fechPrev'].'</td>';
+                /** Validación de fecha_creación vs fecha_actualización para dejar una clase de color diferente en la celda */
+                if ($datos['fechSol'] != $datos['fechAct']) {
+                    echo '      <td>'.$datos['fechSol'].'</td>
+                                <td class="teal lighten-2">'.$datos['fechAct'].'</td>';
+                } else {
+                    echo '      <td>'.$datos['fechSol'].'</td>
+                                <td>'.$datos['fechAct'].'</td>';
+                }
+                echo '          <td><a href="#modalSolicitudInicial" class="modal-trigger" onclick="envioData(\'SI'.$datos['idSol'].'\',\'modalSolicitudInicial.php\');" title="Editar Solicitud"><i class="material-icons teal-text">edit</i></a></td>';
+                /** Validación del estado de la solicitud ESS006=Terminado; ESS007=Cancelado, si pertenece a esos código no se permitirá la asignación de personas ni la creación de nuevos PS*/
+                if ($datos['idEstSol'] == 'ESS006' || $datos['idEstSol'] == 'ESS007') {
+                    echo '      <td></td>
+                                <td></td>';
+                } else {
+                    /** Comprobación para identificar si ya hay productos/servicios creados a esta solicitud y pintar de color diferente */
+                    $consulta3 = "SELECT idSolIni FROM pys_solicitudes WHERE est = '1' AND idSolIni = '".$datos['idSol']."';";
+                    $resultado3 = mysqli_query($connection, $consulta3);
+                    if ($registros = mysqli_num_rows($resultado3)) {
+                        echo '  <td><a href="solicitudEspecifica.php?cod='.$datos['idSol'].'" title="Ya existen Productos/Servicios Creados"><i class="material-icons teal-text">add_box</i></a></td>';
+                    } else {
+                        echo '  <td><a href="solicitudEspecifica.php?cod='.$datos['idSol'].'" title="Crear Producto/Servicio"><i class="material-icons red-text">add_box</i></a></td>';
+                    }
+                    /** Comprobación para identificar si ya hay personas asignadas */
+                    $consulta4 = "SELECT idSol FROM pys_asignados WHERE est = '1' AND idSol = '".$datos['idSol']."';";
+                    $resultado4 = mysqli_query($connection, $consulta4);
+                    if ($registros4 = mysqli_num_rows($resultado4)) {
+                        echo '  <td><a href="asignados.php?cod2='.$datos['idSol'].'" title="Ya existen personas asignadas"><i class="material-icons teal-text">person_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="asignados.php?cod2='.$datos['idSol'].'" title="Asignar personas"><i class="material-icons red-text">person_add</i></a></td>';
+                    }
+                }
+                echo '      </tr>';
+            }
+            echo '      </tbody>
+                    </table>';
+        } else {
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda.</h6></div>';
+        }
+        mysqli_close($connection);
+    }
+
+    public static function busquedaInicialesGest($busqueda, $userName)
+    {
+        require('../Core/connection.php');
+
+        $user       = '';
+        $consulta4  = '';
+        $query  =  " SELECT `idPersona` FROM `pys_login` WHERE `usrLogin` = '$userName' ";
+        $resultado1 = mysqli_query($connection, $query);
+        if (mysqli_num_rows($resultado1) > 0) {
+            while ($datos1 = mysqli_fetch_array($resultado1)) {
+                $user = $datos1['idPersona'];
+            }
+        }
+
+        $consulta = "SELECT pys_asignados.idProy, pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_cursosmodulos.codigoCursoCM, pys_actsolicitudes.idSolicitante, pys_roles.nombreRol
+        FROM `pys_asignados` 
+        INNER JOIN pys_actualizacionproy ON pys_asignados.idProy = pys_actualizacionproy.idProy
+        INNER JOIN pys_proyectos ON pys_actualizacionproy.idProy = pys_proyectos.idProy
+        INNER JOIN pys_cursosmodulos ON pys_proyectos.idProy =  pys_cursosmodulos.idProy 
+        INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
+        INNER JOIN pys_solicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol
+        INNER JOIN pys_convocatoria ON pys_actualizacionproy.idConvocatoria = pys_convocatoria.idConvocatoria
+        INNER JOIN pys_frentes ON pys_proyectos.idFrente = pys_frentes.idFrente
+        INNER JOIN pys_personas ON pys_actsolicitudes.idPersona = pys_personas.idPersona
+        INNER JOIN pys_estadosol ON pys_actsolicitudes.idEstSol = pys_estadosol.idEstSol
+        INNER JOIN pys_tipossolicitud ON pys_solicitudes.idTSol = pys_tipossolicitud.idTSol  
+        INNER JOIN pys_roles ON pys_asignados.idRol = pys_roles.idRol     
+        WHERE pys_solicitudes.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1' AND pys_tipossolicitud.est = '1' AND pys_estadosol.est = '1' AND pys_personas.est = '1' AND pys_frentes.est = '1' AND pys_cursosmodulos.estProy = '1' AND pys_cursosmodulos.estCurso = '1' AND pys_convocatoria.est = '1' AND pys_solicitudes.idTSol = 'TSOL01' AND pys_asignados.idSol = '' AND (pys_asignados.idRol = 'ROL024' OR pys_asignados.idRol = 'ROL025') AND pys_asignados.idPersona = '$user' AND (pys_solicitudes.idSol LIKE '%$busqueda' OR pys_estadosol.nombreEstSol LIKE '%$busqueda%' OR pys_actualizacionproy.codProy LIKE '%$busqueda%' OR pys_actualizacionproy.nombreProy LIKE '%$busqueda%')
+        ORDER BY pys_solicitudes.idSol DESC;";
+        $resultado = mysqli_query($connection, $consulta);
+        if (mysqli_num_rows($resultado) > 0) {
+            echo '  <table class="responsive-table  left" id="tblProyecto">
+                        <thead>
+                            <tr>
+                                <th>CSI</th>
+                                <th>Estado Sol.Inicial</th>
+                                <th>Código Proyecto Conecta-TE</th>
+                                <th>Proyecto</th>
+                                <th>Registró</th>
+                                <th>Solicitante</th>
+                                <th>Descripción Sol. Inicial</th>
+                                <th>Fecha Prevista para Entrega</th>
+                                <th>Fecha de Creación</th>
+                                <th>Fecha de Actualización</th>
+                                <th>Editar</th>
+                                <th>Crear PS</th>
+                                <th>Asignar</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+            while ($datos = mysqli_fetch_array($resultado)) {
+                $splitDescSolIni    = explode("||", $datos['ObservacionAct']);
+                $stringDescsolIni   = '<ul class=" browser-default">';
+                for ($i=0; $i < count($splitDescSolIni) ; $i++) {
+                    $stringDescsolIni .= '<li>'.$splitDescSolIni[$i].'</li>';
+                }
+                $stringDescsolIni .= '</ul>';
+
+                echo '      <tr>
+                                <td>'.$datos['idSol'].'</td>
+                                <td>'.$datos['nombreEstSol'].'</td>
+                                <td>'.$datos['codProy'].'</td>
+                                <td>'.$datos['nombreProy'].'</td>
+                                <td>'.$datos['apellido1'].' '.$datos['apellido2'].' '.$datos['nombres'].'</td>';
+                /** Validación del nombre del solicitante */
+                $consulta2 = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres 
+                    FROM pys_personas
+                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSolicitante = pys_personas.idPersona
+                    WHERE pys_personas.est = '1' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idSolicitante = '".$datos['idSolicitante']."';";
+                $resultado2 = mysqli_query($connection, $consulta2);
+                $datos2 = mysqli_fetch_array($resultado2);
+                $nombreSolicitante = isset($datos2['apellido1']) ? $datos2['apellido1']." ".$datos2['apellido2']." ".$datos2['nombres'] : '';
+                echo '          <td>'.$nombreSolicitante.'</td>
+                                <td>'.$stringDescsolIni.'</td>
+                                <td>'.$datos['fechPrev'].'</td>';
+                /** Validación de fecha_creación vs fecha_actualización para dejar una clase de color diferente en la celda */
+                if ($datos['fechSol'] != $datos['fechAct']) {
+                    echo '      <td>'.$datos['fechSol'].'</td>
+                                <td class="teal lighten-2">'.$datos['fechAct'].'</td>';
+                } else {
+                    echo '      <td>'.$datos['fechSol'].'</td>
+                                <td>'.$datos['fechAct'].'</td>';
+                }
+                echo '          <td><a href="#modalSolicitudInicial" class="modal-trigger" onclick="envioData(\'SI'.$datos['idSol'].'\',\'modalSolicitudInicial.php\');" title="Editar Solicitud"><i class="material-icons teal-text">edit</i></a></td>';
+                /** Validación del estado de la solicitud ESS006=Terminado; ESS007=Cancelado, si pertenece a esos código no se permitirá la asignación de personas ni la creación de nuevos PS*/
+                if ($datos['idEstSol'] == 'ESS006' || $datos['idEstSol'] == 'ESS007') {
+                    echo '      <td></td>
+                                <td></td>';
+                } else {
+                    /** Comprobación para identificar si ya hay productos/servicios creados a esta solicitud y pintar de color diferente */
+                    $consulta3 = "SELECT idSolIni FROM pys_solicitudes WHERE est = '1' AND idSolIni = '".$datos['idSol']."';";
+                    $resultado3 = mysqli_query($connection, $consulta3);
+                    if ($registros = mysqli_num_rows($resultado3)) {
+                        echo '  <td><a href="solicitudEspecifica.php?cod='.$datos['idSol'].'" title="Ya existen Productos/Servicios Creados"><i class="material-icons teal-text">add_box</i></a></td>';
+                    } else {
+                        echo '  <td><a href="solicitudEspecifica.php?cod='.$datos['idSol'].'" title="Crear Producto/Servicio"><i class="material-icons red-text">add_box</i></a></td>';
+                    }
+                    /** Comprobación para identificar si ya hay personas asignadas */
+                    $consulta4 = "SELECT idSol FROM pys_asignados WHERE est = '1' AND idSol = '".$datos['idSol']."';";
+                    $resultado4 = mysqli_query($connection, $consulta4);
+                    if ($registros4 = mysqli_num_rows($resultado4)) {
+                        echo '  <td><a href="asignados.php?cod2='.$datos['idSol'].'" title="Ya existen personas asignadas"><i class="material-icons teal-text">person_add</i></a></td>';
+                    } else {
+                        echo '  <td><a href="asignados.php?cod2='.$datos['idSol'].'" title="Asignar personas"><i class="material-icons red-text">person_add</i></a></td>';
+                    }
+                }
+                echo '      </tr>';
+            }
+            echo '      </tbody>
+                    </table>';
+        } else {
+            echo'<div class="card-panel teal darken-1"><h6 class="white-text">No hay resultados para la busqueda.</h6></div>';
+        }
+        mysqli_close($connection);
+    }
+
+    public static function selectProyecto($busqueda)
+    {
         require('../Core/connection.php');
         $busqueda = mysqli_real_escape_string($connection, $busqueda);
         $consulta = "SELECT pys_actualizacionproy.idProy, pys_actualizacionproy.idFrente, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy, pys_actualizacionproy.descripcionProy
@@ -240,7 +475,8 @@ Class SolicitudInicial {
         mysqli_close($connection);
     }
     
-    public static function selectSolicitante ($idPersona) {
+    public static function selectSolicitante($idPersona)
+    {
         require('../Core/connection.php');
         $consulta = "SELECT idPersona, apellido1, apellido2, nombres FROM pys_personas WHERE est = '1' ORDER BY apellido1;";
         $resultado = mysqli_query($connection, $consulta);
@@ -261,7 +497,8 @@ Class SolicitudInicial {
         mysqli_close($connection);
     }
 
-    public static function preLoadSolicitudInicial () {
+    public static function preLoadSolicitudInicial()
+    {
         require('../Core/connection.php');
         $consulta = "SELECT nombreTSol, idTSol FROM pys_tipossolicitud WHERE est = '1' AND nombreTSol = 'Inicial';";
         $resultado = mysqli_query($connection, $consulta);
@@ -270,7 +507,7 @@ Class SolicitudInicial {
         }
         $consulta2 = "SELECT nombreEstSol, idEstSol FROM pys_estadosol WHERE est = '1' AND nombreEstSol = 'Por iniciar';";
         $resultado2 = mysqli_query($connection, $consulta2);
-        while ($datos2 = mysqli_fetch_array($resultado2)){
+        while ($datos2 = mysqli_fetch_array($resultado2)) {
             $array2 = ['nombreEstado' => $datos2['nombreEstSol'], 'idEstado' => $datos2['idEstSol']];
         }
         $consulta3 = "SELECT COUNT(idSol), MAX(idSol) FROM pys_solicitudes;";
@@ -281,7 +518,7 @@ Class SolicitudInicial {
         if ($count == 0) {
             $idSol = "S00001";
         } else {
-            $idSol = 'S'.substr((substr($max,1)+100001),1);
+            $idSol = 'S'.substr((substr($max, 1)+100001), 1);
         }
         $array3 = ['idSolicitud' => $idSol];
         $array = array_merge($array1, $array2, $array3);
@@ -289,7 +526,8 @@ Class SolicitudInicial {
         mysqli_close($connection);
     }
 
-    public static function registrarSolicitudInicial($idSolicitud, $idTipo, $idEstado, $proyecto, $fecha, $descripcion, $solicita, $registra) {
+    public static function registrarSolicitudInicial($idSolicitud, $idTipo, $idEstado, $proyecto, $fecha, $descripcion, $solicita, $registra)
+    {
         require('../Core/connection.php');
         $descripcion = mysqli_real_escape_string($connection, $descripcion);
         $proyecto = mysqli_real_escape_string($connection, $proyecto);
@@ -343,6 +581,8 @@ Class SolicitudInicial {
         mysqli_close($connection);
     }
 
+    public static function loadInicialesGestor($userName)
+    {
+        self::busquedaTotalInicialesGest($userName);
+    }
 }
-
-?>

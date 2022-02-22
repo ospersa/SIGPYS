@@ -1893,3 +1893,25 @@ function closeProduct () {
         }
     })
 }
+
+function busquedaSolIniGest(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#txt-search").serialize(),
+        beforeSend: function () {
+            $('#div_dinamico').html("<div class='center-align'><div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div></div>");
+        },
+        success: function (data) {
+            inicializarCampos();
+            $('#div_dinamico').html(data);
+            $('#div_dinamico').slideDown("slow");
+            $('table tbody').paginathing({
+                perPage: 15,
+                insertAfter: 'table.responsive-table',
+                pageNumbers: false,
+            });
+        }
+    });
+    return false;
+}
