@@ -156,7 +156,7 @@
 
     <ul id="gestores" class="dropdown-content teal darken-1">
         <li>
-            <a href="proycontdigital.php">Mis solicitudes iniciales</a>
+            <a href="proycontdigital.php">Mis Proyectos de contenido digital</a>
         </li>
         <li>
             <a href="terminacionServiciosProductos.php">Terminación P/S</a>

@@ -466,7 +466,7 @@
                         }
                     }
                     $string .= "</select>
-                                <label for='sltEstadoSolicitud'>Estado Producto/Servicio</label>";
+                                <label class='teal-text' for='sltEstadoSolicitud'>Estado Proyecto de Contenido digital</label>";
                 }
             }
             return $string;

@@ -18,7 +18,7 @@ $userName   = (isset($_SESSION['usuario'])) ? $_SESSION['usuario'] : null;
 </div>
 
 <div id="content" class="center-align">
-    <h4>Solicitudes iniciales donde soy gestor</h4>
+    <h4>Mis proyectos de contenido digital (PCD)</h4>
 </div>
 
 <div class="row mt-5">

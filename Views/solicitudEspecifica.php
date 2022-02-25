@@ -15,13 +15,13 @@ if ($idInicial != "") {
                         <div class="row">
                             <div class="input-field col l3 m3 s12 offset-l3 offset-m3">
                                 <input readonly type="text" name="txtIdSol" id="txtIdSol" value="'.$idInicial.'" >
-                                <label for="txtIdSol" class="active">Código solicitud inicial</label>
+                                <label for="txtIdSol" class="active">Código Proyecto de Contenido Digital</label>
                             </div>
-                            <div class="input-field col l3 m3 s12">
-                                <input hidden type="text" name="txtIdTipoSol" id="txtIdTipoSol" value="'.$precarga['idTipo'].'" >
+                            <input hidden type="text" name="txtIdTipoSol" id="txtIdTipoSol" value="'.$precarga['idTipo'].'" >
+                            <!--<div class="input-field col l3 m3 s12">
                                 <input readonly type="text" name="txtTipoSol" id="txtTipoSol" value="'.$precarga['nombreTipo'].'" >
                                 <label for="txtTipoSol" class="active">Tipo de producto/servicio</label>
-                            </div>
+                            </div>-->
                             <!--<div class="input-field col l2 m2 s12">
                                 <input hidden type="text" name="txtIdEstadoSol" id="txtIdEstadoSol" value="'.$precarga['idEstado'].'" >
                                 <input readonly type="text" name="txtEstadoSol" id="txtEstadoSol" value="'.$precarga['nombreEstado'].'" >
@@ -36,7 +36,7 @@ if ($idInicial != "") {
                                 <ul class="collapsible">
                                     <li>
                                         <div class="collapsible-header"><i class="material-icons">assignment</i><strong>Observación solicitud inicial</strong></div>
-                                        <div class="collapsible-body"><span><textarea class="materialize-textarea" readonly>'.$precarga['observacion'].'</textarea></span></div>
+                                        <div class="collapsible-body">'.$precarga['observacion'].'</div>
                                     </li>
                                 </ul>
                             </div>

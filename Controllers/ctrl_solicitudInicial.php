@@ -29,19 +29,20 @@ if (isset($_REQUEST['id'])) {
     $id = $_REQUEST['id'];
     $prep = substr($id, 0, 3);
     if ($prep == "SIS") {
-        $id = substr($id, 2);
-        $info = SolicitudInicial::onLoadSolicitudInicial($id);
-        $idSolicitud = $info['idSol'];
-        $tipoSolicitud = $info['nombreTSol'];
-        $idEstado = $info['idEstSol'];
-        $registro = $info['apellido1']." ".$info['apellido2']." ".$info['nombres'];
-        $proyecto = $info['nombreProy'];
-        $observacion = $info['ObservacionAct'];
-        $fechActualizacion = $info['fechAct'];
-        $idSolicitante = $info['idSolicitante'];
-        $idCM = $info['idCM'];
-        $fechPrev = $info['fechPrev'];
-        $estProy = $info['idEstProy'];
+        $id                 = substr($id, 2);
+        $info               = SolicitudInicial::onLoadSolicitudInicial($id);
+        $idSolicitud        = $info['idSol'];
+        $tipoSolicitud      = $info['nombreTSol'];
+        $idEstado           = $info['idEstSol'];
+        $registro           = $info['apellido1']." ".$info['apellido2']." ".$info['nombres'];
+        $codProyecto        = $info['codProy'];
+        $proyecto           = $info['nombreProy'];
+        $observacion        = $info['ObservacionAct'];
+        $fechActualizacion  = $info['fechAct'];
+        $idSolicitante      = $info['idSolicitante'];
+        $idCM               = $info['idCM'];
+        $fechPrev           = $info['fechPrev'];
+        $estProy            = $info['idEstProy'];
     }
 }
 
