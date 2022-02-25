@@ -92,6 +92,14 @@ body {
     }
 }
 
+.sidenav li>a {
+    height: auto;
+}
+
+ul#gestores {
+    height: fit-content !important;
+}
+
 .user-view {
     margin-bottom: 0;
 
@@ -129,6 +137,14 @@ body {
 ul.select-dropdown {
     top: 0px !important;
     position: absolute;
+}
+
+.green-text {
+    input {
+        color: #00897b;
+        border-color: #00897b !important;
+        background-color: #e0f2f1 !important;
+    }
 }
 
 /********* Estilos de menu select *********/
@@ -276,7 +292,13 @@ input[type=number] {
 /********* Ajuste al ancho de tablas *********/
 
 #tblProyecto {
+    
     font-size: .9em;
+    & td:nth-child(7),
+    & th:nth-child(7) {
+        width: 350px !important;
+        word-break: break-all;
+    }
 }
 
 /******  Ajuste nombre de proyecto en Views proyecto ******/

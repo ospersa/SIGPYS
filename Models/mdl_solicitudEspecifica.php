@@ -1,8 +1,9 @@
 <?php
 
-    Class SolicitudEspecifica {
-        
-        public static function onLoadSolicitudEspecifica ($id) {
+    class SolicitudEspecifica
+    {
+        public static function onLoadSolicitudEspecifica($id)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_solicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_equipos.idEqu, pys_servicios.nombreSer, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct, pys_tipossolicitud.nombreTSol, pys_tipossolicitud.idTSol, pys_actsolicitudes.idEstSol, pys_actsolicitudes.idCM, pys_actsolicitudes.presupuesto, pys_actsolicitudes.horas, pys_actsolicitudes.idSer, pys_actsolicitudes.registraTiempo
                 FROM pys_solicitudes
@@ -20,16 +21,17 @@
             return $datos;
         }
 
-        public static function preLoadSolicitudEspecifica ($id) {
+        public static function preLoadSolicitudEspecifica($id)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT nombreTSol, idTSol FROM pys_tipossolicitud WHERE est = '1' AND nombreTSol = 'Especifica';";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos = mysqli_fetch_array($resultado)){
+            while ($datos = mysqli_fetch_array($resultado)) {
                 $array1 = ['nombreTipo' => $datos['nombreTSol'], 'idTipo' => $datos['idTSol']];
             }
             $consulta2 = "SELECT nombreEstSol, idEstSol FROM pys_estadosol WHERE est = '1' AND idEstSol = 'ESS003';";
             $resultado2 = mysqli_query($connection, $consulta2);
-            while ($datos2 = mysqli_fetch_array($resultado2)){
+            while ($datos2 = mysqli_fetch_array($resultado2)) {
                 $array2 = ['nombreEstado' => $datos2['nombreEstSol'], 'idEstado' => $datos2['idEstSol']];
             }
             /** Consulta para traer información de la solicitud inicial */
@@ -40,14 +42,22 @@
                 WHERE idSol = '$id' AND pys_actsolicitudes.est = '1' AND pys_actualizacionproy.est = '1';";
             $resultado3 = mysqli_query($connection, $consulta3);
             while ($datos3 = mysqli_fetch_array($resultado3)) {
-                $array3 = ['codProy' => $datos3['codProy'], 'nombreProy' => $datos3['nombreProy'], 'observacion' => $datos3['ObservacionAct'], 'idProy' => $datos3['idProy']];
+                $splitDescSolEsp    = explode("||", $datos3['ObservacionAct']);
+                $stringDescSolEsp   = '<ul class="browser-default left-align">';
+                for ($i=0; $i < count($splitDescSolEsp) ; $i++) {
+                    $stringDescSolEsp .= '<li>'.$splitDescSolEsp[$i].'</li>';
+                }
+                $stringDescSolEsp .= '</ul>';
+
+                $array3 = ['codProy' => $datos3['codProy'], 'nombreProy' => $datos3['nombreProy'], 'observacion' => $stringDescSolEsp, 'idProy' => $datos3['idProy']];
             }
             $array = array_merge($array1, $array2, $array3);
             mysqli_close($connection);
             return $array;
         }
 
-        public static function registrarSolicitudEspecifica ($idSolIni, $tipoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra,$irPresu, $RegistrarT) {
+        public static function registrarSolicitudEspecifica($idSolIni, $tipoSol, $idProy, $presupuesto, $horas, $equipo, $servicio, $fechaPrev, $descripcion, $registra, $irPresu, $RegistrarT)
+        {
             require('../Core/connection.php');
             if ($fechaPrev == null) {
                 $fechaPrev = "'NULL'";
@@ -75,7 +85,7 @@
                 if ($count == 0) {
                     $idSolEsp = "S00001";
                 } else {
-                    $idSolEsp = 'S'.substr((substr($max,1)+100001),1);
+                    $idSolEsp = 'S'.substr((substr($max, 1)+100001), 1);
                 }
                 $RegistrarT = ($RegistrarT !='0'?1:0);
                 /** Consulta para traer el id de la tabla cursos_modulos con respecto al id del proyecto */
@@ -106,9 +116,9 @@
                 if ($resultado3 && $resultado4) {
                     mysqli_query($connection, "COMMIT;");
                     echo '<script>alert("Se guardó correctamente la información.")</script>';
-                    if($irPresu == 1){
+                    if ($irPresu == 1) {
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$idSolIni.'">';
-                    }else if($irPresu == 2){
+                    } elseif ($irPresu == 2) {
                         echo '<meta http-equiv="Refresh" content="0;url=../Views/cotizador.php?cod='.$idSolIni.'&val='.$idProy.'">';
                     }
                 } else {
@@ -120,16 +130,17 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarSolicitudEspecifica ($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona, $RegistrarT) {
+        public static function actualizarSolicitudEspecifica($solIni, $solEsp, $tipoSol, $idCM, $estSol, $presupuesto, $horas, $servicio, $fechaPrev, $descripcion, $persona, $RegistrarT)
+        {
             require('../Core/connection.php');
             $descripcion = mysqli_real_escape_string($connection, $descripcion);
             $presupuesto = mysqli_real_escape_string($connection, $presupuesto);
-            $RegistrarT = ( $RegistrarT != '0' ? 1 : 0 );
+            $RegistrarT = ($RegistrarT != '0' ? 1 : 0);
             $fechaPrev = ($fechaPrev == null) ? "NULL" : "'$fechaPrev'";
             /** Validación de datos vacíos */
             if ($solEsp == null || $tipoSol == null || $estSol == null || $persona == null || $idCM == null) {
                 echo 'No se pudo actualizar el registro porque hay algún campo vacío, por favor verifique.';
-                /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
+            /* echo '<meta http-equiv="Refresh" content="0;url=../Views/solicitudEspecifica.php?cod='.$solIni.'">'; */
             } else {
                 $solEsp = substr($solEsp, 1);
                 /** Obtención del ID de la persona que realiza la actualización */
@@ -203,7 +214,8 @@
             mysqli_close($connection);
         }
 
-        public static function selectEquipo ($idEquipo) {
+        public static function selectEquipo($idEquipo)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_equipos WHERE est = '1' ORDER BY nombreEqu;";
             $resultado = mysqli_query($connection, $consulta);
@@ -225,7 +237,8 @@
             mysqli_close($connection);
         }
 
-        public static function selectServicio ($equipo, $servicio) {
+        public static function selectServicio($equipo, $servicio)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT idSer, nombreSer FROM pys_servicios WHERE idEqu = '$equipo' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
@@ -251,7 +264,8 @@
             mysqli_close($connection);
         }
 
-        public static function cargaEspecificas ($inicial, $cod) {
+        public static function cargaEspecificas($inicial, $cod)
+        {
             require('../Core/connection.php');
             $string = "";
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_solicitudes.idSol, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_solicitudes.fechSol, pys_actsolicitudes.fechAct, pys_estadosol.nombreEstSol
@@ -275,13 +289,12 @@
                 $string = ' <table class="responsive-table  left">
                                 <thead>
                                     <tr>
-                                        <th>CSI</th>
+                                        <th>CPCD</th>
                                         <th>Producto/Servicio</th>
                                         <th>Estado</th>
                                         <th>Cód. proyecto en Conecta-TE</th>
                                         <th>Proyecto</th>
                                         <th>Equipo -- Servicio</th>
-                                        
                                         <th>Descripción Producto/Servicio</th>
                                         <th>Fecha prevista entrega</th>
                                         <th>Fecha creación</th>
@@ -339,17 +352,18 @@
             mysqli_close($connection);
             if ($cod == '1') {
                 return $string;
-            } else if ($cod == '2') {
+            } elseif ($cod == '2') {
                 echo $string;
             }
         }
 
-        public static function cargaEspecificasUsuario ($buscar, $cod, $usuario) {
+        public static function cargaEspecificasUsuario($buscar, $cod, $usuario)
+        {
             require('../Core/connection.php');
             $string = "";
             $sql = "SELECT idPersona FROM pys_login where usrLogin = '$usuario';";
             $result = mysqli_query($connection, $sql);
-            while($data = mysqli_fetch_array($result)){
+            while ($data = mysqli_fetch_array($result)) {
                 $idUsuario = $data[0];
             };
             $buscar = mysqli_real_escape_string($connection, $buscar);
@@ -393,9 +407,9 @@
                                         <td><p class="truncate">'.$datos['ObservacionAct'].'</p></td>
                                         <td>'.$datos['fechPrev'].'</td>
                                         <td><span class="teal-text"><strong>Código: P'.$datos['idSol'].'</strong></span><br> <strong>Nombre: </strong> '.$datos['nombreProd'].'</td>
-                                        <td>'.SolicitudEspecifica::selectEstadoProductoServicio($idSol, $datos['idEstSol'],$datos['idEqu']).'</td>
+                                        <td>'.SolicitudEspecifica::selectEstadoProductoServicio($idSol, $datos['idEstSol'], $datos['idEqu']).'</td>
                                         <td class="center">'.SolicitudEspecifica::registrarInfoPyS($idSol, $idUsuario).'</td>
-                                        <td class="center">'.SolicitudEspecifica::registrarTiempo($idSol,$idUsuario).
+                                        <td class="center">'.SolicitudEspecifica::registrarTiempo($idSol, $idUsuario).
                                         SolicitudEspecifica::marcarTerminado($idSol, $idUsuario).'</td>
                                     </tr>';
                 }
@@ -410,13 +424,14 @@
             }
             if ($cod == '1') {
                 return $string;
-            } else if ($cod == '2') {
+            } elseif ($cod == '2') {
                 echo $string;
             }
             mysqli_close($connection);
         }
 
-        public static function registrarTiempo($idSol, $idUsuario){
+        public static function registrarTiempo($idSol, $idUsuario)
+        {
             require('../Core/connection.php');
             $consulta1 = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
                 FROM pys_tiempos 
@@ -424,7 +439,7 @@
                 WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
-            if ( $registros1 > 0){
+            if ($registros1 > 0) {
                 $string = '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="left" data-tooltip="Ya ha registrado tiempos" onclick="envioData(\'TIE'.$idSol.'\',\'modalResultadoServicio.php\');"><i class="material-icons teal-text">timer</i></a>';
             } else {
                 $string = '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="left" data-tooltip="Aun no ha registrado tiempos"  onclick="envioData(\'TIE'.$idSol.'\',\'modalResultadoServicio.php\');"><i class="material-icons red-text">timer</i></a>';
@@ -433,7 +448,8 @@
             return $string;
         }
 
-        public static function registrarInfoPyS($idSol, $idUsuario){
+        public static function registrarInfoPyS($idSol, $idUsuario)
+        {
             require('../Core/connection.php');
             $string = "";
             //Cambio realizado para registrar video de MOOC
@@ -449,8 +465,8 @@
                 WHERE idSol = '$idSol' AND pys_actsolicitudes.est = '1' AND pys_servicios.est = '1';";
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
-            if ( $registros1 > 0){
-                $equipo = strtoupper( substr ( $datos2['nombreEqu'], 0, 3 ) );
+            if ($registros1 > 0) {
+                $equipo = strtoupper(substr($datos2['nombreEqu'], 0, 3));
                 if ($datos2['productoOservicio'] == 'SI') {
                     $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol, $datos2['idEqu']);
                     if ($validarLLenoPro == 1) {
@@ -461,9 +477,10 @@
                         $tooltips = 'data-position="left" data-tooltip="Agregar resultado de Producto"';
                     }
                     $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" '.$tooltips.' onclick="envioData(\''.$equipo.$idSol.'\',\'modalResultadoServicio.php\');" ><i class="material-icons '.$color.'-text">assignment</i></a>';
-                } if ($datos2['productoOservicio'] == 'NO' && $datos2['idEqu'] != 'EQU004' ) {
-                    $validarLLenoSer = SolicitudEspecifica::validarResultadoServicio($idSol); 
-                    if ($validarLLenoSer == 1){
+                }
+                if ($datos2['productoOservicio'] == 'NO' && $datos2['idEqu'] != 'EQU004') {
+                    $validarLLenoSer = SolicitudEspecifica::validarResultadoServicio($idSol);
+                    if ($validarLLenoSer == 1) {
                         $color = "teal";
                         $tooltips = 'data-position="left" data-tooltip="Editar resultado de servicio"';
                     } else {
@@ -477,14 +494,15 @@
             return $string;
         }
 
-        public static function marcarTerminado($idSol, $idUsuario){
+        public static function marcarTerminado($idSol, $idUsuario)
+        {
             require('../Core/connection.php');
             $string = "";
             $consulta = "SELECT pys_asignados.idAsig
             FROM pys_asignados 
             WHERE  pys_asignados.est = 1 AND pys_asignados.idPersona='".$idUsuario."' AND pys_asignados.idSol='".$idSol."';";
             /* $consulta = "SELECT pys_tiempos.idTiempo, pys_asignados.idAsig
-            FROM pys_tiempos 
+            FROM pys_tiempos
             INNER JOIN pys_asignados ON pys_tiempos.idAsig = pys_asignados.idAsig
             WHERE pys_tiempos.estTiempo = 1 AND pys_asignados.est = 1 AND pys_asignados.idPersona='". $idUsuario."' AND pys_asignados.idSol='".$idSol."';";*/
             $resultado = mysqli_query($connection, $consulta);
@@ -499,8 +517,8 @@
             $resultado2 = mysqli_query($connection, $consulta2);
             $datos2 = mysqli_fetch_array($resultado2);
             $validarLLenoPro = SolicitudEspecifica::validarResultadoProducto($idSol, $datos2['idEqu']);
-            $validarLLeno = SolicitudEspecifica::validarResultadoServicio($idSol); 
-            if ($validarLLeno == 1 || $validarLLenoPro == 1){
+            $validarLLeno = SolicitudEspecifica::validarResultadoServicio($idSol);
+            if ($validarLLeno == 1 || $validarLLenoPro == 1) {
                 $color = "teal";
             } else {
                 $color = "red";
@@ -512,27 +530,28 @@
             } else {
                 $string .= '';
             } */
-            //Cambio realizado para ser registrado 
+            //Cambio realizado para ser registrado
             $string .= '<a href="#modalResultadoServicio" class="modal-trigger tooltipped" data-position="left" data-tooltip="Marcar como terminado" onclick="envioData(\'TER'.$idAsig.'\',\'modalResultadoServicio.php\');"><i class="material-icons '.$color.'-text">done</i></a>';
             return $string;
             mysqli_close($connection);
         }
 
-        public static function validarResultadoServicio($idSol){
+        public static function validarResultadoServicio($idSol)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_resultservicio WHERE idSol = '$idSol' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $completo = 0;
-            if ( $resultado ) {
+            if ($resultado) {
                 $datos = mysqli_fetch_array($resultado);
-                $idPlat     = ( isset ( $datos['idPlat'] ) ) ? $datos['idPlat'] : null;
-                $idClProd   = ( isset ( $datos['idClProd'] ) ) ? $datos['idClProd'] : null;
+                $idPlat     = (isset($datos['idPlat'])) ? $datos['idPlat'] : null;
+                $idClProd   = (isset($datos['idClProd'])) ? $datos['idClProd'] : null;
                 /* $idTProd = $datos['idTProd'];
                 $observacion = $datos['observacion'];
                 $estudiantesImpac = $datos['estudiantesImpac'];
                 $docentesImpac = $datos['docentesImpac'];
                 $urlResultado  = $datos['urlResultado']; */
-                if (($idPlat && $idClProd) != null){
+                if (($idPlat && $idClProd) != null) {
                     $completo = 1;
                 }
             }
@@ -540,36 +559,37 @@
             return $completo;
         }
 
-        public static function validarResultadoProducto($idSol, $equipo) {
+        public static function validarResultadoProducto($idSol, $equipo)
+        {
             require('../Core/connection.php');
             $completo = 0;
             $consulta = "SELECT * FROM pys_productos
                 INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
                 WHERE idSol = '$idSol' AND pys_actproductos.est = '1' AND pys_productos.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
-            if ( $resultado ) {
+            if ($resultado) {
                 $datos = mysqli_fetch_array($resultado);
-                $nomProduc      = ( isset ( $datos['nombreProd'] ) ) ? $datos['nombreProd'] : null;
-                $fechaEntre     = ( isset ( $datos['fechEntregaProd'] ) ) ? $datos['fechEntregaProd'] : null;
-                $RED            = ( isset ( $datos['descripcionProd'] ) ) ? $datos['descripcionProd'] : null;
-                $plat           = ( isset ( $datos['idPlat'] ) ) ? $datos['idPlat'] : null; 
-                $clase          = ( isset ( $datos['idClProd'] ) ) ? $datos['idClProd'] : null; 
-                $tipo           = ( isset ( $datos ['idTProd'] ) ) ? $datos ['idTProd'] : null;
-                $url            = ( isset ( $datos['urlservidor'] ) ) ? $datos['urlservidor'] : null;  
-                $idioma         = ( isset ( $datos['idioma'] ) ) ? $datos['idioma'] : null;
-                $formato        = ( isset ( $datos['formato'] ) ) ? $datos['formato'] : null;
-                $tipoContenido  = ( isset ( $datos['tipoContenido'] ) ) ? $datos['tipoContenido'] : null;
-                if ($equipo == "EQU003" || $equipo == "EQU002" ) {
-                    if ( ( $plat && $clase && $tipo && $nomProduc && $RED  && $url  && $fechaEntre && $idioma && $formato && $tipoContenido ) != null ) {
+                $nomProduc      = (isset($datos['nombreProd'])) ? $datos['nombreProd'] : null;
+                $fechaEntre     = (isset($datos['fechEntregaProd'])) ? $datos['fechEntregaProd'] : null;
+                $RED            = (isset($datos['descripcionProd'])) ? $datos['descripcionProd'] : null;
+                $plat           = (isset($datos['idPlat'])) ? $datos['idPlat'] : null;
+                $clase          = (isset($datos['idClProd'])) ? $datos['idClProd'] : null;
+                $tipo           = (isset($datos ['idTProd'])) ? $datos ['idTProd'] : null;
+                $url            = (isset($datos['urlservidor'])) ? $datos['urlservidor'] : null;
+                $idioma         = (isset($datos['idioma'])) ? $datos['idioma'] : null;
+                $formato        = (isset($datos['formato'])) ? $datos['formato'] : null;
+                $tipoContenido  = (isset($datos['tipoContenido'])) ? $datos['tipoContenido'] : null;
+                if ($equipo == "EQU003" || $equipo == "EQU002") {
+                    if (($plat && $clase && $tipo && $nomProduc && $RED  && $url  && $fechaEntre && $idioma && $formato && $tipoContenido) != null) {
                         $completo = 1;
-                    }        
-                } else if ($equipo == "EQU001" ) {
-                    $urlVimeo   = ( isset ( $datos['urlVimeo'] ) ) ? $datos['urlVimeo'] : null;
-                    $minDura    = ( isset ( $datos['duracionmin'] ) ) ? $datos['duracionmin'] : null;
-                    $segDura    = ( isset ( $datos['duracionseg'] ) ) ? $datos['duracionseg'] : null;
-                    $sinopsis   = ( isset ( $datos['sinopsis'] ) ) ? $datos['sinopsis'] : null;
-                    $autores    = ( isset ( $datos['autorExterno'] ) ) ? $datos['autorExterno'] : null;
-                    if ( ( $plat && $clase && $tipo && $nomProduc && $RED && $url && $urlVimeo && $sinopsis && $autores && $fechaEntre && $idioma && $formato && $tipoContenido ) != null && is_numeric($segDura) && is_numeric($minDura) ) {
+                    }
+                } elseif ($equipo == "EQU001") {
+                    $urlVimeo   = (isset($datos['urlVimeo'])) ? $datos['urlVimeo'] : null;
+                    $minDura    = (isset($datos['duracionmin'])) ? $datos['duracionmin'] : null;
+                    $segDura    = (isset($datos['duracionseg'])) ? $datos['duracionseg'] : null;
+                    $sinopsis   = (isset($datos['sinopsis'])) ? $datos['sinopsis'] : null;
+                    $autores    = (isset($datos['autorExterno'])) ? $datos['autorExterno'] : null;
+                    if (($plat && $clase && $tipo && $nomProduc && $RED && $url && $urlVimeo && $sinopsis && $autores && $fechaEntre && $idioma && $formato && $tipoContenido) != null && is_numeric($segDura) && is_numeric($minDura)) {
                         $completo = 1;
                     }
                 }
@@ -578,7 +598,8 @@
             return $completo;
         }
 
-        public static function formResultado($idSol){
+        public static function formResultado($idSol)
+        {
             require('../Core/connection.php');
             $consulta= "SELECT pys_solicitudes.idSol, pys_solicitudes.descripcionSol, pys_solicitudes.fechSol, pys_solicitudes.idTSol, pys_tipossolicitud.idTSol, pys_tipossolicitud.nombreTSol, pys_actsolicitudes.idSol, pys_actsolicitudes.fechPrev, pys_actsolicitudes.fechAct, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idPersona, pys_estadosol.idEstSol, pys_estadosol.nombreEstSol, pys_personas.idPersona, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_proyectos.idProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.codProy, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_servicios.idSer, pys_servicios.nombreSer, pys_cursosmodulos.codigoCursoCM, pys_equipos.nombreEqu
                 FROM pys_solicitudes
@@ -601,7 +622,8 @@
             mysqli_close($connection);
         }
 
-        public static function cargarInformacionServicio($idSol){
+        public static function cargarInformacionServicio($idSol)
+        {
             require('../Core/connection.php');
             $consulta= "SELECT * FROM pys_resultservicio WHERE idSol = '$idSol' AND est = 1;";
             $resultado = mysqli_query($connection, $consulta);
@@ -610,7 +632,8 @@
             mysqli_close($connection);
         }
 
-        public static function cargarInformacionProducto($idSol){
+        public static function cargarInformacionProducto($idSol)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT pys_actproductos.idPlat, pys_actproductos.idClProd, pys_actproductos.idTProd, pys_actproductos.observacionesProd, pys_actproductos.nombreProd, pys_actproductos.descripcionProd, pys_actproductos.urlservidor, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, pys_actproductos.fechEntregaProd, pys_actproductos.palabrasClave, pys_actproductos.idioma, pys_actproductos.formato, pys_actproductos.tipoContenido, pys_actproductos.idAreaConocimiento 
                 FROM pys_productos
@@ -622,7 +645,8 @@
             return $datos;
         }
 
-        public static function totalTiempo($idSol){
+        public static function totalTiempo($idSol)
+        {
             require('../Core/connection.php');
             $consulta1 = "SELECT pys_tiempos.horaTiempo, pys_tiempos.minTiempo
             FROM pys_tiempos 
@@ -631,14 +655,14 @@
             $resultado1 = mysqli_query($connection, $consulta1);
             $horas = 0;
             $min = 0;
-            while($datos = mysqli_fetch_array($resultado1)){
+            while ($datos = mysqli_fetch_array($resultado1)) {
                 $horas += $datos['horaTiempo'];
                 $min += $datos['minTiempo'];
             }
-            if ($min > 60){
-                $horas = intval(( $min/60 )+$horas);
-                $min = intval( $min%60);
-            } 
+            if ($min > 60) {
+                $horas = intval(($min/60)+$horas);
+                $min = intval($min%60);
+            }
             $tiempos;
             $tiempo[0] = $horas;
             $tiempo[1] = $min;
@@ -647,25 +671,27 @@
             return $tiempo;
         }
 
-        public static function selectRED ($id){
+        public static function selectRED($id)
+        {
             $string = '<select name="SMRed" id="SMRed" class="asignacion" >';
-            if ($id == null){
+            if ($id == null) {
                 $string .= '<option value="" selected disabled>Seleccione</option>
 			        <option value="Si">Si</option>
 			        <option value="No">No</option>';
-            }else if ($id == 'Si'){
+            } elseif ($id == 'Si') {
                 $string .= '<option value="'.$id.'" selected>Si</option>
                 <option value="No">No</option>';
-            }else if ($id == 'No'){
+            } elseif ($id == 'No') {
                 $string .= '<option value="'.$id.'" selected>No</option>
                 <option value="Si">Si</option>';
             }
-		    $string .= ' </select>
+            $string .= ' </select>
             <label for="SMRed">¿Es un RED?</label>';
             return $string;
         }
 
-        public static function selectPlataforma($cod){
+        public static function selectPlataforma($cod)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_plataformas WHERE est = 1;";
             $resultado = mysqli_query($connection, $consulta);
@@ -673,9 +699,9 @@
                 $string = '  <select name="sltPlataforma" id="sltPlataforma" class="asignacion" >
                             <option value="" selected disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    if( $datos['idPlat'] == $cod){
+                    if ($datos['idPlat'] == $cod) {
                         $string .= '  <option selected value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
-                    }else{
+                    } else {
                         $string .= '  <option value="'.$datos['idPlat'].'">'.$datos['nombrePlt'].'</option>';
                     }
                 }
@@ -688,7 +714,8 @@
             mysqli_close($connection);
         }
         
-        public static function selectIdioma($cod){
+        public static function selectIdioma($cod)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM idiomas;";
             $resultado = mysqli_query($connection, $consulta);
@@ -696,9 +723,9 @@
                 $string = '  <select name="sltIdioma" id="sltIdioma" class="asignacion" >
                             <option value="" selected disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    if( $datos['idIdiomas'] == $cod){
+                    if ($datos['idIdiomas'] == $cod) {
                         $string .= '  <option selected value="'.$datos['idIdiomas'].'">'.$datos['idiomaNombre'].'</option>';
-                    }else{
+                    } else {
                         $string .= '  <option value="'.$datos['idIdiomas'].'">'.$datos['idiomaNombre'].'</option>';
                     }
                 }
@@ -710,7 +737,8 @@
             return $string;
             mysqli_close($connection);
         }
-        public static function selectFormato($cod){
+        public static function selectFormato($cod)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM formatos;";
             $resultado = mysqli_query($connection, $consulta);
@@ -718,9 +746,9 @@
                 $string = '  <select name="sltFormato" id="sltFormato" class="asignacion" >
                             <option value="" selected disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    if( $datos['idFormatos'] == $cod){
+                    if ($datos['idFormatos'] == $cod) {
                         $string .= '  <option selected value="'.$datos['idFormatos'].'">'.$datos['formatoNombre'].'</option>';
-                    }else{
+                    } else {
                         $string .= '  <option value="'.$datos['idFormatos'].'">'.$datos['formatoNombre'].'</option>';
                     }
                 }
@@ -732,7 +760,8 @@
             return $string;
             mysqli_close($connection);
         }
-        public static function selectTipoContenido($cod){
+        public static function selectTipoContenido($cod)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM tiposcontenido;";
             $resultado = mysqli_query($connection, $consulta);
@@ -740,9 +769,9 @@
                 $string = '  <select name="sltTipoContenido" id="sltTipoContenido" class="asignacion" >
                             <option value="" selected disabled>Seleccione</option>';
                 while ($datos = mysqli_fetch_array($resultado)) {
-                    if( $datos['idtiposContenido'] == $cod){
+                    if ($datos['idtiposContenido'] == $cod) {
                         $string .= '  <option selected value="'.$datos['idtiposContenido'].'">'.$datos['tipoContenidoNombre'].'</option>';
-                    }else{
+                    } else {
                         $string .= '  <option value="'.$datos['idtiposContenido'].'">'.$datos['tipoContenidoNombre'].'</option>';
                     }
                 }
@@ -755,7 +784,8 @@
             mysqli_close($connection);
         }
 
-        public static function selectAreaConocimiento ($idProy, $idAreaConocimiento) {
+        public static function selectAreaConocimiento($idProy, $idAreaConocimiento)
+        {
             require('../Core/connection.php');
             $query  = " SELECT * FROM areaconocimientohasproyectos
                         INNER JOIN pys_areaconocimiento ON areaconocimientohasproyectos.pys_areaconocimiento_idAreaConocimiento  = pys_areaconocimiento.idAreaConocimiento
@@ -777,13 +807,14 @@
                 $string = '<label for="areaConocimiento" class="active">Área de conocimiento</label>';
                 $string .= '<p name="areaConocimiento" id="areaConocimiento" class="left-align">El proyecto no tiene áreas de conocimiento asignadas.</p>';
             }
-            return $string; 
+            return $string;
             mysqli_close($connection);
         }
 
 
-        public static function selectClaseConTipo ($idServicio, $idClase) {
-            require ('../Core/connection.php');
+        public static function selectClaseConTipo($idServicio, $idClase)
+        {
+            require('../Core/connection.php');
             $consulta = "SELECT idClProd, nombreClProd FROM pys_claseproductos WHERE est = '1' AND idSer = '$idServicio';";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
@@ -810,17 +841,17 @@
             mysqli_close($connection);
         }
 
-        public static function selectTipoProducto($idClase, $idServicio, $codTipo){
-            require ('../Core/connection.php');
+        public static function selectTipoProducto($idClase, $idServicio, $codTipo)
+        {
+            require('../Core/connection.php');
             $select = '     <select name="sltTipo" id="sltTipo" >
                                 <option value="" selected disabled>Seleccione</option>';
             $consulta = "SELECT idTProd FROM `pys_costos` WHERE idSer = '$idServicio' AND idClProd ='$idClase'";
             $resultado = mysqli_query($connection, $consulta);
-            if (mysqli_num_rows($resultado)){
-                
+            if (mysqli_num_rows($resultado)) {
             }
             while ($datos = mysqli_fetch_array($resultado)) {
-                if ($datos['idTProd'] != null){
+                if ($datos['idTProd'] != null) {
                     $idTipo = $datos['idTProd'];
                     $consulta1= "SELECT * FROM pys_tiposproductos WHERE idTProd ='$idTipo'";
                     $resultado1 = mysqli_query($connection, $consulta1);
@@ -835,17 +866,17 @@
                         }
                     } else {
                         $select .= '<option value="" selected >No registra tipo</option>';
-                    }       
-                }     
+                    }
+                }
             }
             $select .= '    </select>
                             <label for="sltTipo">Tipo de producto</label>';
             return $select;
             mysqli_close($connection);
-    
         }
     
-        public static function guardarResultadoServicio ($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $otrosImpac, $urlResultado, $motivoAnulacion, $usuario, $duracionhora, $duracionmin){
+        public static function guardarResultadoServicio($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $otrosImpac, $urlResultado, $motivoAnulacion, $usuario, $duracionhora, $duracionmin)
+        {
             require('../Core/connection.php');
             $observacion = mysqli_real_escape_string($connection, $observacion);
             $estudiantesImpac = mysqli_real_escape_string($connection, $estudiantesImpac);
@@ -856,31 +887,30 @@
             $duracionmin = mysqli_real_escape_string($connection, $duracionmin);
             $consulta = "SELECT count(idResultServ), Max(idResultServ) FROM pys_resultservicio";
             $resultado = mysqli_query($connection, $consulta);
-            while ($datos=mysqli_fetch_array($resultado)){
+            while ($datos=mysqli_fetch_array($resultado)) {
                 $count=$datos[0];
                 $max=$datos[1];
             }
-            if ($count==0){
-            $countResServ="R00001";	
+            if ($count==0) {
+                $countResServ="R00001";
+            } else {
+                $countResServ='R'.substr((substr($max, 3)+100001), 1);
             }
-            else {
-            $countResServ='R'.substr((substr($max,3)+100001),1);		
-            }
-            if ($estudiantesImpac == ""){
+            if ($estudiantesImpac == "") {
                 $estudiantesImpac = 0;
-            } 
+            }
             
-            if ($docentesImpac == ""){
+            if ($docentesImpac == "") {
                 $docentesImpac = 0;
-            } 
+            }
             
-            if ($otrosImpac == ""){
+            if ($otrosImpac == "") {
                 $otrosImpac = 0;
-            } 
+            }
             $idResponRegistro =  SolicitudEspecifica::generarIdPersona($usuario);
             $consulta2 = "INSERT INTO pys_resultservicio VALUES ('$countResServ', '$idSol', '$idPlat', '$idSer', '$idClProd', '$idTipoPro', '$observacion', '$estudiantesImpac', '$docentesImpac', '$otrosImpac', '$urlResultado', '$motivoAnulacion', '$idResponRegistro', '$duracionhora', '$duracionmin', now(), '1')";
             $resultado2 = mysqli_query($connection, $consulta2);
-            if ($resultado && $resultado2){
+            if ($resultado && $resultado2) {
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             } else {
@@ -890,8 +920,9 @@
             mysqli_close($connection);
         }
 
-        public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
-            if($areaConocimiento == null || $areaConocimiento == '') {
+        public static function guardarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento)
+        {
+            if ($areaConocimiento == null || $areaConocimiento == '') {
                 $areaConocimiento = 0;
             }
             require('../Core/connection.php');
@@ -908,7 +939,7 @@
             $resultado      = mysqli_query($connection, $consulta);
             $consulta1      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '$palabrasClave', $fechaEntre, now(), '', '$url', '$labor', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1', $idioma, $formato, $tipoContenido, $areaConocimiento);";
             $resultado1     = mysqli_query($connection, $consulta1);
-            if($resultado && $resultado1) {
+            if ($resultado && $resultado1) {
                 mysqli_query($connection, "COMMIT;");
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
@@ -920,8 +951,9 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento){
-            if($areaConocimiento == null || $areaConocimiento == '') {
+        public static function actualizarResultadoSoporte($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento)
+        {
+            if ($areaConocimiento == null || $areaConocimiento == '') {
                 $areaConocimiento = 0;
             }
             require('../Core/connection.php');
@@ -953,8 +985,9 @@
             mysqli_close($connection);
         }
 
-        public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores,  $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento) {
-            if($areaConocimiento == null || $areaConocimiento == '' || $areaConocimiento == 'Seleccione...') {
+        public static function guardarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento)
+        {
+            if ($areaConocimiento == null || $areaConocimiento == '' || $areaConocimiento == 'Seleccione...') {
                 $areaConocimiento = 0;
             }
             require('../Core/connection.php');
@@ -976,7 +1009,7 @@
             $resultado      = mysqli_query($connection, $consulta);
             $consulta1      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc','$red', '$palabrasClave', $fechaEntre, now(), '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, $areaConocimiento)";
             $resultado1     = mysqli_query($connection, $consulta1);
-            if($resultado && $resultado1){
+            if ($resultado && $resultado1) {
                 mysqli_query($connection, "COMMIT;");
                 echo '<script>alert("Se guardó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
@@ -988,7 +1021,8 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento) {
+        public static function actualizarResultadoRealizacion($idSol, $usuario, $nomProduc, $fechaEntre, $red, $idPlat, $idClProd, $idTipoPro, $url, $labor, $sinopsis, $autores, $urlVimeo, $min, $seg, $palabrasClave, $idioma, $formato, $tipoContenido, $areaConocimiento)
+        {
             $areaConocimiento = 0;
             require('../Core/connection.php');
             $min = ($min == "") ? "null" : $min;
@@ -1013,7 +1047,7 @@
             $consulta2      = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$idPlat', '$idClProd', '$idTipoPro', '$nomProduc', '$red', '$palabrasClave', $fechaEntre, now(), '$urlVimeo', '$url', '$labor', '', '$idPersona', '', $min, $seg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, '$areaConocimiento');";
             
             $resultado2     = mysqli_query($connection, $consulta2);
-            if($resultado && $resultado1 && $resultado2){
+            if ($resultado && $resultado1 && $resultado2) {
                 mysqli_query($connection, "COMMIT;");
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
@@ -1025,7 +1059,8 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarResultadoServicio ($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $urlResultado, $usuario){
+        public static function actualizarResultadoServicio($idSol, $idPlat, $idSer, $idClProd, $idTipoPro, $observacion, $estudiantesImpac, $docentesImpac, $urlResultado, $usuario)
+        {
             require('../Core/connection.php');
             $observacion = mysqli_real_escape_string($connection, $observacion);
             $estudiantesImpac = mysqli_real_escape_string($connection, $estudiantesImpac);
@@ -1034,35 +1069,36 @@
             $idPersona = SolicitudEspecifica::generarIdPersona($usuario);
             $consulta = "UPDATE pys_resultservicio SET idPlat = '$idPlat',  idSer ='$idSer', idClProd= '$idClProd', idTProd ='$idTipoPro', observacion= '$observacion', estudiantesImpac = '$estudiantesImpac', docentesImpac = '$docentesImpac', urlResultado = '$urlResultado', idResponRegistro = '$idPersona', fechaCreacion = now() WHERE idSol = '$idSol'";
             $resultado = mysqli_query($connection, $consulta);
-            if($resultado){
+            if ($resultado) {
                 echo '<script>alert("Se actualizó correctamente la información.")</script>';
                 echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER["HTTP_REFERER"].'">';
-            } else {         
+            } else {
                 echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url= '.$_SERVER["HTTP_REFERER"].'">';
             }
             mysqli_close($connection);
-
         }
 
-        public static function generarCodigoProducto(){
+        public static function generarCodigoProducto()
+        {
             require('../Core/connection.php');
             $consulta="SELECT COUNT(idProd),MAX(idProd) FROM pys_productos";
-			$resultado = mysqli_query($connection, $consulta);
-            while ($result=mysqli_fetch_array($resultado)){
+            $resultado = mysqli_query($connection, $consulta);
+            while ($result=mysqli_fetch_array($resultado)) {
                 $count=$result[0];
                 $max=$result[1];
             }
-            if ($count==0){
-                $countProd="P00001";	
-            }else {
-                $countProd='P'.substr((substr($max,1)+100001),1);		
+            if ($count==0) {
+                $countProd="P00001";
+            } else {
+                $countProd='P'.substr((substr($max, 1)+100001), 1);
             }
             return $countProd;
             mysqli_close($connection);
         }
 
-        public static function generarIdPersona($usuario){
+        public static function generarIdPersona($usuario)
+        {
             require('../Core/connection.php');
             $consulta1 = "SELECT idPersona FROM pys_login where usrLogin = '$usuario';";
             $resultado1 = mysqli_query($connection, $consulta1);
@@ -1072,33 +1108,36 @@
             mysqli_close($connection);
         }
 
-        public static function comprobraExisResultadoServicio($idSol){
+        public static function comprobraExisResultadoServicio($idSol)
+        {
             require('../Core/connection.php');
             $consulta1 = "SELECT idSol FROM pys_resultservicio WHERE idSol = '$idSol' AND est = 1;";
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
-            if ($registros1 > 0){
-                return True;
-            }else{
-                return False;
+            if ($registros1 > 0) {
+                return true;
+            } else {
+                return false;
             }
             mysqli_close($connection);
         }
 
-        public static function comprobraExisResultadoProductos($idSol) {
+        public static function comprobraExisResultadoProductos($idSol)
+        {
             require('../Core/connection.php');
             $consulta1 = "SELECT idSol FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
             $resultado1 = mysqli_query($connection, $consulta1);
             $registros1 = mysqli_num_rows($resultado1);
             mysqli_close($connection);
-            if ($registros1 > 0){
-                return True;
-            }else{
-                return False;
+            if ($registros1 > 0) {
+                return true;
+            } else {
+                return false;
             }
         }
 
-        public static function selectEstadoProductoServicio ($idSol, $idEstado,$idEquipo) {
+        public static function selectEstadoProductoServicio($idSol, $idEstado, $idEquipo)
+        {
             require('../Core/connection.php');
             $select='';
             $query = 'SELECT idEstSol, nombreEstSol FROM pys_estadosol WHERE est = "1" AND idEstSol != "ESS001" AND idEstSol != "ESS006" AND idEstSol != "ESS007"  AND descripcionEstSol ="'.$idEquipo.'" ORDER BY nombreEstSol;';
@@ -1123,7 +1162,8 @@
             return $select;
         }
 
-        public static function actualizarEstadoSolicitud ($idSol, $idEst) {
+        public static function actualizarEstadoSolicitud($idSol, $idEst)
+        {
             require('../Core/connection.php');
             $query0 = "SELECT idPersona FROM pys_login WHERE usrLogin = '".$_SESSION['usuario']."';";
             $result0 = mysqli_query($connection, $query0);
@@ -1141,11 +1181,12 @@
             mysqli_close($connection);
         }
 
-        public static function cancelarSolicitudEspecifica ($idSol) {
+        public static function cancelarSolicitudEspecifica($idSol)
+        {
             require('../Core/connection.php');
             $allowCancel = false;
             $asignados = self::totalAsignados($idSol);
-            if ( $asignados > 0 ) {
+            if ($asignados > 0) {
                 echo "El producto P$idSol, no puede ser cancelado porque tiene $asignados personas asignadas";
             } else {
                 $query = "SELECT productoOservicio FROM pys_actsolicitudes 
@@ -1156,21 +1197,21 @@
                 $productoServicio = $data['productoOservicio'];
                 if ($productoServicio == "SI") {
                     $metadataDiligenciada = self::verificarMetadataProducto($idSol);
-                    if ( $metadataDiligenciada > 0 ) {
+                    if ($metadataDiligenciada > 0) {
                         echo "El producto P$idSol, no puede ser cancelado porque tiene información de metadata relacionada";
                     } else {
                         $allowCancel = true;
                     }
                 }
             }
-            if ( $allowCancel ) {
+            if ($allowCancel) {
                 $query1 = "SELECT idPersona FROM pys_login WHERE usrLogin = '".$_SESSION['usuario']."';";
                 $result1 = mysqli_query($connection, $query1);
                 $data1 = mysqli_fetch_array($result1);
                 $user = $data1[0];
                 $query2 = "UPDATE pys_actsolicitudes SET idEstSol = 'ESS007', idPersona = '$user', fechAct = NOW() WHERE idSol = '$idSol' AND est = '1';";
                 $result2 = mysqli_query($connection, $query2);
-                if ( $result2 ) {
+                if ($result2) {
                     echo "Producto/Servicio P$idSol cancelado correctamente";
                 } else {
                     echo "Ocurrión un error y el Producto/Servicio P$idSol no pudo ser cancelado. Por favor intente nuevamente.";
@@ -1179,11 +1220,12 @@
             mysqli_close($connection);
         }
 
-        public static function eliminarSolicitudEspecifica ($idSol) {
+        public static function eliminarSolicitudEspecifica($idSol)
+        {
             require('../Core/connection.php');
             $allowDelete = false;
             $asignados = self::totalAsignados($idSol);
-            if ( $asignados > 0 ) {
+            if ($asignados > 0) {
                 echo "El producto P$idSol, no puede ser eliminado porque tiene $asignados personas asignadas";
             } else {
                 $query = "SELECT productoOservicio FROM pys_actsolicitudes 
@@ -1194,21 +1236,21 @@
                 $productoServicio = $data['productoOservicio'];
                 if ($productoServicio == "SI") {
                     $metadataDiligenciada = self::verificarMetadataProducto($idSol);
-                    if ( $metadataDiligenciada > 0 ) {
+                    if ($metadataDiligenciada > 0) {
                         echo "El producto P$idSol, no puede ser eliminado porque tiene información de metadata relacionada";
                     } else {
                         $allowDelete = true;
                     }
                 }
             }
-            if ( $allowDelete ) {
+            if ($allowDelete) {
                 $query1 = "SELECT idPersona FROM pys_login WHERE usrLogin = '".$_SESSION['usuario']."';";
                 $result1 = mysqli_query($connection, $query1);
                 $data1 = mysqli_fetch_array($result1);
                 $user = $data1[0];
                 $query2 = "UPDATE pys_actsolicitudes SET est = '0', idPersona = '$user', fechAct = NOW() WHERE idSol = '$idSol' AND est = '1';";
                 $result2 = mysqli_query($connection, $query2);
-                if ( $result2 ) {
+                if ($result2) {
                     echo "Producto/Servicio P$idSol eliminado correctamente";
                 } else {
                     echo "Ocurrión un error y el Producto/Servicio P$idSol no pudo ser eliminado. Por favor intente nuevamente.";
@@ -1217,7 +1259,8 @@
             mysqli_close($connection);
         }
 
-        public static function totalAsignados ($idSol) {
+        public static function totalAsignados($idSol)
+        {
             require('../Core/connection.php');
             $query = "SELECT idAsig FROM pys_asignados WHERE idSol = '$idSol' AND est != '0';";
             $result = mysqli_query($connection, $query);
@@ -1226,7 +1269,8 @@
             return $registry;
         }
 
-        public static function verificarMetadataProducto ($idSol) {
+        public static function verificarMetadataProducto($idSol)
+        {
             require('../Core/connection.php');
             $query = "SELECT pys_productos.idProd FROM pys_productos
                 INNER JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
@@ -1236,7 +1280,4 @@
             mysqli_close($connection);
             return $registry;
         }
-
     }
-
-?>

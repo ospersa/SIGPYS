@@ -78,6 +78,14 @@ body {
       display: inline-block;
       width: 100%; } }
 
+.sidenav li > a {
+  height: auto; }
+
+ul#gestores {
+  height: -webkit-fit-content !important;
+  height: -moz-fit-content !important;
+  height: fit-content !important; }
+
 .user-view {
   margin-bottom: 0; }
   .user-view .name {
@@ -106,6 +114,11 @@ body {
 ul.select-dropdown {
   top: 0px !important;
   position: absolute; }
+
+.green-text input {
+  color: #00897b;
+  border-color: #00897b !important;
+  background-color: #e0f2f1 !important; }
 
 /********* Estilos de menu select *********/
 /********* Estilos de titulos *********/
@@ -218,6 +231,10 @@ input[type=number] {
 /********* Ajuste al ancho de tablas *********/
 #tblProyecto {
   font-size: .9em; }
+  #tblProyecto td:nth-child(7),
+  #tblProyecto th:nth-child(7) {
+    width: 350px !important;
+    word-break: break-all; }
 
 /******  Ajuste nombre de proyecto en Views proyecto ******/
 .caja {

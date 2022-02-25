@@ -166,7 +166,7 @@ require('../Controllers/ctrl_restriccionMenu.php');
             <a href="solicitudInicial.php">Solicitud inicial</a>
         </li>
         <li>
-            <a href="proycontdigital.php">Mis solicitudes iniciales</a>
+            <a href="proycontdigital.php">Mis Proyectos de contenido digital</a>
         </li>
     </ul>';
     }
