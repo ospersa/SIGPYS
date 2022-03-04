@@ -148,7 +148,7 @@ class SolicitudInicial
                         <thead>
                             <tr>
                                 <th>CPCD</th>
-                                <th>Estado PCD/th>
+                                <th>Estado PCD</th>
                                 <th>Código Proyecto Conecta-TE</th>
                                 <th>Proyecto</th>
                                 <th>Registró</th>
