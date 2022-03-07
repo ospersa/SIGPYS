@@ -607,6 +607,10 @@
                                         <input type="number" name="txtMinutos" id="txtMinutos" min="0" max="59" placeholder="0" class="asignacion">
                                         <label for="txtMinutos">Minutos</label>
                                     </div>';
+                } else {
+                    echo '  <input type="hidden" name="txtHoras" id="txtHoras" placeholder="0" class="asignacion" value="0">
+                            <input type="hidden" name="txtMinutos" id="txtMinutos" min="0" max="59" placeholder="0" class="asignacion" value="0">
+                    ';
                 }
                 echo '<div class="input-field col l1 m1 s12">
                                     <button class="btn waves-effect" type="submit" name="btnAsignar" id="btnAsignar">Asignar</button>
