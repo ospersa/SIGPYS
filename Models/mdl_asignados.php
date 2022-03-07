@@ -1,7 +1,8 @@
 <?php
-    Class Asignados {
-
-        public static function onLoadAsignacion ($idSol) {
+    class Asignados
+    {
+        public static function onLoadAsignacion($idSol)
+        {
             require('../Core/connection.php');
             $idSol = mysqli_real_escape_string($connection, $idSol);
             $consulta = "SELECT pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_fases.nombreFase, pys_asignados.maxhora, pys_asignados.maxmin, pys_asignados.est
@@ -15,7 +16,8 @@
             mysqli_close($connection);
         }
 
-        public static function asignarPersonaProy ($idProy) {
+        public static function asignarPersonaProy($idProy)
+        {
             require('../Core/connection.php');
             $idProy = mysqli_real_escape_string($connection, $idProy);
             $consulta = "SELECT pys_frentes.idFrente, pys_proyectos.idProy, pys_frentes.nombreFrente, pys_frentes.descripcionFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actualizacionproy.idConvocatoria, pys_actualizacionproy.nombreCortoProy, pys_actualizacionproy.descripcionProy
@@ -74,7 +76,8 @@
             mysqli_close($connection);
         }
 
-        public static function selectRol () {
+        public static function selectRol()
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_roles WHERE est = '1' ORDER BY nombreRol;";
             $resultado = mysqli_query($connection, $consulta);
@@ -93,7 +96,8 @@
             mysqli_close($connection);
         }
 
-        public static function selectPersona () {
+        public static function selectPersona()
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_personas WHERE est = '1' ORDER BY apellido1;";
             $resultado = mysqli_query($connection, $consulta);
@@ -113,7 +117,8 @@
             mysqli_close($connection);
         }
         
-        public static function selectPersonaPys () {
+        public static function selectPersonaPys()
+        {
             require('../Core/connection.php');
             $consulta = "SELECT idPersona, apellido1, apellido2, nombres
                             FROM pys_personas 
@@ -137,7 +142,8 @@
             return $string;
         }
 
-        public static function selectFase () {
+        public static function selectFase()
+        {
             require('../Core/connection.php');
             $consulta = "SELECT * FROM pys_fases WHERE est = '1';";
             $resultado = mysqli_query($connection, $consulta);
@@ -156,7 +162,8 @@
             mysqli_close($connection);
         }
 
-        public static function mostrarAsignados ($tipo, $id) {
+        public static function mostrarAsignados($tipo, $id)
+        {
             require('../Core/connection.php');
             $string = "";
             if ($tipo == "Proyecto") {
@@ -195,7 +202,7 @@
                     $string .= '    </tbody>
                                 </table>';
                 }
-            } else if ($tipo == "SolIni") {
+            } elseif ($tipo == "SolIni") {
                 $consulta = "SELECT pys_asignados.idAsig, pys_asignados.maxhora, pys_asignados.maxmin, pys_roles.nombreRol, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_fases.nombreFase
                     FROM pys_asignados
                     INNER JOIN pys_roles ON pys_roles.idRol = pys_asignados.idRol
@@ -227,7 +234,7 @@
                     $string .= '    </tbody>
                                 </table>';
                 }
-            } else if ($tipo == "SolEsp") {
+            } elseif ($tipo == "SolEsp") {
                 $consulta = "SELECT pys_asignados.idAsig, pys_asignados.maxhora, pys_asignados.maxmin, pys_roles.nombreRol, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_fases.nombreFase, pys_asignados.est
                     FROM pys_asignados
                     INNER JOIN pys_roles ON pys_roles.idRol = pys_asignados.idRol
@@ -277,7 +284,7 @@
                             </div>
                             </form>';
                 }
-            } else if ($tipo == "Cot") {
+            } elseif ($tipo == "Cot") {
                 $totalHoras = 0;
                 $totalMinutos = 0;
                 $totalRecurso = 0;
@@ -291,7 +298,7 @@
                     AND idSol = '$id';";
                 $resultado = mysqli_query($connection, $consulta);
                 $datos = mysqli_num_rows($resultado);
-                if ($datos > 0){
+                if ($datos > 0) {
                     $string = '
                         <div class="divider"></div>
                         <h5>Personas Asignadas:</h5>
@@ -315,9 +322,9 @@
                             $consFechSolEsp = "SELECT fechSol FROM pys_solicitudes WHERE idSol = '$id';";
                             $resFechSolEsp = mysqli_query($connection, $consFechSolEsp);
                             $fechSolEsp = mysqli_fetch_array($resFechSolEsp);
-                            $fecha = date("Y-m-d",strtotime($fechSolEsp['fechSol']));
+                            $fecha = date("Y-m-d", strtotime($fechSolEsp['fechSol']));
                         } else { // De lo contrario traemos el valor almacenado en la tabla de pys_asignados (Este campo es nuevo en la tabla 21/11/2018)
-                            $fecha = date("Y-m-d",strtotime($datos2['fechAsig']));
+                            $fecha = date("Y-m-d", strtotime($datos2['fechAsig']));
                         }
                         $idPersona = $datos2['idPersona'];
                         $consulta3 = "SELECT * 
@@ -383,7 +390,8 @@
             mysqli_close($connection);
         }
 
-        public static function eliminarAsignacion ($idAsig) {
+        public static function eliminarAsignacion($idAsig)
+        {
             require('../Core/connection.php');
             $idAsig = mysqli_real_escape_string($connection, $idAsig);
             $consulta = "UPDATE pys_asignados SET est = '0' WHERE idAsig = '$idAsig';";
@@ -397,12 +405,17 @@
             mysqli_close($connection);
         }
 
-        public static function registrarAsignacion ($rol, $persona, $fase, $idProy, $idCurso, $registra, $maxHora, $maxMin, $idSol) {
+        public static function registrarAsignacion($rol, $persona, $fase, $idProy, $idCurso, $registra, $maxHora, $maxMin, $idSol)
+        {
             require('../Core/connection.php');
-            if ($maxHora == "") { $maxHora = 0;}
-            if ($maxMin == "") { $maxMin = 0;}
+            if ($maxHora == "") {
+                $maxHora = 0;
+            }
+            if ($maxMin == "") {
+                $maxMin = 0;
+            }
             if (substr($idSol, 0, 1) == 'P') {
-               $idSol = substr($idSol, 1);
+                $idSol = substr($idSol, 1);
             }
             $consulta = "SELECT idPersona FROM pys_login WHERE usrLogin = '$registra' AND est = '1';";
             $resultado = mysqli_query($connection, $consulta);
@@ -438,7 +451,8 @@
             mysqli_close($connection);
         }
 
-        public static function actualizarAsignacion($idAsig, $maxhora, $maxmin) {
+        public static function actualizarAsignacion($idAsig, $maxhora, $maxmin)
+        {
             require('../Core/connection.php');
             $consulta = "UPDATE pys_asignados SET maxhora = $maxhora, maxmin = $maxmin WHERE idAsig = '$idAsig';";
             $resultado = mysqli_query($connection, $consulta);
@@ -449,12 +463,13 @@
             mysqli_close($connection);
         }
 
-        public static function cambiarEstadoAsignacion ($idAsig, $estado) {
+        public static function cambiarEstadoAsignacion($idAsig, $estado)
+        {
             require('../Core/connection.php');
             if ($estado == 1) {
                 $consulta = "UPDATE pys_asignados SET est = '2' WHERE idAsig = '$idAsig';";
                 $resultado = mysqli_query($connection, $consulta);
-            } else if ($estado == 2) {
+            } elseif ($estado == 2) {
                 $consulta = "UPDATE pys_asignados SET est = '1' WHERE idAsig = '$idAsig';";
                 $resultado = mysqli_query($connection, $consulta);
             }
@@ -467,7 +482,8 @@
             mysqli_close($connection);
         }
 
-        public static function asignarPersonaSolIni ($idSolIni) {
+        public static function asignarPersonaSolIni($idSolIni)
+        {
             require('../Core/connection.php');
             $idSolIni = mysqli_real_escape_string($connection, $idSolIni);
             $consulta = "SELECT pys_actsolicitudes.idSol, pys_frentes.descripcionFrente, pys_frentes.nombreFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actsolicitudes.ObservacionAct, pys_actualizacionproy.idProy
@@ -530,10 +546,11 @@
             mysqli_close($connection);
         }
 
-        public static function asignarPersonaSolEsp ($idSol) {
+        public static function asignarPersonaSolEsp($idSol)
+        {
             require('../Core/connection.php');
             $idSol = mysqli_real_escape_string($connection, $idSol);
-            $consulta = "SELECT pys_actsolicitudes.idSol, pys_frentes.descripcionFrente, pys_frentes.nombreFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actsolicitudes.ObservacionAct, pys_actualizacionproy.idProy
+            $consulta = "SELECT pys_actsolicitudes.idSol, pys_frentes.descripcionFrente, pys_frentes.nombreFrente, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_actsolicitudes.ObservacionAct, pys_actualizacionproy.idProy, pys_actsolicitudes.registraTiempo
                 FROM pys_actsolicitudes
                 INNER JOIN pys_cursosmodulos ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM
                 INNER JOIN pys_actualizacionproy ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy
@@ -580,16 +597,18 @@
                                 </div>
                                 <div class="input-field col l2 m4 s12">
                                     '.Asignados::selectFase().'
-                                </div>
-                                <div class="input-field col l1 m1 s12">
-                                    <input type="number" name="txtHoras" id="txtHoras" placeholder="0" class="asignacion">
-                                    <label for="txtHoras">Horas</label>
-                                </div>
-                                <div class="input-field col l1 m1 s12">
-                                    <input type="number" name="txtMinutos" id="txtMinutos" min="0" max="59" placeholder="0" class="asignacion">
-                                    <label for="txtMinutos">Minutos</label>
-                                </div>
-                                <div class="input-field col l1 m1 s12">
+                                </div>';
+                if ($datos['registraTiempo'] == 1) {
+                    echo ' <div class="input-field col l1 m1 s12">
+                                        <input type="number" name="txtHoras" id="txtHoras" placeholder="0" class="asignacion">
+                                        <label for="txtHoras">Horas</label>
+                                    </div>
+                                    <div class="input-field col l1 m1 s12">
+                                        <input type="number" name="txtMinutos" id="txtMinutos" min="0" max="59" placeholder="0" class="asignacion">
+                                        <label for="txtMinutos">Minutos</label>
+                                    </div>';
+                }
+                echo '<div class="input-field col l1 m1 s12">
                                     <button class="btn waves-effect" type="submit" name="btnAsignar" id="btnAsignar">Asignar</button>
                                 </div>
                             </div>
@@ -604,7 +623,8 @@
             mysqli_close($connection);
         }
 
-        public static function infoEnviarCorreoSolIni($idSol){
+        public static function infoEnviarCorreoSolIni($idSol)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT pys_solicitudes.idSolIni, pys_personas.nombres, pys_personas.apellido1, pys_personas.apellido2, pys_personas.correo , pys_proyectos.codProy, pys_proyectos.nombreProy   
                 FROM pys_solicitudes 
@@ -620,7 +640,8 @@
             mysqli_close($connection);
         }
 
-        public static function infoEnviarCorreoAsig($idSol){
+        public static function infoEnviarCorreoAsig($idSol)
+        {
             require('../Core/connection.php');
             $consulta = "SELECT  pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.idSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.fechPrev FROM pys_solicitudes
             INNER JOIN pys_actsolicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
@@ -635,9 +656,10 @@
             $datos = mysqli_fetch_array($resultado);
             return $datos;
             mysqli_close($connection);
-        } 
+        }
 
-        public static function infoEnviarCorreoResponsable($idSol){
+        public static function infoEnviarCorreoResponsable($idSol)
+        {
             require('../Core/connection.php');
             $string ="";
             $consulta = "SELECT  pys_personas.correo, pys_personas.apellido1, pys_personas.apellido2, pys_personas.nombres, pys_roles.nombreRol, pys_fases.nombreFase
@@ -668,7 +690,8 @@
             return $string;
             mysqli_close($connection);
         }
-        public static function correosResponsable($idSol){
+        public static function correosResponsable($idSol)
+        {
             require('../Core/connection.php');
             $string ="";
             $consulta = "SELECT  pys_personas.correo
@@ -688,12 +711,13 @@
                 $correo=$datos['correo'];
                 $string .= $correo.";";
             }
-            $string = substr($string,0,-1);  
+            $string = substr($string, 0, -1);
             mysqli_close($connection);
             return $string;
         }
 
-        public static function correosAsesorGestorRed ($idSol) {
+        public static function correosAsesorGestorRed($idSol)
+        {
             require('../Core/connection.php');
             $asesoresGestores = '';
             $query = "SELECT pys_personas.correo
@@ -715,4 +739,3 @@
             return $asesoresGestores;
         }
     }
-?>
