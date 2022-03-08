@@ -64,41 +64,40 @@
         <input type="hidden" name="txtIdTipoSol"
             value="<?php echo $idTipoSol;?>">
         <input type="hidden" name="txtHoras" id="txtHoras"
-            value="<?php echo $horas;?>">
-        <!-- <div class="input-field col l4 m4 s12">
+            value="<?php echo $horas ? $horas : '0 horas y 0 minutos';?>">
+        <input type="hidden" name="txtTipoSol" id="txtTipoSol"
+            value="<?php echo $nombreTipo;?>" readonly>
+
+        <div class="input-field col l12 m12 s12">
+            <p>
+                <label>
+                    <input class="filled-in" name="txtRegistrarT" id="txtRegistrarT" type="checkbox" <?php echo $RegistraTiempo;?>/>
+                    <span>Habilitar registro de tiempos en este producto/servicio.</span>
+                </label>
+            </p>
+        </div>
+        <div class="input-field col l12 m12 s12">
+            <button class="btn waves-effect waves-light" type="submit" onclick="actSolEsp();"
+                name="btnActualizarSolEsp">Actualizar</button>
+            <?php
+                if ($idEstadoSol == 'ESS007') {
+                    $disabled = "disabled";
+                } else {
+                    $disabled = "";
+                }
+            ?>
+            <button class="btn waves-effect waves-light red" onclick="cancelarSolicitudEspecifica();" <?php echo $disabled; ?>>Cancelar
+                <i class="material-icons left">cancel</i>
+            </button>
+            <button class="btn waves-effect waves-light red darken-4" onclick="eliminarSolicitudEspecifica();">Eliminar
+                <i class="material-icons left">delete</i>
+            </button>
+        </div>
+    </form>
+    <!-- <div class="input-field col l4 m4 s12">
             <label for="txtHoras" class="active">Máximo horas a invertir</label>
         </div> -->
-        <!-- <div class="input-field col l4 m4 s12">
-            <input type="text" name="txtTipoSol" id="txtTipoSol" value="<?php echo $nombreTipo;?>"
-        readonly>
+    <!-- <div class="input-field col l4 m4 s12">
         <label for="txtTipoSol" class="active">Tipo de Producto/Servicio</label>
 </div> -->
-
-
-<div class="input-field col l12 m12 s12">
-    <p>
-        <label>
-            <input class="filled-in" name="txtRegistrarT" id="txtRegistrarT" type="checkbox" <?php echo $RegistraTiempo;?>/>
-            <span>Habilitar registro de tiempos en este producto/servicio.</span>
-        </label>
-    </p>
-</div>
-<div class="input-field col l12 m12 s12">
-    <button class="btn waves-effect waves-light" type="submit" onclick="actSolEsp();"
-        name="btnActualizarSolEsp">Actualizar</button>
-    <?php
-        if ($idEstadoSol == 'ESS007') {
-            $disabled = "disabled";
-        } else {
-            $disabled = "";
-        }
-    ?>
-    <button class="btn waves-effect waves-light red" onclick="cancelarSolicitudEspecifica();" <?php echo $disabled; ?>>Cancelar
-        <i class="material-icons left">cancel</i>
-    </button>
-    <button class="btn waves-effect waves-light red darken-4" onclick="eliminarSolicitudEspecifica();">Eliminar
-        <i class="material-icons left">delete</i>
-    </button>
-</div>
-</form>
 </div>
