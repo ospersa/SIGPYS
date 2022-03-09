@@ -37,20 +37,20 @@
             $resultado = "";
             $string = "";
             // Valida los proyectos en los cuales es asignado como gestor o asesor RED.
-            $consulta = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol, pys_actproductos.nombreProd
+            $consulta = "SELECT pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_solicitudes.idSol, pys_solicitudes.idSolIni, pys_solicitudes.fechSol, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_asignados.est AS 'estado', pys_estadosol.nombreEstSol, pys_actproductos.nombreProd, pys_servicios.productoOservicio
                 FROM pys_actualizacionproy
                 INNER JOIN pys_cursosmodulos ON pys_actualizacionproy.idProy = pys_cursosmodulos.idProy 
-                INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM 
-                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol
-                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer
-                INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
+                INNER JOIN pys_actsolicitudes ON pys_cursosmodulos.idCM = pys_actsolicitudes.idCM AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS007' AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006'
+                INNER JOIN pys_solicitudes ON pys_solicitudes.idSol = pys_actsolicitudes.idSol AND pys_solicitudes.idTSol = 'TSOL02'
+                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_actsolicitudes.idSer AND pys_servicios.est = '1'
+                INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu AND pys_equipos.est = '1'
                 INNER JOIN pys_asignados ON pys_actualizacionproy.idProy = pys_asignados.idProy
                 INNER JOIN pys_personas ON pys_asignados.idPersona = pys_personas.idPersona 
-                INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona 
+                INNER JOIN pys_login ON pys_personas.idPersona = pys_login.idPersona AND pys_login.usrLogin = '$user'
                 INNER JOIN pys_estadosol ON pys_estadosol.idEstSol = pys_actsolicitudes.idEstSol
                 LEFT JOIN pys_productos ON pys_productos.idSol = pys_actsolicitudes.idSol AND pys_productos.est = '1'
                 LEFT JOIN pys_actproductos ON pys_actproductos.idProd = pys_productos.idProd AND pys_actproductos.est = '1'
-                WHERE pys_login.usrLogin = '$user' AND pys_actualizacionproy.est = '1' AND (idRol= 'ROL024' OR idRol= 'ROL025') AND pys_actsolicitudes.est = '1' AND pys_solicitudes.idTSol = 'TSOL02' AND pys_actsolicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS007' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_equipos.est = '1' AND pys_servicios.est = '1' ";
+                WHERE pys_actualizacionproy.est = '1' AND (idRol= 'ROL024' OR idRol= 'ROL025') ";
             if ($cod == 1 ) {
                 $consulta .= "AND pys_actualizacionproy.idProy = '$busProy' ";
             } else if($cod == 3) {
@@ -96,7 +96,7 @@
                             $pendientes++;
                         }
                     }
-                   $consultaProd = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave 
+                    $consultaProd = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave 
                         FROM pys_productos
                         INNER JOIN pys_actproductos ON pys_productos.idProd = pys_actproductos.idProd
                         LEFT JOIN idiomas ON idiomas.idIdiomas = pys_actproductos.idioma
@@ -112,15 +112,19 @@
                     $metadataDiseno = ['nombreProd', 'fechEntregaProd', 'descripcionProd', 'plat_producto', 'nombreClProd', 'nombreTProd', 'idiomaNombre', 'formatoNombre', 'tipoContenidoNombre', 'palabrasClave', 'urlservidor'];
                     $metapendiente = 0;
                     if ( $nombreEqu == 'Realización' ) {
-                        foreach ( $metadataRealizacion as $meta ) {
-                            if ( ! isset ( $dataProd[$meta] ) || $dataProd[$meta] == '' ) {
-                                $metapendiente ++;
+                        if ($data['productoOservicio'] == 'SI') {
+                            foreach ( $metadataRealizacion as $meta ) {
+                                if ( ! isset ( $dataProd[$meta] ) || $dataProd[$meta] == '' ) {
+                                    $metapendiente ++;
+                                }
                             }
                         }
                     } else if ( $nombreEqu == 'Diseño Gráfico' ) {
-                        foreach ( $metadataDiseno as $meta ) {
-                            if ( ! isset ($dataProd[$meta] ) || $dataProd[$meta] == '' ) {
-                                $metapendiente ++;
+                        if ($data['productoOservicio'] == 'SI') {
+                            foreach ( $metadataDiseno as $meta ) {
+                                if ( ! isset ($dataProd[$meta] ) || $dataProd[$meta] == '' ) {
+                                    $metapendiente ++;
+                                }
                             }
                         }
                     }
@@ -219,7 +223,9 @@
             $hora               = $tiempoTotal[0];
             $min                = $tiempoTotal[1];
             if ($idEqu == 'EQU001') {
-                $disabled = ($nomProduc == $vacio || $sinopsis == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $urlVimeo == $vacio || $autores == $vacio || $minDura == $vacio || $fechaEntre == $vacio) ? "disabled" : "";
+                if ($datos['productoOservicio'] == 'SI') {
+                    $disabled = ($nomProduc == $vacio || $sinopsis == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $urlVimeo == $vacio || $autores == $vacio || $minDura == $vacio || $fechaEntre == $vacio) ? "disabled" : "";
+                }
             } else if ($idEqu == 'EQU002') {
                 $disabled = ($nomProduc == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $fechaEntre == $vacio ) ? "disabled" : "";
             }
