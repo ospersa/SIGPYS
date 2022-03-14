@@ -43,13 +43,17 @@ $plataforma         = (isset($_POST['sltPlataforma'])) ? $_POST['sltPlataforma']
 $fechaEntrega       = (isset($_POST['txtfechEntr'])) ? $_POST['txtfechEntr'] : null;
 $idSol              = (isset($_POST['idSol'])) ? $_POST['idSol'] : null;
 $areaConocimiento   = (isset($_POST['sltAreaConocimiento'])) ? $_POST['sltAreaConocimiento'] : null;
+$productoServicio   = (isset($_POST['producto'])) ? $_POST['producto'] : null;
+$estudiantesImpac   = (isset($_POST['numEst'])) ? $_POST['numEst'] : null;
+$docentesImpac      = (isset($_POST['numDoc'])) ? $_POST['numDoc'] : null;
+$servicio           = (isset($_POST['idServicio'])) ? $_POST['idServicio'] : null;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if ($action == 'close') {
         $id = null;
         Terminar::terminarProducto($id2);
     } else if ($action == 'guardarMetadata') {
-        Terminar::guardarMetadata($idSol, $equipo, $nombreProducto, $sinopsis, $claseProducto, $tipoProducto, $idioma, $formato, $tipoContenido, $red, $palabrasClave, $urlServidor, $urlVimeo, $autores, $observaciones, $duracionMin, $duracionSeg, $plataforma, $fechaEntrega, $areaConocimiento);
+        Terminar::guardarMetadata($idSol, $equipo, $nombreProducto, $sinopsis, $claseProducto, $tipoProducto, $idioma, $formato, $tipoContenido, $red, $palabrasClave, $urlServidor, $urlVimeo, $autores, $observaciones, $duracionMin, $duracionSeg, $plataforma, $fechaEntrega, $areaConocimiento, $productoServicio, $estudiantesImpac, $docentesImpac, $servicio);
     }
     /* if (isset($_POST['btnTerEnvi'])) {
     $correo = Terminar::infoSolicitante($idSolIni);
