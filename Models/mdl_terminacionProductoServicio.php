@@ -251,6 +251,8 @@
                             <input type="hidden" name="action" value="guardarMetadata">
                             <input type="hidden" name="idSol" value="'.$idSol.'">
                             <input type="hidden" name="idEquipo" value="'.$idEqu.'">
+                            <input type="hidden" name="producto" value="'.$datos['productoOservicio'].'">
+                            <input type="hidden" name="idServicio" value="'.$datos['idSer'].'">
                             <div class="">
                                 <div class="input-field col l2 m12 s12 ">
                                     <label for="idSol" class="active">Código PS:</label>
@@ -353,7 +355,7 @@
                                     <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
                                 </div>
                                 <div class="input-field col l12 m12 s12">
-                                    <a href="#" class="btn" onclick="guardarMetadata(\''.$idSol.'\',\'../Controllers/ctrl_terminacionProductoServicio.php\')">Guardar Metadata</a>
+                                    <a href="#" class="btn orange" style="margin-right: 30px;" onclick="guardarMetadata(\''.$idSol.'\',\'../Controllers/ctrl_terminacionProductoServicio.php\')">Guardar Metadata</a>
                                     <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
                                 </div>';
             } else if ($datos['productoOservicio'] == 'NO') {
@@ -372,11 +374,10 @@
                 $sltClase           = SolicitudEspecifica::selectClaseConTipo ($idServicio, $clase);
                 $tipo               = (empty($datos2['idTProd'])) ? '' : $datos2['idTProd'];
                 $sltTipo            = (empty($datos2['idTProd'])) ? $selectTipoVacio : SolicitudEspecifica::selectTipoProducto ($clase, $idServicio, $tipo);
-                echo $clase;
-                $observacion        = (empty($datos2['observacion'])) ? $vacio : '<p class="left-align">'.$datos2['observacion'].' </p>' ;
-                $estudiantesImpac   = (empty($datos2['estudiantesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['estudiantesImpac'].' </p>' ;
-                $docentesImpac      = (empty($datos2['docentesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['docentesImpac'].' </p>' ;
-                $urlResultado       = (empty($datos2['urlResultado'])) ? $vacio : '<p class="left-align">'.$datos2['urlResultado'].' </p>' ;
+                $observacion        = (empty($datos2['observacion'])) ? '' : $datos2['observacion'];
+                $estudiantesImpac   = (empty($datos2['estudiantesImpac'])) ? '' : $datos2['estudiantesImpac'];
+                $docentesImpac      = (empty($datos2['docentesImpac'])) ? '' : $datos2['docentesImpac'];
+                $urlResultado       = (empty($datos2['urlResultado'])) ? '' : $datos2['urlResultado'];
                 $string .= '    <div class="input-field col l4 m4 s12">
                                     '.$sltPlataforma.'
                                 </div>
@@ -387,8 +388,8 @@
                                     '.$sltTipo.'
                                 </div>
                                 <div class="input-field col l12 m12 s12  left-align">
-                                    <textarea name="descripSer" id="descripSer" class="materialize-textarea" >'.$observacion.'</textarea>
-                                    <label for="descripSer" class="active">Descripción Servicio:</label>
+                                    <textarea name="labor" id="labor" class="materialize-textarea" >'.$observacion.'</textarea>
+                                    <label for="labor" class="active">Descripción Servicio:</label>
                                 </div>
                                 <div class="input-field col l2 m12 s12">
                                     <input type="number" name="numEst" id="numEst" min = 0 value = "'.$estudiantesImpac.'">
@@ -399,10 +400,11 @@
                                     <label for="numDoc" class="active">Numero de docentes:</label>
                                 </div>
                                 <div class="input-field col l6 m12 s12">
-                                    <input type="url" name="url" id="url" value="'.$urlResultado.'" >
+                                    <input type="text" name="url" id="url" value="'.$urlResultado.'" >
                                     <label for="url" class="active">URL store easy Conecta-TE :</label>
                                 </div>
                                 <div class="input-field col l12 m12 s12">
+                                    <a href="#" class="btn orange" style="margin-right: 30px;" onclick="guardarMetadata(\''.$idSol.'\',\'../Controllers/ctrl_terminacionProductoServicio.php\')">Guardar Metadata</a>
                                     <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
                                 </div>';
             }
@@ -546,11 +548,9 @@
             mysqli_close($connection);
         }
 
-        public static function guardarMetadata($idSol, $equipo, $nombreProducto, $sinopsis, $claseProducto, $tipoProducto, $idioma, $formato, $tipoContenido, $red, $palabrasClave, $urlServidor, $urlVimeo, $autores, $observaciones, $duracionMin, $duracionSeg, $plataforma, $fechaEntrega, $areaConocimiento) {
+        public static function guardarMetadata($idSol, $equipo, $nombreProducto, $sinopsis, $claseProducto, $tipoProducto, $idioma, $formato, $tipoContenido, $red, $palabrasClave, $urlServidor, $urlVimeo, $autores, $observaciones, $duracionMin, $duracionSeg, $plataforma, $fechaEntrega, $areaConocimiento, $productoServicio, $estudiantesImpac, $docentesImpac, $idServicio) {
             require('../Core/connection.php');
             include_once('../Models/mdl_solicitudEspecifica.php');
-            $producto = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
-            $countProd          = SolicitudEspecifica::generarCodigoProducto();
             $plataforma         = ($plataforma == '') ? "PLT009" : $plataforma;
             $nombreProducto     = mysqli_real_escape_string($connection, $nombreProducto);
             $red                = mysqli_real_escape_string($connection, $red);
@@ -565,43 +565,97 @@
             $duracionSeg        = ($duracionSeg == "") ? "null" : $duracionSeg;
             $sinopsis           = mysqli_real_escape_string($connection, $sinopsis);
             $autores            = mysqli_real_escape_string($connection, $autores);
-            $areaConocimiento   = ($areaConocimiento == null || $areaConocimiento == '' || $areaConocimiento == 'Seleccione...') ? 0 : $areaConocimiento;
-            if (!$producto) {
-                mysqli_query($connection, "BEGIN;");
-                if ($equipo == 'EQU001' || $equipo == 'EQU002') {
-                    $consultaProducto       = "INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto','$nombreProducto','$red', '', $fechaEntrega, now(), '$urlVimeo','$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '1')";
-                    $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto','$red', '$palabrasClave', $fechaEntrega, now(), '$urlVimeo', '$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, $areaConocimiento)";
-                }
-                $resultadoProducto      = mysqli_query($connection, $consultaProducto);
-                $resultadoActProducto   = mysqli_query($connection, $consultaActProducto);
-                if ($resultadoProducto && $resultadoActProducto) {
-                    echo "<script>alert('Registro guardado correctamente');</script>";
-                    mysqli_query($connection, "COMMIT;");
+            $idioma             = ($idioma == null || $idioma == '') ? "null" : $idioma;
+            $formato            = ($formato == null || $formato == '') ? "null" : $formato;
+            $tipoContenido      = ($tipoContenido == null || $tipoContenido == '') ? "null" : $tipoContenido;
+            $areaConocimiento   = ($areaConocimiento == null || $areaConocimiento == '' || $areaConocimiento == 'Seleccione...') ? '0' : $areaConocimiento;
+            $estudiantesImpac   = ($estudiantesImpac == null || $estudiantesImpac == '') ? 0 : $estudiantesImpac;
+            $estudiantesImpac   = ($docentesImpac == null || $docentesImpac == '') ? 0 : $docentesImpac;
+            if ($productoServicio == 'SI') {
+                /* Si el tipo de serivicio genera producto, se procede a realizar guardado/actualización en la tabla pys_productos y pys_actproductos */
+                $producto           = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
+                $countProd          = SolicitudEspecifica::generarCodigoProducto();
+                if (!$producto) {
+                    /* Si no existe el producto en el sistema, se procede a crear uno nuevo */
+                    mysqli_query($connection, "BEGIN;");
+                    if ($equipo == 'EQU001' || $equipo == 'EQU002') {
+                        $consultaProducto       = "INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto','$nombreProducto','$red', '', $fechaEntrega, now(), '$urlVimeo','$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '1')";
+                        $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto','$red', '$palabrasClave', $fechaEntrega, now(), '$urlVimeo', '$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, $areaConocimiento)";
+                    } else if ($equipo == 'EQU003') {
+                        $consultaProducto       = "INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '', $fechaEntrega, now(), '', '$urlServidor', '$observaciones', '', '$idPersona', '', '0', '0', DEFAULT, '1');";
+                        $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '$palabrasClave', $fechaEntrega, now(), '', '$urlServidor', '$observaciones', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1', $idioma, $formato, $tipoContenido, $areaConocimiento);";
+                    }
+                    $resultadoProducto      = mysqli_query($connection, $consultaProducto);
+                    $resultadoActProducto   = mysqli_query($connection, $consultaActProducto);
+                    if ($resultadoProducto && $resultadoActProducto) {
+                        echo "<script>alert('Registro guardado correctamente');</script>";
+                        mysqli_query($connection, "COMMIT;");
+                    } else {
+                        echo "<script>alert('Se presentaron errores durante el guardado de la información. Por favor intente nuevamente.');</script>";
+                        mysqli_query($connection, "ROLLBACK;");
+                    }
+                    echo "<h3>$consultaProducto</h3>";
+                    echo "<h3>$consultaActProducto</h3>";
+                    mysqli_close($connection);
                 } else {
-                    echo "<script>alert('Se presentaron errores durante el guardado de la información. Por favor intente nuevamente.');</script>";
-                    mysqli_query($connection, "ROLLBACK;");
+                    /* Si existe el producto, se procede a realizar la actualización */
+                    mysqli_query($connection, "BEGIN;");
+                    $consulta1      = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
+                    $resultado1     = mysqli_query($connection, $consulta1);
+                    $datos          = mysqli_fetch_array($resultado1);
+                    $countProd      = $datos['idProd'];
+                    $consulta       = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = '1';";
+                    $resultado      = mysqli_query($connection, $consulta);
+                    if ($equipo == 'EQU001' || $equipo == 'EQU002') {
+                        $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '$palabrasClave', $fechaEntrega, now(), '$urlVimeo', '$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, '$areaConocimiento');";
+                    } else if ($idEqu == 'EQU003') {
+                        $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '$palabrasClave', $fechaEntrega, now(), '', '$urlServidor', '$observaciones', '', '$idPersona', '', '0', '0', DEFAULT, '', '', '1', $idioma, $formato, $tipoContenido, $areaConocimiento);";
+                    }
+                    $resultadoActProducto   = mysqli_query($connection, $consultaActProducto);
+                    if ($resultadoActProducto) {
+                        echo "<script>alert('Registro actualizado correctamente');</script>";
+                        mysqli_query($connection, "COMMIT;");
+                    } else {
+                        echo "<script>alert('Se presentaron errores durante la actualización de la información. Por favor intente nuevamente.');</script>";
+                        mysqli_query($connection, "ROLLBACK;");
+                    }
                 }
-                mysqli_close($connection);
             } else {
-                mysqli_query($connection, "BEGIN;");
-                $consulta1      = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
-                $resultado1     = mysqli_query($connection, $consulta1);
-                $datos          = mysqli_fetch_array($resultado1);
-                $countProd      = $datos['idProd'];
-                $consulta       = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = '1';";
-                $resultado      = mysqli_query($connection, $consulta);
-                if ($equipo == 'EQU001' || $equipo == 'EQU002') {
-                    $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '$palabrasClave', $fechaEntrega, now(), '$urlVimeo', '$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, '$areaConocimiento');";
-                }
-                $resultadoActProducto   = mysqli_query($connection, $consultaActProducto);
-                if ($resultadoActProducto) {
-                    echo "<script>alert('Registro actualizado correctamente');</script>";
-                    mysqli_query($connection, "COMMIT;");
+                /* Si no genera producto entonces se procede a realizar guardado/actualización en la tabla pys_resultservicio */
+                $servicio = SolicitudEspecifica::comprobraExisResultadoServicio($idSol);
+                if (!$servicio) {
+                    /* Si no existe el registro en el sistema, se procede a registrar la información en la tabla pys_resultservicio */
+                    $consulta = "SELECT COUNT(idResultServ), MAX(idResultServ) FROM pys_resultservicio;";
+                    $resultado = mysqli_query($connection, $consulta);
+                    while ($datos=mysqli_fetch_array($resultado)) {
+                        $count = $datos[0];
+                        $max = $datos[1];
+                    }
+                    $countResServ       = ($count == 0) ? "R00001" : 'R'.substr((substr($max, 3)+100001), 1);
+                    $estudiantesImpac   = ($estudiantesImpac == "") ? 0 : $estudiantesImpac;
+                    $docentesImpac      = ($docentesImpac == "") ? 0 : $docentesImpac;
+                    $tiempoTotal        = SolicitudEspecifica::totalTiempo ($idSol);
+                    $hora               = $tiempoTotal[0];
+                    $min                = $tiempoTotal[1];
+                    $consulta2 = "INSERT INTO pys_resultservicio VALUES ('$countResServ', '$idSol', '$plataforma', '$idServicio', '$claseProducto', '$tipoProducto', '$observaciones', '$estudiantesImpac', '$docentesImpac', 0, '$urlServidor', '', '$idPersona', '$hora', '$min', now(), '1')";
+                    $resultado2 = mysqli_query($connection, $consulta2);
+                    if ($resultado && $resultado2) {
+                        echo '<script>alert("Se guardó correctamente la información.")</script>';
+                    } else {
+                        echo '<script>alert("Se presentó un error y el registro no pudo ser guardado.")</script>';
+                    }
                 } else {
-                    echo "<script>alert('Se presentaron errores durante la actualización de la información. Por favor intente nuevamente.');</script>";
-                    mysqli_query($connection, "ROLLBACK;");
+                    /* Si ya existe un registro, se procede con la actualización del mismo en la tabla pys_resultservicio */
+                    $consulta = "UPDATE pys_resultservicio SET idPlat = '$plataforma',  idSer ='$idServicio', idClProd= '$claseProducto', idTProd ='$tipoProducto', observacion= '$observaciones', estudiantesImpac = '$estudiantesImpac', docentesImpac = '$docentesImpac', urlResultado = '$urlServidor', idResponRegistro = '$idPersona', fechaCreacion = now() WHERE idSol = '$idSol' AND est = '1';";
+                    $resultado = mysqli_query($connection, $consulta);
+                    if ($resultado) {
+                        echo '<script>alert("Se actualizó correctamente la información.")</script>';
+                    } else {
+                        echo "<script> alert ('Ocurrió un error al intentar actualizar el registro');</script>";
+                    }
                 }
             }
+            
             echo self::informacionProdSer ($idSol);
         }
         
