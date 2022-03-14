@@ -1915,3 +1915,16 @@ function busquedaSolIniGest(url) {
     });
     return false;
 }
+
+function guardarMetadata (idSol, url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $('#actForm').serialize(),
+        success: function (data) {
+            $('#test2').html(data);
+            inicializarCampos();
+            $('button[name="btnBuscar"]').click();
+        }
+    })
+}

@@ -171,10 +171,11 @@
 
         public static function informacionProdSer ($idSol) {
             require('../Core/connection.php');
-            require('../Models/mdl_solicitudEspecifica.php');
+            include_once('../Models/mdl_solicitudEspecifica.php');
             $string = $disabled = "";
-            $vacio = '<p class="left-align red-text">Información pendiente</p>';
-            $consulta = "SELECT plataforma_producto.nombrePlt AS plat_producto, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_servicios.productoOservicio, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.nombreClProd, pys_tiposproductos.nombreTProd, pys_tiposproductos.descripcionTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idiomaNombre, formatos.formatoNombre, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave, pys_estadosol.nombreEstSol
+            /* $vacio = '<p class="left-align red-text">Información pendiente</p>'; */
+            $vacio = '';
+            $consulta = "SELECT plataforma_producto.nombrePlt AS plat_producto, plataforma_producto.idPlat, pys_equipos.idEqu, pys_equipos.nombreEqu, pys_actsolicitudes.idSer, pys_servicios.nombreSer, pys_actsolicitudes.ObservacionAct, pys_actsolicitudes.fechPrev, pys_actualizacionproy.idProy, pys_actualizacionproy.codProy, pys_actualizacionproy.nombreProy, pys_servicios.productoOservicio, pys_actproductos.nombreProd, pys_actproductos.fechEntregaProd, pys_actproductos.descripcionProd, pys_claseproductos.idClProd, pys_claseproductos.nombreClProd, pys_tiposproductos.idTProd, pys_tiposproductos.nombreTProd, pys_tiposproductos.descripcionTProd, pys_actproductos.urlservidor, pys_actproductos.observacionesProd, pys_actproductos.urlVimeo, pys_actproductos.duracionmin, pys_actproductos.duracionseg, pys_actproductos.sinopsis, pys_actproductos.autorExterno, idiomas.idIdiomas, idiomas.idiomaNombre, formatos.idFormatos, formatos.formatoNombre, tiposcontenido.idtiposContenido, tiposcontenido.tipoContenidoNombre, pys_actproductos.palabrasClave, pys_estadosol.nombreEstSol, pys_actproductos.idAreaConocimiento
                 FROM pys_actsolicitudes 
                 INNER JOIN pys_servicios ON pys_actsolicitudes.idSer = pys_servicios.idSer 
                 INNER JOIN pys_cursosmodulos ON pys_actsolicitudes.idCM = pys_cursosmodulos.idCM
@@ -195,41 +196,62 @@
                 WHERE pys_actsolicitudes.idSol = '$idSol' AND pys_actsolicitudes.est = '1' AND pys_servicios.est = '1' AND pys_proyectos.est = '1' AND pys_actsolicitudes.est = '1' AND pys_equipos.est = '1';";
             $resultado = mysqli_query($connection, $consulta);
             $datos = mysqli_fetch_array($resultado);
-            $idEqu              = $datos['idEqu'];
-            $nombreEqu          = $datos['nombreEqu'];
-            $nombreSer          = $datos['nombreSer'];
-            $observacionAct     = $datos['ObservacionAct'];
-            $estado             = $datos['nombreEstSol'];
-            $fechPrev           = $datos['fechPrev'];
-            $idProy             = $datos['codProy'];
-            $nombreProy         = $datos['nombreProy'];
-            $nomProduc          = (empty($datos['nombreProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreProd'].' </p>' ;
-            $fechaEntre         = (empty($datos['fechEntregaProd'])) ? $vacio : '<p class="left-align">'.$datos['fechEntregaProd'].' </p>' ;
-            $RED                = (empty($datos['descripcionProd'])) ? $vacio : '<p class="left-align">'.$datos['descripcionProd'].' </p>' ;
-            $plataformaProducto = (empty($datos['plat_producto'])) ? $vacio : '<p class="left-align">'.$datos['plat_producto'].' </p>' ;
-            $clase              = (empty($datos['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreClProd'].' </p>' ;
-            $tipo               = (empty($datos['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos['nombreTProd'].' - '.$datos['descripcionTProd'].' </p>' ;
-            $url                = (empty($datos['urlservidor'])) ? $vacio : '<p class="left-align">'.$datos['urlservidor'].' </p>' ;
-            $labor              = (empty($datos['observacionesProd'])) ? '<p class="left-align" style="color:transparent;">Observación</p>' : '<p class="left-align">'.$datos['observacionesProd'].' </p>' ;
-            $urlVimeo           = (empty($datos['urlVimeo'])) ? $vacio : '<p class="left-align">'.$datos['urlVimeo'].' </p>' ;
-            $minDura            = (empty($datos['duracionmin']) && empty($datos['duracionseg']) ) ? $vacio : '<p class="left-align">'.$datos['duracionmin'].' m '.$datos['duracionseg'].' s </p>' ;
-            $sinopsis           = (empty($datos['sinopsis'])) ? $vacio : '<p class="left-align">'.$datos['sinopsis'].' </p>' ;
-            $autores            = (empty($datos['autorExterno'])) ? $vacio : '<p class="left-align">'.$datos['autorExterno'].' </p>' ;
-            $idioma             = (empty($datos['idiomaNombre'])) ? $vacio : '<p class="left-align">'.$datos['idiomaNombre'].' </p>' ;
-            $formato            = (empty($datos['formatoNombre'])) ? $vacio : '<p class="left-align">'.$datos['formatoNombre'].' </p>' ;
-            $tipoContenido      = (empty($datos['tipoContenidoNombre'])) ? $vacio : '<p class="left-align">'.$datos['tipoContenidoNombre'].' </p>' ;
-            $palabrasClave      = (empty($datos['palabrasClave'])) ? $vacio : '<p class="left-align">'.$datos['palabrasClave'].' </p>' ;
-            $tiempoTotal        = SolicitudEspecifica::totalTiempo ($idSol);
-            $hora               = $tiempoTotal[0];
-            $min                = $tiempoTotal[1];
+            $idProy                 = $datos['codProy'];
+            $nombreProy             = $datos['nombreProy'];
+            $estado                 = $datos['nombreEstSol'];
+            $observacionAct         = $datos['ObservacionAct'];
+            $fechPrev               = $datos['fechPrev'];
+            $idEqu                  = $datos['idEqu'];
+            $nombreEqu              = $datos['nombreEqu'];
+            $nombreSer              = $datos['nombreSer'];
+            $tiempoTotal            = SolicitudEspecifica::totalTiempo ($idSol);
+            $hora                   = $tiempoTotal[0];
+            $min                    = $tiempoTotal[1];
+            $nomProduc              = $datos['nombreProd'];
+            $sinopsis               = $datos['sinopsis'];
+            $idServicio             = $datos['idSer'];
+            $idClase                = $datos['idClProd'];
+            $idTipo                 = $datos['idTProd'];
+            $clase                  = $datos['nombreClProd'];
+            $sltClase               = SolicitudEspecifica::selectClaseConTipo ($idServicio, $idClase);
+            $tipo                   = $datos['nombreTProd'];
+            $selectTipoVacio        = ' <select>
+                                            <option value="" disabled>Seleccione una clase de producto</option>
+                                        </select>
+                                        <label for="">Tipo de producto</label>';
+            $sltTipo                = ($datos['idTProd'] != null) ? SolicitudEspecifica::selectTipoProducto ($idClase, $idServicio, $idTipo) : $selectTipoVacio;
+            $idioma                 = $datos['idiomaNombre'];
+            $sltIdioma              = SolicitudEspecifica::selectIdioma ($datos['idIdiomas']);
+            $formato                = $datos['formatoNombre'];
+            $sltFormato             = SolicitudEspecifica::selectFormato ($datos['idFormatos']);
+            $tipoContenido          = $datos['tipoContenidoNombre'];
+            $sltTipoContenido       = SolicitudEspecifica::selectTipoContenido ($datos['idtiposContenido']);
+            $RED                    = $datos['descripcionProd'];
+            $sltRED                 = SolicitudEspecifica::selectRED ($RED);
+            $idAreaConocimiento     = $datos['idAreaConocimiento'];
+            $sltAreaConocimiento    = SolicitudEspecifica::selectAreaConocimiento ($idProy, $idAreaConocimiento);
+            $palabrasClave          = $datos['palabrasClave'];
+            $url                    = $datos['urlservidor'];
+            $urlVimeo               = $datos['urlVimeo'];
+            $autores                = $datos['autorExterno'];
+            $labor                  = $datos['observacionesProd'];
+            $minDura                = $datos['duracionmin'];
+            $segDura                = $datos['duracionseg'];
+            $sltPlataforma          = SolicitudEspecifica::selectPlataforma ($datos['idPlat']);
+            $fechaEntre             = $datos['fechEntregaProd'];
+
             if ($idEqu == 'EQU001') {
                 if ($datos['productoOservicio'] == 'SI') {
-                    $disabled = ($nomProduc == $vacio || $sinopsis == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $urlVimeo == $vacio || $autores == $vacio || $minDura == $vacio || $fechaEntre == $vacio) ? "disabled" : "";
+                    $disabled = ( empty($nomProduc) || empty($sinopsis) || empty($clase) || empty($tipo) || empty($idioma) || empty($formato) || empty($tipoContenido) || empty($RED) || empty($palabrasClave) || empty($url) || empty($urlVimeo) || empty($autores) || empty($minDura) || empty($fechaEntre) ) ? "disabled" : "";
                 }
             } else if ($idEqu == 'EQU002') {
                 $disabled = ($nomProduc == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $fechaEntre == $vacio ) ? "disabled" : "";
             }
-            $string .= '    <div class="col l12 m12 s12">
+            $string .= '<form id="actForm" method="post">
+                            <input type="hidden" name="action" value="guardarMetadata">
+                            <input type="hidden" name="idSol" value="'.$idSol.'">
+                            <input type="hidden" name="idEquipo" value="'.$idEqu.'">
+                            <div class="">
                                 <div class="input-field col l2 m12 s12 ">
                                     <label for="idSol" class="active">Código PS:</label>
                                     <p class="left-align">P'.$idSol.'</p>
@@ -260,135 +282,134 @@
                                 </div>';
             if ($datos['productoOservicio'] == 'SI') { 
                 $string .='     <div class="input-field col l12 m12 s12 ">
+                                    <input type="text" name="nomProd" id="nomProd" value="'.$nomProduc.'" >
                                     <label for="nomProd" class="active">Nombre Producto:</label>
-                                    '.$nomProduc.'
                                 </div>';
                 if ($idEqu == 'EQU001') {
                     $string .=' <div class="input-field col l12 m12 s12  left-align">
+                                    <textarea name="sinopsis" id="sinopsis" class="materialize-textarea">'.$sinopsis.'</textarea>
                                     <label for="sinopsis" class="active">Sinopsis:</label>
-                                    '.$sinopsis.'
                                 </div>';
                 }
                 $string .='     <div class="input-field col l6 m12 s12">
-                                    <label for="clase" class="active">Clase de Producto:</label>
-                                    '.$clase.'
+                                    '.$sltClase.'
                                 </div>
                                 <div class="input-field col l6 m12 s12" id="sltModalTipo">
-                                    <label for="tipo" class="active">Tipo de Producto:</label>
-                                    '.$tipo.'
+                                    '.$sltTipo.'
                                 </div>
                                 <div class="input-field col l6 m12 s12">
-                                    <label for="clase" class="active">Idioma:</label>
-                                    '.$idioma.'
+                                    '.$sltIdioma.'
                                 </div>
                                 <div class="input-field col l6 m12 s12" id="sltModalTipo">
-                                    <label for="tipo" class="active">Formato:</label>
-                                    '.$formato.'
+                                    '.$sltFormato.'
                                 </div>
                                 <div class="input-field col l6 m12 s12" id="sltModalTipo">
-                                    <label for="tipo" class="active">Tipo Contenido:</label>
-                                    '.$tipoContenido.'
+                                    '.$sltTipoContenido.'
                                 </div>
                                 <div class="input-field col l6 m12 s12 ">
-                                    <label for="txtRED" class="active">¿Es un RED?:</label>
-                                    '.$RED.'
+                                    '.$sltRED.'
                                 </div>
                                 <div class="input-field col l12 m12 s12">
+                                    '.$sltAreaConocimiento.'
+                                </div>
+                                <div class="input-field col l12 m12 s12">
+                                    <textarea id="palabrasClave" name="palabrasClave" class="materialize-textarea">'.$palabrasClave.'</textarea>
                                     <label for="labor" class="active">Palabras clave:</label>
-                                    '.$palabrasClave.'
                                 </div>
                                 <div class="input-field col l12 m12 s12 ">
+                                    <input type="text" name="url" id="url" value="'.$url.'">
                                     <label for="url" class="active">Enlace para inventario:</label>
-                                    '.$url.'
                                 </div>';
                 if ($idEqu == 'EQU001') {
                     $string .= '<div class="input-field col l12 m12 s12 ">
+                                    <input type="text" name="urlV" id="urlV" value="'.$urlVimeo.'">
                                     <label for="urlVimeo" class="active">Enlace Vimeo:</label>
-                                    '.$urlVimeo.'
                                 </div>
                                 <div class="input-field col l12 m12 s12  left-align">
+                                    <textarea name="autores" id="autores" class="materialize-textarea">'.$autores.'</textarea>
                                     <label for="autores" class="active">Autores:</label>
-                                    '.$autores.'
                                 </div>';
                 }
                 $string .= '    <div class="input-field col l12 m12 s12  left-align">
+                                    <textarea name="labor" id="labor" class="materialize-textarea">'.$labor.'</textarea>
                                     <label for="labor" class="active">Observaciones:</label>
-                                    '.$labor.'
                                 </div>';
                 if ($idEqu == 'EQU001') {
-                    $string .=' <div class="input-field col l6 m12 s12 ">
-                                    <label for="urlVimeo" class="active">Duración Video:</label>
-                                    '.$minDura.'
+                    $string .=' <div class="input-field col l3 m12 s12 ">
+                                    <input type="number" name="minutosDura" min="0" id="minutosDura" value="'.$minDura.'">
+                                    <label for="minutosDura" class="active">Duración Min:</label>
+                                </div>
+                                <div class="input-field col l3 m12 s12">
+                                    <input type="number" name="segundosDura" min="0" max="59" id="segundosDura" value="'.$segDura.'">
+                                    <label for="segundosDura" class="active">Duración Seg:</label>
                                 </div>';
                 } else if ($idEqu == 'EQU002') {
                     $string .= '<div class="input-field col l6 m12 s12">
-                                    <label for="plat" class="active">Plataforma:</label>
-                                    '.$plataformaProducto.'
+                                    '.$sltPlataforma.'
                                 </div>';
                 }
                 $string .= '    <div class="input-field col l6 m12 s12">
+                                    <input class="datepicker" type="text" name="txtfechEntr" id="txtfechEntr"  value="'.$fechaEntre.'" >
                                     <label for="txtfechEntr" class="active">Fecha de Entrega al Cliente:</label>
-                                    '.$fechaEntre.'
+                                </div>
+                                <div class="input-field col l12 m12 s12">
+                                    <a href="#" class="btn" onclick="guardarMetadata(\''.$idSol.'\',\'../Controllers/ctrl_terminacionProductoServicio.php\')">Guardar Metadata</a>
+                                    <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
+                                </div>';
+            } else if ($datos['productoOservicio'] == 'NO') {
+                $consulta2 = "SELECT * 
+                    FROM pys_resultservicio 
+                    INNER JOIN pys_plataformas ON pys_resultservicio.idPlat = pys_plataformas.idPlat
+                    INNER JOIN pys_claseproductos ON pys_resultservicio.idClProd = pys_claseproductos.idClProd
+                    INNER JOIN pys_tiposproductos ON pys_resultservicio.idTProd = pys_tiposproductos.idTProd 
+                    WHERE pys_resultservicio.idSol = '$idSol' AND pys_resultservicio.est = '1' AND pys_plataformas.est = '1' AND pys_claseproductos.est= '1' AND pys_tiposproductos.est = '1';";
+                $resultado2 = mysqli_query($connection, $consulta2);
+                $registros2 = mysqli_num_rows($resultado2);
+                $datos2 = mysqli_fetch_array($resultado2);
+                $plataforma         = (empty($datos2['idPlat'])) ? '' : $datos2['idPlat'];
+                $sltPlataforma      = SolicitudEspecifica::selectPlataforma ($plataforma);
+                $clase              = (empty($datos2['idClProd'])) ? '' : $datos2['idClProd'];
+                $sltClase           = SolicitudEspecifica::selectClaseConTipo ($idServicio, $clase);
+                $tipo               = (empty($datos2['idTProd'])) ? '' : $datos2['idTProd'];
+                $sltTipo            = (empty($datos2['idTProd'])) ? $selectTipoVacio : SolicitudEspecifica::selectTipoProducto ($clase, $idServicio, $tipo);
+                echo $clase;
+                $observacion        = (empty($datos2['observacion'])) ? $vacio : '<p class="left-align">'.$datos2['observacion'].' </p>' ;
+                $estudiantesImpac   = (empty($datos2['estudiantesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['estudiantesImpac'].' </p>' ;
+                $docentesImpac      = (empty($datos2['docentesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['docentesImpac'].' </p>' ;
+                $urlResultado       = (empty($datos2['urlResultado'])) ? $vacio : '<p class="left-align">'.$datos2['urlResultado'].' </p>' ;
+                $string .= '    <div class="input-field col l4 m4 s12">
+                                    '.$sltPlataforma.'
+                                </div>
+                                <div class="input-field col l4 m4 s12">
+                                    '.$sltClase.'
+                                </div>
+                                <div class="input-field col l4 m4 s12" id="sltModalTipo">
+                                    '.$sltTipo.'
+                                </div>
+                                <div class="input-field col l12 m12 s12  left-align">
+                                    <textarea name="descripSer" id="descripSer" class="materialize-textarea" >'.$observacion.'</textarea>
+                                    <label for="descripSer" class="active">Descripción Servicio:</label>
+                                </div>
+                                <div class="input-field col l2 m12 s12">
+                                    <input type="number" name="numEst" id="numEst" min = 0 value = "'.$estudiantesImpac.'">
+                                    <label for="numEst" class="active">Numero de estudiantes:</label>
+                                </div>
+                                <div class="input-field col l2 m12 s12">
+                                    <input type="number" name="numDoc" id="numDoc" min = 0 value = "'.$docentesImpac.'" > 
+                                    <label for="numDoc" class="active">Numero de docentes:</label>
+                                </div>
+                                <div class="input-field col l6 m12 s12">
+                                    <input type="url" name="url" id="url" value="'.$urlResultado.'" >
+                                    <label for="url" class="active">URL store easy Conecta-TE :</label>
                                 </div>
                                 <div class="input-field col l12 m12 s12">
                                     <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
                                 </div>';
-            } else if ($datos['productoOservicio'] == 'NO'){
-                $consulta2 = "SELECT * FROM pys_resultservicio 
-                INNER JOIN pys_plataformas ON pys_resultservicio.idPlat = pys_plataformas.idPlat
-                INNER JOIN pys_claseproductos ON pys_resultservicio.idClProd = pys_claseproductos.idClProd
-                INNER JOIN pys_tiposproductos ON pys_resultservicio.idTProd = pys_tiposproductos.idTProd 
-                WHERE pys_resultservicio.idSol = '$idSol' AND pys_resultservicio.est = 1 AND pys_plataformas.est = 1 AND pys_claseproductos.est= 1 AND pys_tiposproductos.est = 1;";
-                $resultado2 = mysqli_query($connection, $consulta2);
-                $registro2 =  mysqli_num_rows($resultado2);
-                /* if ($resultado2 == TRUE && $registro2 > 0){ */
-                    $datos2 = mysqli_fetch_array($resultado2);
-                    $plat               = (empty($datos2['nombrePlt'])) ? $vacio : '<p class="left-align">'.$datos2['nombrePlt'].' </p>' ;
-                    $clase              = (empty($datos2['nombreClProd'])) ? $vacio : '<p class="left-align">'.$datos2['nombreClProd'].' </p>' ;
-                    $tipo               = (empty($datos2['nombreTProd'])) ? $vacio : '<p class="left-align">'.$datos2['nombreTProd'].' </p>' ;
-                    $observacion        = (empty($datos2['observacion'])) ? $vacio : '<p class="left-align">'.$datos2['observacion'].' </p>' ;
-                    $estudiantesImpac   = (empty($datos2['estudiantesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['estudiantesImpac'].' </p>' ;
-                    $docentesImpac      = (empty($datos2['docentesImpac'])) ? $vacio : '<p class="left-align">'.$datos2['docentesImpac'].' </p>' ;
-                    $urlResultado       = (empty($datos2['urlResultado'])) ? $vacio : '<p class="left-align">'.$datos2['urlResultado'].' </p>' ;
-                    $string .= '
-                    <div class="input-field col l3 m3 s12">
-                        <label for="plat" class="active">Plataforma:</label>
-                        '.$plat.'
-                    </div>
-                    <div class="input-field col l3 m3 s12">
-                        <label for="clase" class="active">Clase de Producto:</label>
-                        '.$clase.'
-                    </div>
-                    <div class="input-field col l3 m3 s12" id="sltModalTipo">
-                        <label for="tipo" class="active">Tipo de Producto:</label>
-                        '.$tipo.'
-                    </div>
-                    <div class="input-field col l12 m12 s12  left-align">
-                        <label for="descripSer" class="active">Descripción Servicio:</label>
-                        '.$observacion.'
-                    </div>
-                    <div class="input-field col l2 m12 s12">
-                    <label for="numEst" class="active">Numero de estudiantes:</label>
-                        '.$estudiantesImpac.'
-                    </div>
-                    <div class="input-field col l2 m12 s12 offset-l1">
-                    <label for="numDoc" class="active">Numero de docentes:</label>
-                        '.$docentesImpac.'
-                    </div>
-                    <div class="input-field col l6 m12 s12 offset-l1">
-                        <label for="url" class="active">URL store easy Conecta-TE :</label>
-                        '.$urlResultado.'
-                    </div>
-                    <div class="input-field col l12 m12 s12">
-                        <a href="#modalTerminarProSer" class="btn modal-trigger" data-modal="#modalTerminarProSer" '.$disabled.' onclick="envioData(\'TER'.$idSol.'\',\'modalTerminarProSer.php\')">Terminar producto</a>
-                    </div>';
-                /* } else{
-                    $string = '<div class="card-panel teal darken-1"><h6 class="white-text">No se ha completado la información de Terminación del servicio </h6></div>';
-                } */
             }
-            $string .= '</div>';
-            return $string;
+            $string .= '    </div>
+                        </form>';
             mysqli_close($connection);
+            return $string;
         }
 
         public static function infoEmail ($idSol){
@@ -524,6 +545,65 @@
             echo $jsonString;
             mysqli_close($connection);
         }
+
+        public static function guardarMetadata($idSol, $equipo, $nombreProducto, $sinopsis, $claseProducto, $tipoProducto, $idioma, $formato, $tipoContenido, $red, $palabrasClave, $urlServidor, $urlVimeo, $autores, $observaciones, $duracionMin, $duracionSeg, $plataforma, $fechaEntrega, $areaConocimiento) {
+            require('../Core/connection.php');
+            include_once('../Models/mdl_solicitudEspecifica.php');
+            $producto = SolicitudEspecifica::comprobraExisResultadoProductos($idSol);
+            $countProd          = SolicitudEspecifica::generarCodigoProducto();
+            $plataforma         = ($plataforma == '') ? "PLT009" : $plataforma;
+            $nombreProducto     = mysqli_real_escape_string($connection, $nombreProducto);
+            $red                = mysqli_real_escape_string($connection, $red);
+            $palabrasClave      = mysqli_real_escape_string($connection, $palabrasClave);
+            $fechaEntrega       = ($fechaEntrega != null) ? "'".$fechaEntrega."'" : "null";
+            $urlVimeo           = mysqli_real_escape_string($connection, $urlVimeo);
+            $urlServidor        = mysqli_real_escape_string($connection, $urlServidor);
+            $observaciones      = mysqli_real_escape_string($connection, $observaciones);
+            $usuario            = $_SESSION['usuario'];
+            $idPersona          = SolicitudEspecifica::generarIdPersona($usuario);
+            $duracionMin        = ($duracionMin == "") ? "null" : $duracionMin;
+            $duracionSeg        = ($duracionSeg == "") ? "null" : $duracionSeg;
+            $sinopsis           = mysqli_real_escape_string($connection, $sinopsis);
+            $autores            = mysqli_real_escape_string($connection, $autores);
+            $areaConocimiento   = ($areaConocimiento == null || $areaConocimiento == '' || $areaConocimiento == 'Seleccione...') ? 0 : $areaConocimiento;
+            if (!$producto) {
+                mysqli_query($connection, "BEGIN;");
+                if ($equipo == 'EQU001' || $equipo == 'EQU002') {
+                    $consultaProducto       = "INSERT INTO pys_productos VALUES ('$countProd', '$idSol', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto','$nombreProducto','$red', '', $fechaEntrega, now(), '$urlVimeo','$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '1')";
+                    $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto','$red', '$palabrasClave', $fechaEntrega, now(), '$urlVimeo', '$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, $areaConocimiento)";
+                }
+                $resultadoProducto      = mysqli_query($connection, $consultaProducto);
+                $resultadoActProducto   = mysqli_query($connection, $consultaActProducto);
+                if ($resultadoProducto && $resultadoActProducto) {
+                    echo "<script>alert('Registro guardado correctamente');</script>";
+                    mysqli_query($connection, "COMMIT;");
+                } else {
+                    echo "<script>alert('Se presentaron errores durante el guardado de la información. Por favor intente nuevamente.');</script>";
+                    mysqli_query($connection, "ROLLBACK;");
+                }
+                mysqli_close($connection);
+            } else {
+                mysqli_query($connection, "BEGIN;");
+                $consulta1      = "SELECT idProd FROM pys_productos WHERE idSol = '$idSol' AND est = '1';";
+                $resultado1     = mysqli_query($connection, $consulta1);
+                $datos          = mysqli_fetch_array($resultado1);
+                $countProd      = $datos['idProd'];
+                $consulta       = "UPDATE pys_actproductos SET est= 2 WHERE idProd = '$countProd' AND est = '1';";
+                $resultado      = mysqli_query($connection, $consulta);
+                if ($equipo == 'EQU001' || $equipo == 'EQU002') {
+                    $consultaActProducto    = "INSERT INTO pys_actproductos VALUES (NULL, '$countProd', 'TRC012', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '$palabrasClave', $fechaEntrega, now(), '$urlVimeo', '$urlServidor', '$observaciones', '', '$idPersona', '', $duracionMin, $duracionSeg, DEFAULT, '$sinopsis', '$autores', '1', $idioma, $formato, $tipoContenido, '$areaConocimiento');";
+                }
+                $resultadoActProducto   = mysqli_query($connection, $consultaActProducto);
+                if ($resultadoActProducto) {
+                    echo "<script>alert('Registro actualizado correctamente');</script>";
+                    mysqli_query($connection, "COMMIT;");
+                } else {
+                    echo "<script>alert('Se presentaron errores durante la actualización de la información. Por favor intente nuevamente.');</script>";
+                    mysqli_query($connection, "ROLLBACK;");
+                }
+            }
+            echo self::informacionProdSer ($idSol);
+        }
         
-}
+    }
 ?>
