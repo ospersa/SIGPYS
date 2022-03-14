@@ -245,7 +245,9 @@
                     $disabled = ( empty($nomProduc) || empty($sinopsis) || empty($clase) || empty($tipo) || empty($idioma) || empty($formato) || empty($tipoContenido) || empty($RED) || empty($palabrasClave) || empty($url) || empty($urlVimeo) || empty($autores) || empty($minDura) || empty($fechaEntre) ) ? "disabled" : "";
                 }
             } else if ($idEqu == 'EQU002') {
-                $disabled = ($nomProduc == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $fechaEntre == $vacio ) ? "disabled" : "";
+                if ($datos['productoOservicio'] == 'SI') {
+                    $disabled = ($nomProduc == $vacio || $clase == $vacio || $tipo == $vacio || $idioma == $vacio || $formato == $vacio || $tipoContenido == $vacio || $RED == $vacio || $palabrasClave == $vacio || $url == $vacio || $fechaEntre == $vacio ) ? "disabled" : "";
+                }
             }
             $string .= '<form id="actForm" method="post">
                             <input type="hidden" name="action" value="guardarMetadata">
