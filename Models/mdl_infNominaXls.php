@@ -859,7 +859,13 @@ Class InformeNomima {
             $spreadsheet->getActiveSheet()->getColumnDimension(chr($col))->setWidth(13);
             $spreadsheet->getActiveSheet()->getStyle('A3:'.chr($col).($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
             $spreadsheet->getActiveSheet()->getStyle('E4:'.chr($col-1).$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE);
-                                
+            $filaTotales = ['I', 'N', 'S', 'X', 'AC', 'AH', 'AM', 'AR', 'AW', 'BB', 'BG'];
+            foreach ($filaTotales as $filaTotalMes) {
+                $cellValue = $spreadsheet->getActiveSheet()->getCell($filaTotalMes.'3')->getValue();
+                if ($cellValue != '') {
+                    $spreadsheet->getActiveSheet()->getStyle($filaTotalMes.'4:'.$filaTotalMes.($fila-1))->applyFromArray(STYLETABLETITLE);
+                }
+            }
         }
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
