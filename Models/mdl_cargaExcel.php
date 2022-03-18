@@ -30,6 +30,7 @@ class CargaExcel {
     public static function services ($array) {
         require('../Core/connection.php');
         include_once('mdl_solicitudEspecifica.php');
+        $registros = 0;
         foreach ($array as $fila) {
             $solicitud          = substr($fila[0], 1);
             $datos = [
@@ -47,7 +48,7 @@ class CargaExcel {
                 'registro'          => $fila[20],
                 'fechaCreacion'     => $fila[23]
             ];
-            $total  = 0;
+            $total = 0;
             $texto  = '';
             $tiempo         = SolicitudEspecifica::totalTiempo($solicitud);
             $horas          = (!is_null($tiempo[0])) ? $tiempo[0] : 0;
@@ -78,6 +79,7 @@ class CargaExcel {
                 }
                 $result = mysqli_query($connection, $query);
                 if ($result) {
+                    $registros++;
                     echo "<p>P$solicitud $texto</p>";
                 } else {
                     echo "<p>Se presentaron errores P$solicitud: <br><br>$query</p>";
@@ -86,6 +88,7 @@ class CargaExcel {
                 echo "<p>El producto P$solicitud con estado " . $datos['estado'] . " no pudo ser actualizado. Total datos: " . $total . ".</p>";
             }
         }
+        echo "<h5>Total registros afectados: $registros</h5>";
         mysqli_close($connection);
     }
 
