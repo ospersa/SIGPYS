@@ -13,6 +13,29 @@ $('.modal').on('change', function () {
 });
 
 $(document).ready(function () {
+
+    $('#frmExcelImport').submit(function(e){
+        e.preventDefault();
+        let formData = new FormData(document.getElementById('frmExcelImport'));
+        $.ajax({
+            url: '../Controllers/ctrl_cargaExcel.php',
+            type: 'post',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $('#div_response').html("<div class='preloader-wrapper small active'><div class='spinner-layer spinner-teal-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+            },
+            error: function() {
+                alert("Se presentaron errores")
+            },
+            success: function(response) {
+                $('#div_response').html(response);
+            }
+        });
+    })
+
     let path = window.location.pathname;
     let comp = path.split("/")
     if (comp.pop() == 'home.php') {
