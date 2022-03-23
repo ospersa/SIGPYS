@@ -82,11 +82,12 @@ Class Producto {
     public static function busquedaClaseProductos ($busqueda) {
         require('../Core/connection.php');
         $busqueda = mysqli_real_escape_string($connection, $busqueda);
-        $consulta = "SELECT pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_claseproductos.idClProd, pys_claseproductos.nombreClProd, pys_claseproductos.nombreCortoClProd, pys_claseproductos.descripcionClProd, pys_costos.costo FROM pys_claseproductos
-		    INNER JOIN pys_servicios ON pys_claseproductos.idSer = pys_servicios.idSer
-            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu
-            INNER JOIN pys_costos ON pys_costos.idClProd = pys_claseproductos.idClProd
-            WHERE pys_equipos.est = '1' AND pys_servicios.est = '1' AND pys_claseproductos.est = '1' AND pys_costos.est = '1' AND pys_costos.idTProd = '' AND ((pys_equipos.nombreEqu LIKE '%$busqueda%') OR (pys_servicios.nombreSer LIKE '%$busqueda%') OR (pys_claseproductos.nombreClProd LIKE '%$busqueda%') OR (pys_claseproductos.nombreCortoClProd LIKE '%$busqueda%'))
+        $consulta = "SELECT pys_equipos.nombreEqu, pys_servicios.nombreSer, pys_claseproductos.idClProd, pys_claseproductos.nombreClProd, pys_claseproductos.nombreCortoClProd, pys_claseproductos.descripcionClProd, pys_costos.costo
+            FROM pys_claseproductos 
+            INNER JOIN pys_servicios ON pys_claseproductos.idSer = pys_servicios.idSer AND pys_claseproductos.est = '1' 
+            INNER JOIN pys_equipos ON pys_servicios.idEqu = pys_equipos.idEqu AND pys_equipos.est = '1'
+            LEFT JOIN pys_costos ON pys_costos.idClProd = pys_claseproductos.idClProd AND pys_costos.est = '1'
+            WHERE pys_servicios.est = '1' AND ((pys_equipos.nombreEqu LIKE '%$busqueda%') OR (pys_servicios.nombreSer LIKE '%$busqueda%') OR (pys_claseproductos.nombreClProd LIKE '%$busqueda%') OR (pys_claseproductos.nombreCortoClProd LIKE '%$busqueda%')) 
             ORDER BY pys_equipos.nombreEqu;";
         $resultado = mysqli_query($connection, $consulta);
         $registros = mysqli_num_rows($resultado);

@@ -394,13 +394,22 @@
         {
             require('../Core/connection.php');
             $idAsig = mysqli_real_escape_string($connection, $idAsig);
-            $consulta = "UPDATE pys_asignados SET est = '0' WHERE idAsig = '$idAsig';";
-            $resultado = mysqli_query($connection, $consulta);
-            if ($resultado) {
+            /* Validación de tiempos registrados :: Si tiene tiempos registrados no se debe permitir la eliminación de la asignación */
+            $query = "SELECT * FROM pys_tiempos WHERE idAsig = '$idAsig' AND estTiempo != '0';";
+            $result = mysqli_query($connection, $query);
+            $registry = mysqli_num_rows($result);
+            if ($registry > 0) {
+                echo "<script> alert('No se puede eliminar esta asignación porque hay tiempos registrados. Por favor contacte a la mesa de servicio.');</script>";
                 echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
             } else {
-                echo "<script> alert('Se presentó un error al eliminar la asignación. Por favor intente nuevamente');</script>";
-                echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+                $consulta = "UPDATE pys_asignados SET est = '0' WHERE idAsig = '$idAsig';";
+                $resultado = mysqli_query($connection, $consulta);
+                if ($resultado) {
+                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+                } else {
+                    echo "<script> alert('Se presentó un error al eliminar la asignación. Por favor intente nuevamente');</script>";
+                    echo '<meta http-equiv="Refresh" content="0;url='.$_SERVER['HTTP_REFERER'].'">';
+                }
             }
             mysqli_close($connection);
         }
