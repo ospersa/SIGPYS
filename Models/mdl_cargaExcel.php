@@ -134,6 +134,12 @@ class CargaExcel {
             $fechaColciencias = ( is_null($fechaColciencias) ) ? 'NULL' : '"'.$fechaColciencias.'"';
             $duracionMinutos = ( is_null($duracionMinutos) ) ? 'NULL' : $duracionMinutos;
             $duracionSegundos = ( is_null($duracionSegundos) ) ? 'NULL' : $duracionSegundos;
+            /* Consulta de la existencia de un producto en la base de datos, para evitar duplicidad */
+            $query0 = "SELECT idProd FROM pys_productos WHERE idSol = '$solicitud' AND est = '1';";
+            $result0 = mysqli_query($connection, $query0);
+            $registry0 = mysqli_num_rows($result0);
+            $data0 = mysqli_fetch_array($result0);
+            $producto = ($registry0 > 0) ? $data0[0] : null;
             if ($estado != 'Cancelado') {
                 if ($producto != null) {
                     /* Si el producto ya está creado, se procede a actualizar la información en pys_actproductos */
