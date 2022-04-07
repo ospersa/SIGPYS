@@ -18,6 +18,8 @@ class CargaExcel {
                 $dataArray = $reader->getActiveSheet()->rangeToArray('A2:'.$lastCol.$lastRow);
                 if ($operacion == 'servicios') {
                     self::services($dataArray);
+                } else if ($operacion == 'productos') {
+                    self::products($dataArray);
                 }
             } else {
                 
@@ -87,6 +89,84 @@ class CargaExcel {
             } else {
                 echo "<p>El producto P$solicitud con estado " . $datos['estado'] . " no pudo ser actualizado. Total datos: " . $total . ".</p>";
             }
+        }
+        echo "<h5>Total registros afectados: $registros</h5>";
+        mysqli_close($connection);
+    }
+
+    public static function products ($array) {
+        require('../Core/connection.php');
+        include_once('mdl_solicitudEspecifica.php');
+        $registros = 0;
+        foreach ($array as $fila) {
+            $solicitud                  = substr($fila[0], 1);
+            $datos = [
+                'estado'                => $fila[6],
+                'producto'              => $fila[10],
+                'tipoRecurso'           => $fila[11],
+                'plataforma'            => $fila[12],
+                'claseProducto'         => $fila[13],
+                'tipoProducto'          => $fila[14],
+                'nombreProducto'        => $fila[15],
+                'red'                   => $fila[16],
+                'palabrasClave'         => $fila[17],
+                'fechaEntrega'          => $fila[18],
+                'fechaActualizacion'    => $fila[19],
+                'urlVimeo'              => $fila[20],
+                'urlServidor'           => $fila[21],
+                'observacion'           => $fila[22],
+                'varios'                => $fila[23],
+                'registro'              => $fila[24],
+                'motivoAnulacion'       => $fila[25],
+                'duracionMinutos'       => $fila[26],
+                'duracionSegundos'      => $fila[27],
+                'fechaColciencias'      => $fila[28],
+                'sinopsis'              => $fila[29],
+                'autorExterno'          => $fila[30],
+                'idioma'                => $fila[31],
+                'formato'               => $fila[32],
+                'tipoContenido'         => $fila[33],
+                'areaConocimiento'      => $fila[34]
+            ];
+            list($estado, $producto, $tipoRecurso, $plataforma, $claseProducto, $tipoProducto, $nombreProducto, $red, $palabrasClave, $fechaEntrega, $fechaActualizacion, $urlVimeo, $urlServidor, $observacion, $varios, $registro, $motivoAnulacion, $duracionMinutos, $duracionSegundos, $fechaColciencias, $sinopsis, $autorExterno, $idioma, $formato, $tipoContenido, $areaConocimiento) = array_values($datos);
+            $fechaEntrega = ( is_null($fechaEntrega) ) ? 'NULL' : '"'.$fechaEntrega.'"';
+            $fechaActualizacion = ( is_null($fechaActualizacion) ) ? 'NULL' : '"'.$fechaActualizacion.'"';
+            $fechaColciencias = ( is_null($fechaColciencias) ) ? 'NULL' : '"'.$fechaColciencias.'"';
+            $duracionMinutos = ( is_null($duracionMinutos) ) ? 'NULL' : $duracionMinutos;
+            $duracionSegundos = ( is_null($duracionSegundos) ) ? 'NULL' : $duracionSegundos;
+            if ($estado != 'Cancelado') {
+                if ($producto != null) {
+                    /* Si el producto ya está creado, se procede a actualizar la información en pys_actproductos */
+                    $query = "UPDATE pys_actproductos SET idTRec = '$tipoRecurso', idPlat = '$plataforma', idCLProd = '$claseProducto', idTProd = '$tipoProducto', nombreProd = '$nombreProducto', descripcionProd = '$red', palabrasClave = '$palabrasClave', fechEntregaProd = $fechaEntrega, fechaActualizacionProd = $fechaActualizacion, urlVimeo = '$urlVimeo', urlServidor = '$urlServidor', observacionesProd = '$observacion', varios = '$varios', idResponRegistro = '$registro', motivoAnulacion = '$motivoAnulacion', duracionmin = $duracionMinutos, duracionseg = $duracionSegundos, fechaColciencias = $fechaColciencias, sinopsis = '$sinopsis', autorExterno = '$autorExterno', idioma = '$idioma', formato = '$formato', tipoContenido = '$tipoContenido', idAreaConocimiento = '$areaConocimiento' WHERE idProd = '$producto' AND est = '1';";
+                    $result = mysqli_query($connection, $query);
+                    if ($result) {
+                        echo "<p class='orange-text'>[P$solicitud] Producto $producto actualizado correctamente.</p>";
+                    } else {
+                        echo "<p class='orange-text'>[P$solicitud] Se presentaron errores y no se pudo actualizar el producto $producto.</p>";
+                        echo $query;
+                    }
+                } else {
+                    $producto = SolicitudEspecifica::generarCodigoProducto();
+                    /* Si el producto aún no existe, se procede a realizar el registro en las tablas pys_productos y pys_actproductos */
+                    $query  = "INSERT INTO pys_productos VALUES ('$producto', '$solicitud', '$tipoRecurso', '$plataforma', '$claseProducto', '$tipoProducto','$nombreProducto','$red', '$palabrasClave', $fechaEntrega, $fechaActualizacion, '$urlVimeo', '$urlServidor', '$observacion', '$varios', '$registro', '$motivoAnulacion', $duracionMinutos, $duracionSegundos, $fechaColciencias, '1')";
+                    $query1 = "INSERT INTO pys_actproductos VALUES (NULL, '$producto', '$tipoRecurso', '$plataforma', '$claseProducto', '$tipoProducto', '$nombreProducto', '$red', '$palabrasClave', $fechaEntrega, $fechaActualizacion, '$urlVimeo', '$urlServidor', '$observacion', '$varios', '$registro', '$motivoAnulacion', $duracionMinutos, $duracionSegundos, $fechaColciencias, '$sinopsis', '$autorExterno', '1', $idioma, $formato, $tipoContenido, $areaConocimiento);";
+                    /* Preparación de base de datos para en caso de fallo realizar ROLLBACK */
+                    mysqli_query($connection, "BEGIN;");
+                    $result = mysqli_query($connection, $query);
+                    $result1 = mysqli_query($connection, $query1);
+                    if ($result && $result1) {
+                        /* Si los registros se guardan correctamente procedemos a guardar los cambios en la base */
+                        mysqli_query($connection, "COMMIT;");
+                        echo "<p class='teal-text'>[P$solicitud] Producto <strong>$producto</strong> creado correctamente.</p>";
+                    } else {
+                        mysqli_query($connection, "ROLLBACK;");
+                        echo "<p class='red-text'>[P$solicitud] se presentaron errores y el producto no pudo ser creado.</p>";
+                    }
+                }
+            } else {
+                echo "<p class='red-text'>[P$solicitud] no se modificó porque está cancelado.</p>";
+            }
+            $registros++;
         }
         echo "<h5>Total registros afectados: $registros</h5>";
         mysqli_close($connection);

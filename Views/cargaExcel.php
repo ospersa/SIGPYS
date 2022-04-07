@@ -21,6 +21,7 @@ require('../Controllers/ctrl_asignados.php');
                 <select required id="operacion"  name="operacion" onchange="inicializarCampos();">
                     <option value="" selected>Seleccione</option>
                     <option value="servicios">Carga de servicios</option>
+                    <option value="productos">Carga de productos</option>
                 </select>
                 <label for="operacion">Operación a realizar</label>
             </div>
