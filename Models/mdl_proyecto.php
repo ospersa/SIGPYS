@@ -139,7 +139,7 @@ class Proyecto {
                 (pys_facdepto.facDeptoDepartamento LIKE '%".$busqueda."%') OR
                 (pys_frentes.nombreFrente LIKE '%".$busqueda."%') OR
                 (pys_actualizacionproy.codProy LIKE '%".$busqueda."%') OR
-                (pys_actualizacionproy.nombreCortoProy LIKE '%".$busqueda."%') OR
+                (pys_actualizacionproy.nombreProy LIKE '%".$busqueda."%') OR
                 (pys_estadoproy.nombreEstProy LIKE '%".$busqueda."%'))
             ORDER BY pys_proyectos.fechaCreacionProy DESC;";
         $resultado = mysqli_query($connection, $consulta);
