@@ -20,6 +20,8 @@ class CargaExcel {
                     self::services($dataArray);
                 } else if ($operacion == 'productos') {
                     self::products($dataArray);
+                } else if ($operacion == 'terminar') {
+                    self::changeStateAndInactivatePersons($dataArray);
                 }
             } else {
                 
@@ -167,6 +169,8 @@ class CargaExcel {
                     } else {
                         mysqli_query($connection, "ROLLBACK;");
                         echo "<p class='red-text'>[P$solicitud] se presentaron errores y el producto no pudo ser creado.</p>";
+                        echo $query."<hr>";
+                        echo $query1;
                     }
                 }
             } else {
@@ -175,6 +179,46 @@ class CargaExcel {
             $registros++;
         }
         echo "<h5>Total registros afectados: $registros</h5>";
+        mysqli_close($connection);
+    }
+
+    public static function changeStateAndInactivatePersons ($array) {
+        require('../Core/connection.php');
+        $registros = 0;
+        foreach ($array as $fila) {
+            $solicitud      = substr($fila[0], 1);
+            $nuevoEstado    = $fila[60];
+            $idNuevoEstado  = $fila[61];
+            if ($nuevoEstado == 'Terminado') {
+                /* Verificación de personas asignadas */
+                $query0     = "SELECT idAsig FROM pys_asignados WHERE idSol = '$solicitud' AND est = '1';";
+                $result0    = mysqli_query($connection, $query0);
+                $registry0  = mysqli_num_rows($result0);
+                if ($registry0 > 0) {
+                    /* Si existen personas activas se procede a realizar la inactivación de la asignación */
+                    while ($data0 = mysqli_fetch_array($result0)) {
+                        $idAsignado = $data0[0];
+                        $query1     = "UPDATE pys_asignados SET est = '2' WHERE idAsig = '$idAsignado' AND est = '1';";
+                        $result1    = mysqli_query($connection, $query1);
+                        if ($result1) {
+                            echo "<h6 class='blue-text'>$idAsignado inactivado correctamente</h6>";
+                        } else {
+                            echo "<h6 class='red-text'>No se pudo realizar la inactivación de: $idAsignado</h6>";
+                        }
+                    }
+                }
+            }
+            /* Se procede a actualizar el estado de las solicitudes */
+            $query1     = "UPDATE pys_actsolicitudes SET idEstSol = '$idNuevoEstado' WHERE idSol = '$solicitud' AND est = '1';";
+            $result1    = mysqli_query($connection, $query1);
+            if ($result1) {
+                echo "<h5 class='teal-text'>Solicitud P$solicitud actualizada correctamente </h5>";
+            } else {
+                echo "<h5 class='red-text'>No se pudo actualizar la solicitud P$solicitud</h6>";
+            }
+            $registros++;
+        }
+        echo "<h1>Registros: $registros</h1>";
         mysqli_close($connection);
     }
 
