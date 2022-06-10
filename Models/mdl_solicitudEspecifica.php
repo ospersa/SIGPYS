@@ -846,7 +846,12 @@
             require('../Core/connection.php');
             $select = '     <select name="sltTipo" id="sltTipo" >
                                 <option value="" selected disabled>Seleccione</option>';
-            $consulta = "SELECT idTProd FROM `pys_costos` WHERE idSer = '$idServicio' AND idClProd ='$idClase'";
+            $consulta = "SELECT pys_costos.idTProd 
+                FROM pys_costos 
+                INNER JOIN pys_servicios ON pys_servicios.idSer = pys_costos.idSer AND pys_servicios.est = '1'
+                INNER JOIN pys_tiposproductos ON pys_tiposproductos.idTProd = pys_costos.idTProd AND pys_tiposproductos.est = '1'
+                WHERE pys_costos.idSer = '$idServicio' AND pys_costos.idClProd ='$idClase'
+                ORDER BY pys_tiposproductos.nombreTProd;";
             $resultado = mysqli_query($connection, $consulta);
             if (mysqli_num_rows($resultado)) {
             }
