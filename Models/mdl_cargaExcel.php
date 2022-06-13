@@ -22,6 +22,8 @@ class CargaExcel {
                     self::products($dataArray);
                 } else if ($operacion == 'terminar') {
                     self::changeStateAndInactivatePersons($dataArray);
+                } else if ($operacion == 'iniciales') {
+                    self::terminarIniciales($dataArray);
                 }
             } else {
                 
@@ -219,6 +221,36 @@ class CargaExcel {
             $registros++;
         }
         echo "<h1>Registros: $registros</h1>";
+        mysqli_close($connection);
+    }
+
+    public static function terminarIniciales($array) {
+        require('../Core/connection.php');
+        foreach ($array as $fila) {
+            if ($fila[1] != 'Cancelado') {
+                $idSol = $fila[0];
+                /*
+                ESS001 = Estado Indeterminado
+                ESS006 = Estado Terminado
+                ESS007 = Estado Cancelado
+                 */
+                $query0 = "SELECT pys_actsolicitudes.idEstSol
+                    FROM pys_solicitudes 
+                    INNER JOIN pys_actsolicitudes ON pys_actsolicitudes.idSol = pys_solicitudes.idSol AND pys_actsolicitudes.est = '1'
+                    WHERE idSolIni = '$idSol' AND pys_solicitudes.est = '1' AND pys_actsolicitudes.idEstSol != 'ESS001' AND pys_actsolicitudes.idEstSol != 'ESS006' AND pys_actsolicitudes.idEstSol != 'ESS007';";
+                $result0 = mysqli_query($connection, $query0);
+                $registry0 = mysqli_num_rows($result0);
+                if ($registry0 == 0) {
+                    $query1 = "UPDATE pys_actsolicitudes SET idEstSol = 'ESS006' WHERE idSol = '$idSol' AND est = '1';";
+                    $result1 = mysqli_query($connection, $query1);
+                    if ($result1) {
+                        echo "<h5>Se cambió estado a terminado en la solicitud $idSol</h5>";
+                    } else {
+                        echo "<h5 class='red-text'>No se pudo realizar la actualización de la solicitud $idSol</h5>";
+                    }
+                }
+            }
+        }
         mysqli_close($connection);
     }
 

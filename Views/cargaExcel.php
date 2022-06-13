@@ -23,6 +23,7 @@ require('../Controllers/ctrl_asignados.php');
                     <option value="servicios">Carga de servicios</option>
                     <option value="productos">Carga de productos</option>
                     <option value="terminar">Terminación/Inactivación de productos</option>
+                    <option value="iniciales">Terminación/Inactivación de Solicitudes Iniciales</option>
                 </select>
                 <label for="operacion">Operación a realizar</label>
             </div>
