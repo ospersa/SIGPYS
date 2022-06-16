@@ -815,7 +815,7 @@
         public static function selectClaseConTipo($idServicio, $idClase)
         {
             require('../Core/connection.php');
-            $consulta = "SELECT idClProd, nombreClProd FROM pys_claseproductos WHERE est = '1' AND idSer = '$idServicio';";
+            $consulta = "SELECT idClProd, nombreClProd FROM pys_claseproductos WHERE est = '1' AND idSer = '$idServicio' ORDER BY nombreClProd;";
             $resultado = mysqli_query($connection, $consulta);
             $registros = mysqli_num_rows($resultado);
             if ($registros > 0) {
