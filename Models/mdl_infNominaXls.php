@@ -791,10 +791,8 @@ Class InformeNomima {
                         AND pys_dedicaciones.persona_IdPersona = '".$datos['idPersona']."' AND inicioPeriodo = '$inicioPeriodo' AND finPeriodo = '$finPeriodo';";
                     $resultado5 = mysqli_query($connection, $consulta5);
                     $datos5 = mysqli_fetch_array($resultado5);
-                    $per1 = $datos5[0];
-                    $per2 = $datos5[1];
-                    $diasPer1 = ($datos5['diasSegmento1'] * $datos5['porcentajeDedicacion1'] / 100) ;
-                    $diasPer2 = ($datos5['diasSegmento2'] * $datos5['porcentajeDedicacion2'] / 100) ;
+                    $diasPer1 = isset($datos5['diasSegmento1']) ? ($datos5['diasSegmento1'] * $datos5['porcentajeDedicacion1'] / 100) : 0 ;
+                    $diasPer2 = isset($datos5['diasSegmento2']) ? ($datos5['diasSegmento2'] * $datos5['porcentajeDedicacion2'] / 100) : 0 ;
                     $hrsPeriodo = ($diasPer1 + $diasPer2) * 8;
                     $hrsPeriodo = ($hrsPeriodo == 0) ? 160 : $hrsPeriodo;
                     $consulta2 = "SELECT pys_tiempos.horaTiempo, pys_tiempos.minTiempo, pys_servicios.idEqu
@@ -844,9 +842,9 @@ Class InformeNomima {
             }
             $col = count($informacion)+64;
             $sheet->setCellValue('A1', 'Informe de Nomina');
-            $sheet->mergeCells("A1:".chr($col)."1");
+            /* $sheet->mergeCells("A1:".chr($col)."1"); */
         
-            $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(STYLETABLETI);
+            /* $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(STYLETABLETI);
             $spreadsheet->getActiveSheet()->getStyle('A3:'.chr($col).'3')->applyFromArray(STYLETABLETITLE);    
             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(14);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -858,7 +856,7 @@ Class InformeNomima {
             $spreadsheet->getActiveSheet()->getColumnDimension(chr($col-1))->setWidth(13);
             $spreadsheet->getActiveSheet()->getColumnDimension(chr($col))->setWidth(13);
             $spreadsheet->getActiveSheet()->getStyle('A3:'.chr($col).($fila-1))->getBorders()->applyFromArray(STYLEBORDER);
-            $spreadsheet->getActiveSheet()->getStyle('E4:'.chr($col-1).$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE);
+            $spreadsheet->getActiveSheet()->getStyle('E4:'.chr($col-1).$fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE); */
             $filaTotales = ['I', 'N', 'S', 'X', 'AC', 'AH', 'AM', 'AR', 'AW', 'BB', 'BG'];
             foreach ($filaTotales as $filaTotalMes) {
                 $cellValue = $spreadsheet->getActiveSheet()->getCell($filaTotalMes.'3')->getValue();
